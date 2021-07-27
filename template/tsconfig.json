@@ -13,13 +13,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowUnreachableCode": false,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitAny": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
+    "experimentalDecorators": true,
     "jsx": "preserve"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "test", "dist"]
 }
