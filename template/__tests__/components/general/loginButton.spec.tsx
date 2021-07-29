@@ -1,17 +1,35 @@
 import { mount } from 'enzyme';
-import LoginButton from "../../../src/components/general/loginButton";
+import * as sinon from 'sinon';
+import { LoginButton } from "../../../src/prebuiltUI/general/loginButton";
 
 describe("Login Button", () => {
   it("renders anchor component button", () => {
-    const wrapper = mount(<LoginButton isAuthed={false} />)
-    expect(wrapper.find('a')).toHaveLength(1)
+    const wrapper = mount(<LoginButton isAuthed={false} logout={() => { }}/>)
+    expect(wrapper.find('button')).toHaveLength(1)
   })
   it("renders correct text", () => {
-    let wrapper = mount(<LoginButton isAuthed={false} />)
-    expect(wrapper.find('a').text()).toEqual('Login')
+    let wrapper = mount(<LoginButton isAuthed={false} logout={() => { }}/>)
+    expect(wrapper.find('button').text()).toEqual('Log in')
 
     wrapper.unmount()
-    wrapper = mount(<LoginButton isAuthed={true} />)
-    expect(wrapper.find('a').text()).toEqual('Logout')
+    wrapper = mount(<LoginButton isAuthed={true} logout={() => { }}/>)
+    expect(wrapper.find('button').text()).toEqual('Log out')
+  })
+  it("Link Component href is correct and passed to button when isAuthed is false", () => {
+    const wrapper = mount(<LoginButton isAuthed={false} logout={() => { }} />)
+    expect(wrapper.find('button').props().href).toEqual('/auth')
+  })
+  it("Link Component href not passed to button when isAuthed is true", () => {
+    const wrapper = mount(<LoginButton isAuthed={true} logout={() => { }} />)
+    expect(wrapper.find('button').props().href).toBe(undefined)
+  })
+  it("logout() works when clicked when isAuthed is true", () => {
+    const logout = {func: () => { }}
+    const mock = sinon.mock(logout)
+    mock.expects("func").once()
+
+    const wrapper = mount(<LoginButton isAuthed={true} logout={logout.func} />)
+    wrapper.find('button').simulate('click')
+    mock.verify()
   })
 })
