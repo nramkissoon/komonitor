@@ -59,7 +59,7 @@ const dropDownStyles: BoxProps = {
 }
 
 
-export const TopNavBar = (props: BaseNavBarProps) => {
+export const BasicNavBar = (props: BaseNavBarProps) => {
   const {
     isAuthed,
     brandingImageSrc,

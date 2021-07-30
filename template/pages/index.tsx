@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { Copyright } from '../src/prebuiltUI/general/copyright'
 import { LoginButton } from '../src/prebuiltUI/general/loginButton';
-import { TopNavBar } from '../src/prebuiltUI/navBars/topNavBar'
+import { BasicNavBar } from '../src/prebuiltUI/navBars/BasicNavBar'
 
 const Home = () => {
   const isAuthed = false;
 
   return (
     <>
-      <TopNavBar
+      <BasicNavBar
         isAuthed={isAuthed}
         brandingImageSrc='/svg/brandingPlaceholder.svg'
         links={[
