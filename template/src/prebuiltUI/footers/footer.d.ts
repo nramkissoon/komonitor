@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * Props for a simple link.
  */
@@ -11,7 +13,7 @@ export interface FooterLinkProps {
  */
 export interface FooterSocialLinkProps extends FooterLinkProps {
   text: string; // used as alt for icon
-  icon: string;
+  icon: React.ReactElement;
   href: string;
 }
 
@@ -19,7 +21,6 @@ export interface FooterSocialLinkProps extends FooterLinkProps {
  * Props for a simple footer.
  */
 export interface SimpleFooterProps {
-  brandingImgSrc: string;
   companyName: string;
   privacyPolicyLink: FooterLinkProps;
   termsOfServiceLink: FooterLinkProps;
@@ -45,7 +46,13 @@ export interface FooterSocialLinkSectionProps extends FooterLinkSectionProps {
  * Props for a simple footer with social links.
  */
 export interface SimpleSocialFooterProps extends SimpleFooterProps {
-  socialSection: FooterSocialLinkSectionProp;
+  socialLinks: FooterSocialLinkProps[];
+  styles?: {
+    containerStyles: HTMLChakraProps<"div">;
+    copyrightStyles: HTMLChakraProps<"div">;
+    linkStyles?: HTMLChakraProps<"div">;
+    socialLinkStyles?: HTMLChakraProps<"div">;
+  };
 }
 
 /**

@@ -8,9 +8,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  FlexProps,
-  ImgProps,
-  BoxProps,
   HTMLChakraProps,
 } from '@chakra-ui/react'
 import Link from 'next/link'
@@ -20,7 +17,7 @@ import { DropDownProps, NavBarLinkProps, BaseNavBarProps } from './navBar'
 
 const hoverColor = 'gray.600'
 
-const flexContainerStyles: FlexProps = {
+const flexContainerStyles: HTMLChakraProps<"div"> = {
   w: "100vw",
   py: "1em",
   px: SPACING_X_REACTIVE_VALUES,
@@ -31,12 +28,12 @@ const flexContainerStyles: FlexProps = {
   alignItems: ["center", "flex-start"],
 }
 
-const brandingImageStyles: ImgProps = {
+const brandingImageStyles: HTMLChakraProps<"div"> = {
   w: "7.5em",
   h: "100%",
 }
 
-const navBarlinkStyles: BoxProps = {
+const navBarlinkStyles: HTMLChakraProps<"div"> = {
   verticalAlign: "middle",
   display: "inline-block",
   marginRight: "1.5vw",
@@ -54,8 +51,11 @@ const menuButtonHoverStyle: HTMLChakraProps<"div"> = {
   }
 }
 
-const dropDownStyles: BoxProps = {
+const dropDownStyles: HTMLChakraProps<"div"> = {
   fontSize: "1em",
+  py: '0',
+  mt: '.8em',
+  borderRadius: 'none'
 }
 
 
@@ -122,11 +122,11 @@ const DropDownLink = (props: DropDownProps) => {
           {title} <ChevronDownIcon ml='.2em'/>
         </Box>
       </MenuButton>
-      <MenuList>
+      <MenuList {...overrideStyles(dropDownStyles, linkStyles?.dropDownLinkStyles)}>
         {links.map((link) => (
           <MenuItem key={link.text}>
             <Link href={link.href} passHref>
-              <Box {...overrideStyles(dropDownStyles, linkStyles?.dropDownLinkStyles)}>
+              <Box>
                 {link.text}
               </Box>
             </Link>
