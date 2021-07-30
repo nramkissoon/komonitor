@@ -4,7 +4,6 @@
  */
 
 import { extendTheme } from "@chakra-ui/react";
-import { TopNavBar } from "./components/topNavBar";
 
 const defaultTheme = extendTheme({
   styles: {
@@ -16,9 +15,6 @@ const defaultTheme = extendTheme({
   fonts: {
     heading: "Roboto",
     body: "Roboto",
-  },
-  components: {
-    TopNavBar,
   },
 });
 

@@ -1,15 +1,7 @@
 import * as React from 'react'
 import { Copyright } from '../src/prebuiltUI/general/copyright'
-import { TopNavBar } from '../src/prebuiltUI/general/topNavBar'
-
-const topNavBarLinks = [
-  { text: 'Pricing', href: '/pricing', type: 'TextLink' },
-  { text: 'About', href: '/about', type: 'TextLink' },
-  {
-    type: 'DropDownLink', title: 'Resources', links:
-      [{ text: 'Blog', href: '#', type: 'TextLink' }, { text: 'Docs', href: '#', type: 'TextLink' }]
-  },
-]
+import { LoginButton } from '../src/prebuiltUI/general/loginButton';
+import { TopNavBar } from '../src/prebuiltUI/navBars/topNavBar'
 
 const Home = () => {
   const isAuthed = false;
@@ -18,16 +10,16 @@ const Home = () => {
     <>
       <TopNavBar
         isAuthed={isAuthed}
-        logout={() => { }}
-        brandingImgSrc='/svg/brandingPlaceholder.svg'
+        brandingImageSrc='/svg/brandingPlaceholder.svg'
         links={[
-          { text: 'Pricing', href: '/pricing', type: 'TextLink' },
-          { text: 'About', href: '/about', type: 'TextLink' },
+          { text: 'Pricing', href: '/pricing', type: 'link' },
+          { text: 'About', href: '/about', type: 'link' },
           {
-            type: 'DropDownLink', title: 'Resources', links:
+            type: 'dropdown', title: 'Resources', links:
               [{ text: 'Blog', href: '#', type: 'TextLink' }, { text: 'Docs', href: '#', type: 'TextLink' }]
           },
         ]}
+        loginButton={LoginButton({ isAuthed: isAuthed, logout: () => { } })}
       />
       <Copyright name='Company'/>
     </>
