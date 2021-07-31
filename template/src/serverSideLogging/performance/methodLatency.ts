@@ -1,11 +1,11 @@
 // This module contains a decorator for measuring and logging method latency.
 
 import { performance } from "perf_hooks";
-import { Metrics } from "../metrics/metrics";
+import { MethodMetricLoggingDecorator, Metrics } from "../logging";
 import { METHOD_LATENCY } from "../metrics/metricsConstants";
 
-export const logMethodLatencyAsync =
-  (metrics: Metrics, metadata?: any) =>
+export const logMethodLatencyAsync: MethodMetricLoggingDecorator =
+  (metrics: Metrics) =>
   (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
 
@@ -17,7 +17,7 @@ export const logMethodLatencyAsync =
         level: "info",
         tag: METHOD_LATENCY,
         value: finish - start,
-        other: metadata,
+        parameters: args,
       });
       return methodResult;
     };
