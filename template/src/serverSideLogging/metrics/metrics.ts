@@ -1,4 +1,12 @@
-import { Logger, LogLineComponents, Metrics } from "../logging";
+import { randomUUID } from "crypto";
+import {
+  Logger,
+  LogLineComponents,
+  LogLineComponentsData,
+  Metrics,
+  MetricsPrefix,
+  MetricsPrefixData,
+} from "../logging";
 
 /**
  * This class contains the logic for logging metrics to user defined output channels.
@@ -7,16 +15,31 @@ import { Logger, LogLineComponents, Metrics } from "../logging";
  */
 export class MetricsImpl implements Metrics {
   loggers: Logger[];
+  prefix: MetricsPrefix;
 
-  constructor(loggers: Logger[]) {
+  constructor(loggers: Logger[], metricsPrefixData?: MetricsPrefixData) {
     this.loggers = loggers;
+
+    const metricsId: string = randomUUID();
+    this.prefix = {
+      metricsId,
+      ...metricsPrefixData,
+    };
   }
 
-  log = async (logLineComponents: LogLineComponents) => {
+  log = async (logLineComponentsData: LogLineComponentsData) => {
     const utcTimeComponent: string = new Date().toISOString();
-    logLineComponents.timestamp = utcTimeComponent;
+    const logLineComponents: LogLineComponents = {
+      timestamp: utcTimeComponent,
+      ...logLineComponentsData,
+    };
     this.loggers.forEach((logger) => {
-      logger.log(JSON.stringify(logLineComponents));
+      try {
+        logger.log(logLineComponents);
+      } catch (err) {
+        // console log the error and move on
+        console.error((err as Error).message);
+      }
     });
   };
 }

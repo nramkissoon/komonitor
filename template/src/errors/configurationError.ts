@@ -5,7 +5,7 @@ export class ConfigurationError extends Error {
     configurationName: string
   ) {
     super();
-    this.name = configurationName;
+    this.name = `Configuration Error: ${configurationName}`;
     this.message = `Invalid configuration value '${givenValue}'. Value must be one of ${validValues.toString()}`;
   }
 }

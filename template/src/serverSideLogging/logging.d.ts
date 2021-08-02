@@ -1,20 +1,35 @@
 export interface Logger {
-  log: (logLine: string) => void;
+  log: (logLine: Object) => void;
 }
 
 export type LogLevel = "info" | "warn" | "error";
 
-export interface LogLineComponents {
+export interface LogLineComponentsData {
   tag: string;
   level: LogLevel;
   value: string | number | boolean;
-  timestamp?: string;
-  parameters?: Object;
+  otherData?: Object;
 }
+
+export interface LogLineComponents extends LogLineComponentsData {
+  timestamp: string;
+}
+
+export type MetricsPrefixData = {
+  requestData?: Object;
+  otherMetadata?: Object;
+};
+
+export type MetricsPrefix = {
+  metricsId: string;
+  requestData?: Object;
+  otherMetadata?: Object;
+};
 
 export class Metrics {
   loggers: Logger[];
-  constructor(loggers: Logger[]): void;
+  prefix: MetricsPrefix;
+  constructor(loggers: Logger[], metricsPrefixData?: MetricsPrefixData): void;
   async log(logLineComponents: LogLineComponents): void;
 }
 

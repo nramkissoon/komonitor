@@ -1,8 +1,19 @@
 import { Logger } from "./logging";
+import fs from "fs";
+import { LoggingError } from "../errors/loggingError";
 
 // Simple console logger
 export class ConsoleLogger implements Logger {
-  log = (logLine: string) => {
-    console.log(logLine);
+  log = (logLine: Object) => {
+    try {
+      console.log(JSON.stringify(logLine));
+    } catch (err) {
+      throw new LoggingError("Console", (err as Error).message);
+    }
   };
+}
+
+// File logger
+export class FileLogger implements Logger {
+  log = () => {};
 }
