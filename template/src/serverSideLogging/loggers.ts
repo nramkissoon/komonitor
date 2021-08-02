@@ -1,6 +1,6 @@
 import { Logger } from "./logging";
 import fs from "fs";
-import { LoggingError } from "../errors/loggingError";
+import { LoggingError } from "./loggingError";
 
 // Simple console logger
 export class ConsoleLogger implements Logger {
