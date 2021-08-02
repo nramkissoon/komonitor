@@ -13,126 +13,108 @@ import {
 import Link from 'next/link'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { overrideStyles, SPACING_X_REACTIVE_VALUES } from '../theme/utils'
-import { DropDownProps, NavBarLinkProps, BaseNavBarProps } from './navBar'
+import { BaseNavBarProps } from './navBar'
 
-const hoverColor = 'gray.600'
 
-const flexContainerStyles: HTMLChakraProps<"div"> = {
-  w: "100vw",
-  py: "1em",
-  px: SPACING_X_REACTIVE_VALUES,
-  display: "flex",
-  flexWrap: "wrap",
-  shadow: "sm",
-  flexDirection: ["column", "row"],
-  alignItems: ["center", "flex-start"],
-}
-
-const brandingImageStyles: HTMLChakraProps<"div"> = {
-  w: "7.5em",
-  h: "100%",
-}
-
-const navBarlinkStyles: HTMLChakraProps<"div"> = {
-  verticalAlign: "middle",
-  display: "inline-block",
-  marginRight: "1.5vw",
-  marginLeft: "1.5vw",
-  fontSize: "1em",
-  fontWeight: "bold",
-  _hover: {
-    color: hoverColor,
-  },
-}
-
-const menuButtonHoverStyle: HTMLChakraProps<"div"> = {
-  _hover: {
-    color: hoverColor
-  }
-}
-
-const dropDownStyles: HTMLChakraProps<"div"> = {
-  fontSize: "1em",
-  py: '0',
-  mt: '.8em',
-  borderRadius: 'none'
-}
 
 
 export const BasicNavBar = (props: BaseNavBarProps) => {
   const {
     isAuthed,
-    brandingImageSrc,
+    companyIcon,
     loginButton,
     links,
-    navBarStyles} = props
+    styles} = props
 
+    const hoverColor = 'gray.400'
+
+    const defaultFlexContainerStyles: HTMLChakraProps<"div"> = {
+      w: "100vw",
+      py: "1em",
+      px: SPACING_X_REACTIVE_VALUES,
+      display: "flex",
+      flexWrap: "wrap",
+      shadow: "sm",
+      flexDirection: ["column", "row"],
+      alignItems: ["center", "flex-start"],
+    }
+    
+    const defaultBrandingImageStyles: HTMLChakraProps<"div"> = {
+      w: "7.5em",
+      h: "100%",
+    }
+    
+    const defaultNavBarLinkStyles: HTMLChakraProps<"div"> = {
+      verticalAlign: "middle",
+      display: "inline-block",
+      marginRight: "1.5vw",
+      marginLeft: "1.5vw",
+      fontSize: "1em",
+      fontWeight: "bold",
+      _hover: {
+        color: hoverColor,
+      },
+    }
+    
+    const defaultMenuButtonHoverStyle: HTMLChakraProps<"div"> = {
+      _hover: {
+        color: hoverColor
+      }
+    }
+    
+    const defaultDropDownStyles: HTMLChakraProps<"div"> = {
+      fontSize: "1em",
+      py: '0',
+      mt: '.8em',
+      borderRadius: 'none'
+    }
 
   let finalLinks = links
   if (isAuthed) {finalLinks = links.concat([{text: 'App', href: '/app', type: 'link'}])}
 
   return (
-    <Flex {...overrideStyles(flexContainerStyles, navBarStyles?.containerStyle )}>
-        <Branding brandingImgSrc={brandingImageSrc}/>
+    <Flex {...overrideStyles(defaultFlexContainerStyles, styles?.containerStyle )}>
+        <Box>
+          <Link href={'/'} passHref>
+            <a><Img alt={'Company Branding'} src={companyIcon} {...defaultBrandingImageStyles}/></a>
+          </Link>
+        </Box>
         <Spacer />
         <Box>
           {finalLinks.map((link) => {
             if (link.type === 'link') {
               return (
-                <TextLink {...link} key={link.text} styles={navBarStyles?.linkStyles?.topLevelLinkStyles}/>
+                <Link href={link.href} passHref key={link.text}>
+                  <Box as='a' {...overrideStyles(defaultNavBarLinkStyles, styles?.linkStyles?.topLevelLinkStyles)}>
+                    {link.text}
+                  </Box>
+                </Link>
               )
             } else {
-              return <DropDownLink {...link} key={link.title} linkStyles={navBarStyles?.linkStyles} />
+              return (
+                <Menu>
+                  <MenuButton {...overrideStyles(defaultMenuButtonHoverStyle, styles?.linkStyles?.dropDownMenuButtonStyles)}>
+                    <Box {...overrideStyles(defaultNavBarLinkStyles, styles?.linkStyles?.topLevelLinkStyles)}>
+                      {link.title} <ChevronDownIcon ml='.2em'/>
+                    </Box>
+                  </MenuButton>
+                  <MenuList {...overrideStyles(defaultDropDownStyles, styles?.linkStyles?.dropDownLinkStyles)}>
+                    {link.links.map((dropDownLink: {text: string, href: string}) => (
+                      <MenuItem key={dropDownLink.text}>
+                        <Link href={dropDownLink.href} passHref>
+                          <Box>
+                            {dropDownLink.text}
+                          </Box>
+                        </Link>
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                </Menu>
+              )
             }
           })}
           {loginButton}
         </Box>
     </Flex>
-  )
-}
-
-const Branding = (props: { brandingImgSrc: string }) => {
-  const {brandingImgSrc} = props
-  return (
-    <Box>
-      <Link href={'/'} passHref>
-        <a><Img alt={'Company Branding'} src={brandingImgSrc} {...brandingImageStyles}/></a>
-      </Link>
-    </Box>
-  )
-}
-
-const TextLink = (props: NavBarLinkProps) => {
-  const { text, href, styles } = props
-  return (
-    <Link href={href} passHref>
-      <Box as='a' {...overrideStyles(navBarlinkStyles, styles)}>
-        {text}
-      </Box>
-    </Link>
-  )
-}
-
-const DropDownLink = (props: DropDownProps) => {
-  const { title, links, linkStyles } = props
-  return (
-    <Menu>
-      <MenuButton {...overrideStyles(menuButtonHoverStyle, linkStyles?.menuButtonStyles)}>
-        <Box {...overrideStyles(navBarlinkStyles, linkStyles?.topLevelLinkStyles)}>
-          {title} <ChevronDownIcon ml='.2em'/>
-        </Box>
-      </MenuButton>
-      <MenuList {...overrideStyles(dropDownStyles, linkStyles?.dropDownLinkStyles)}>
-        {links.map((link) => (
-          <MenuItem key={link.text}>
-            <Link href={link.href} passHref>
-              <Box>
-                {link.text}
-              </Box>
-            </Link>
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu>
   )
 }

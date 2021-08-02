@@ -13,7 +13,6 @@ export interface NavBarLinkProps {
   text: string;
   href: string;
   type: "link";
-  styles?: HTMLChakraProps<"div">;
 }
 
 /**
@@ -23,11 +22,6 @@ export interface DropDownProps {
   title: string;
   links: NavBarLinkProps[];
   type: "dropdown";
-  linkStyles?: {
-    menuButtonStyles?: HTMLChakraProps<"div">;
-    dropDownLinkStyles?: HTMLChakraProps<"div">;
-    topLevelLinkStyles?: HTMLChakraProps<"div">;
-  };
 }
 
 /**
@@ -38,7 +32,7 @@ export interface NavBarStyleProps {
   containerStyle?: HTMLChakraProps<"div">;
   brandingImageStyle?: HTMLChakraProps<"img">;
   linkStyles?: {
-    menuButtonStyles?: HTMLChakraProps<"div">;
+    dropDownMenuButtonStyles?: HTMLChakraProps<"div">;
     dropDownLinkStyles?: HTMLChakraProps<"div">;
     topLevelLinkStyles?: HTMLChakraProps<"div">;
   };
@@ -51,7 +45,7 @@ export interface NavBarStyleProps {
 export interface BaseNavBarProps {
   isAuthed: boolean;
   loginButton: React.ReactElement;
-  brandingImageSrc: string;
-  links: (LinkProps | DropDownProps)[];
-  navBarStyles?: NavBarStyleProps;
+  companyIcon: string;
+  links: (NavBarLinkProps | DropDownProps)[];
+  styles?: NavBarStyleProps;
 }
