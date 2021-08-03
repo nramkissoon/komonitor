@@ -1,3 +1,9 @@
+import {
+  BoxProps,
+  FlexProps,
+  IconProps,
+  WrapItemProps,
+} from "@chakra-ui/react";
 import React from "react";
 
 /**
@@ -63,4 +69,71 @@ export interface SectionedFooterProps {
   companyName: string;
   linkSections: FooterLinkSectionProps[];
   socialSection?: FooterSocialLinkSectionProps;
+}
+
+/**
+ * Props for a simple centered footer with a (optional) link, (optional) social link, and copyright section.
+ */
+export interface SimpleCenteredFooterProps {
+  /**
+   * Links for other pages within website.
+   */
+  pageLinks: FooterLinkProps[];
+
+  /**
+   * Social links with icon.
+   */
+  socialLinks: FooterSocialLinkProps[];
+
+  /**
+   * Copyright string
+   */
+  copyright: string;
+
+  /**
+   * Style props
+   */
+  styles?: {
+    /**
+     * Props for the flex box container housing the footer.
+     *
+     * See https://chakra-ui.com/docs/layout/flex for documentation on Flex component.
+     */
+    flexContainerProps?: FlexProps;
+
+    /**
+     * Props for the Wrap housing the page links section.
+     *
+     * See https://chakra-ui.com/docs/layout/wrap for documentation on Wrap component.
+     */
+    pageLinkWrapProps?: WrapProps;
+
+    /**
+     * Props for the Box component housing the page link.
+     *
+     * See https://chakra-ui.com/docs/layout/box for documentation on Box component.
+     */
+    pageLinkProps?: BoxProps;
+
+    /**
+     * Props for the Wrap housing the social links section.
+     *
+     * See https://chakra-ui.com/docs/layout/wrap for documentation on Wrap component.
+     */
+    socialLinkWrapProps?: WrapProps;
+
+    /**
+     * Props for the Icon component housing the page link.
+     *
+     * See https://chakra-ui.com/docs/media-and-icons/icon for documentation on Icon component.
+     */
+    socialLinkProps?: IconProps;
+
+    /**
+     * Props for the Box component housing the copyright string.
+     *
+     * See https://chakra-ui.com/docs/layout/box for documentation on Box component.
+     */
+    copyrightProps?: BoxProps;
+  };
 }

@@ -83,7 +83,7 @@ export const SimpleSocialFooter = (props: SimpleSocialFooterProps) => {
       <Spacer />
       <Box>
         {socialLinks.map((link) => (
-          <Link href={'/'} passHref key={`footer-${link.text}`}>
+          <Link href={link.href} passHref key={`footer-${link.text}`}>
             <a><Icon {...overrideStyles(defaultSocialLinkStyles, styles?.socialLinkStyles)} >{link.icon}</Icon></a>
           </Link>
           )
