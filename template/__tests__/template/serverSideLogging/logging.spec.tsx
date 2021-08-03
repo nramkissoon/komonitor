@@ -1,4 +1,4 @@
-import { LoggingError } from "../../src/serverSideLogging/loggingError";
+import { LoggingError } from "../../../src/template/serverSideLogging/loggingError";
 
 describe("Logging Error", () => {
   it("message is correct", () => {

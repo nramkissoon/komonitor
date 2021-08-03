@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react';
 import { mount, shallow } from 'enzyme';
 import * as sinon from 'sinon';
-import { LoginButton } from "../../../src/prebuiltUI/buttons/loginButton";
+import { LoginButton } from "../../../../src/template/prebuiltUI/buttons/loginButton";
 
 describe("Login Button", () => {
 

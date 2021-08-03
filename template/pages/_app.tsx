@@ -7,7 +7,7 @@ import type { AppProps } from 'next/app'
  */
 import { ChakraProvider } from "@chakra-ui/react"
 import "@fontsource/roboto" // see https://chakra-ui.com/guides/using-fonts for configuring fonts.
-import defaultTheme from '../src/prebuiltUI/theme/defaultTheme';
+import defaultTheme from '../src/template/prebuiltUI/theme/defaultTheme';
 
 
 function MyApp({ Component, pageProps }: AppProps) {

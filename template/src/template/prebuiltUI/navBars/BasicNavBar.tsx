@@ -92,7 +92,7 @@ export const BasicNavBar = (props: BaseNavBarProps) => {
               )
             } else {
               return (
-                <Menu>
+                <Menu key={link.title}>
                   <MenuButton {...overrideStyles(defaultMenuButtonHoverStyle, styles?.linkStyles?.dropDownMenuButtonStyles)}>
                     <Box {...overrideStyles(defaultNavBarLinkStyles, styles?.linkStyles?.topLevelLinkStyles)}>
                       {link.title} <ChevronDownIcon ml='.2em'/>
