@@ -75,19 +75,21 @@ export const SimpleCenteredFooter = (props: SimpleCenteredFooterProps) => {
           )))}
         </Wrap>
       </Box>
-      <Box>
-        <Wrap {...overrideStyles(defaultSocialLinksWrapStyles, styles?.socialLinkWrapProps)}>
-          {socialLinks.map((socialLink) => (
-            <WrapItem key={`footer-social-${socialLink.href}`}>
-              <Link href={socialLink.href} passHref >
-                <Box as='a'>
-                  <Icon {...overrideStyles(defaultSocialLinkStyles, styles?.socialLinkProps)}>{socialLink.icon}</Icon>
-                </Box>
-              </Link>
-            </WrapItem>
-          ))}
-        </Wrap>
-      </Box>
+      {socialLinks ? (
+        <Box>
+          <Wrap {...overrideStyles(defaultSocialLinksWrapStyles, styles?.socialLinkWrapProps)}>
+            {socialLinks.map((socialLink) => (
+              <WrapItem key={`footer-social-${socialLink.href}`}>
+                <Link href={socialLink.href} passHref >
+                  <Box as='a'>
+                    <Icon {...overrideStyles(defaultSocialLinkStyles, styles?.socialLinkProps)}>{socialLink.icon}</Icon>
+                  </Box>
+                </Link>
+              </WrapItem>
+            ))}
+          </Wrap>
+        </Box>
+      ) : (<></>) }
       <Box>
         <Box {...overrideStyles(defaultCopyrightStyles, styles?.copyrightProps)}>
           { copyright }

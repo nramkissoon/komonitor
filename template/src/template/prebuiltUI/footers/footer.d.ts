@@ -18,7 +18,7 @@ export interface FooterLinkProps {
  * Props for a social link that would be displayed as an icon.
  */
 export interface FooterSocialLinkProps extends FooterLinkProps {
-  text: string; // used as alt for icon
+  text: string;
   icon: React.ReactElement;
   href: string;
 }
@@ -53,11 +53,37 @@ export interface FooterSocialLinkSectionProps extends FooterLinkSectionProps {
  */
 export interface SimpleSocialFooterProps extends SimpleFooterProps {
   socialLinks: FooterSocialLinkProps[];
+  /**
+   * Style props
+   */
   styles?: {
-    containerStyles: HTMLChakraProps<"div">;
-    copyrightStyles: HTMLChakraProps<"div">;
-    linkStyles?: HTMLChakraProps<"div">;
-    socialLinkStyles?: HTMLChakraProps<"div">;
+    /**
+     * Props for the flex box container housing the footer.
+     *
+     * See https://chakra-ui.com/docs/layout/flex for documentation on Flex component.
+     */
+    flexContainerProps?: FlexProps;
+
+    /**
+     * Props for the Box component housing the copyright string.
+     *
+     * See https://chakra-ui.com/docs/layout/box for documentation on Box component.
+     */
+    copyrightProps?: BoxProps;
+
+    /**
+     * Props for the Box component housing the page link.
+     *
+     * See https://chakra-ui.com/docs/layout/box for documentation on Box component.
+     */
+    pageLinkProps?: BoxProps;
+
+    /**
+     * Props for the Icon component housing the page link.
+     *
+     * See https://chakra-ui.com/docs/media-and-icons/icon for documentation on Icon component.
+     */
+    socialLinkProps?: IconProps;
   };
 }
 
@@ -72,7 +98,7 @@ export interface SectionedFooterProps {
 }
 
 /**
- * Props for a simple centered footer with a (optional) link, (optional) social link, and copyright section.
+ * Props for a simple centered footer with a page link, (optional) social link, and copyright section.
  */
 export interface SimpleCenteredFooterProps {
   /**
@@ -81,9 +107,9 @@ export interface SimpleCenteredFooterProps {
   pageLinks: FooterLinkProps[];
 
   /**
-   * Social links with icon.
+   * Optional social links with icon.
    */
-  socialLinks: FooterSocialLinkProps[];
+  socialLinks?: FooterSocialLinkProps[];
 
   /**
    * Copyright string

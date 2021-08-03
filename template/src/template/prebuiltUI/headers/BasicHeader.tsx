@@ -8,17 +8,19 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  HTMLChakraProps,
+  FlexProps,
+  ImgProps,
+  BoxProps,
+  MenuButtonProps,
+  MenuListProps,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { overrideStyles, SPACING_X_REACTIVE_VALUES } from '../theme/utils'
-import { BaseNavBarProps } from './navBar'
+import { BasicHeaderProps } from './header'
 
 
-
-
-export const BasicNavBar = (props: BaseNavBarProps) => {
+export const BasicHeader = (props: BasicHeaderProps) => {
   const {
     isAuthed,
     companyIcon,
@@ -28,7 +30,7 @@ export const BasicNavBar = (props: BaseNavBarProps) => {
 
     const hoverColor = 'gray.400'
 
-    const defaultFlexContainerStyles: HTMLChakraProps<"div"> = {
+    const defaultFlexContainerStyles: FlexProps = {
       w: "100vw",
       py: "1em",
       px: SPACING_X_REACTIVE_VALUES,
@@ -39,12 +41,12 @@ export const BasicNavBar = (props: BaseNavBarProps) => {
       alignItems: ["center", "flex-start"],
     }
     
-    const defaultBrandingImageStyles: HTMLChakraProps<"div"> = {
+    const defaultBrandingImageStyles: ImgProps = {
       w: "7.5em",
       h: "100%",
     }
     
-    const defaultNavBarLinkStyles: HTMLChakraProps<"div"> = {
+    const defaultHeaderLinkStyles: BoxProps = {
       verticalAlign: "middle",
       display: "inline-block",
       marginRight: "1.5vw",
@@ -56,13 +58,13 @@ export const BasicNavBar = (props: BaseNavBarProps) => {
       },
     }
     
-    const defaultMenuButtonHoverStyle: HTMLChakraProps<"div"> = {
+    const defaultMenuButtonStyle: MenuButtonProps = {
       _hover: {
         color: hoverColor
       }
     }
     
-    const defaultDropDownStyles: HTMLChakraProps<"div"> = {
+    const defaultDropDownListStyles: MenuListProps = {
       fontSize: "1em",
       py: '0',
       mt: '.8em',
@@ -73,7 +75,7 @@ export const BasicNavBar = (props: BaseNavBarProps) => {
   if (isAuthed) {finalLinks = links.concat([{text: 'App', href: '/app', type: 'link'}])}
 
   return (
-    <Flex {...overrideStyles(defaultFlexContainerStyles, styles?.containerStyle )}>
+    <Flex {...overrideStyles(defaultFlexContainerStyles, styles?.flexContainerProps )}>
         <Box>
           <Link href={'/'} passHref>
             <a><Img alt={'Company Branding'} src={companyIcon} {...defaultBrandingImageStyles}/></a>
@@ -85,7 +87,7 @@ export const BasicNavBar = (props: BaseNavBarProps) => {
             if (link.type === 'link') {
               return (
                 <Link href={link.href} passHref key={link.text}>
-                  <Box as='a' {...overrideStyles(defaultNavBarLinkStyles, styles?.linkStyles?.topLevelLinkStyles)}>
+                  <Box as='a' {...overrideStyles(defaultHeaderLinkStyles, styles?.headerLinkProps)}>
                     {link.text}
                   </Box>
                 </Link>
@@ -93,12 +95,12 @@ export const BasicNavBar = (props: BaseNavBarProps) => {
             } else {
               return (
                 <Menu key={link.title}>
-                  <MenuButton {...overrideStyles(defaultMenuButtonHoverStyle, styles?.linkStyles?.dropDownMenuButtonStyles)}>
-                    <Box {...overrideStyles(defaultNavBarLinkStyles, styles?.linkStyles?.topLevelLinkStyles)}>
+                  <MenuButton {...overrideStyles(defaultMenuButtonStyle, styles?.dropDownMenuButtonProps)}>
+                    <Box {...overrideStyles(defaultHeaderLinkStyles, styles?.headerLinkProps)}>
                       {link.title} <ChevronDownIcon ml='.2em'/>
                     </Box>
                   </MenuButton>
-                  <MenuList {...overrideStyles(defaultDropDownStyles, styles?.linkStyles?.dropDownLinkStyles)}>
+                  <MenuList {...overrideStyles(defaultDropDownListStyles, styles?.dropDownMenuListProps)}>
                     {link.links.map((dropDownLink: {text: string, href: string}) => (
                       <MenuItem key={dropDownLink.text}>
                         <Link href={dropDownLink.href} passHref>
