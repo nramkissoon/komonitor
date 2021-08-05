@@ -42,7 +42,7 @@ export interface BasicHeaderProps {
   /**
    * Login button component.
    */
-  loginButton: React.ReactElement;
+  loginButton: React.ReactNode;
 
   /**
    * Path to the asset that will be used for the company branding on the

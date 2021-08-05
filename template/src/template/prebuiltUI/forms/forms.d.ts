@@ -11,6 +11,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { FormikHelpers } from "formik";
+import React from "react";
 
 /**
  * @description Formik values needed for an email submission component.
@@ -40,7 +41,7 @@ export type EmailSubmissionFormOnSubmitCallBack = (
 export type ValidateEmailFunc = (email: string) => undefined | string;
 
 /**
- *
+ * @description Props for an email submission form.
  */
 export interface EmailSubmissionFormProps {
   /**
@@ -80,7 +81,7 @@ export interface EmailSubmissionFormProps {
      *
      * @see https://chakra-ui.com/docs/layout/flex for documentation on Flex component.
      */
-    formFlexContainerProps: FlexProps;
+    formFlexContainerProps?: FlexProps;
 
     /**
      * @description Props for {@link Input} component where user can enter their email.

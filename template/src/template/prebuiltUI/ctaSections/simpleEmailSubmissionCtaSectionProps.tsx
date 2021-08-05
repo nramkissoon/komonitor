@@ -1,12 +1,19 @@
-import { Box, Flex, FlexProps, Heading, HeadingProps } from "@chakra-ui/layout";
-import { Button, ButtonProps } from "@chakra-ui/react";
 import React from "react";
+import { Box, Flex, FlexProps, Heading, HeadingProps } from "@chakra-ui/layout";
 import { overrideStyles } from "../theme/utils";
-import { SimpleSignUpCtaSectionProps } from "./ctaSection";
+import { SimpleEmailSubmissionCtaSectionProps } from "./ctaSection";
+import { BoxProps } from "@chakra-ui/react";
 
-export const SimpleSignUpCtaSection = (props: SimpleSignUpCtaSectionProps) => {
-  const { header, subheader, ctaButtonProps, styles } = props;
-  const { isAuthed, buttonText, authRoute, appRoute } = ctaButtonProps;
+/**
+ * @description A centered CTA section that features a header, (optional) subheader, and an email submission form.
+ *
+ * @param props {@link SimpleEmailSubmissionCtaSectionProps}
+ * @returns A CTA section with an email submission form
+ */
+export const SimpleEmailSubmissionCtaSection = (
+  props: SimpleEmailSubmissionCtaSectionProps
+) => {
+  const { header, subheader, emailSubmissionForm, styles } = props;
 
   const defaultFlexContainerStyles: FlexProps = {
     w: "100vw",
@@ -29,16 +36,12 @@ export const SimpleSignUpCtaSection = (props: SimpleSignUpCtaSectionProps) => {
     size: "lg",
     textAlign: "center",
     color: "gray.600",
-    mt: ".3em",
+    mt: ".8em",
   };
 
-  const defaultCtaButtonProps: ButtonProps = {
-    size: "lg",
-    as: "a",
-    mt: "3.5em",
-    shadow: "md",
-    px: "2.5em",
-    py: "1.5em",
+  const defaultEmailSubmissionFormContainerPros: BoxProps = {
+    w: ["300px", "450px", null, null, "550px", "600px"],
+    mt: "4.5em",
   };
 
   return (
@@ -64,13 +67,13 @@ export const SimpleSignUpCtaSection = (props: SimpleSignUpCtaSectionProps) => {
       ) : (
         <></>
       )}
-      <Box>
-        <Button
-          href={isAuthed ? appRoute : authRoute}
-          {...overrideStyles(defaultCtaButtonProps, styles?.ctaButtonProps)}
-        >
-          {isAuthed ? buttonText.authed : buttonText.notAuthed}
-        </Button>
+      <Box
+        {...overrideStyles(
+          defaultEmailSubmissionFormContainerPros,
+          styles?.emailSubmissionFormContainerProps
+        )}
+      >
+        {emailSubmissionForm}
       </Box>
     </Flex>
   );
