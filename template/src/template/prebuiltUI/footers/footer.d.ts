@@ -1,6 +1,7 @@
 import {
   BoxProps,
   FlexProps,
+  HeadingProps,
   IconProps,
   WrapItemProps,
 } from "@chakra-ui/react";
@@ -30,14 +31,6 @@ export interface SimpleFooterProps {
   companyName: string;
   privacyPolicyLink: FooterLinkProps;
   termsOfServiceLink: FooterLinkProps;
-}
-
-/**
- * Props for a section of related links in a footer.
- */
-export interface FooterLinkSectionProps {
-  sectionTitle: string;
-  links: FooterLinkProps[];
 }
 
 /**
@@ -162,4 +155,44 @@ export interface SimpleCenteredFooterProps {
      */
     copyrightProps?: BoxProps;
   };
+}
+
+export interface FooterLinksColumnProps {
+  columnTitle: React.ReactNode;
+  links: FooterLinkProps[];
+}
+
+export interface BrandingSectionProps {
+  icon: React.ReactNode;
+  missionStatement?: React.ReactNode;
+  socialLinks?: FooterSocialLinkProps[];
+  styles?: {}; // TODO
+}
+
+export interface CtaSectionProps {
+  header: React.ReactNode;
+  subheader?: React.ReactNode;
+  /**
+   * @description CTA component. Typically this would be a sign up button or email form.
+   */
+  ctaComponent: React.ReactNode;
+  styles?: {
+    boxContainerProps: BoxProps;
+    headingProps: HeadingProps;
+    subheadingProps: HeadingProps;
+    ctaComponentContainerProps: BoxProps;
+  };
+}
+
+export interface FourColumnFooterProps {
+  copyright: React.ReactNode;
+  firstColumn: FooterLinksColumnProps;
+  secondColumn: FooterLinksColumnProps;
+  thirdColumn: FooterLinksColumnProps;
+  fourthColumn: FooterLinksColumnProps;
+  extraSection: {
+    component: React.ReactNode;
+    placement?: "right" | "left" = "left";
+  };
+  styles?: {};
 }
