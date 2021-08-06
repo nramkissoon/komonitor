@@ -30,7 +30,7 @@ export const SimpleSocialFooter = (props: SimpleSocialFooterProps) => {
   } = props;
 
   const defaultContainerStyles: FlexProps = {
-    w: "100vw",
+    w: "100%",
     py: ".5em",
     px: SPACING_X_REACTIVE_VALUES,
     display: "flex",

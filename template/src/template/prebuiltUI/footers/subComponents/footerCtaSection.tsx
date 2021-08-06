@@ -24,13 +24,14 @@ export const FooterCtaSection = (props: CtaSectionProps) => {
 
   const defaultSubheadingProps: HeadingProps = {
     as: "h5",
-    size: "md",
+    size: "sm",
+    fontWeight: "normal",
     color: "gray.600",
-    mt: ".8em",
+    mt: ".1em",
   };
 
   const defaultCtaComponentContainerProps: BoxProps = {
-    mt: "2em",
+    mt: "1em",
   };
 
   return (

@@ -1,10 +1,15 @@
 import {
   BoxProps,
+  DividerProps,
   FlexProps,
+  GridProps,
   HeadingProps,
   IconProps,
+  StackProps,
   WrapItemProps,
 } from "@chakra-ui/react";
+import { SimpleCenteredFooter } from "./simpleCenteredFooter";
+import { SimpleSocialFooter } from "./simpleSocialFooter";
 import React from "react";
 
 /**
@@ -177,22 +182,82 @@ export interface CtaSectionProps {
    */
   ctaComponent: React.ReactNode;
   styles?: {
-    boxContainerProps: BoxProps;
-    headingProps: HeadingProps;
-    subheadingProps: HeadingProps;
-    ctaComponentContainerProps: BoxProps;
+    boxContainerProps?: BoxProps;
+    headingProps?: HeadingProps;
+    subheadingProps?: HeadingProps;
+    ctaComponentContainerProps?: BoxProps;
   };
 }
 
 export interface FourColumnFooterProps {
+  /**
+   * @description a copyright section at the bottom of the footer.
+   * Can be a string or a component such as {@link SimpleCenteredFooter}
+   * or {@link SimpleSocialFooter}
+   */
   copyright: React.ReactNode;
+
   firstColumn: FooterLinksColumnProps;
   secondColumn: FooterLinksColumnProps;
   thirdColumn: FooterLinksColumnProps;
   fourthColumn: FooterLinksColumnProps;
-  extraSection: {
+
+  /**
+   * @description an optional section for components such as an email form or sign up CTA section.
+   */
+  extraSection?: {
     component: React.ReactNode;
-    placement?: "right" | "left" = "left";
+
+    /**
+     * @description placement relative to the link columns
+     */
+    placement: "right" | "left";
   };
-  styles?: {};
+
+  styles?: {
+    /**
+     * Props for the Box component housing the entire footer.
+     */
+    boxContainerProps?: BoxProps;
+
+    /**
+     * Props for the Flex component housing the columns and extra section.
+     */
+    flexContainerProps?: FlexProps;
+
+    /**
+     * Props for the Box component housing the extra section.
+     */
+    extraSectionContainerProps?: BoxProps;
+
+    /**
+     * Props for the Grid component housing the columns.
+     */
+    columnGridContainerProps?: GridProps;
+
+    /**
+     * Props for the VStack component representing a column.
+     */
+    columnProps?: StackProps;
+
+    /**
+     * Props for the Heading component that is the column title.
+     */
+    columnTitleProps?: HeadingProps;
+
+    /**
+     * Props for the Box components housing links in a column.
+     */
+    columnLinkProps?: BoxProps;
+
+    /**
+     * Props for the Divider component separating the columns from the copyright section.
+     */
+    dividerProps?: DividerProps;
+
+    /**
+     * Props for the Box component housing the copyright component.
+     */
+    copyrightContainerProps: BoxProps;
+  };
 }
