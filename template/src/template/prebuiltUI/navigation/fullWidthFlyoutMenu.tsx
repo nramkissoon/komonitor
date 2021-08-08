@@ -31,7 +31,9 @@ export const FullWidthFlyoutMenu = (props: FullWidthFlyoutMenuProps) => {
     w: "full",
     display: "none",
     shadow: "sm",
+    bg: useColorModeValue("white", "gray.700"),
     _groupHover: { display: "block" },
+    zIndex: "dropdown",
   };
 
   const defaultLinkGridContainerStyles: SimpleGridProps = {

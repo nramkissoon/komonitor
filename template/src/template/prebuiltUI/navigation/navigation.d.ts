@@ -64,3 +64,11 @@ export interface FullWidthFlyoutMenuProps {
     linkGridContainerProps?: SimpleGridProps;
   };
 }
+
+export interface SimpleLinkProps {
+  text: string;
+  href: string;
+  styles?: {
+    buttonLinkStyles?: ButtonProps;
+  };
+}
