@@ -54,3 +54,13 @@ export interface DropDownMenuProps {
     dropDownContainerStyles?: PopoverContentProps;
   };
 }
+
+export interface FullWidthFlyoutMenuProps {
+  buttonText: string;
+  links: React.ReactNode[];
+  styles?: {
+    flyoutButtonProps?: ButtonProps;
+    flyoutBoxContainerProps?: BoxProps;
+    linkGridContainerProps?: SimpleGridProps;
+  };
+}
