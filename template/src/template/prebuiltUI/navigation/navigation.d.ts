@@ -2,6 +2,8 @@ import {
   BoxProps,
   CloseButtonProps,
   HTMLChakraProps,
+  PopoverContentProps,
+  SimpleGridProps,
   StackProps,
 } from "@chakra-ui/react";
 import React from "react";
@@ -39,5 +41,16 @@ export interface SlideMobileNavigationProps {
     slideTransitionProps?: SlideProps;
     vstackContainerProps?: StackProps;
     closeButtonProps?: CloseButtonProps;
+  };
+}
+
+export interface DropDownMenuProps {
+  buttonText: string;
+  mainColumnLinks: React.ReactNode[];
+  responsiveColumns?: boolean;
+  styles?: {
+    dropDownButtonProps?: ButtonProps;
+    linkColumnGridContainerProps?: SimpleGridProps;
+    dropDownContainerStyles?: PopoverContentProps;
   };
 }
