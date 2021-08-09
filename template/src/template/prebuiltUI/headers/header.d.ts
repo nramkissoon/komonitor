@@ -1,97 +1,106 @@
 import {
   BackgroundProps,
   BoxProps,
-  CSSObject,
   FlexProps,
   HTMLChakraProps,
-  ImgProps,
-  MenuButtonProps,
-  MenuListProps,
-  SystemCSSProperties,
+  IconButtonProps,
+  StackProps,
 } from "@chakra-ui/react";
-import React from "react";
 
 /**
- * Props for a top level link in a navigation bar.
+ * @description Props for a base header with centered page links.
  */
-export interface HeaderLinkProps {
-  text: string;
-  href: string;
-  type: "link";
-}
-
-/**
- * Props for a drop down menu in a navigation bar.
- */
-export interface HeaderDropDownProps {
-  title: string;
-  links: HeaderLinkProps[];
-  type: "dropdown";
-}
-
-/**
- * Props for a basic header component.
- */
-export interface BasicHeaderProps {
+export interface BaseHeaderProps {
   /**
-   * Boolean flag to indicate if the user is authed and to change the
-   * appearance of the header.
+   * Optional mobile navigation component.
    */
-  isAuthed: boolean;
+  mobileNavigation?: {
+    /**
+     * Menu component to display when toggled.
+     */
+    menu: React.ReactNode;
+
+    /**
+     * Function to call to open the menu. Passed to the onClick prop of a toggle button.
+     */
+    onOpen: MouseEventHandler<HTMLButtonElement>;
+  };
 
   /**
-   * Login button component.
+   * Link components. Can be custom components or pre-built link components.
+   */
+  links: React.ReactNode[];
+
+  /**
+   * Logo component. Usually an SVG icon.
+   */
+  logo: React.ReactNode;
+
+  /**
+   * Login button component that displays on the right side of the header.
    */
   loginButton: React.ReactNode;
 
   /**
-   * Path to the asset that will be used for the company branding on the
-   * header.
+   * A component to display that will redirect to sign in page or app page based on user's authentication status.
    */
-  companyIcon: string;
+  signInOrAppLink: React.ReactNode;
 
   /**
-   * A list of page links and drop down menu props.
-   */
-  links: (HeaderLinkProps | DropDownProps)[];
-
-  /**
-   * Styles for controlling the look of individual header components.
+   * Props to control the styling and functionality of subcomponents of this header.
    */
   styles?: {
     /**
-     * Props for the flex box container housing the header.
-     *
-     * See https://chakra-ui.com/docs/layout/flex for documentation on Flex component.
+     * Custom icons for the color mode toggle instead of defaults.
+     */
+    colorModeToggleIcons?: {
+      darkIcon: IconType;
+      lightIcon: IconType;
+    };
+
+    /**
+     * Props for the header element housing the entire component.
+     */
+    headerContainerProps?: HTMLChakraProps<"header">;
+
+    /**
+     * Props for the flex box housing the header's subcomponents.
      */
     flexContainerProps?: FlexProps;
 
     /**
-     * Props for the Img component for the branding image.
-     *
-     * See https://chakra-ui.com/docs/media-and-icons/image for documentation on Img component.
+     * Props for the flex box housing the logo.
      */
-    brandingImgProps?: ImgProps;
+    logoFlexContainerProps?: FlexProps;
 
     /**
-     * Props for the Box component housing the header links.
-     *
-     * See https://chakra-ui.com/docs/layout/box for documentation on Box component.
+     * Props for the Box component housing the logo. Logo sizing can be controlled through these props.
      */
-    headerLinkProps?: BoxProps;
+    logoBoxContainerProps?: BoxProps;
 
     /**
-     * Props for the Menu Button component for a drop down.
-     *
-     * See https://chakra-ui.com/docs/overlay/menu for documentation on Menu Button component.
+     * Props for the Stack component housing the page links.
      */
-    dropDownMenuButtonProps?: MenuButtonProps;
+    linksHstackContainerProps?: StackProps;
 
     /**
-     * Props for the Menu List component for a drop down.
-     *
-     * See https://chakra-ui.com/docs/overlay/menu for documentation on Menu List component.
+     * Props for the flex box housing the subcomponents on the right side of the header.
      */
-    dropDownMenuListProps?: MenuListProps;
+    rightSectionFlexContainerProps?: FlexProps;
+
+    /**
+     * Props for the Stack component housing the subcomponents on the right side of the header.
+     */
+    rightSectionHstackContainerProps?: StackProps;
+
+    /**
+     * Props for the color mode toggle button.
+     */
+    colorModeToggleProps?: IconButtonProps;
+
+    /**
+     * Props for the mobile navigation menu toggle that displays when screen width is small enough.
+     */
+    mobileNavHamburgerProps?: IconButtonProps;
   };
 }
