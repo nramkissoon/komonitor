@@ -1,9 +1,11 @@
 import {
+  BadgeProps,
   BoxProps,
   ButtonProps,
   FlexProps,
   HTMLChakraProps,
   StackProps,
+  TextProps,
 } from "@chakra-ui/react";
 import React, { MouseEventHandler } from "react";
 
@@ -35,6 +37,27 @@ export interface BasicPricingCardProps {
     bottomSectionVstackContainerProps?: StackProps;
     featureVstackContainerProps?: StackProps;
     buttonBoxContainerProps?: BoxProps;
+    buttonProps?: ButtonProps;
+  };
+}
+
+export interface FancyPricingCardProps {
+  productTitle: string;
+  price: string;
+  pricePeriod?: string;
+  description?: string;
+  buttonOnClick: MouseEventHandler<HTMLButtonElement>;
+  buttonText: string;
+  featureItems: React.ReactNode[];
+  styles?: {
+    boxContainerProps?: BoxProps;
+    topSectionBoxContainerProps?: BoxProps;
+    productTitleBadgeProps?: BadgeProps;
+    priceNumberProps?: TextProps;
+    pricePeriodProps?: HTMLChakraProps<"span">;
+    descriptionProps?: HTMLChakraProps<"p">;
+    bottomSectionFlexContainerProps?: FlexProps;
+    featureVstackContainerProps?: StackProps;
     buttonProps?: ButtonProps;
   };
 }
