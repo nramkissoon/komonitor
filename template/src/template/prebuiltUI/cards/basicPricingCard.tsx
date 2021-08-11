@@ -11,12 +11,14 @@ import {
   BoxProps,
   ButtonProps,
   Button,
+  Text,
+  TextProps,
 } from "@chakra-ui/react";
 import React from "react";
 import { overrideStyles } from "../theme/utils";
-import { BasicPricingCardProps } from "./card";
+import { BasicPricingCardPropsA, BasicPricingCardPropsB } from "./card";
 
-export const BasicPricingCard = (props: BasicPricingCardProps) => {
+export const BasicPricingCardA = (props: BasicPricingCardPropsA) => {
   const {
     productTitle,
     price,
@@ -172,5 +174,113 @@ export const BasicPricingCard = (props: BasicPricingCardProps) => {
         </Box>
       </VStack>
     </Flex>
+  );
+};
+
+export const BasicPricingCardB = (props: BasicPricingCardPropsB) => {
+  const {
+    productTitle,
+    price,
+    pricePeriod,
+    buttonOnClick,
+    buttonText,
+    featureItems,
+    styles,
+  } = props;
+
+  const defaultBoxContainerProps: BoxProps = {
+    rounded: ["none", "lg"],
+    shadow: ["none", "md"],
+    bg: useColorModeValue("white", "gray.800"),
+  };
+
+  const defaultTopSectionFlexContainerProps: FlexProps = {
+    direction: "column",
+    justify: "space-between",
+    p: 6,
+    borderBottomWidth: "1px",
+    borderColor: useColorModeValue("gray.200", "gray.600"),
+  };
+
+  const defaultProductTitleProps: HTMLChakraProps<"p"> = {
+    mb: 1,
+    fontSize: "lg",
+    fontWeight: "semibold",
+    color: useColorModeValue("gray.700", "gray.400"),
+  };
+
+  const defaultPriceNumberProps: TextProps = {
+    mb: 2,
+    fontSize: "2xl",
+    color: useColorModeValue("gray.600", "gray.400"),
+  };
+
+  const defaultPricePeriodProps: HTMLChakraProps<"span"> = {
+    fontSize: "2xl",
+    fontWeight: "medium",
+    color: useColorModeValue("gray.600", "gray.400"),
+  };
+
+  const defaultButtonProps: ButtonProps = {
+    w: ["full", "auto"],
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    px: 5,
+    py: 3,
+    color: "white",
+    bg: useColorModeValue("gray.600", "gray.500"),
+    _hover: { bg: useColorModeValue("gray.700", "gray.600") },
+    onClick: buttonOnClick,
+  };
+
+  const defaultFeatureVstackContainerProps: StackProps = {
+    p: 6,
+    spacing: 3,
+    flexGrow: 1,
+  };
+
+  return (
+    <Box
+      {...overrideStyles(defaultBoxContainerProps, styles?.boxContainerProps)}
+    >
+      <Flex
+        {...overrideStyles(
+          defaultTopSectionFlexContainerProps,
+          styles?.topSectionFlexContainerProps
+        )}
+      >
+        <chakra.p>{productTitle}</chakra.p>
+        <Text
+          {...overrideStyles(defaultPriceNumberProps, styles?.priceNumberProps)}
+        >
+          {price}
+          {pricePeriod ? (
+            <chakra.span
+              {...overrideStyles(
+                defaultPricePeriodProps,
+                styles?.pricePeriodProps
+              )}
+            >
+              {" "}
+              /{pricePeriod}{" "}
+            </chakra.span>
+          ) : (
+            <></>
+          )}
+        </Text>
+        <Button {...overrideStyles(defaultButtonProps, styles?.buttonProps)}>
+          {buttonText}
+        </Button>
+      </Flex>
+      <VStack
+        {...overrideStyles(
+          defaultFeatureVstackContainerProps,
+          styles?.featureVstackContainerProps
+        )}
+      >
+        {featureItems.map((item) => item)}
+      </VStack>
+    </Box>
   );
 };

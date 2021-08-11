@@ -27,6 +27,9 @@ export interface BasicPricingCardProps {
   buttonOnClick: MouseEventHandler<HTMLButtonElement>;
   buttonText: string;
   featureItems: React.ReactNode[];
+}
+
+export interface BasicPricingCardPropsA extends BasicPricingCardProps {
   styles?: {
     flexContainerProps?: FlexProps;
     vstackContainerProps?: StackProps;
@@ -38,6 +41,18 @@ export interface BasicPricingCardProps {
     featureVstackContainerProps?: StackProps;
     buttonBoxContainerProps?: BoxProps;
     buttonProps?: ButtonProps;
+  };
+}
+
+export interface BasicPricingCardPropsB extends BasicPricingCardProps {
+  styles?: {
+    boxContainerProps?: BoxProps;
+    topSectionFlexContainerProps?: FlexProps;
+    productTitleProps?: HTMLChakraProps<"p">;
+    priceNumberProps?: TextProps;
+    pricePeriodProps?: HTMLChakraProps<"span">;
+    buttonProps?: ButtonProps;
+    featureVstackContainerProps?: StackProps;
   };
 }
 
