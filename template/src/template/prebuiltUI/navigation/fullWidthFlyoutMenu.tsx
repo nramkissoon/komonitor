@@ -23,6 +23,7 @@ export const FullWidthFlyoutMenu = (props: FullWidthFlyoutMenuProps) => {
     _focus: { boxShadow: "none" },
     rightIcon: <IoIosArrowDown />,
     _hover: { color: useColorModeValue("gray.800", "white") },
+    py: "1.5em",
   };
 
   const defaultFlyoutBoxContainerStyles: BoxProps = {

@@ -15,7 +15,6 @@ export const LeftIconListItem = (props: LeftIconListItemProps) => {
   const { styles, text, icon } = props;
 
   const defaultFlexContainerProps: FlexProps = {
-    alignSelf: "start",
     w: "full",
   };
 
