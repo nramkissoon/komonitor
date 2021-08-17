@@ -12,6 +12,10 @@ export const eventIdNotProcessed = async (
   }
 };
 
+export type checkEventIdNotProcessed = (eventId: string) => Promise<boolean>;
+
+export type addEventIdToDb = (eventId: string) => Promise<void>;
+
 export const addEventIdToDB = async (eventId: string) => {
   try {
     // TODO add id to db

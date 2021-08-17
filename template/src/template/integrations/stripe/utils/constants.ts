@@ -17,6 +17,8 @@ export const EventTypes = {
 
   CUSTOMER_SUBSCRIPTION_CREATED: "customer.subscription.created",
 
+  CUSTOMER_SUBSCRIPTION_DELETED: "customer.subscription.deleted",
+
   CUSTOMER_SUBSCRIPTION_TRIAL__WILL__END:
     "customer.subscription.trial_will_end",
 

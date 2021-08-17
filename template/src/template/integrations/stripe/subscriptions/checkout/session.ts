@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import { clientSideGetStripe, serverSideGetStripe } from "../../getStripe";
+import {
+  clientSideGetStripe,
+  serverSideGetStripe,
+} from "../../utils/getStripe";
 
 const checkoutSessionFetch = async (
   priceId: string[],
@@ -59,6 +62,7 @@ export const clientCreateStripeSessionAndRedirect = async (
   userEmail: string,
   successUrl: string,
   cancelUrl: string,
+  stripePublicKey: string,
   serverErrorHandler: (message: string) => void,
   clientErrorHandler: (message: string | undefined) => void
 ) => {
@@ -78,9 +82,7 @@ export const clientCreateStripeSessionAndRedirect = async (
     );
   }
 
-  const stripe = await clientSideGetStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-  );
+  const stripe = await clientSideGetStripe(stripePublicKey);
   const { error } = await stripe!.redirectToCheckout({
     sessionId: response.id,
   });
@@ -89,45 +91,51 @@ export const clientCreateStripeSessionAndRedirect = async (
 };
 
 /**
- * Next.js API handler function for creating a Stripe checkout session for a subscription product.
+ * Next.js API middleware function for creating a Stripe checkout session for a subscription product.
  *
- * @param req NextApiRequest
- * @param res NextApiResponse
+ * @param stripeSecretKey string
+ * @param handler Next.js API handler function
  */
-export const createSessionApiHandler = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
-  if (req.method === "POST") {
-    const { body } = req;
-    const { userEmail, userId, priceIds, successUrl, cancelUrl } = body;
+export const createSessionApiMiddleware =
+  (
+    stripeSecretKey: string,
+    handler: (req: NextApiRequest, res: NextApiResponse) => void
+  ) =>
+  async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method === "POST") {
+      const { body } = req;
+      const { userEmail, userId, priceIds, successUrl, cancelUrl } = body;
 
-    if (!userEmail || !userId || !priceIds || !successUrl || !cancelUrl) {
-      res.status(400).end("Bad Request");
+      if (!userEmail || !userId || !priceIds || !successUrl || !cancelUrl) {
+        res.status(400).end("Bad Request");
+        return handler(req, res);
+      }
+
+      try {
+        const stripe = serverSideGetStripe(stripeSecretKey);
+        const checkoutSession: Stripe.Checkout.Session =
+          await stripe.checkout.sessions.create({
+            mode: "subscription",
+            customer_email: userEmail,
+            client_reference_id: userId,
+            payment_method_types: ["card"],
+            line_items: priceIds.map((priceId: string) => ({
+              priceId: priceId,
+              quantity: 1,
+            })),
+            success_url: successUrl + "?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url: cancelUrl + "?session_id={CHECKOUT_SESSION_ID}",
+          });
+
+        res.status(200).json(checkoutSession);
+        return handler(req, res);
+      } catch (error: any) {
+        res.status(500).json({ statusCode: 500, message: error.message });
+        return handler(req, res);
+      }
+    } else {
+      res.setHeader("Allow", "POST");
+      res.status(405).end("Method Not Allowed");
+      return handler(req, res);
     }
-
-    try {
-      const stripe = serverSideGetStripe(process.env.STRIPE_SECRET_KEY!);
-      const checkoutSession: Stripe.Checkout.Session =
-        await stripe.checkout.sessions.create({
-          mode: "subscription",
-          customer_email: userEmail,
-          client_reference_id: userId,
-          payment_method_types: ["card"],
-          line_items: priceIds.map((priceId: string) => ({
-            priceId: priceId,
-            quantity: 1,
-          })),
-          success_url: successUrl + "?session_id={CHECKOUT_SESSION_ID}",
-          cancel_url: cancelUrl + "?session_id={CHECKOUT_SESSION_ID}",
-        });
-
-      res.status(200).json(checkoutSession);
-    } catch (error: any) {
-      res.status(500).json({ statusCode: 500, message: error.message });
-    }
-  } else {
-    res.setHeader("Allow", "POST");
-    res.status(405).end("Method Not Allowed");
-  }
-};
+  };
