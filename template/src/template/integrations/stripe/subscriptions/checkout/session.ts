@@ -94,11 +94,13 @@ export const clientCreateStripeSessionAndRedirect = async (
  * Next.js API middleware function for creating a Stripe checkout session for a subscription product.
  *
  * @param stripeSecretKey string
+ * @param createOrRetrieveStripeCustomerId a function to call DB and Stripe to either create a new Stripe Customer or retrieve it, returns the customer ID
  * @param handler Next.js API handler function
  */
 export const createSessionApiMiddleware =
   (
     stripeSecretKey: string,
+    createOrRetrieveStripeCustomerId: (userId: string) => Promise<string>,
     handler: (req: NextApiRequest, res: NextApiResponse) => void
   ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
@@ -113,11 +115,15 @@ export const createSessionApiMiddleware =
 
       try {
         const stripe = serverSideGetStripe(stripeSecretKey);
+
+        const customerId = await createOrRetrieveStripeCustomerId(userId);
+
         const checkoutSession: Stripe.Checkout.Session =
           await stripe.checkout.sessions.create({
             mode: "subscription",
             customer_email: userEmail,
             client_reference_id: userId,
+            customer: customerId,
             payment_method_types: ["card"],
             line_items: priceIds.map((priceId: string) => ({
               priceId: priceId,

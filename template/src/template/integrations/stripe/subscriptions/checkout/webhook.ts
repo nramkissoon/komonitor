@@ -2,18 +2,21 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { serverSideGetStripe } from "../../utils/getStripe";
 import { EventTypes } from "../../utils/constants";
-import { addEventIdToDB, eventIdNotProcessed } from "../../utils/eventIdCheck";
+import { EventHandlers } from "./eventHandler";
 
 /**
  * Webhook middleware for handling Stripe events.
  *
- * @param req NextApiRequest
- * @param res NextApiResponse
+ * @param webhookSecret
+ * @param stripeSecretKey
+ * @param eventHandlers event handler methods for webhook events
+ * @param handler Next.js API handler function
  */
 export const stripeSubscriptionWebhookMiddleware =
   (
     webhookSecret: string,
     stripeSecretKey: string,
+    eventHandlers: EventHandlers,
     handler: (req: NextApiRequest, res: NextApiResponse) => void
   ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
@@ -33,7 +36,7 @@ export const stripeSubscriptionWebhookMiddleware =
 
         try {
           // handle the event on the backend
-          await handleEvent(event);
+          await handleEvent(event, eventHandlers);
           handler(req, res);
         } catch (error) {
           // server error
@@ -59,32 +62,40 @@ export const stripeSubscriptionWebhookMiddleware =
  * For each event, you should implement the required functionality for your specific use case in ./eventHandlers.ts
  *
  * @param event [Stripe Event](https://stripe.com/docs/api/events)
+ * @param eventHandlers event handler methods for webhook events
  * @returns
  */
-export const handleEvent = async (event: Stripe.Event) => {
+export const handleEvent = async (
+  event: Stripe.Event,
+  eventHandlers: EventHandlers
+) => {
   const { type, data, id } = event;
 
-  if (!(await eventIdNotProcessed(id))) {
+  if (!(await eventHandlers.checkEventIdNotProcessed(id))) {
     return;
   }
 
   try {
     switch (type) {
       case EventTypes.CHECKOUT_SESSION_COMPLETED:
+        await eventHandlers.provisionSubscriptionOnCheckoutSessionCompleted(
+          data
+        );
         break;
       case EventTypes.INVOICE_PAID:
+        await eventHandlers.provisionSubscriptionOnInvoicePaid(data);
         break;
       case EventTypes.INVOICE_PAYMENT__FAILED:
+        await eventHandlers.notifyCustomerOnPaymentMethodFailure(data);
         break;
       case EventTypes.INVOICE_PAYMENT__ACTION__REQUIRED:
-        break;
-      case EventTypes.CUSTOMER_SUBSCRIPTION_TRIAL__WILL__END:
-        break;
-      case EventTypes.INVOICE_CREATED:
+        await eventHandlers.notifyCustomerOnPaymentActionRequired(data);
         break;
       case EventTypes.CUSTOMER_SUBSCRIPTION_UPDATED:
+        await eventHandlers.handleCustomerSubscriptionUpdated(data);
         break;
-      case EventTypes.CUSTOMER_SUBSCRIPTION_DELETED:
+      default:
+        // fall through for events that do not need any particular handling
         break;
     }
   } catch (error) {
@@ -92,5 +103,5 @@ export const handleEvent = async (event: Stripe.Event) => {
     throw error;
   }
 
-  addEventIdToDB(id);
+  eventHandlers.addEventIdToDb(id);
 };
