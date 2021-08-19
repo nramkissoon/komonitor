@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 import { BasicCardProps } from "./card";
 
 export const BasicCard = (props: BasicCardProps) => {

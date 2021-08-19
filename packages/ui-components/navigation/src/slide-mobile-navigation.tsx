@@ -7,7 +7,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 import { SlideMobileNavigationProps } from "./navigation";
 
 export const SlideMobileNavigation = (props: SlideMobileNavigationProps) => {

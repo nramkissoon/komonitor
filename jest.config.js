@@ -15,9 +15,9 @@ module.exports = {
       },
     },
     testEnvironment: 'jsdom',
-    testMatch: ['**/tests/**/*.[jt]s?(x), **/?(*.)+(spec|test).[tj]s?(x)'],
+    testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
     transform: {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
+      "^.+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
     },
     roots: ["./packages"]
   };

@@ -1,12 +1,14 @@
 import {
   BoxProps,
+  ButtonProps,
   CloseButtonProps,
   HTMLChakraProps,
   PopoverContentProps,
   SimpleGridProps,
+  SlideProps,
   StackProps,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 
 export interface SectionLinkProps {
   title: string;

@@ -5,13 +5,3 @@ export const SPACING_X_REACTIVE_VALUES = ["1em", "3em", "5em", "7em", "10em"];
 export const overrideStyles = (original: any, override: any) => {
   return Object.assign({}, original, override);
 };
-
-// Utility function for creating a copyright string
-export const createCopyrightString = (
-  name: string,
-  includeCopyright: boolean
-): string => {
-  return `${
-    includeCopyright ? "Copyright " : ""
-  }© ${name} ${new Date().getFullYear()}`;
-};

@@ -11,7 +11,6 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { FormikHelpers } from "formik";
-import React from "react";
 
 /**
  * @description Formik values needed for an email submission component.

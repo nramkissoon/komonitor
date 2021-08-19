@@ -14,8 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { EmailSubmissionFormikValues, EmailSubmissionFormProps } from "./forms";
 import { Formik, Form, Field, FieldInputProps, FormikProps } from "formik";
-import { overrideStyles } from "../theme/utils";
-import { basicValidateEmailSubmission } from "./validationUtils";
+import { overrideStyles } from "@hyper-next/react-utils";
+import { basicValidateEmailSubmission } from "./validation-utils";
 
 /**
  * @description A simple form that renders an email input text box and submit button.

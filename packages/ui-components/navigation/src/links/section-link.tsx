@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { SectionLinkProps } from "../navigation";
-import { overrideStyles } from "../../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 
 export const SectionLink = (props: SectionLinkProps) => {
   const { title, body, href, icon, styles } = props;

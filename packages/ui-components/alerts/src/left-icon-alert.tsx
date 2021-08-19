@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 import { LeftIconAlertProps } from "./alerts";
 
 export const LeftIconAlert = (props: LeftIconAlertProps) => {

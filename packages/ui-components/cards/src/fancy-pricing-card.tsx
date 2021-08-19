@@ -15,7 +15,7 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 import { FancyPricingCardProps } from "./card";
 
 export const FancyPricingCard = (props: FancyPricingCardProps) => {
@@ -102,6 +102,7 @@ export const FancyPricingCard = (props: FancyPricingCardProps) => {
     _hover: {
       bg: useColorModeValue("gray.700", "gray.600"),
     },
+    onClick: buttonOnClick,
   };
 
   return (

@@ -8,7 +8,7 @@ import {
   HTMLChakraProps,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { overrideStyles } from "../../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 
 export const LeftIconLink = (props: LeftIconLinkProps) => {
   const { icon, text, href, styles } = props;

@@ -8,8 +8,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
-import { LeftIconListItemProps } from "./listItems";
+import { overrideStyles } from "@hyper-next/react-utils";
+import { LeftIconListItemProps } from "./list-items";
 
 export const LeftIconListItem = (props: LeftIconListItemProps) => {
   const { styles, text, icon } = props;

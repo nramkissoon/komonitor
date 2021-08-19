@@ -1,5 +1,6 @@
-import { Box, SimpleGrid } from "@chakra-ui/layout";
 import {
+  Box,
+  SimpleGrid,
   BoxProps,
   Button,
   ButtonProps,
@@ -8,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 import { FullWidthFlyoutMenuProps } from "./navigation";
 
 export const FullWidthFlyoutMenu = (props: FullWidthFlyoutMenuProps) => {

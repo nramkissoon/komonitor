@@ -1,13 +1,13 @@
 {
-  "name": "@hyper-next/stripe",
+  "name": "@hyper-next/react-utils",
   "version": "1.0.0",
-  "description": "Stripe integration",
+  "description": "Utils for React components",
   "homepage": "https://hyper-next.com",
   "sideEffects": false,
   "author": {
     "email": "hi@hyper-next.com",
     "name": "hyper-next team",
-    "url": "https://hyper-next.com"
+    "url": "https://hyper-next.io"
   },
   "maintainers": [
     {
@@ -17,12 +17,12 @@
     }
   ],
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hyper-next/hyper-next.git",
-    "directory": "packages/integrations/stripe"
+      "type": "git",
+      "url": "git+https://github.com/hyper-next/hyper-next.git",
+      "directory": "packages/utils/react-utils"
   },
   "bugs": {
-    "url": "https://github.com/hyper-next/hyper-next/issues"
+      "url": "https://github.com/hyper-next/hyper-next/issues"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -51,8 +51,5 @@
     "text:cov": "npm run test --coverage"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "dependencies": {
-    "@stripe/stripe-js": "^1.17.1",
-    "stripe": "^8.170.0"
-  }
+  "dependencies": {}
 }

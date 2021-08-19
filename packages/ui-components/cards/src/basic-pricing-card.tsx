@@ -15,7 +15,7 @@ import {
   TextProps,
 } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 import { BasicPricingCardPropsA, BasicPricingCardPropsB } from "./card";
 
 export const BasicPricingCardA = (props: BasicPricingCardPropsA) => {

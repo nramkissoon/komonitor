@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { SimpleLinkProps } from "../navigation";
 import { Button, ButtonProps, useColorModeValue } from "@chakra-ui/react";
-import { overrideStyles } from "../../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 
 export const SimpleLink = (props: SimpleLinkProps) => {
   const { text, href, styles } = props;

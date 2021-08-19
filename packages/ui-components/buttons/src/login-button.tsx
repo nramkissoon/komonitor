@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Button, ButtonProps } from "@chakra-ui/react";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 
 export interface LoginButtonProps extends ButtonProps {
   isAuthed: boolean;

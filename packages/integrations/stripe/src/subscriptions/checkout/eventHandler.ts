@@ -4,7 +4,7 @@ import {
   CheckEventIdNotProcessed,
 } from "../../utils/eventIdCheck";
 
-type EventHandler = (data: Stripe.Event.Data) => Promise<void>;
+export type EventHandler = (data: Stripe.Event.Data) => Promise<void>;
 
 /**
  * @description Stripe webhook event handlers for subscription events.

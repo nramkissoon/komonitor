@@ -12,7 +12,7 @@ import {
 import { IoIosArrowDown } from "react-icons/io";
 import React from "react";
 import { DropDownMenuProps } from "./navigation";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 
 export const DropDownMenu = (props: DropDownMenuProps) => {
   const { buttonText, mainColumnLinks, responsiveColumns, styles } = props;

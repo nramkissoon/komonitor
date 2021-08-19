@@ -18,7 +18,7 @@ module.exports = function(api) {
         ]
     ]
     const plugins = [
-        ["@babel/plugin-proposal-decorators", { "legacy": true }]
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
     ]
 
     return {

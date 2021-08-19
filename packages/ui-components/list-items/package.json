@@ -17,12 +17,12 @@
     }
   ],
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/hyper-next/hyper-next.git",
-      "directory": "packages/ui-components/list-items"
+    "type": "git",
+    "url": "git+https://github.com/hyper-next/hyper-next.git",
+    "directory": "packages/ui-components/list-items"
   },
   "bugs": {
-      "url": "https://github.com/hyper-next/hyper-next/issues"
+    "url": "https://github.com/hyper-next/hyper-next/issues"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -51,5 +51,10 @@
     "text:cov": "npm run test --coverage"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "dependencies": {}
+  "dependencies": {
+    "@chakra-ui/react": "^1.6.6",
+    "@hyper-next/react-utils": "1.0.0",
+    "react": "^17.0.2",
+    "react-icons": "^4.2.0"
+  }
 }
