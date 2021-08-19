@@ -1,4 +1,4 @@
-import { basicValidateEmailSubmission } from "../../../../src/template/prebuiltUI/forms/validationUtils";
+import { basicValidateEmailSubmission } from "./../src/validation-utils";
 
 describe("basicValidateEmailSubmission", () => {
   it("returns default email required message for missing email", () => {
