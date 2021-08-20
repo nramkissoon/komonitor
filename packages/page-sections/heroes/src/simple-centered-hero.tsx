@@ -1,6 +1,6 @@
 import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 import { SimpleCenteredHeroProps } from "./hero";
 
 export const SimpleCenteredHero = (props: SimpleCenteredHeroProps) => {
