@@ -14,7 +14,10 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { overrideStyles, SPACING_X_REACTIVE_VALUES } from "../theme/utils";
+import {
+  overrideStyles,
+  SPACING_X_REACTIVE_VALUES,
+} from "@hyper-next/react-utils";
 import { FourColumnFooterProps } from "./footer";
 
 /**

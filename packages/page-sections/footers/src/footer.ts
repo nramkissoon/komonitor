@@ -6,10 +6,8 @@ import {
   HeadingProps,
   IconProps,
   StackProps,
-  WrapItemProps,
+  WrapProps,
 } from "@chakra-ui/react";
-import { SimpleCenteredFooter } from "./simpleCenteredFooter";
-import { SimpleSocialFooter } from "./simpleSocialFooter";
 import React from "react";
 
 /**
@@ -33,17 +31,9 @@ export interface FooterSocialLinkProps extends FooterLinkProps {
  * Props for a simple footer.
  */
 export interface SimpleFooterProps {
-  companyName: string;
+  copyright: string;
   privacyPolicyLink: FooterLinkProps;
   termsOfServiceLink: FooterLinkProps;
-}
-
-/**
- * Props for a section of social links in a footer.
- */
-export interface FooterSocialLinkSectionProps extends FooterLinkSectionProps {
-  sectionTitle: string;
-  links: FooterSocialLinkProps[];
 }
 
 /**
@@ -83,16 +73,6 @@ export interface SimpleSocialFooterProps extends SimpleFooterProps {
      */
     socialLinkProps?: IconProps;
   };
-}
-
-/**
- * Props for a footer with multiple sections.
- */
-export interface SectionedFooterProps {
-  brandingImgSrc: string;
-  companyName: string;
-  linkSections: FooterLinkSectionProps[];
-  socialSection?: FooterSocialLinkSectionProps;
 }
 
 /**

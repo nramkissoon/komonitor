@@ -17,12 +17,12 @@
     }
   ],
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/hyper-next/hyper-next.git",
-      "directory": "packages/page-sections/pricing-sections"
+    "type": "git",
+    "url": "git+https://github.com/hyper-next/hyper-next.git",
+    "directory": "packages/page-sections/pricing-sections"
   },
   "bugs": {
-      "url": "https://github.com/hyper-next/hyper-next/issues"
+    "url": "https://github.com/hyper-next/hyper-next/issues"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

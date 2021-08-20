@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, BoxProps, Heading, HeadingProps } from "@chakra-ui/react";
 import { CtaSectionProps } from "../footer";
-import { overrideStyles } from "../../theme/utils";
+import { overrideStyles } from "@hyper-next/react-utils";
 
 /**
  * @description A CTA section that goes inside of a footer. The CTA component is user defined, it can be a button or form for example.

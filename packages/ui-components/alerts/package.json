@@ -52,7 +52,7 @@
   },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@chakra-ui/react": "^1.6.6",
+    "@chakra-ui/react": "^1.6.6",    
     "@hyper-next/react-utils": "1.0.0",
     "react": "^17.0.2"
   }

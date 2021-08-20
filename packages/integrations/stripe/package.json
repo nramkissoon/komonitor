@@ -52,8 +52,8 @@
   },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@hyper-next/react-utils": "^1.0.0",
     "@stripe/stripe-js": "^1.17.1",
+    "next": "^11.1.0",
     "stripe": "^8.170.0"
   }
 }

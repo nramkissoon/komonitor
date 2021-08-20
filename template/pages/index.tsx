@@ -6,9 +6,9 @@ import FacebookIcon from "./../public/svg/social/facebook.svg";
 import InstaIcon from "./../public/svg/social/instagram.svg";
 import TwitterIcon from "./../public/svg/social/twitter.svg";
 import BorderSvg from "./../public/svg/backgrounds/angledBottomBorder.svg";
-import { SimpleSignUpCtaSection } from "../src/template/prebuiltUI/ctaSections/simpleSignUpCtaSection";
+import { SimpleSignUpCtaSection } from "../../packages/page-sections/cta-sections/src/simple-sign-up-cta-section";
 import { BasicEmailSubmissionForm } from "../src/template/prebuiltUI/forms/basicEmailSubmissionForm";
-import { SimpleEmailSubmissionCtaSection } from "../src/template/prebuiltUI/ctaSections/simpleEmailSubmissionCtaSectionProps";
+import { SimpleEmailSubmissionCtaSection } from "../../packages/page-sections/cta-sections/src/simple-email-submission-cta-section";
 import {
   Button,
   useColorMode,
@@ -21,7 +21,7 @@ import { SlideMobileNavigation } from "../src/template/prebuiltUI/navigation/sli
 import { DropDownMenu } from "../src/template/prebuiltUI/navigation/dropDownMenu";
 import { FullWidthFlyoutMenu } from "../src/template/prebuiltUI/navigation/fullWidthFlyoutMenu";
 import { SimpleLink } from "../src/template/prebuiltUI/navigation/links/simpleLink";
-import { BaseHeader } from "../src/template/prebuiltUI/headers/baseHeader";
+import { BaseHeader } from "../../packages/page-sections/headers/src/base-header";
 import { BasicCard } from "../src/template/prebuiltUI/cards/basicCard";
 import { GridListFeatureSection } from "../src/template/prebuiltUI/featureSections/gridListFeatureSection";
 import { IoCheckmark } from "react-icons/io5";

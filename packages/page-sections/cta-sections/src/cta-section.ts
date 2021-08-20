@@ -5,7 +5,6 @@ import {
   HeadingProps,
 } from "@chakra-ui/react";
 import React from "react";
-import { EmailSubmissionForm, EmailSubmissionFormProps } from "../forms/forms";
 
 /**
  * @description Props for defining the behavior of a CTA section sign up button.

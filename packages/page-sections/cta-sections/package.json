@@ -17,12 +17,12 @@
     }
   ],
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/hyper-next/hyper-next.git",
-      "directory": "packages/page-sections/cta-sections"
+    "type": "git",
+    "url": "git+https://github.com/hyper-next/hyper-next.git",
+    "directory": "packages/page-sections/cta-sections"
   },
   "bugs": {
-      "url": "https://github.com/hyper-next/hyper-next/issues"
+    "url": "https://github.com/hyper-next/hyper-next/issues"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -52,6 +52,8 @@
   },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@hyper-next/react-utils": "1.0.0"
+    "@chakra-ui/react": "^1.6.6",
+    "@hyper-next/react-utils": "1.0.0",
+    "react": "^17.0.2"
   }
 }

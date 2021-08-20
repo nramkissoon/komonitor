@@ -11,10 +11,9 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import {
-  createCopyrightString,
   overrideStyles,
   SPACING_X_REACTIVE_VALUES,
-} from "../theme/utils";
+} from "@hyper-next/react-utils";
 import { SimpleSocialFooterProps } from "./footer";
 
 /**
@@ -22,7 +21,7 @@ import { SimpleSocialFooterProps } from "./footer";
  */
 export const SimpleSocialFooter = (props: SimpleSocialFooterProps) => {
   const {
-    companyName,
+    copyright,
     privacyPolicyLink,
     termsOfServiceLink,
     socialLinks,
@@ -78,7 +77,7 @@ export const SimpleSocialFooter = (props: SimpleSocialFooterProps) => {
         <Box
           {...overrideStyles(defaultCopyrightStyles, styles?.copyrightProps)}
         >
-          {createCopyrightString(companyName, true)}
+          {copyright}
         </Box>
       </Box>
       <Box>

@@ -17,12 +17,12 @@
     }
   ],
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/hyper-next/hyper-next.git",
-      "directory": "packages/utils/react-utils"
+    "type": "git",
+    "url": "git+https://github.com/hyper-next/hyper-next.git",
+    "directory": "packages/utils/react-utils"
   },
   "bugs": {
-      "url": "https://github.com/hyper-next/hyper-next/issues"
+    "url": "https://github.com/hyper-next/hyper-next/issues"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -51,5 +51,6 @@
     "text:cov": "npm run test --coverage"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "dependencies": {}
+  "dependencies": {
+  }
 }

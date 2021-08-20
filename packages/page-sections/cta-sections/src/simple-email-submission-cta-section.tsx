@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Flex, FlexProps, Heading, HeadingProps } from "@chakra-ui/layout";
-import { overrideStyles } from "../theme/utils";
-import { SimpleEmailSubmissionCtaSectionProps } from "./ctaSection";
+import { Box, Flex, FlexProps, Heading, HeadingProps } from "@chakra-ui/react";
+import { overrideStyles } from "@hyper-next/react-utils";
+import { SimpleEmailSubmissionCtaSectionProps } from "./cta-section";
 import { BoxProps } from "@chakra-ui/react";
 
 /**

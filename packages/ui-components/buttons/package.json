@@ -56,7 +56,5 @@
     "@hyper-next/react-utils": "1.0.0",
     "next": "^11.1.0",
     "react": "^17.0.2"
-  },
-  "devDependencies": {
   }
 }

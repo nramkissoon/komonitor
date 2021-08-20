@@ -4,14 +4,16 @@ import {
   Flex,
   FlexProps,
   Icon,
-  Spacer,
   useColorModeValue,
   Wrap,
   WrapItem,
   WrapProps,
 } from "@chakra-ui/react";
 import * as React from "react";
-import { overrideStyles, SPACING_X_REACTIVE_VALUES } from "../theme/utils";
+import {
+  overrideStyles,
+  SPACING_X_REACTIVE_VALUES,
+} from "@hyper-next/react-utils";
 import { SimpleCenteredFooterProps } from "./footer";
 import Link from "next/link";
 

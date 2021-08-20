@@ -1,8 +1,8 @@
-import { Box, Flex, FlexProps, Heading, HeadingProps } from "@chakra-ui/layout";
+import { Box, Flex, FlexProps, Heading, HeadingProps } from "@chakra-ui/react";
 import { Button, ButtonProps } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
-import { SimpleSignUpCtaSectionProps } from "./ctaSection";
+import { overrideStyles } from "@hyper-next/react-utils";
+import { SimpleSignUpCtaSectionProps } from "./cta-section";
 
 export const SimpleSignUpCtaSection = (props: SimpleSignUpCtaSectionProps) => {
   const { header, subheader, ctaButtonProps, styles } = props;

@@ -6,8 +6,8 @@ import {
   SimpleGridProps,
 } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
-import { SimpleThreeColumnFeatureSectionProps } from "./featureSections";
+import { overrideStyles } from "@hyper-next/react-utils";
+import { SimpleThreeColumnFeatureSectionProps } from "./feature-sections";
 
 export const SimpleThreeColumnFeatureSection = (
   props: SimpleThreeColumnFeatureSectionProps

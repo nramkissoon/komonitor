@@ -10,8 +10,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { overrideStyles } from "../theme/utils";
-import { GridListFeatureSectionProps } from "./featureSections";
+import { overrideStyles } from "@hyper-next/react-utils";
+import { GridListFeatureSectionProps } from "./feature-sections";
 
 export const GridListFeatureSection = (props: GridListFeatureSectionProps) => {
   const { listItems, title, subtitle, styles } = props;
