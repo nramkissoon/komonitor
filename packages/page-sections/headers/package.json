@@ -1,13 +1,13 @@
 {
-  "name": "@hyper-next/stripe",
+  "name": "@hyper-next/headers",
   "version": "1.0.0",
-  "description": "Stripe integration",
+  "description": "Header React components",
   "homepage": "https://hyper-next.com",
   "sideEffects": false,
   "author": {
     "email": "hi@hyper-next.com",
     "name": "hyper-next team",
-    "url": "https://hyper-next.com"
+    "url": "https://hyper-next.io"
   },
   "maintainers": [
     {
@@ -19,7 +19,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hyper-next/hyper-next.git",
-    "directory": "packages/integrations/stripe"
+    "directory": "packages/page-sections/headers"
   },
   "bugs": {
     "url": "https://github.com/hyper-next/hyper-next/issues"
@@ -52,8 +52,10 @@
   },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@hyper-next/react-utils": "^1.0.0",
-    "@stripe/stripe-js": "^1.17.1",
-    "stripe": "^8.170.0"
+    "@chakra-ui/react": "^1.6.6",
+    "next": "^11.1.0",
+    "react": "^17.0.2",
+    "@hyper-next/react-utils": "1.0.0",
+    "react-icons": "^4.2.0"
   }
 }
