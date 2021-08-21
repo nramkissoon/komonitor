@@ -1,7 +1,7 @@
 {
   "packages": [
     "packages/**",
-    "website"
+    "tools/**"
   ],
   "version": "0.0.0"
 }
