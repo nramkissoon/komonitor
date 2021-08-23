@@ -1,0 +1,57 @@
+{
+  "name": "@hyper-next/cli",
+  "version": "1.0.0",
+  "description": "hyper-next CLI tool",
+  "homepage": "https://hyper-next.com",
+  "sideEffects": false,
+  "author": {
+    "email": "hi@hyper-next.com",
+    "name": "hyper-next team",
+    "url": "https://hyper-next.io"
+  },
+  "maintainers": [
+    {
+      "email": "hi@hyper-next.com",
+      "name": "hyper-next team",
+      "url": "https://hyper-next.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyper-next/hyper-next.git",
+    "directory": "tools/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/hyper-next/hyper-next/issues"
+  },
+  "main": "./lib/index.js",
+  "scripts": {
+    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "build": "tsc -p . && babel src --config-file ./babel.config.json --out-dir lib --copy-files",
+    "cli:install": "npm run build && npm i -g",
+    "refresh": "rm -rf ./node_modules ./package-lock.json && rm -rf ./lib && npm install"
+  },
+  "bin": {
+    "hyper-next": "./lib/index.js"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^8.1.0",
+    "node-plop": "^0.26.2",
+    "plop": "^2.7.4",
+    "prompts": "^2.4.1",
+    "shelljs": "^0.8.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/node": "^16.7.1",
+    "@types/prompts": "^2.0.14",
+    "@types/shelljs": "^0.8.9",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.3.5"
+  }
+}
