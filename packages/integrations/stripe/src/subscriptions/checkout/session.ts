@@ -129,6 +129,9 @@ export const createSessionApiMiddleware =
               priceId: priceId,
               quantity: 1,
             })),
+            automatic_tax: {
+              enabled: true,
+            },
             success_url: successUrl + "?session_id={CHECKOUT_SESSION_ID}",
             cancel_url: cancelUrl + "?session_id={CHECKOUT_SESSION_ID}",
           });
