@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import prompts from "prompts";
-import { checkFileExists } from "../utils";
+import { addPackageToLernaJson, checkFileExists } from "../utils";
 import { existsSync, mkdirSync, readdirSync, renameSync } from "fs";
 import nodePlop from "node-plop";
 import shelljs from "shelljs";
@@ -172,7 +172,8 @@ export const init = async (args: any) => {
 
   installDependencies(appName);
 
-  // TODO add name to lerna.json packages and lerna bootstrap
+  addPackageToLernaJson(appName);
+  shelljs.exec("npm run bootstrap");
 
   console.log(chalk.green("Success!"));
   console.log(`You can now cd into ${appName} to begin development!`);
