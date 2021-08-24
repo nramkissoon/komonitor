@@ -3,8 +3,12 @@ import {
   AddEventIdToDb,
   CheckEventIdNotProcessed,
 } from "../../utils/eventIdCheck";
+import winston from "winston";
 
-export type EventHandler = (data: Stripe.Event.Data) => Promise<void>;
+export type EventHandler = (
+  data: Stripe.Event.Data,
+  logger?: winston.Logger
+) => Promise<void>;
 
 /**
  * @description Stripe webhook event handlers for subscription events.

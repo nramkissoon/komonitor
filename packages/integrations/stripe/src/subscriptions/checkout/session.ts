@@ -4,6 +4,7 @@ import {
   clientSideGetStripe,
   serverSideGetStripe,
 } from "../../utils/getStripe";
+import winston from "winston";
 
 const checkoutSessionFetch = async (
   priceId: string[],
@@ -96,12 +97,14 @@ export const clientCreateStripeSessionAndRedirect = async (
  * @param stripeSecretKey string
  * @param createOrRetrieveStripeCustomerId a function to call DB and Stripe to either create a new Stripe Customer or retrieve it, returns the customer ID
  * @param handler Next.js API handler function
+ * @param logger winston Logger for logging
  */
 export const createSessionApiMiddleware =
   (
     stripeSecretKey: string,
     createOrRetrieveStripeCustomerId: (userId: string) => Promise<string>,
-    handler: (req: NextApiRequest, res: NextApiResponse) => void
+    handler: (req: NextApiRequest, res: NextApiResponse) => void,
+    logger?: winston.Logger
   ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "POST") {
@@ -109,6 +112,8 @@ export const createSessionApiMiddleware =
       const { userEmail, userId, priceIds, successUrl, cancelUrl } = body;
 
       if (!userEmail || !userId || !priceIds || !successUrl || !cancelUrl) {
+        logger?.warn("Bad request sent.");
+        logger?.verbose(body.toString());
         res.status(400).end("Bad Request");
         return handler(req, res);
       }
@@ -139,12 +144,14 @@ export const createSessionApiMiddleware =
         res.status(200).json(checkoutSession);
         return handler(req, res);
       } catch (error: any) {
+        logger?.error(error.message);
         res.status(500).json({ statusCode: 500, message: error.message });
         return handler(req, res);
       }
     } else {
       res.setHeader("Allow", "POST");
       res.status(405).end("Method Not Allowed");
+      logger?.warn(`${req.method} method sent. Method not allowed.`);
       return handler(req, res);
     }
   };

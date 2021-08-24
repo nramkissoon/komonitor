@@ -54,6 +54,10 @@
   "dependencies": {
     "@stripe/stripe-js": "^1.17.1",
     "next": "^11.1.0",
-    "stripe": "^8.170.0"
+    "stripe": "^8.170.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/winston": "^2.4.4"
   }
 }

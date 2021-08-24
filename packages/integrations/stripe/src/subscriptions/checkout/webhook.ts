@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { serverSideGetStripe } from "../../utils/getStripe";
 import { EventTypes } from "../../utils/constants";
 import { EventHandlers } from "./eventHandler";
+import winston from "winston";
 
 /**
  * Webhook middleware for handling Stripe events.
@@ -11,13 +12,15 @@ import { EventHandlers } from "./eventHandler";
  * @param stripeSecretKey
  * @param eventHandlers event handler methods for webhook events
  * @param handler Next.js API handler function
+ * @param logger winston Logger for logging
  */
 export const stripeSubscriptionWebhookMiddleware =
   (
     webhookSecret: string,
     stripeSecretKey: string,
     eventHandlers: EventHandlers,
-    handler: (req: NextApiRequest, res: NextApiResponse) => void
+    handler: (req: NextApiRequest, res: NextApiResponse) => void,
+    logger?: winston.Logger
   ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
     const stripe = serverSideGetStripe(stripeSecretKey);
@@ -36,10 +39,11 @@ export const stripeSubscriptionWebhookMiddleware =
 
         try {
           // handle the event on the backend
-          await handleEvent(event, eventHandlers);
+          await handleEvent(event, eventHandlers, logger);
           handler(req, res);
         } catch (error) {
           // server error
+          logger?.error((error as Error).message);
           res.status(500);
           return handler(req, res);
         }
@@ -47,11 +51,13 @@ export const stripeSubscriptionWebhookMiddleware =
         res.status(200);
         handler(req, res);
       } catch (error) {
+        logger?.error((error as Error).message);
         res.status(400);
         handler(req, res);
       }
     } else {
       // enforce webhook secret is present even though it is only recommended
+      logger?.error("Missing webhook secret.");
       res.status(500);
       handler(req, res);
     }
@@ -63,15 +69,23 @@ export const stripeSubscriptionWebhookMiddleware =
  *
  * @param event [Stripe Event](https://stripe.com/docs/api/events)
  * @param eventHandlers event handler methods for webhook events
+ * @param logger winston Logger for logging
  * @returns
  */
 export const handleEvent = async (
   event: Stripe.Event,
-  eventHandlers: EventHandlers
+  eventHandlers: EventHandlers,
+  logger?: winston.Logger
 ) => {
   const { type, data, id } = event;
 
-  if (!(await eventHandlers.checkEventIdNotProcessed(id))) {
+  try {
+    if (!(await eventHandlers.checkEventIdNotProcessed(id))) {
+      logger?.info(`Event ID: ${id} already processed.`);
+      return;
+    }
+  } catch (error) {
+    logger?.error(`unable to check if ID ${id} is in DB`);
     return;
   }
 
@@ -79,23 +93,25 @@ export const handleEvent = async (
     switch (type) {
       case EventTypes.CHECKOUT_SESSION_COMPLETED:
         await eventHandlers.provisionSubscriptionOnCheckoutSessionCompleted(
-          data
+          data,
+          logger
         );
         break;
       case EventTypes.INVOICE_PAID:
-        await eventHandlers.provisionSubscriptionOnInvoicePaid(data);
+        await eventHandlers.provisionSubscriptionOnInvoicePaid(data, logger);
         break;
       case EventTypes.INVOICE_PAYMENT__FAILED:
-        await eventHandlers.notifyCustomerOnPaymentMethodFailure(data);
+        await eventHandlers.notifyCustomerOnPaymentMethodFailure(data, logger);
         break;
       case EventTypes.INVOICE_PAYMENT__ACTION__REQUIRED:
-        await eventHandlers.notifyCustomerOnPaymentActionRequired(data);
+        await eventHandlers.notifyCustomerOnPaymentActionRequired(data, logger);
         break;
       case EventTypes.CUSTOMER_SUBSCRIPTION_UPDATED:
-        await eventHandlers.handleCustomerSubscriptionUpdated(data);
+        await eventHandlers.handleCustomerSubscriptionUpdated(data, logger);
         break;
       default:
         // fall through for events that do not need any particular handling
+        logger?.info(`unhandled event type: ${type}`);
         break;
     }
   } catch (error) {
