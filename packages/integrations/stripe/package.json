@@ -53,11 +53,17 @@
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@stripe/stripe-js": "^1.17.1",
+    "isomorphic-unfetch": "^3.1.0",
+    "jest": "^27.0.6",
     "next": "^11.1.0",
+    "sinon": "^11.1.2",
     "stripe": "^8.170.0",
+    "test-listen": "^1.1.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "@types/sinon": "^10.0.2",
     "@types/winston": "^2.4.4"
   }
 }

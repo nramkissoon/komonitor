@@ -38,12 +38,11 @@ export const createCustomerPortalSessionMiddleware = async (
         customer: customerId,
         return_url: returnUrl,
       });
-
-      res.redirect(302, session.url);
+      res.writeHead(302, { location: session.url }).end();
       return;
     } catch (error) {
       logger?.error((error as Error).message);
-      res.status(500);
+      res.status(500).end();
       return;
     }
   } else {

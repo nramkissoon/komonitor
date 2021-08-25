@@ -40,17 +40,17 @@ export const stripeSubscriptionWebhookMiddleware = async (
       try {
         // handle the event on the backend
         await handleEvent(event, eventHandlers, logger);
-        res.status(200);
+        res.status(200).end("ok");
         return;
       } catch (error) {
         // server error
         logger?.error((error as Error).message);
-        res.status(500);
+        res.status(500).end();
         return;
       }
     } catch (error) {
       logger?.error((error as Error).message);
-      res.status(400);
+      res.status(400).end();
       return;
     }
   } else {
