@@ -1,0 +1,28 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import { createSessionApiMiddleware } from "@hyper-next/stripe";
+import { randomUUID } from "crypto";
+
+const stripeSecretKey: string; // TODO get a Stripe Secret Key
+
+// TODO define a function that creates a new Stripe customer or retrieve an existing one for the given user ID and return the Stripe customer ID
+const createOrRetrieveStripeCustomerId: (userId: string) => Promise<string>;
+
+// TODO Optional: Create a winston logger for logging. https://www.npmjs.com/package/winston
+const logger;
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // create a child logger to track this specific request
+  const requestLogger = logger
+    ? logger.child({ requestId: randomUUID() })
+    : undefined;
+
+  await createSessionApiMiddleware(
+    stripeSecretKey,
+    createOrRetrieveStripeCustomerId,
+    req,
+    res,
+    requestLogger
+  );
+};
+
+export default handler;

@@ -1,0 +1,33 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import {
+  stripeSubscriptionWebhookMiddleware,
+  CheckoutSubscriptionEventHandlers,
+} from "@hyper-next/stripe";
+import { randomUUID } from "crypto";
+
+const webhookSecretKey: string; // TODO get a Stripe webhook Secret Key
+const stripeSecretKey: string; // TODO get a Stripe Secret Key
+
+// TODO define the event handlers needed to handle webhooks that come from Stripe
+const eventHandlers: CheckoutSubscriptionEventHandlers;
+
+// TODO Optional: Create a winston logger for logging. https://www.npmjs.com/package/winston
+const logger;
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // create a child logger to track this specific request
+  const requestLogger = logger
+    ? logger.child({ requestId: randomUUID() })
+    : undefined;
+
+  await stripeSubscriptionWebhookMiddleware(
+    webhookSecretKey,
+    stripeSecretKey,
+    eventHandlers,
+    req,
+    res,
+    requestLogger
+  );
+};
+
+export default handler;
