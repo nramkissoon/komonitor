@@ -96,62 +96,62 @@ export const clientCreateStripeSessionAndRedirect = async (
  *
  * @param stripeSecretKey string
  * @param createOrRetrieveStripeCustomerId a function to call DB and Stripe to either create a new Stripe Customer or retrieve it, returns the customer ID
- * @param handler Next.js API handler function
+ * @param req NextApiRequest
+ * @param res NextApiResponse
  * @param logger winston Logger for logging
  */
-export const createSessionApiMiddleware =
-  (
-    stripeSecretKey: string,
-    createOrRetrieveStripeCustomerId: (userId: string) => Promise<string>,
-    handler: (req: NextApiRequest, res: NextApiResponse) => void,
-    logger?: winston.Logger
-  ) =>
-  async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === "POST") {
-      const { body } = req;
-      const { userEmail, userId, priceIds, successUrl, cancelUrl } = body;
+export const createSessionApiMiddleware = async (
+  stripeSecretKey: string,
+  createOrRetrieveStripeCustomerId: (userId: string) => Promise<string>,
+  req: NextApiRequest,
+  res: NextApiResponse,
+  logger?: winston.Logger
+): Promise<void> => {
+  if (req.method === "POST") {
+    const { body } = req;
+    const { userEmail, userId, priceIds, successUrl, cancelUrl } = body;
 
-      if (!userEmail || !userId || !priceIds || !successUrl || !cancelUrl) {
-        logger?.warn("Bad request sent.");
-        logger?.verbose(body.toString());
-        res.status(400).end("Bad Request");
-        return handler(req, res);
-      }
-
-      try {
-        const stripe = serverSideGetStripe(stripeSecretKey);
-
-        const customerId = await createOrRetrieveStripeCustomerId(userId);
-
-        const checkoutSession: Stripe.Checkout.Session =
-          await stripe.checkout.sessions.create({
-            mode: "subscription",
-            customer_email: userEmail,
-            client_reference_id: userId,
-            customer: customerId,
-            payment_method_types: ["card"],
-            line_items: priceIds.map((priceId: string) => ({
-              priceId: priceId,
-              quantity: 1,
-            })),
-            automatic_tax: {
-              enabled: true,
-            },
-            success_url: successUrl + "?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url: cancelUrl + "?session_id={CHECKOUT_SESSION_ID}",
-          });
-
-        res.status(200).json(checkoutSession);
-        return handler(req, res);
-      } catch (error: any) {
-        logger?.error(error.message);
-        res.status(500).json({ statusCode: 500, message: error.message });
-        return handler(req, res);
-      }
-    } else {
-      res.setHeader("Allow", "POST");
-      res.status(405).end("Method Not Allowed");
-      logger?.warn(`${req.method} method sent. Method not allowed.`);
-      return handler(req, res);
+    if (!userEmail || !userId || !priceIds || !successUrl || !cancelUrl) {
+      logger?.warn("Bad request sent.");
+      logger?.verbose(body.toString());
+      res.status(400).end("Bad Request");
+      return;
     }
-  };
+
+    try {
+      const stripe = serverSideGetStripe(stripeSecretKey);
+
+      const customerId = await createOrRetrieveStripeCustomerId(userId);
+
+      const checkoutSession: Stripe.Checkout.Session =
+        await stripe.checkout.sessions.create({
+          mode: "subscription",
+          customer_email: userEmail,
+          client_reference_id: userId,
+          customer: customerId,
+          payment_method_types: ["card"],
+          line_items: priceIds.map((priceId: string) => ({
+            priceId: priceId,
+            quantity: 1,
+          })),
+          automatic_tax: {
+            enabled: true,
+          },
+          success_url: successUrl + "?session_id={CHECKOUT_SESSION_ID}",
+          cancel_url: cancelUrl + "?session_id={CHECKOUT_SESSION_ID}",
+        });
+
+      res.status(200).json(checkoutSession);
+      return;
+    } catch (error: any) {
+      logger?.error(error.message);
+      res.status(500).json({ statusCode: 500, message: error.message });
+      return;
+    }
+  } else {
+    res.setHeader("Allow", "POST");
+    res.status(405).end("Method Not Allowed");
+    logger?.warn(`${req.method} method sent. Method not allowed.`);
+    return;
+  }
+};

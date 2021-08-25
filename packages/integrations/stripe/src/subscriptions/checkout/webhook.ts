@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { serverSideGetStripe } from "../../utils/getStripe";
 import { EventTypes } from "../../utils/constants";
-import { EventHandlers } from "./eventHandler";
+import { CheckoutSubscriptionEventHandlers } from "./eventHandler";
 import winston from "winston";
 
 /**
@@ -11,57 +11,55 @@ import winston from "winston";
  * @param webhookSecret
  * @param stripeSecretKey
  * @param eventHandlers event handler methods for webhook events
- * @param handler Next.js API handler function
+ * @param req NextApiRequest
+ * @param res NextApiResponse
  * @param logger winston Logger for logging
  */
-export const stripeSubscriptionWebhookMiddleware =
-  (
-    webhookSecret: string,
-    stripeSecretKey: string,
-    eventHandlers: EventHandlers,
-    handler: (req: NextApiRequest, res: NextApiResponse) => void,
-    logger?: winston.Logger
-  ) =>
-  async (req: NextApiRequest, res: NextApiResponse) => {
-    const stripe = serverSideGetStripe(stripeSecretKey);
+export const stripeSubscriptionWebhookMiddleware = async (
+  webhookSecret: string,
+  stripeSecretKey: string,
+  eventHandlers: CheckoutSubscriptionEventHandlers,
+  req: NextApiRequest,
+  res: NextApiResponse,
+  logger?: winston.Logger
+): Promise<void> => {
+  const stripe = serverSideGetStripe(stripeSecretKey);
 
-    if (webhookSecret) {
-      let event: Stripe.Event;
-      const signature = req.headers["stripe-signature"];
+  if (webhookSecret) {
+    let event: Stripe.Event;
+    const signature = req.headers["stripe-signature"];
 
-      // try to verify the signature
+    // try to verify the signature
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        signature!,
+        webhookSecret
+      );
+
       try {
-        event = stripe.webhooks.constructEvent(
-          req.body,
-          signature!,
-          webhookSecret
-        );
-
-        try {
-          // handle the event on the backend
-          await handleEvent(event, eventHandlers, logger);
-          handler(req, res);
-        } catch (error) {
-          // server error
-          logger?.error((error as Error).message);
-          res.status(500);
-          return handler(req, res);
-        }
-
+        // handle the event on the backend
+        await handleEvent(event, eventHandlers, logger);
         res.status(200);
-        handler(req, res);
+        return;
       } catch (error) {
+        // server error
         logger?.error((error as Error).message);
-        res.status(400);
-        handler(req, res);
+        res.status(500);
+        return;
       }
-    } else {
-      // enforce webhook secret is present even though it is only recommended
-      logger?.error("Missing webhook secret.");
-      res.status(500);
-      handler(req, res);
+    } catch (error) {
+      logger?.error((error as Error).message);
+      res.status(400);
+      return;
     }
-  };
+  } else {
+    // enforce webhook secret is present even though it is only recommended
+    logger?.error("Missing webhook secret.");
+    res.status(500);
+    return;
+  }
+};
 
 /**
  * Method for handling various events that Stripe sends as a part of Checkout and subscriptions.
@@ -74,7 +72,7 @@ export const stripeSubscriptionWebhookMiddleware =
  */
 export const handleEvent = async (
   event: Stripe.Event,
-  eventHandlers: EventHandlers,
+  eventHandlers: CheckoutSubscriptionEventHandlers,
   logger?: winston.Logger
 ) => {
   const { type, data, id } = event;

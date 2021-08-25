@@ -15,7 +15,7 @@ export type EventHandler = (
  *
  * @see [Using webhooks with subscriptions](https://stripe.com/docs/billing/subscriptions/webhooks)
  */
-export interface EventHandlers {
+export interface CheckoutSubscriptionEventHandlers {
   /**
    * @description function to provision a product upon receiving a Stripe [checkout.session.completed Event](https://stripe.com/docs/api/events/types#event_types-checkout.session.completed)
    *
