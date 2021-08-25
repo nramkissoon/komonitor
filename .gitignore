@@ -41,3 +41,7 @@ yarn-error.log*
 .vscode/
 
 dist/
+
+tools/cli/lib
+
+**/playground

@@ -13,7 +13,8 @@
     "clean": "lerna clean --yes && rimraf node_modules",
     "reset": "npm run clean && npm install && npm run bootstrap",
     "clean-dist": "lerna exec -- rimraf dist",
-    "create:pkg": "ts-node scripts/create-pkg.ts"
+    "create:pkg": "ts-node scripts/create-pkg.ts",
+    "cli:install": "cd tools/cli && npm run cli:install && cd ../.."
   },
   "dependencies": {
     "@babel/cli": "^7.14.8",

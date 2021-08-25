@@ -2,6 +2,7 @@
 
 import { Command } from "commander";
 import { init } from "./init";
+import { use } from "./use";
 
 const program = new Command();
 
@@ -21,6 +22,9 @@ program
   .requiredOption(
     "-p, --package [package name]",
     "Package name. See https://hyper-next.com/docs/cli/use#packages for list of available package names."
-  );
+  )
+  .action((args) => {
+    use(args);
+  });
 
 program.parse(process.argv);
