@@ -16,6 +16,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ? logger.child({ requestId: randomUUID() })
     : undefined;
 
+  // TODO check req for valid user or return a 401 error
+
   await createSessionApiMiddleware(
     stripeSecretKey,
     createOrRetrieveStripeCustomerId,

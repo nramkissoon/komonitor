@@ -1,4 +1,5 @@
 import {
+  As,
   Box,
   BoxProps,
   chakra,
@@ -11,10 +12,23 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { overrideStyles } from "@hyper-next/react-utils";
-import { LeftIconAlertProps } from "./alerts";
+
+export interface LeftIconAlertProps {
+  icon: As<any> | undefined;
+  header: string;
+  subheader: string;
+  subComponentsProps?: {
+    flexContainerPropsL0?: FlexProps;
+    iconFlexContainerPropsL1?: FlexProps;
+    iconPropsL2?: IconProps;
+    textBoxContainerPropsL1?: BoxProps;
+    headerPropsL2?: HTMLChakraProps<"span">;
+    subheaderPropsL2?: HTMLChakraProps<"p">;
+  };
+}
 
 export const LeftIconAlert = (props: LeftIconAlertProps) => {
-  const { icon, header, subheader, styles } = props;
+  const { icon, header, subheader, subComponentsProps } = props;
 
   const defaultFlexContainerProps: FlexProps = {
     maxW: "sm",
@@ -56,33 +70,42 @@ export const LeftIconAlert = (props: LeftIconAlertProps) => {
 
   return (
     <Flex
-      {...overrideStyles(defaultFlexContainerProps, styles?.flexContainerProps)}
+      {...overrideStyles(
+        defaultFlexContainerProps,
+        subComponentsProps?.flexContainerPropsL0
+      )}
     >
       <Flex
         {...overrideStyles(
           defaultIconFlexContainerProps,
-          styles?.iconFlexContainerProps
+          subComponentsProps?.iconFlexContainerPropsL1
         )}
       >
         <Icon
           as={icon}
-          {...overrideStyles(defaultIconProps, styles?.iconProps)}
+          {...overrideStyles(defaultIconProps, subComponentsProps?.iconPropsL2)}
         />
       </Flex>
       <Box
         {...overrideStyles(
           defaultTextBoxContainerProps,
-          styles?.textBoxContainerProps
+          subComponentsProps?.textBoxContainerPropsL1
         )}
       >
         <Box mx={3}>
           <chakra.span
-            {...overrideStyles(defaultHeaderProps, styles?.headerProps)}
+            {...overrideStyles(
+              defaultHeaderProps,
+              subComponentsProps?.headerPropsL2
+            )}
           >
             {header}
           </chakra.span>
           <chakra.p
-            {...overrideStyles(defaultSubheaderProps, styles?.subheaderProps)}
+            {...overrideStyles(
+              defaultSubheaderProps,
+              subComponentsProps?.subheaderPropsL2
+            )}
           >
             {subheader}
           </chakra.p>
