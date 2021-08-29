@@ -38,7 +38,11 @@ export class CdkPipelineStack extends cdk.Stack {
       }),
     });
 
-    console.log(cloudAssemblyArtifact.atPath("package.json").fileName);
+    const l = sourceArtifact.atPath(
+      "application/uptime-check-lambda/package.json"
+    ).artifact;
+
+    l.setMetadata("a", "z");
 
     const devStackStage = new DevStackStage(this, "devStackStage");
     this.pipeline.addApplicationStage(devStackStage);
