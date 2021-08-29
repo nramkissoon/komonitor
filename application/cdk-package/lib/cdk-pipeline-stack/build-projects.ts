@@ -9,7 +9,9 @@ const uptimeCheckBuildSpec = {
       commands: ["cd application/uptime-check-lambda"],
     },
     build: {
-      commands: ["npm run build"],
+      commands: [
+        "npx lerna run build --scope=uptime-check-lambda --scope=types",
+      ],
     },
   },
   artifacts: {
