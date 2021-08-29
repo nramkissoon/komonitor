@@ -48,7 +48,7 @@ export class CdkPipelineStack extends cdk.Stack {
     const lambdaBuildStage = this.pipeline.addStage("Lambda Build");
     lambdaBuildStage.addActions(
       new CodeBuildAction({
-        actionName: "Uptime Check Lambda Build",
+        actionName: "Uptime-Check-Lambda-Build",
         input: sourceArtifact,
         project: buildProjects.uptimeCheckLambdaBuild,
         outputs: [uptimeCheckLambdaArtifact],
