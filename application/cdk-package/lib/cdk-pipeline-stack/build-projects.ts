@@ -1,15 +1,15 @@
 import * as codebuild from "@aws-cdk/aws-codebuild";
-import { BuildSpec } from "@aws-cdk/aws-codebuild";
+import { LinuxBuildImage, BuildSpec } from "@aws-cdk/aws-codebuild";
 import * as cdk from "@aws-cdk/core";
 
 const uptimeCheckBuildSpec = {
   version: "0.2",
   phases: {
     pre_build: {
-      commands: ["cd application/uptime-check-lambda", "npm install"],
+      commands: ["cd application/uptime-check-lambda"],
     },
     build: {
-      commands: ["npm run build", "npx cdk synth"],
+      commands: ["npm run build"],
     },
   },
   artifacts: {
@@ -28,6 +28,7 @@ export class BuildProjects extends cdk.Construct {
       "uptimeCheckLambdaBuild",
       {
         buildSpec: BuildSpec.fromObjectToYaml(uptimeCheckBuildSpec),
+        environment: { buildImage: LinuxBuildImage.STANDARD_5_0 },
       }
     );
   }

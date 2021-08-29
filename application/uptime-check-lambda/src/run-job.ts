@@ -6,7 +6,6 @@ import {
 } from "types";
 import request from "request";
 import AbortController from "abort-controller";
-import { performance } from "perf_hooks";
 import { writeStatusToDB } from "./status-db";
 
 const controller = new AbortController();
@@ -21,7 +20,7 @@ const fetchCall = async (url: string) => {
     request(
       {
         url: url,
-        method: "HEAD",
+        method: "GET",
         time: true,
         timeout: 5000,
         headers: {
@@ -36,7 +35,7 @@ const fetchCall = async (url: string) => {
             ok: response.statusCode
               ? response.statusCode >= 200 && response.statusCode < 300
               : false,
-            latency: response.timingPhases?.firstByte,
+            latency: response.timingPhases?.total,
           });
         }
       }
@@ -51,10 +50,7 @@ const webhookNotifyCall = async (
   webhookNotification: UptimeMonitorWebhookNotification
 ) => {
   let response: Response;
-  let latency: number;
-
   try {
-    const start = performance.now();
     response = await fetch(url, {
       method: "POST",
       headers: {
@@ -64,10 +60,8 @@ const webhookNotifyCall = async (
       signal: controller.signal,
       body: JSON.stringify(webhookNotification),
     });
-    const end = performance.now();
-    latency = end - start;
 
-    return { response: response, latency: latency };
+    return response;
   } finally {
     clearTimeout(fetchTimeout);
   }
@@ -124,7 +118,6 @@ export const runJob = async (job: UptimeMonitorJob) => {
       if (fetchResult.latency !== undefined) {
         latencies.push(fetchResult.latency);
       }
-      console.log(retriesRemaining);
       retriesRemaining -= 1;
     }
   }
@@ -137,7 +130,7 @@ export const runJob = async (job: UptimeMonitorJob) => {
   );
 
   try {
-    const success = await writeStatusToDB(status);
+    await writeStatusToDB(status);
   } catch (err) {}
 
   if (webhook_url) {

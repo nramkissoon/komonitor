@@ -10,7 +10,7 @@ export const writeStatusToDB = async (
   status: UptimeMonitorStatus
 ): Promise<boolean> => {
   const ddbClient = new DynamoDBClient({
-    region: process.env.REGION,
+    region: "us-east-1",
     apiVersion: "2012-08-10",
   });
   const tableName = process.env.MONITOR_STATUS_TABLE_NAME

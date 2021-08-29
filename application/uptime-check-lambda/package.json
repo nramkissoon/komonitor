@@ -4,9 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf dist/ && tsc && cp .env dist/.env",
-    "build:clean": "rm -f lambda-package.zip && rm -rf node_modules && lerna bootstrap && npm run build",
-    "build:deploy": "npm run build:clean && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types && cd dist && zip -r ../lambda-package.zip . * && cd ..",
+    "build": "npm run build:deploy",
+    "build:clean": "rm -f lambda-package.zip && rm -rf node_modules && npx lerna bootstrap && rm -rf dist/ && tsc",
+    "build:deploy": "npm run build:clean && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,7 +23,6 @@
     "@aws-sdk/client-dynamodb": "^3.27.0",
     "@aws-sdk/util-dynamodb": "^3.27.0",
     "abort-controller": "^3.0.0",
-    "dotenv": "^10.0.0",
     "request": "^2.88.2",
     "types": "^1.0.0"
   }
