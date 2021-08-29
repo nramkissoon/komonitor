@@ -1,8 +1,11 @@
 import * as cdk from "@aws-cdk/core";
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
+import { BuildProjects } from "./build-projects";
+import { LambdaBuildStage } from "./stages/lambda-build-stage";
 import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
 import { DevStackStage } from "./stages/dev-stack-stage";
+import { CodeBuildAction } from "@aws-cdk/aws-codepipeline-actions";
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
@@ -38,11 +41,19 @@ export class CdkPipelineStack extends cdk.Stack {
       }),
     });
 
-    const l = sourceArtifact.atPath(
-      "application/uptime-check-lambda/package.json"
-    ).artifact;
+    const buildProjects = new BuildProjects(this, "build_projects", {});
 
-    l.setMetadata("a", "z");
+    const uptimeCheckLambdaArtifact = new codepipeline.Artifact();
+
+    const lambdaBuildStage = this.pipeline.addStage("Lambda Build");
+    lambdaBuildStage.addActions(
+      new CodeBuildAction({
+        actionName: "Uptime Check Lambda Build",
+        input: sourceArtifact,
+        project: buildProjects.uptimeCheckLambdaBuild,
+        outputs: [uptimeCheckLambdaArtifact],
+      })
+    );
 
     const devStackStage = new DevStackStage(this, "devStackStage");
     this.pipeline.addApplicationStage(devStackStage);
