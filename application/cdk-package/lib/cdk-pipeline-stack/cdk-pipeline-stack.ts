@@ -38,6 +38,8 @@ export class CdkPipelineStack extends cdk.Stack {
       }),
     });
 
+    console.log(cloudAssemblyArtifact.atPath("package.json").fileName);
+
     const devStackStage = new DevStackStage(this, "devStackStage");
     this.pipeline.addApplicationStage(devStackStage);
   }
