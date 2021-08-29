@@ -22,7 +22,7 @@ class UptimeCheckLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, "dev_uptime_check", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromInline(""),
+      code: lambda.Code.fromInline("export {}"),
       environment: {
         REGION: props.region,
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
