@@ -1,5 +1,5 @@
-import { Construct, StackProps, Stage } from "@aws-cdk/core";
-import { DevStack } from "./../../dev-stack/dev-stack";
+import { Construct, StackProps, Stage, StageProps } from "@aws-cdk/core";
+import { DevStack, DevStackProps } from "./../../dev-stack/dev-stack";
 import { environments } from "../../common/environments";
 
 export class DevStackStage extends Stage {
@@ -15,7 +15,7 @@ export class DevStackStage extends Stage {
   ) {
     super(scope, id, props);
 
-    const stackProps = {
+    const stackProps: DevStackProps = {
       env: environments.dev,
       uptimeCheckLambdaBucketName: props.uptimeCheckLambdaBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,

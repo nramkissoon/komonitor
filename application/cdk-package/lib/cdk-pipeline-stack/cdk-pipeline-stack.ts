@@ -55,9 +55,12 @@ export class CdkPipelineStack extends cdk.Stack {
       })
     );
 
+    const uptimeCheckLambdaBucketName = uptimeCheckLambdaArtifact.bucketName;
+    const uptimeCheckLambdaBucketKey = uptimeCheckLambdaArtifact.objectKey;
+
     const devStackStage = new DevStackStage(this, "devStackStage", {
-      uptimeCheckLambdaBucketName: uptimeCheckLambdaArtifact.bucketName,
-      uptimeCheckLambdaBucketKey: uptimeCheckLambdaArtifact.objectKey,
+      uptimeCheckLambdaBucketName: uptimeCheckLambdaBucketName,
+      uptimeCheckLambdaBucketKey: uptimeCheckLambdaBucketKey,
     });
     this.pipeline.addApplicationStage(devStackStage);
   }

@@ -3,7 +3,7 @@ import { StackProps } from "@aws-cdk/core";
 import { DevStackDdbTables } from "./ddb-tables";
 import { DevStackLambdas } from "./lambdas";
 
-interface DevStackProps extends StackProps {
+export interface DevStackProps extends StackProps {
   uptimeCheckLambdaBucketName: string;
   uptimeCheckLambdaBucketKey: string;
 }
