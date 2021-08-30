@@ -1,0 +1,11 @@
+{
+  "jobs": [
+    {
+      "monitor_id": "asdasd",
+      "url": "https://google.com",
+      "name": "Google",
+      "region": "us-east-1",
+      "retries": 2
+    }
+  ]
+}
