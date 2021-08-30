@@ -6,7 +6,7 @@ import * as cdk from "@aws-cdk/core";
 const uptimeCheckBuildSpec = {
   version: "0.2",
   env: {
-    "exported-variables": ["ARTIFACTS_PATH", "KEY", "S3_BUCKET"],
+    "exported-variables": ["ARTIFACTS_PATH", "S3_BUCKET"],
   },
   phases: {
     pre_build: {
@@ -14,9 +14,7 @@ const uptimeCheckBuildSpec = {
     },
     build: {
       commands: [
-        "export TODAY=$(date +%Y-%m-%d-%H-%M-%S)",
-        "export ARTIFACTS_PATH=s3://$S3_BUCKET/uptime-check-lambda/$TODAY.zip",
-        "export KEY=uptime-check-lambda/$TODAY.zip",
+        "export ARTIFACTS_PATH=s3://$S3_BUCKET/$S3_KEY",
         "npm run build",
         "cd dist",
         "zip -r ../package.zip . *",
