@@ -29,13 +29,8 @@ const uptimeCheckBuildSpec = {
 
 export class BuildProjects extends cdk.Construct {
   public readonly uptimeCheckLambdaBuild: codebuild.PipelineProject;
-  public readonly s3: Bucket;
-  constructor(scope: cdk.Construct, id: string, props: {}) {
+  constructor(scope: cdk.Construct, id: string, props: { s3: Bucket }) {
     super(scope, id);
-
-    this.s3 = new Bucket(this, "buildS3", {
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-    });
 
     this.uptimeCheckLambdaBuild = new codebuild.PipelineProject(
       this,
@@ -46,6 +41,6 @@ export class BuildProjects extends cdk.Construct {
       }
     );
 
-    this.s3.grantReadWrite(this.uptimeCheckLambdaBuild);
+    props.s3.grantReadWrite(this.uptimeCheckLambdaBuild);
   }
 }

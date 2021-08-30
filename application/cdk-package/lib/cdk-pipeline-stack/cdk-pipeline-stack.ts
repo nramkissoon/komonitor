@@ -11,6 +11,7 @@ import {
   CodeBuildAction,
 } from "@aws-cdk/aws-codepipeline-actions";
 import { BuildEnvironmentVariableType } from "@aws-cdk/aws-codebuild";
+import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
@@ -46,7 +47,10 @@ export class CdkPipelineStack extends cdk.Stack {
       }),
     });
 
-    const buildProjects = new BuildProjects(this, "build_projects", {});
+    const s3 = new Bucket(this, "buildS3", {
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+    });
+    const buildProjects = new BuildProjects(this, "build_projects", { s3: s3 });
 
     const lambdaBuildStage = this.pipeline.addStage("LambdaBuild");
     const uptimeCheckLambdaBuild = new CodeBuildAction({
@@ -57,14 +61,21 @@ export class CdkPipelineStack extends cdk.Stack {
       environmentVariables: {
         S3_BUCKET: {
           type: BuildEnvironmentVariableType.PLAINTEXT,
-          value: buildProjects.s3.bucketName,
+          value: s3.bucketName,
         },
       },
     });
     lambdaBuildStage.addActions(uptimeCheckLambdaBuild);
-
-    const uptimeCheckLambdaBucketName = buildProjects.s3.bucketName;
-    const uptimeCheckLambdaBucketKey = uptimeCheckLambdaBuild.variable("KEY");
+    new cdk.CfnOutput(this, "asd", {
+      exportName: "name",
+      value: s3.bucketName,
+    });
+    new cdk.CfnOutput(this, "asddd", {
+      exportName: "key",
+      value: uptimeCheckLambdaBuild.variable("KEY"),
+    });
+    const uptimeCheckLambdaBucketName = cdk.Fn.importValue("name");
+    const uptimeCheckLambdaBucketKey = cdk.Fn.importValue("key");
 
     const devStackStage = new DevStackStage(this, "devStackStage", {
       uptimeCheckLambdaBucketName: uptimeCheckLambdaBucketName,
