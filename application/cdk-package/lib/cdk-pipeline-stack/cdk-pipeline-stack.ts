@@ -49,7 +49,6 @@ export class CdkPipelineStack extends cdk.Stack {
     const buildProjects = new BuildProjects(this, "buildProjectsConstruct", {
       s3: lambdaCodeS3.s3,
     });
-    const uuid = createUUID();
     const lambdaBuildStage = this.pipeline.addStage("LambdaBuild");
     const lambdaCodeBuildActions = new LambdaCodeBuildActions(
       this,
@@ -58,7 +57,7 @@ export class CdkPipelineStack extends cdk.Stack {
         sourceArtifact: sourceArtifact,
         s3Props: {
           bucketName: lambdaCodeS3.s3.bucketName,
-          objectKey: getLambdaCodeObjectKey(uuid, "lambda-uptime-check"),
+          objectKey: getLambdaCodeObjectKey("package", "lambda-uptime-check"),
         },
         buildProjects: buildProjects,
       }
@@ -81,7 +80,7 @@ export class CdkPipelineStack extends cdk.Stack {
     const devStackStage = new DevStackStage(this, "devStackStage", {
       lambdaCodeBucketName: LambdaBucketCodeName,
       uptimeCheckLambdaBucketKey: getLambdaCodeObjectKey(
-        uuid,
+        "package",
         "lambda-uptime-check"
       ),
     });
