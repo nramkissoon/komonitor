@@ -3,6 +3,7 @@ import * as lambda from "@aws-cdk/aws-lambda";
 import * as s3 from "@aws-cdk/aws-s3";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import * as iam from "@aws-cdk/aws-iam";
+import { DEV_STACK } from "../common/names";
 
 class UptimeCheckLambda extends cdk.Construct {
   public readonly lambda: lambda.Function;
@@ -24,6 +25,7 @@ class UptimeCheckLambda extends cdk.Construct {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
       code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
+      functionName: DEV_STACK.UPTIME_CHECK_LAMBDA,
       environment: {
         REGION: props.region,
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,

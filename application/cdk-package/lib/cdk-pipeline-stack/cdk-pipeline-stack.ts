@@ -14,6 +14,11 @@ import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
 import { LambdaCodeS3 } from "./lambda-code-s3";
 import { LambdaCodeBuildActions } from "./lambda-code-build-actions";
 import { createUUID, getLambdaCodeObjectKey } from "./../common/utils";
+import {
+  DEV_STACK,
+  LAMBDA_CODE_BUCKET,
+  UPTIME_CHECK_LAMBDA_CODE_KEY,
+} from "../common/names";
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
@@ -60,8 +65,8 @@ export class CdkPipelineStack extends cdk.Stack {
       {
         sourceArtifact: sourceArtifact,
         s3Props: {
-          bucketName: lambdaCodeS3.s3.bucketName,
-          objectKey: getLambdaCodeObjectKey("package", "lambda-uptime-check"),
+          bucketName: LAMBDA_CODE_BUCKET,
+          objectKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         },
         buildProjects: buildProjects,
       }
@@ -70,43 +75,23 @@ export class CdkPipelineStack extends cdk.Stack {
       lambdaCodeBuildActions.uptimeCheckCodeBuildAction
     );
 
-    new cdk.CfnOutput(this, "LambdaCodeBucketCfnOutput", {
-      exportName: "lambdaCodeBucketName",
-      value: lambdaCodeS3.s3.bucketName,
-    });
-    // new cdk.CfnOutput(this, "asddd", {
-    //   exportName: "key",
-    //   value: s3Key,
-    // });
-    const LambdaBucketCodeName = cdk.Fn.importValue("lambdaCodeBucketName");
-
     const devStackStage = new DevStackStage(this, "DevStackStage", {
-      lambdaCodeBucketName: LambdaBucketCodeName,
-      uptimeCheckLambdaBucketKey: getLambdaCodeObjectKey(
-        "package",
-        "lambda-uptime-check"
-      ),
+      lambdaCodeBucketName: LAMBDA_CODE_BUCKET,
+      uptimeCheckLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
     });
-    this.pipeline.addApplicationStage(devStackStage);
 
-    const devStackLambdaDeployStage = this.pipeline.addStage(
-      "DevStackLambdaDeployStage"
-    );
-
-    const lambda = cdk.Fn.importValue("devStackUptimeCheckLambdaName");
-    devStackLambdaDeployStage.addActions(
+    this.pipeline.addApplicationStage(devStackStage).addActions(
       new ShellScriptAction({
         actionName: "DevStackLambdaDeploy",
         commands: [
-          `aws lambda update-function-code --function-name ${lambda} --s3-bucket ${
-            lambdaCodeS3.s3.bucketName
-          } --s3-key ${getLambdaCodeObjectKey(
-            "package",
-            "lambda-uptime-check"
-          )}`,
+          `aws lambda update-function-code --function-name ${DEV_STACK.UPTIME_CHECK_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${UPTIME_CHECK_LAMBDA_CODE_KEY}`,
         ],
         additionalArtifacts: [sourceArtifact],
       })
     );
+
+    // const devStackLambdaDeployStage = this.pipeline.addStage(
+    //   "DevStackLambdaDeployStage"
+    // );
   }
 }
