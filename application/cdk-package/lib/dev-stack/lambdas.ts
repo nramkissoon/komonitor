@@ -13,6 +13,7 @@ class UptimeCheckLambda extends cdk.Construct {
     props: {
       monitorStatusTable: dynamodb.Table;
       lambdaCodeIBucket: s3.IBucket;
+      key: string;
       //alertLambda: AlertLambda;
       region: string;
     }
@@ -22,7 +23,7 @@ class UptimeCheckLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, "dev_uptime_check", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromInline("export {}"),
+      code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
       environment: {
         REGION: props.region,
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
@@ -97,6 +98,7 @@ class AlertLambda extends cdk.Construct {
     props: {
       lambdaCodeIBucket: s3.IBucket;
       monitorStatusTable: dynamodb.Table;
+      uptimeCheckLambdaBucketUrl: string;
     }
   ) {
     super(scope, id);
@@ -122,19 +124,24 @@ export class DevStackLambdas extends cdk.Construct {
   public readonly uptimeCheckLambda: UptimeCheckLambda;
   public readonly alertLambda: AlertLambda;
   public readonly uptimeCheckJobRunnerLambda: UptimeCheckJobRunnerLambda;
-  public readonly lambdaCodeIBucket: s3.IBucket;
+  public readonly uptimeCheckLambdaCodeIBucket: s3.IBucket;
 
   constructor(
     scope: cdk.Construct,
     id: string,
-    props: { monitorStatusTable: dynamodb.Table; region: string }
+    props: {
+      monitorStatusTable: dynamodb.Table;
+      region: string;
+      uptimeCheckLambdaBucketName: string;
+      uptimeCheckLambdaBucketKey: string;
+    }
   ) {
     super(scope, id);
 
-    this.lambdaCodeIBucket = s3.Bucket.fromBucketArn(
+    this.uptimeCheckLambdaCodeIBucket = s3.Bucket.fromBucketAttributes(
       this,
       "dev_lambda_code_bucket",
-      "arn:aws:s3:::dev-ono"
+      { bucketName: props.uptimeCheckLambdaBucketName }
     );
 
     // this.alertLambda = new AlertLambda(this, "alert_lambda", {
@@ -147,7 +154,8 @@ export class DevStackLambdas extends cdk.Construct {
       "dev_uptime_check_lambda",
       {
         monitorStatusTable: props.monitorStatusTable,
-        lambdaCodeIBucket: this.lambdaCodeIBucket,
+        lambdaCodeIBucket: this.uptimeCheckLambdaCodeIBucket,
+        key: props.uptimeCheckLambdaBucketKey,
         region: props.region,
         //alertLambda: this.alertLambda,
       }
