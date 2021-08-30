@@ -79,7 +79,7 @@ export class CdkPipelineStack extends cdk.Stack {
     const uptimeCheckLambdaBucketKey = cdk.Fn.importValue("key");
 
     const devStackStage = new DevStackStage(this, "devStackStage", {
-      uptimeCheckLambdaBucketName: LambdaBucketCodeName,
+      lambdaCodeBucketName: LambdaBucketCodeName,
       uptimeCheckLambdaBucketKey: getLambdaCodeObjectKey(
         uuid,
         "lambda-uptime-check"

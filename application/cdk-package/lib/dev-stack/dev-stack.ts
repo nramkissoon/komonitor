@@ -4,7 +4,7 @@ import { DevStackDdbTables } from "./ddb-tables";
 import { DevStackLambdas } from "./lambdas";
 
 export interface DevStackProps extends StackProps {
-  uptimeCheckLambdaBucketName: string;
+  lambdaCodeBucketName: string;
   uptimeCheckLambdaBucketKey: string;
 }
 
@@ -18,7 +18,7 @@ export class DevStack extends cdk.Stack {
     this.lambdas = new DevStackLambdas(this, "dev_lambdas", {
       monitorStatusTable: this.tables.uptimeMonitorStatusTable,
       region: props.env?.region || "us-east-1", // dev is always us-east-1 anyways
-      uptimeCheckLambdaBucketName: props.uptimeCheckLambdaBucketName,
+      uptimeCheckLambdaBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
     });
   }

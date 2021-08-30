@@ -5,19 +5,12 @@ import { environments } from "../../common/environments";
 export class DevStackStage extends Stage {
   public readonly stack: DevStack;
 
-  constructor(
-    scope: Construct,
-    id: string,
-    props: StackProps & {
-      uptimeCheckLambdaBucketName: string;
-      uptimeCheckLambdaBucketKey: string;
-    }
-  ) {
+  constructor(scope: Construct, id: string, props: StackProps & DevStackProps) {
     super(scope, id, props);
 
     const stackProps: DevStackProps = {
       env: environments.dev,
-      uptimeCheckLambdaBucketName: props.uptimeCheckLambdaBucketName,
+      lambdaCodeBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
     };
 
