@@ -23,7 +23,10 @@ class UptimeCheckLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, "dev_uptime_check", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
+      code: lambda.Code.fromBucket(
+        props.lambdaCodeIBucket,
+        cdk.Fn.importValue("uptimeCheckLambdaBucketKey")
+      ),
       environment: {
         REGION: props.region,
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
@@ -141,7 +144,7 @@ export class DevStackLambdas extends cdk.Construct {
     this.uptimeCheckLambdaCodeIBucket = s3.Bucket.fromBucketAttributes(
       this,
       "dev_lambda_code_bucket",
-      { bucketName: props.uptimeCheckLambdaBucketName }
+      { bucketName: cdk.Fn.importValue("uptimeCheckLambdaBucketName") }
     );
 
     // this.alertLambda = new AlertLambda(this, "alert_lambda", {
