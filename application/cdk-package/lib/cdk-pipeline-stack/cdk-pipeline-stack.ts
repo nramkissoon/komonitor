@@ -91,7 +91,7 @@ export class CdkPipelineStack extends cdk.Stack {
         additionalArtifacts: [sourceArtifact],
         rolePolicyStatements: [
           new PolicyStatement({
-            actions: ["lambda:UpdateFunctionCode"],
+            actions: ["lambda:UpdateFunctionCode", "s3:GetObject"],
             effect: Effect.ALLOW,
             resources: ["*"],
           }),
