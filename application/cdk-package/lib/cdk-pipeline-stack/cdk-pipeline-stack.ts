@@ -5,7 +5,12 @@ import { BuildProjects } from "./build-projects";
 import { LambdaBuildStage } from "./stages/lambda-build-stage";
 import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
 import { DevStackStage } from "./stages/dev-stack-stage";
-import { CodeBuildAction } from "@aws-cdk/aws-codepipeline-actions";
+import {
+  CloudFormationCreateReplaceChangeSetAction,
+  CloudFormationExecuteChangeSetAction,
+  CodeBuildAction,
+} from "@aws-cdk/aws-codepipeline-actions";
+import { BuildEnvironmentVariableType } from "@aws-cdk/aws-codebuild";
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
@@ -43,29 +48,23 @@ export class CdkPipelineStack extends cdk.Stack {
 
     const buildProjects = new BuildProjects(this, "build_projects", {});
 
-    const uptimeCheckLambdaArtifact = new codepipeline.Artifact();
-
     const lambdaBuildStage = this.pipeline.addStage("LambdaBuild");
-    lambdaBuildStage.addActions(
-      new CodeBuildAction({
-        actionName: "Uptime-Check-Lambda-Build",
-        input: sourceArtifact,
-        project: buildProjects.uptimeCheckLambdaBuild,
-        outputs: [uptimeCheckLambdaArtifact],
-      })
-    );
-
-    new cdk.CfnOutput(this, "uptimeCheckLambdaBucketName", {
-      value: uptimeCheckLambdaArtifact.bucketName,
-      exportName: "uptimeCheckLambdaBucketName",
+    const uptimeCheckLambdaBuild = new CodeBuildAction({
+      actionName: "Uptime-Check-Lambda-Build",
+      input: sourceArtifact,
+      project: buildProjects.uptimeCheckLambdaBuild,
+      variablesNamespace: "uptime-lambda-check-build",
+      environmentVariables: {
+        S3_BUCKET: {
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+          value: buildProjects.s3.bucketName,
+        },
+      },
     });
+    lambdaBuildStage.addActions(uptimeCheckLambdaBuild);
 
-    new cdk.CfnOutput(this, "uptimeCheckLambdaBucketKey", {
-      value: uptimeCheckLambdaArtifact.objectKey,
-      exportName: "uptimeCheckLambdaBucketKey",
-    });
-    const uptimeCheckLambdaBucketName = "";
-    const uptimeCheckLambdaBucketKey = "";
+    const uptimeCheckLambdaBucketName = buildProjects.s3.bucketName;
+    const uptimeCheckLambdaBucketKey = uptimeCheckLambdaBuild.variable("KEY");
 
     const devStackStage = new DevStackStage(this, "devStackStage", {
       uptimeCheckLambdaBucketName: uptimeCheckLambdaBucketName,
