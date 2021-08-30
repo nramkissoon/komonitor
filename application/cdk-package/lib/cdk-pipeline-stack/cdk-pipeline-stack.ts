@@ -3,7 +3,11 @@ import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
 import { BuildProjects } from "./build-projects";
 import { LambdaBuildStage } from "./stages/lambda-build-stage";
-import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
+import {
+  CdkPipeline,
+  ShellScriptAction,
+  SimpleSynthAction,
+} from "@aws-cdk/pipelines";
 import { DevStackStage } from "./stages/dev-stack-stage";
 import { BuildEnvironmentVariableType } from "@aws-cdk/aws-codebuild";
 import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
@@ -75,9 +79,8 @@ export class CdkPipelineStack extends cdk.Stack {
     //   value: s3Key,
     // });
     const LambdaBucketCodeName = cdk.Fn.importValue("lambdaCodeBucketName");
-    const uptimeCheckLambdaBucketKey = cdk.Fn.importValue("key");
 
-    const devStackStage = new DevStackStage(this, "devStackStage", {
+    const devStackStage = new DevStackStage(this, "DevStackStage", {
       lambdaCodeBucketName: LambdaBucketCodeName,
       uptimeCheckLambdaBucketKey: getLambdaCodeObjectKey(
         "package",
@@ -85,5 +88,25 @@ export class CdkPipelineStack extends cdk.Stack {
       ),
     });
     this.pipeline.addApplicationStage(devStackStage);
+
+    const devStackLambdaDeployStage = this.pipeline.addStage(
+      "DevStackLambdaDeployStage"
+    );
+
+    const lambda = cdk.Fn.importValue("devStackUptimeCheckLambdaName");
+    devStackLambdaDeployStage.addActions(
+      new ShellScriptAction({
+        actionName: "DevStackLambdaDeploy",
+        commands: [
+          `aws lambda update-function-code --function-name ${lambda} --s3-bucket ${
+            lambdaCodeS3.s3.bucketName
+          } --s3-key ${getLambdaCodeObjectKey(
+            "package",
+            "lambda-uptime-check"
+          )}`,
+        ],
+        additionalArtifacts: [sourceArtifact],
+      })
+    );
   }
 }
