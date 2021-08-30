@@ -1,6 +1,6 @@
 import * as codebuild from "@aws-cdk/aws-codebuild";
 import { LinuxBuildImage, BuildSpec } from "@aws-cdk/aws-codebuild";
-import { Bucket } from "@aws-cdk/aws-s3";
+import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
 import * as cdk from "@aws-cdk/core";
 
 const uptimeCheckBuildSpec = {
@@ -33,7 +33,9 @@ export class BuildProjects extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: {}) {
     super(scope, id);
 
-    this.s3 = new Bucket(this, "buildS3");
+    this.s3 = new Bucket(this, "buildS3", {
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+    });
 
     this.uptimeCheckLambdaBuild = new codebuild.PipelineProject(
       this,
