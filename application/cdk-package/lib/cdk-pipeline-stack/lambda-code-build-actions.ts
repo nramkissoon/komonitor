@@ -32,7 +32,7 @@ export class LambdaCodeBuildActions extends Construct {
         },
         S3_KEY: {
           type: BuildEnvironmentVariableType.PLAINTEXT,
-          value: s3Props.objectKey,
+          value: s3Props.uptimeCheckLambdaCodeObjectKey,
         },
       },
     });

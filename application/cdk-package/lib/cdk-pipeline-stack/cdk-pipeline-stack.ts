@@ -14,11 +14,13 @@ import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
 import { LambdaCodeS3 } from "./lambda-code-s3";
 import { LambdaCodeBuildActions } from "./lambda-code-build-actions";
 import { createUUID, getLambdaCodeObjectKey } from "./../common/utils";
+import { Function } from "@aws-cdk/aws-lambda";
 import {
   DEV_STACK,
   LAMBDA_CODE_BUCKET,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
 } from "../common/names";
+import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
@@ -58,7 +60,7 @@ export class CdkPipelineStack extends cdk.Stack {
     const buildProjects = new BuildProjects(this, "buildProjectsConstruct", {
       s3: lambdaCodeS3.s3,
     });
-    const lambdaBuildStage = this.pipeline.addStage("LambdaBuild");
+    const lambdaBuildStage = this.pipeline.addStage("LambdaBuildStage");
     const lambdaCodeBuildActions = new LambdaCodeBuildActions(
       this,
       "LambdaCodeBuildActionsConstruct",
@@ -66,7 +68,7 @@ export class CdkPipelineStack extends cdk.Stack {
         sourceArtifact: sourceArtifact,
         s3Props: {
           bucketName: LAMBDA_CODE_BUCKET,
-          objectKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
+          uptimeCheckLambdaCodeObjectKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         },
         buildProjects: buildProjects,
       }
@@ -87,11 +89,14 @@ export class CdkPipelineStack extends cdk.Stack {
           `aws lambda update-function-code --function-name ${DEV_STACK.UPTIME_CHECK_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${UPTIME_CHECK_LAMBDA_CODE_KEY}`,
         ],
         additionalArtifacts: [sourceArtifact],
+        rolePolicyStatements: [
+          new PolicyStatement({
+            actions: ["lambda:UpdateFunctionCode"],
+            effect: Effect.ALLOW,
+            resources: ["*"],
+          }),
+        ],
       })
     );
-
-    // const devStackLambdaDeployStage = this.pipeline.addStage(
-    //   "DevStackLambdaDeployStage"
-    // );
   }
 }
