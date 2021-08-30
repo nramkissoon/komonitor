@@ -6,7 +6,7 @@ const uptimeCheckBuildSpec = {
   version: "0.2",
   phases: {
     pre_build: {
-      commands: ["cd application/uptime-check-lambda"],
+      commands: ["cd application/uptime-check-lambda", "npx lerna bootstrap"],
     },
     build: {
       commands: [
