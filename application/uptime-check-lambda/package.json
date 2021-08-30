@@ -4,8 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm run build:deploy",
-    "build:deploy": "rm -rf node_modules && npx lerna run build && rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript",
+    "build": "npx lerna run build --scope=types && rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
