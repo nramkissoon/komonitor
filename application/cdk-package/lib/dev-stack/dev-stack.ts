@@ -21,10 +21,5 @@ export class DevStack extends cdk.Stack {
       uptimeCheckLambdaBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
     });
-
-    new cdk.CfnOutput(this, "uptimeCheckLambda-devStack-cfnOutput", {
-      value: this.lambdas.uptimeCheckLambda.lambda.functionName,
-      exportName: "devStackUptimeCheckLambdaName",
-    });
   }
 }
