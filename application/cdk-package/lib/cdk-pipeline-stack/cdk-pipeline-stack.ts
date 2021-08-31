@@ -74,6 +74,7 @@ export class CdkPipelineStack extends cdk.Stack {
       }
     );
     lambdaBuildStage.addActions(
+      lambdaCodeBuildActions.manualApprovalAction,
       lambdaCodeBuildActions.uptimeCheckCodeBuildAction
     );
 

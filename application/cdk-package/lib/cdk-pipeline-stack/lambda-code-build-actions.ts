@@ -1,11 +1,15 @@
 import { BuildEnvironmentVariableType } from "@aws-cdk/aws-codebuild";
 import { Artifact } from "@aws-cdk/aws-codepipeline";
-import { CodeBuildAction } from "@aws-cdk/aws-codepipeline-actions";
+import {
+  CodeBuildAction,
+  ManualApprovalAction,
+} from "@aws-cdk/aws-codepipeline-actions";
 import { LambdaCodeBucketProps } from "./../common/types";
 import { Construct } from "@aws-cdk/core";
 import { BuildProjects } from "./build-projects";
 
 export class LambdaCodeBuildActions extends Construct {
+  public manualApprovalAction: ManualApprovalAction;
   public uptimeCheckCodeBuildAction: CodeBuildAction;
   constructor(
     scope: Construct,
@@ -20,7 +24,13 @@ export class LambdaCodeBuildActions extends Construct {
 
     const { sourceArtifact, buildProjects, s3Props } = props;
 
+    this.manualApprovalAction = new ManualApprovalAction({
+      actionName: "Lambda-Build-Manual-Approval",
+      runOrder: 1,
+    });
+
     this.uptimeCheckCodeBuildAction = new CodeBuildAction({
+      runOrder: 2,
       actionName: "Uptime-Check-Lambda-Build",
       input: sourceArtifact,
       project: buildProjects.uptimeCheckLambdaBuild,
