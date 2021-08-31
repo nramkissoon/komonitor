@@ -6,9 +6,11 @@ export const handler = async (event: any) => {
   const start = performance.now();
   let jobs = getJobs(event);
 
+  const jobPromises = [];
   for (let job of jobs) {
-    runJob(job);
+    jobPromises.push(runJob(job));
   }
+  await Promise.allSettled(jobPromises);
   const end = performance.now();
   return {
     statusCode: 200,

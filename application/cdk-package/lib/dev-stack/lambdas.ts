@@ -32,6 +32,7 @@ class UptimeCheckLambda extends cdk.Construct {
         //ALERT_LAMBDA: props.alertLambda.lambda.functionArn,
       },
       timeout: cdk.Duration.seconds(60),
+      memorySize: 140,
     });
 
     const monitorStatusDbWritePolicyStatement = new iam.PolicyStatement({
