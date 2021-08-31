@@ -7,7 +7,7 @@ export const handler = async (event: any) => {
   let jobs = getJobs(event);
 
   for (let job of jobs) {
-    await runJob(job);
+    runJob(job);
   }
   const end = performance.now();
   return {
