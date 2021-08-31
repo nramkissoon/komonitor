@@ -14,35 +14,39 @@ const fetchTimeout = setTimeout(() => {
 }, 5000);
 
 const fetchCall = async (url: string) => {
-  const res = await new Promise<
-    { ok: boolean; latency: number | undefined } | undefined
-  >((resolve, reject) =>
-    request(
-      {
-        url: url,
-        method: "GET",
-        time: true,
-        timeout: 5000,
-        headers: {
-          "User-Agent": "isthisfine",
+  try {
+    const res = await new Promise<
+      { ok: boolean; latency: number | undefined } | undefined
+    >((resolve, reject) =>
+      request(
+        {
+          url: url,
+          method: "GET",
+          time: true,
+          timeout: 5000,
+          headers: {
+            "User-Agent": "isthisfine",
+          },
         },
-      },
-      (err, response) => {
-        if (err) {
-          resolve({ ok: false, latency: undefined });
-        } else {
-          resolve({
-            ok: response.statusCode
-              ? response.statusCode >= 200 && response.statusCode < 300
-              : false,
-            latency: response.timingPhases?.total,
-          });
+        (err, response) => {
+          if (err) {
+            resolve({ ok: false, latency: undefined });
+          } else {
+            resolve({
+              ok: response.statusCode
+                ? response.statusCode >= 200 && response.statusCode < 300
+                : false,
+              latency: response.timingPhases?.total,
+            });
+          }
         }
-      }
-    )
-  );
+      )
+    );
 
-  return { response: res?.ok, latency: res?.latency };
+    return { response: res?.ok, latency: res?.latency };
+  } catch (err) {
+    return { response: false, latency: undefined };
+  }
 };
 
 const webhookNotifyCall = async (
