@@ -130,7 +130,7 @@ export const runJob = async (job: UptimeMonitorJob) => {
   );
 
   try {
-    await writeStatusToDB(status);
+    writeStatusToDB(status);
   } catch (err) {}
 
   if (webhook_url) {

@@ -35,7 +35,7 @@ export class DevStackDdbTables extends cdk.Construct {
     this.uptimeMonitorTable.addGlobalSecondaryIndex({
       indexName: "frequencyGSI",
       partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
-      sortKey: { name: "monitor_id", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
