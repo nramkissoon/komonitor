@@ -4,12 +4,12 @@ import * as targets from "@aws-cdk/aws-events-targets";
 import * as lambda from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
 
-export class UptimeCheckScheduleRules extends cdk.Construct {
+export class ScheduleRules extends cdk.Construct {
   public readonly fiveMinuteRule: events.Rule;
   constructor(
     scope: cdk.Construct,
     id: string,
-    props: { uptimeCheckJobRunnerLambda: lambda.Function }
+    props: { jobRunnerLambda: lambda.Function }
   ) {
     super(scope, id);
 
@@ -18,8 +18,8 @@ export class UptimeCheckScheduleRules extends cdk.Construct {
     });
 
     this.fiveMinuteRule.addTarget(
-      new targets.LambdaFunction(props.uptimeCheckJobRunnerLambda, {
-        event: events.RuleTargetInput.fromObject({}), //TODO
+      new targets.LambdaFunction(props.jobRunnerLambda, {
+        event: events.RuleTargetInput.fromObject({ periodInMinutes: 5 }),
       })
     );
   }

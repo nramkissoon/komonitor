@@ -22,6 +22,7 @@ export class DevStackDdbTables extends cdk.Construct {
       indexName: "GSI1",
       partitionKey: { name: "GSI1PK", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "GSI1SK", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
     });
 
     this.uptimeMonitorTable = new dynamodb.Table(this, "dev_uptime_monitor", {
@@ -29,6 +30,13 @@ export class DevStackDdbTables extends cdk.Construct {
       sortKey: { name: "monitor_id", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
+    this.uptimeMonitorTable.addGlobalSecondaryIndex({
+      indexName: "frequencyGSI",
+      partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: "monitor_id", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
     });
 
     this.uptimeMonitorStatusTable = new dynamodb.Table(
