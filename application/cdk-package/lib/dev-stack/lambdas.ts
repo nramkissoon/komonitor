@@ -77,10 +77,7 @@ class JobRunnerLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, "dev_uptime_check", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromBucket(
-        props.lambdaCodeIBucket,
-        "uptime-check-job-runner-lambda-package.zip"
-      ),
+      code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
       functionName: DEV_STACK.JOB_RUNNER_LAMBDA,
       environment: {
         REGION: props.region,
