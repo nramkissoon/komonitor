@@ -6,6 +6,7 @@ import { DevStackLambdas } from "./lambdas";
 export interface DevStackProps extends StackProps {
   lambdaCodeBucketName: string;
   uptimeCheckLambdaBucketKey: string;
+  jobRunnerLambdaBucketKey: string;
 }
 
 export class DevStack extends cdk.Stack {
@@ -19,10 +20,14 @@ export class DevStack extends cdk.Stack {
 
     this.tables = new DevStackDdbTables(this, "dev_tables", {});
     this.lambdas = new DevStackLambdas(this, "dev_lambdas", {
-      monitorStatusTable: this.tables.uptimeMonitorStatusTable,
+      uptimeCheckMonitorStatusTable: this.tables.uptimeMonitorStatusTable,
+      uptimeCheckMonitorTable: this.tables.uptimeMonitorTable,
+      uptimeCheckMonitorTableFrequencyGsiName:
+        this.tables.uptimeCheckMonitorTableFrequencyGsiName,
       region: props.env?.region || "us-east-1", // dev is always us-east-1 anyways
-      uptimeCheckLambdaBucketName: props.lambdaCodeBucketName,
+      lambdaCodeBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
+      jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
     });
   }
 }

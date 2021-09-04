@@ -4,6 +4,7 @@ import * as dynamodb from "@aws-cdk/aws-dynamodb";
 export class DevStackDdbTables extends cdk.Construct {
   public readonly uptimeMonitorTable: dynamodb.Table;
   public readonly uptimeMonitorStatusTable: dynamodb.Table;
+  public readonly uptimeCheckMonitorTableFrequencyGsiName: string;
   public readonly userTable: dynamodb.Table;
   public readonly alarmTable: dynamodb.Table;
   public readonly alarmStatusTable: dynamodb.Table;
@@ -32,8 +33,10 @@ export class DevStackDdbTables extends cdk.Construct {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
+    this.uptimeCheckMonitorTableFrequencyGsiName = "frequencyGSI";
+
     this.uptimeMonitorTable.addGlobalSecondaryIndex({
-      indexName: "frequencyGSI",
+      indexName: this.uptimeCheckMonitorTableFrequencyGsiName,
       partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
       sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,

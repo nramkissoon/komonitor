@@ -2,21 +2,17 @@ import * as cdk from "@aws-cdk/core";
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
 import { BuildProjects } from "./build-projects";
-import { LambdaBuildStage } from "./stages/lambda-build-stage";
 import {
   CdkPipeline,
   ShellScriptAction,
   SimpleSynthAction,
 } from "@aws-cdk/pipelines";
 import { DevStackStage } from "./stages/dev-stack-stage";
-import { BuildEnvironmentVariableType } from "@aws-cdk/aws-codebuild";
-import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
 import { LambdaCodeS3 } from "./lambda-code-s3";
 import { LambdaCodeBuildActions } from "./lambda-code-build-actions";
-import { createUUID, getLambdaCodeObjectKey } from "./../common/utils";
-import { Function } from "@aws-cdk/aws-lambda";
 import {
   DEV_STACK,
+  JOB_RUNNER_LAMBDA_CODE_KEY,
   LAMBDA_CODE_BUCKET,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
 } from "../common/names";
@@ -69,18 +65,21 @@ export class CdkPipelineStack extends cdk.Stack {
         s3Props: {
           bucketName: LAMBDA_CODE_BUCKET,
           uptimeCheckLambdaCodeObjectKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
+          jobRunnerLambdaCodeObjectKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         },
         buildProjects: buildProjects,
       }
     );
     lambdaBuildStage.addActions(
       lambdaCodeBuildActions.manualApprovalAction,
-      lambdaCodeBuildActions.uptimeCheckCodeBuildAction
+      lambdaCodeBuildActions.uptimeCheckCodeBuildAction,
+      lambdaCodeBuildActions.jobRunnerCodeBuildAction
     );
 
     const devStackStage = new DevStackStage(this, "DevStackStage", {
       lambdaCodeBucketName: LAMBDA_CODE_BUCKET,
       uptimeCheckLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
+      jobRunnerLambdaBucketKey: JOB_RUNNER_LAMBDA_CODE_KEY,
     });
 
     this.pipeline.addApplicationStage(devStackStage).addActions(

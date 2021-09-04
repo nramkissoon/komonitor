@@ -12,6 +12,7 @@ export class DevStackStage extends Stage {
       env: environments.dev,
       lambdaCodeBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
+      jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
     };
 
     this.stack = new DevStack(this, "DevStack", stackProps);
