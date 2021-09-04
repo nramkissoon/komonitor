@@ -81,6 +81,7 @@ class JobRunnerLambda extends cdk.Construct {
         props.lambdaCodeIBucket,
         "uptime-check-job-runner-lambda-package.zip"
       ),
+      functionName: DEV_STACK.JOB_RUNNER_LAMBDA,
       environment: {
         REGION: props.region,
         UPTIME_CHECK_MONITOR_TABLE_NAME:

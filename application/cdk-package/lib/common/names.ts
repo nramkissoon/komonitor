@@ -4,4 +4,5 @@ export const JOB_RUNNER_LAMBDA_CODE_KEY = "lambda-job-runner/package.zip";
 
 export const DEV_STACK = {
   UPTIME_CHECK_LAMBDA: "devStackUptimeCheckLambda",
+  JOB_RUNNER_LAMBDA: "devStackJobRunnerLambda",
 };
