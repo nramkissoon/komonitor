@@ -2,6 +2,7 @@ import { createHash, randomBytes } from "crypto";
 import { Profile, Session, User } from "next-auth";
 import { Adapter } from "next-auth/adapters";
 
+// Custom DynamoDB Adapter
 export const DynamoDBAdapter: Adapter<
   any,
   {
