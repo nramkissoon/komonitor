@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
+import { redirect } from "next/dist/server/api-utils";
 import { sendVerificationRequest } from "../../../src/auth/send-verification-request";
 import { DynamoDBAdapter } from "./../../../src/auth/dynamodb-adapter";
 
@@ -31,6 +32,9 @@ export default NextAuth({
         session.uid = user.id; // allow us to get the user ID from the session object
       }
       return session;
+    },
+    async redirect(url: string, baseUrl: string) {
+      return url.startsWith(baseUrl) ? url : baseUrl + url; // allow relative urls
     },
   },
   adapter: DynamoDBAdapter(new AWS.DynamoDB.DocumentClient(), {
