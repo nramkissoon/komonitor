@@ -1,7 +1,6 @@
 import AWS from "aws-sdk";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
-import { redirect } from "next/dist/server/api-utils";
 import { sendVerificationRequest } from "../../../src/auth/send-verification-request";
 import { DynamoDBAdapter } from "./../../../src/auth/dynamodb-adapter";
 
@@ -43,7 +42,7 @@ export default NextAuth({
   pages: {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
-    error: "/auth/error",
-    verifyRequest: "/auth/verify-request",
+    error: "/auth/signin",
+    verifyRequest: "/auth/signin?info=VerificationSent",
   },
 });

@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Container,
@@ -11,9 +13,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
-import { signIn } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
+import { useRouter } from "next/router";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
+import { getErrorStringFromErrorCode } from "../../src/auth/errors";
 import { ExtendedNextPage } from "../_app";
 
 const validateEmailSubmission = (
@@ -33,6 +37,23 @@ const validateEmailSubmission = (
 };
 
 const Signin: ExtendedNextPage = () => {
+  const router = useRouter();
+  const queryParams = router.query;
+  let errorString;
+  let emailSentString;
+  if (queryParams.error) {
+    errorString = getErrorStringFromErrorCode(queryParams.error as string);
+  }
+  if (queryParams.info && queryParams.info === "VerificationSent") {
+    emailSentString =
+      "We sent an email with a sign in link to you. Click on it to complete sign in.";
+  }
+
+  const [session] = useSession();
+  if (session?.user) {
+    router.push("/app");
+  }
+
   const emailOnSubmit = ({ email }: { email: string }) => {
     signIn("email", { email, callbackUrl: "/app" });
   };
@@ -52,8 +73,24 @@ const Signin: ExtendedNextPage = () => {
           Get started for free.
         </Heading>
         <Text textAlign="center" mb="2em" color="gray.600">
-          Signing in gets you access to our free tier. No credit card required.
+          Sign in to get access to our free tier. No credit card required.
         </Text>
+        {errorString ? (
+          <Alert status="error" variant="solid" borderRadius="lg" mb="1.2em">
+            <AlertIcon />
+            {errorString}
+          </Alert>
+        ) : (
+          <></>
+        )}
+        {emailSentString ? (
+          <Alert status="success" variant="solid" borderRadius="lg" mb="1.2em">
+            <AlertIcon />
+            {emailSentString}
+          </Alert>
+        ) : (
+          <></>
+        )}
         <Formik initialValues={{ email: "" }} onSubmit={emailOnSubmit}>
           {(props) => (
             <Form>
