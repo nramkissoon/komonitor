@@ -1,7 +1,17 @@
 import {
+  MonitorType,
   SupportedRegion,
   UptimeCheckSupportedFrequenciesInMinutes,
 } from "../config/index";
+
+export interface UptimeMonitorWebhookNotification {
+  url: string;
+  name: string;
+  trigger: "up" | "down";
+  region: SupportedRegion;
+  monitor_type: MonitorType;
+  latency: number;
+}
 
 export interface UptimeMonitor {
   owner_id: string;
@@ -17,7 +27,6 @@ export interface UptimeMonitor {
   webhook_url?: string;
   alert_ids?: string[];
 }
-
 export interface UptimeMonitorJob {
   monitor_id: string;
   url: string;
@@ -25,4 +34,12 @@ export interface UptimeMonitorJob {
   region: SupportedRegion;
   retries: number;
   webhook_url?: string;
+}
+
+export interface UptimeMonitorStatus {
+  monitor_id: string;
+  timestamp: number;
+  status: "up" | "down";
+  latency: number;
+  region: SupportedRegion;
 }
