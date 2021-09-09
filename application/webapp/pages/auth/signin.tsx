@@ -11,6 +11,7 @@ import {
   Heading,
   Input,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { signIn, useSession } from "next-auth/client";
@@ -60,7 +61,14 @@ const Signin: ExtendedNextPage = () => {
   const googleOnSubmit = () => signIn("google", { callbackUrl: "/app" });
 
   return (
-    <Container p="0" shadow="md" maxW="xl" borderRadius="lg" mt="2em">
+    <Container
+      p="0"
+      shadow="md"
+      maxW="xl"
+      borderRadius="lg"
+      mt="2em"
+      bg={useColorModeValue("white", "gray.900")}
+    >
       <Box
         bgGradient="linear(to-b, blue.300, blue.200)"
         w="100%"
@@ -72,7 +80,11 @@ const Signin: ExtendedNextPage = () => {
         <Heading as="h2" textAlign="center" mb="2">
           Get started for free.
         </Heading>
-        <Text textAlign="center" mb="2em" color="gray.600">
+        <Text
+          textAlign="center"
+          mb="2em"
+          color={useColorModeValue("gray.800", "gray.300")}
+        >
           Sign in to get access to our free tier. No credit card required.
         </Text>
         {errorString ? (

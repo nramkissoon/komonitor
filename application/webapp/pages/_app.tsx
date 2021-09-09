@@ -1,11 +1,13 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import "@fontsource/roboto";
+import { NextComponentType, NextPage, NextPageContext } from "next";
 import {
   Provider as SessionProvider,
   signIn,
   useSession,
 } from "next-auth/client";
 import React from "react";
-import { NextComponentType, NextPage, NextPageContext } from "next";
+import theme from "./../src/components/theme";
 
 type Extensions = {
   requiresAuth?: boolean;
@@ -23,7 +25,7 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: ExtendedAppProps) {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
           <Auth>
