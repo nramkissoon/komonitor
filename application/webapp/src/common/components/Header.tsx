@@ -248,7 +248,7 @@ export const Header = () => {
           </HStack>
         </Flex>
         <Flex justify="flex-end" align="center" color="gray.400">
-          <HStack justify="flex-end" align="center" color="gray.400">
+          <HStack justify="flex-end" align="center" color="gray.400" mr=".8em">
             {GoToAppOrSigninButton({ authed: authed })}
             {SignOutButton({ authed: authed })}
           </HStack>

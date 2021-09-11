@@ -129,22 +129,22 @@ const MobileNavHeader = (props: {
         <CloseButton {...defaultCloseButtonStyles} />
         {HeaderLink({
           text: "Uptime",
-          href: "/uptime",
+          href: "/app/uptime",
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
           text: "Browser",
-          href: "/browser",
+          href: "/app/browser",
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
           text: "Lighthouse",
-          href: "/lighthouse",
+          href: "/app/lighthouse",
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
           text: "Settings",
-          href: "/settings",
+          href: "/app/settings",
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
@@ -229,19 +229,19 @@ export const AppHeader = () => {
           <HStack {...defaultLinksHstackContainerStyles}>
             {HeaderLink({
               text: "Uptime",
-              href: "/uptime",
+              href: "/app/uptime",
             })}
             {HeaderLink({
               text: "Browser",
-              href: "/browser",
+              href: "/app/browser",
             })}
             {HeaderLink({
               text: "Lighthouse",
-              href: "/lighthouse",
+              href: "/app/lighthouse",
             })}
             {HeaderLink({
               text: "Settings",
-              href: "/settings",
+              href: "/app/settings",
             })}
             {HeaderLink({
               text: "Docs",

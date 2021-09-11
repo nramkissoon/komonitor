@@ -18,8 +18,8 @@ import { signIn, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
-import { getErrorStringFromErrorCode } from "../../src/auth/errors";
-import { Header } from "../../src/components/Header";
+import { Header } from "../../src/common/components/Header";
+import { getErrorStringFromErrorCode } from "../../src/modules/auth/errors";
 import { ExtendedNextPage } from "../_app";
 
 const validateEmailSubmission = (

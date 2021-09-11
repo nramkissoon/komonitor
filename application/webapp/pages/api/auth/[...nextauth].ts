@@ -1,8 +1,8 @@
 import AWS from "aws-sdk";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
-import { sendVerificationRequest } from "../../../src/auth/send-verification-request";
-import { DynamoDBAdapter } from "./../../../src/auth/dynamodb-adapter";
+import { DynamoDBAdapter } from "../../../src/modules/auth/dynamodb-adapter";
+import { sendVerificationRequest } from "../../../src/modules/auth/send-verification-request";
 
 AWS.config.update({ region: "us-east-1" });
 

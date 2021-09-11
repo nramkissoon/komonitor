@@ -1,4 +1,4 @@
-import { AppHeader } from "../../src/components/app/App-Header";
+import { AppHeader } from "../../src/common/components/App-Header";
 import { ExtendedNextPage } from "../_app";
 
 const App: ExtendedNextPage = () => {

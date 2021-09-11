@@ -7,7 +7,7 @@ import {
   useSession,
 } from "next-auth/client";
 import React from "react";
-import theme from "./../src/components/theme";
+import theme from "../src/common/components/theme";
 
 type Extensions = {
   requiresAuth?: boolean;
