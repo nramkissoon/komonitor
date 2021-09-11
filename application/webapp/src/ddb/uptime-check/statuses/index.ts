@@ -4,4 +4,9 @@ export function getStatuses(
   ddbClient: DynamoDBClient,
   monitorIds: string[],
   since: number
-) {}
+) {
+  try {
+  } catch (err) {
+    return [];
+  }
+}

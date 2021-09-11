@@ -39,7 +39,7 @@ const HeaderLink = (props: {
     alignItems: "center",
     variant: "ghost",
     fontWeight: "medium",
-    fontSize: "lg",
+    fontSize: "medium",
     _focus: { boxShadow: "none" },
     _hover: { color: useColorModeValue("gray.500", "white") },
     as: "a",
@@ -54,37 +54,22 @@ const HeaderLink = (props: {
   );
 };
 
-const GoToAppOrSigninButton = (props: { authed: boolean }) => {
-  const { authed } = props;
-  return (
-    <Link href={authed ? "/app" : "/auth/signin"} passHref>
-      <Button
-        size="md"
-        colorScheme="blue"
-        bgGradient="linear(to-r, blue.400, blue.300)"
-        fontSize="lg"
-        fontWeight="medium"
-        color="white"
-      >
-        {authed ? "Go to App" : "Get Started"}
-      </Button>
-    </Link>
-  );
-};
-
 const SignOutButton = (props: { authed: boolean }) => {
   const { authed } = props;
   return authed ? (
     <Button
-      color={useColorModeValue("gray.900", "gray.400")}
+      color={useColorModeValue("gray.900", "red.400")}
       size="md"
       variant="ghost"
-      fontSize="lg"
+      fontSize="md"
       fontWeight="medium"
       as="a"
       onClick={() => signOut({ callbackUrl: "/" })}
       _focus={{ boxShadow: "none" }}
-      _hover={{ color: useColorModeValue("gray.500", "white") }}
+      _hover={{
+        color: useColorModeValue("gray.500", "red.200"),
+        cursor: "pointer",
+      }}
     >
       Sign out
     </Button>
@@ -143,8 +128,23 @@ const MobileNavHeader = (props: {
       <VStack {...defaultVstackContainerStyles}>
         <CloseButton {...defaultCloseButtonStyles} />
         {HeaderLink({
-          text: "Pricing",
-          href: "/pricing",
+          text: "Uptime",
+          href: "/uptime",
+          buttonProps: linkButtonStyles,
+        })}
+        {HeaderLink({
+          text: "Browser",
+          href: "/browser",
+          buttonProps: linkButtonStyles,
+        })}
+        {HeaderLink({
+          text: "Lighthouse",
+          href: "/lighthouse",
+          buttonProps: linkButtonStyles,
+        })}
+        {HeaderLink({
+          text: "Settings",
+          href: "/settings",
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
@@ -152,17 +152,12 @@ const MobileNavHeader = (props: {
           href: "/docs",
           buttonProps: linkButtonStyles,
         })}
-        {HeaderLink({
-          text: "About",
-          href: "/about",
-          buttonProps: linkButtonStyles,
-        })}
       </VStack>
     </Slide>
   );
 };
 
-export const Header = () => {
+export const AppHeader = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [session, loading] = useSession();
@@ -230,26 +225,33 @@ export const Header = () => {
             </HStack>
           </Link>
         </Flex>
-        <Spacer />
-        <Flex mr="3em">
+        <Flex ml="2em">
           <HStack {...defaultLinksHstackContainerStyles}>
             {HeaderLink({
-              text: "Pricing",
-              href: "/pricing",
+              text: "Uptime",
+              href: "/uptime",
+            })}
+            {HeaderLink({
+              text: "Browser",
+              href: "/browser",
+            })}
+            {HeaderLink({
+              text: "Lighthouse",
+              href: "/lighthouse",
+            })}
+            {HeaderLink({
+              text: "Settings",
+              href: "/settings",
             })}
             {HeaderLink({
               text: "Docs",
               href: "/docs",
             })}
-            {HeaderLink({
-              text: "About",
-              href: "/about",
-            })}
           </HStack>
         </Flex>
+        <Spacer />
         <Flex justify="flex-end" align="center" color="gray.400">
           <HStack justify="flex-end" align="center" color="gray.400">
-            {GoToAppOrSigninButton({ authed: authed })}
             {SignOutButton({ authed: authed })}
           </HStack>
           <IconButton {...defaultColorModeToggleStyles} />
