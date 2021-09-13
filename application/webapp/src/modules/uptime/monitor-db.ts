@@ -3,9 +3,11 @@ import {
   DeleteItemCommandInput,
   DynamoDBClient,
   paginateQuery,
+  PutItemCommand,
+  PutItemCommandInput,
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { UptimeMonitor } from "types";
 
 export async function getMonitorsForUser(
@@ -60,11 +62,34 @@ export async function deleteMonitor(
   }
 }
 
-// create or update = PUT
-export async function createOrUpdateMonitor(
+// create = PUT
+export async function createMonitor(
   ddbClient: DynamoDBClient,
+  tableName: string,
   monitor: UptimeMonitor
 ) {
   try {
-  } catch (err) {}
+    const putItemCommandInput: PutItemCommandInput = {
+      TableName: tableName,
+      Item: marshall(monitor, {
+        removeUndefinedValues: true,
+        convertEmptyValues: true,
+      }),
+      ConditionExpression: "attribute_not_exists(monitor_id)", // avoid overwriting preexisting monitors
+    };
+    const response = await ddbClient.send(
+      new PutItemCommand(putItemCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+    return false;
+  } catch (err) {
+    return false;
+  }
 }
+
+export async function updateMonitor(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  monitor: UptimeMonitor
+) {}

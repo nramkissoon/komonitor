@@ -1,7 +1,8 @@
 import useSWR from "swr";
-import { UptimeMonitor } from "types";
+import { CoreUptimeMonitor, UptimeMonitor } from "types";
+import { env } from "../../common/client.utils";
 
-const apiUrl = "/api/uptime/monitors";
+const apiUrl = env.BASE_URL + "/api/uptime/monitors";
 
 export function useUptimeMonitors() {
   const fetcher = (url: string) =>
@@ -17,21 +18,34 @@ export function useUptimeMonitors() {
 
 export async function deleteMonitor(
   monitorId: string,
-  onOpenSuccess?: () => void,
-  onOpenError?: () => void
+  onSuccess?: () => void,
+  onError?: () => void
 ) {
-  const response = await fetch(apiUrl, {
+  const response = await fetch(apiUrl + `?monitorId=${monitorId}`, {
     method: "DELETE",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify({ monitorId: monitorId }),
   });
   if (response.ok) {
-    onOpenSuccess ? onOpenSuccess() : null;
+    onSuccess ? onSuccess() : null;
   } else {
-    onOpenError ? onOpenError() : null;
+    onError ? onError() : null;
   }
 }
 
-export function createOrUpdateMonitor() {}
+export async function createOrUpdateMonitor(
+  monitor: UptimeMonitor | CoreUptimeMonitor,
+  onSuccess?: () => void,
+  onError?: () => void
+) {
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(monitor),
+  });
+  if (response.ok) {
+    onSuccess ? onSuccess() : null;
+  } else {
+    onError ? onError() : null;
+  }
+}

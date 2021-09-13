@@ -9,6 +9,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { User } from "types";
+import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
 export async function getUserById(
   ddbClient: DynamoDBClient,
@@ -76,5 +77,22 @@ export async function updateUserIfExists(
     return false;
   } catch (err) {
     return false;
+  }
+}
+
+export async function getServicePlanProductIdForUser(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string
+): Promise<string | undefined> {
+  try {
+    const user = await getUserById(ddbClient, userTableName, userId);
+    if (!user) {
+      throw new Error("undefined user");
+    }
+    if (user.product_id) return user.product_id;
+    return PLAN_PRODUCT_IDS.FREE;
+  } catch (err) {
+    return;
   }
 }
