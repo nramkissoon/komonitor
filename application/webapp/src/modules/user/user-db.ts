@@ -84,15 +84,15 @@ export async function getServicePlanProductIdForUser(
   ddbClient: DynamoDBClient,
   userTableName: string,
   userId: string
-): Promise<string | undefined> {
+): Promise<string> {
   try {
     const user = await getUserById(ddbClient, userTableName, userId);
     if (!user) {
       throw new Error("undefined user");
     }
-    if (user.product_id) return user.product_id;
+    if (user.product_id && user.product_id !== null) return user.product_id;
     return PLAN_PRODUCT_IDS.FREE;
   } catch (err) {
-    return;
+    throw err;
   }
 }

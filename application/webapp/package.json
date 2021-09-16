@@ -32,7 +32,8 @@
     "react-icons": "^4.2.0",
     "react-table": "^7.7.0",
     "swr": "^1.0.0",
-    "types": "^1.0.0"
+    "types": "^1.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -43,6 +44,7 @@
     "@types/react-icons": "^3.0.0",
     "@types/react-table": "^7.7.2",
     "@types/sinon": "^10.0.2",
+    "@types/uuid": "^8.3.1",
     "babel-jest": "^27.0.6",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.0",

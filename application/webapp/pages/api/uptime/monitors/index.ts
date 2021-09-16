@@ -44,12 +44,6 @@ async function createHandler(
   res: NextApiResponse,
   session: Session
 ) {
-  const { monitor } = req.body;
-  if (!monitor || !isValidCoreUptimeMonitor(monitor)) {
-    res.status(400);
-    return;
-  }
-
   try {
     // check if user is allowed to create a new monitor
     const userId = session.uid as string;
@@ -63,8 +57,15 @@ async function createHandler(
       await getMonitorsForUser(ddbClient, env.UPTIME_MONITOR_TABLE_NAME, userId)
     ).length;
 
-    if (allowance >= currentMonitorsTotal) {
+    if (allowance <= currentMonitorsTotal) {
       res.status(403);
+      return;
+    }
+
+    // validate the new monitor
+    const monitor = req.body;
+    if (!monitor || !isValidCoreUptimeMonitor(monitor, product_id)) {
+      res.status(400);
       return;
     }
 
