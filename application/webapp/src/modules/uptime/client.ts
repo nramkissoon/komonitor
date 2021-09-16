@@ -12,7 +12,6 @@ export function useUptimeMonitors() {
   const fetcher = (url: string) =>
     fetch(url, { method: "GET" }).then((r) => r.json());
   const { data, error } = useSWR(apiUrl, fetcher);
-
   return {
     monitors: data as UptimeMonitor[],
     isLoading: !error && !data,

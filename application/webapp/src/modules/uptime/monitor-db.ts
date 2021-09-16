@@ -29,13 +29,14 @@ export async function getMonitorsForUser(
     while (!done) {
       const page = await query.next();
       done = page.done === undefined || page.done;
-      const queryItems = page.value.Items ? page.value.Items : [];
+      const queryItems = page.value?.Items ? page.value.Items : [];
       queryItems.forEach((item) =>
         monitors.push(unmarshall(item) as UptimeMonitor)
       );
     }
     return monitors;
   } catch (err) {
+    console.log(err);
     return [];
   }
 }
