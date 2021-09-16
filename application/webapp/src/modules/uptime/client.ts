@@ -6,14 +6,27 @@ import {
 } from "types";
 import { env } from "../../common/client-utils";
 
-const apiUrl = env.BASE_URL + "/api/uptime/monitors";
+const monitorApiUrl = env.BASE_URL + "/api/uptime/monitors";
+const statusApiUrl = env.BASE_URL + "/api/uptime/statuses";
+
+const getFetcher = (url: string) =>
+  fetch(url, { method: "GET" }).then((r) => r.json());
 
 export function useUptimeMonitors() {
-  const fetcher = (url: string) =>
-    fetch(url, { method: "GET" }).then((r) => r.json());
-  const { data, error } = useSWR(apiUrl, fetcher);
+  const fetcher = getFetcher;
+  const { data, error } = useSWR(monitorApiUrl, fetcher);
   return {
     monitors: data as UptimeMonitor[],
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+// Used for the main uptime page, get status for all user monitors
+export function useAllUptimeMonitorStatuses() {
+  const fetcher = getFetcher;
+  const { data, error } = useSWR(statusApiUrl, fetcher);
+  return {
     isLoading: !error && !data,
     isError: error,
   };
@@ -24,7 +37,7 @@ export async function deleteMonitor(
   onSuccess?: () => void,
   onError?: () => void
 ) {
-  const response = await fetch(apiUrl + `?monitorId=${monitorId}`, {
+  const response = await fetch(monitorApiUrl + `?monitorId=${monitorId}`, {
     method: "DELETE",
   });
   if (response.ok) {
@@ -59,7 +72,7 @@ export async function createMonitor(
   onError?: () => void
 ) {
   const monitor = createCoreMonitorFromFormData(formData);
-  const response = await fetch(apiUrl, {
+  const response = await fetch(monitorApiUrl, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",

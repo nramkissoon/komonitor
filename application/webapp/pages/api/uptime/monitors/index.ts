@@ -4,12 +4,19 @@ import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../../src/common/server-utils";
 import { getUptimeMonitorAllowanceFromProductId } from "../../../../src/modules/billing/plans";
 import {
-  createMonitor,
   deleteMonitor,
+  getMonitorForUserByMonitorId,
   getMonitorsForUser,
+  putMonitor,
 } from "../../../../src/modules/uptime/monitor-db";
-import { createNewMonitorFromCore } from "../../../../src/modules/uptime/utils";
-import { isValidCoreUptimeMonitor } from "../../../../src/modules/uptime/validation";
+import {
+  createNewMonitorFromCore,
+  createUpdatedMonitor,
+} from "../../../../src/modules/uptime/utils";
+import {
+  isValidCoreUptimeMonitor,
+  isValidUptimeMonitor,
+} from "../../../../src/modules/uptime/validation";
 import { getServicePlanProductIdForUser } from "../../../../src/modules/user/user-db";
 
 async function getHandler(
@@ -36,7 +43,48 @@ async function updateHandler(
   res: NextApiResponse,
   session: Session
 ) {
-  // TODO verify that the monitor id belongs to the user if update
+  try {
+    const userId = session.uid as string;
+    const product_id = await getServicePlanProductIdForUser(
+      ddbClient,
+      env.USER_TABLE_NAME,
+      userId
+    );
+    const monitor = req.body;
+    if (!monitor || !isValidUptimeMonitor(monitor, product_id)) {
+      res.status(400);
+      return;
+    }
+
+    // verify that the monitor id belongs to the user before updating
+    const monitorExistsForUser = await getMonitorForUserByMonitorId(
+      ddbClient,
+      env.UPTIME_MONITOR_TABLE_NAME,
+      userId,
+      monitor.monitor_id
+    );
+    if (monitorExistsForUser === null) {
+      res.status(403);
+      return;
+    }
+
+    const updatedMonitor = createUpdatedMonitor(monitor);
+
+    const updated = await putMonitor(
+      ddbClient,
+      env.UPTIME_MONITOR_TABLE_NAME,
+      updatedMonitor
+    );
+    if (updated) {
+      res.status(200);
+      return;
+    }
+    res.status(500);
+    return;
+  } catch (err) {
+    res.status(500);
+    return;
+  }
 }
 
 async function createHandler(
@@ -71,7 +119,7 @@ async function createHandler(
 
     // user is allowed to create monitor
     const newMonitor = createNewMonitorFromCore(monitor, userId);
-    const created = await createMonitor(
+    const created = await putMonitor(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
       newMonitor
@@ -129,7 +177,8 @@ export default async function handler(
       case "DELETE":
         await deleteHandler(req, res, session);
         break;
-      case "PATCH":
+      case "PUT":
+        await updateHandler(req, res, session);
         break;
       default:
         res.status(405);

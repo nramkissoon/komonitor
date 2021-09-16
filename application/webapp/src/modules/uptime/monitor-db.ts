@@ -5,6 +5,7 @@ import {
   paginateQuery,
   PutItemCommand,
   PutItemCommandInput,
+  QueryCommand,
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
@@ -41,6 +42,31 @@ export async function getMonitorsForUser(
   }
 }
 
+export async function getMonitorForUserByMonitorId(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  userId: string,
+  monitorId: string
+) {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: tableName,
+      KeyConditionExpression:
+        "owner_id = :partitionkeyval AND monitor_id = :sortkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: userId },
+        ":sortkeyval": { S: monitorId },
+      },
+    };
+    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
+    if (response?.Count === 1 && response.Items) {
+      return unmarshall(response.Items[0]) as UptimeMonitor;
+    }
+  } catch (err) {
+    return null;
+  }
+}
+
 export async function deleteMonitor(
   ddbClient: DynamoDBClient,
   tableName: string,
@@ -63,8 +89,8 @@ export async function deleteMonitor(
   }
 }
 
-// create = PUT
-export async function createMonitor(
+// create or update = PUT
+export async function putMonitor(
   ddbClient: DynamoDBClient,
   tableName: string,
   monitor: UptimeMonitor

@@ -26,3 +26,11 @@ export function createNewMonitorFromCore(
   };
   return monitor;
 }
+
+export function createUpdatedMonitor(monitor: UptimeMonitor) {
+  const updatedMonitor: UptimeMonitor = { ...monitor };
+  updatedMonitor.last_updated = new Date().getTime();
+  if (!monitor.webhook_url) updatedMonitor.webhook_url = undefined;
+  if (!monitor.alert_id) updatedMonitor.alert_id = undefined;
+  return updatedMonitor;
+}
