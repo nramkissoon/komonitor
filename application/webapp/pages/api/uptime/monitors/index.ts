@@ -63,7 +63,12 @@ async function updateHandler(
       userId,
       monitor.monitor_id
     );
-    if (monitorExistsForUser === null) {
+    // check created_at and owner_id as a extra check against tampering with the request
+    if (
+      monitorExistsForUser === null ||
+      monitorExistsForUser?.created_at !== monitor.created_at ||
+      monitorExistsForUser.owner_id !== monitor.owner_id
+    ) {
       res.status(403);
       return;
     }

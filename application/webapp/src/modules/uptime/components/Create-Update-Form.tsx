@@ -13,14 +13,14 @@ import {
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import React from "react";
-import { Alert, CoreUptimeMonitor } from "types";
+import { Alert, UptimeMonitor } from "types";
 import { minutesToString } from "../../../common/client-utils";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import { createMonitor, updateMonitor } from "./../client";
 
 interface CreateUpdateFormProps {
   product_id: string;
-  currentMonitorAttributes?: CoreUptimeMonitor;
+  currentMonitorAttributes?: UptimeMonitor;
   userAlerts?: Alert[];
 }
 
@@ -158,7 +158,13 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
         if (createNewMonitor) {
           await createMonitor(values);
         } else {
-          await updateMonitor(values);
+          // augment the form values by merging the current monitor's attributes.
+          const augmentedValues: any = values;
+          augmentedValues.monitor_id = currentMonitorAttributes.monitor_id;
+          augmentedValues.owner_id = currentMonitorAttributes.owner_id;
+          augmentedValues.created_at = currentMonitorAttributes.created_at;
+          augmentedValues.last_updated = currentMonitorAttributes.last_updated;
+          await updateMonitor(augmentedValues);
         }
         actions.setSubmitting(false);
       }}

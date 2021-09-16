@@ -86,6 +86,35 @@ export async function createMonitor(
   }
 }
 
-function createUpdatedMonitorFromFormData(formData: any) {}
+function createUpdatedMonitorFromFormData(formData: any) {
+  const coreAttributes: CoreUptimeMonitor =
+    createCoreMonitorFromFormData(formData);
+  const monitor: UptimeMonitor = {
+    monitor_id: formData.monitor_id,
+    last_updated: Number.parseInt(formData.last_updated),
+    created_at: Number.parseInt(formData.created_at),
+    owner_id: formData.owner_id,
+    ...coreAttributes,
+  };
+  return monitor;
+}
 
-export async function updateMonitor(formData: any) {}
+export async function updateMonitor(
+  formData: any,
+  onSuccess?: () => void,
+  onError?: () => void
+) {
+  const monitor = createUpdatedMonitorFromFormData(formData);
+  const response = await fetch(monitorApiUrl, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(monitor),
+  });
+  if (response.ok) {
+    onSuccess ? onSuccess() : null;
+  } else {
+    onError ? onError() : null;
+  }
+}
