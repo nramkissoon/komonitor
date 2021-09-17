@@ -118,9 +118,3 @@ export async function putMonitor(
     return false;
   }
 }
-
-export async function updateMonitor(
-  ddbClient: DynamoDBClient,
-  tableName: string,
-  monitor: UptimeMonitor
-) {}
