@@ -3,7 +3,7 @@ import { AppHeader } from "../../../src/common/components/App-Header";
 import { CreateUpdateForm } from "../../../src/modules/uptime/components/Create-Update-Form";
 import { ExtendedNextPage } from "../../_app";
 
-const Uptime: ExtendedNextPage = () => {
+const New: ExtendedNextPage = () => {
   return (
     <>
       <AppHeader />
@@ -12,5 +12,5 @@ const Uptime: ExtendedNextPage = () => {
   );
 };
 
-Uptime.requiresAuth = true;
-export default Uptime;
+New.requiresAuth = true;
+export default New;

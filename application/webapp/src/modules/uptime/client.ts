@@ -106,7 +106,7 @@ export async function updateMonitor(
 ) {
   const monitor = createUpdatedMonitorFromFormData(formData);
   const response = await fetch(monitorApiUrl, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },

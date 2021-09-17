@@ -55,7 +55,6 @@ async function updateHandler(
       res.status(400);
       return;
     }
-
     // verify that the monitor id belongs to the user before updating
     const monitorExistsForUser = await getMonitorForUserByMonitorId(
       ddbClient,
@@ -78,7 +77,8 @@ async function updateHandler(
     const updated = await putMonitor(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
-      updatedMonitor
+      updatedMonitor,
+      true
     );
     if (updated) {
       res.status(200);
@@ -127,7 +127,8 @@ async function createHandler(
     const created = await putMonitor(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
-      newMonitor
+      newMonitor,
+      false
     );
     if (created) {
       res.status(200);

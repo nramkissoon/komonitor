@@ -12,6 +12,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
+import Router from "next/router";
 import React from "react";
 import { Alert, UptimeMonitor } from "types";
 import { minutesToString } from "../../../common/client-utils";
@@ -55,6 +56,15 @@ function createAlertSelectOptions(alerts: Alert[]) {
       </option>
     ));
   }
+}
+
+function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
+  if (!monitor) return undefined;
+  const placeholders = { ...monitor };
+  if (placeholders.webhook_url)
+    placeholders.webhook_url = placeholders.webhook_url.replace("https://", "");
+  placeholders.url = placeholders.url.replace("https://", "");
+  return placeholders;
 }
 
 function createFrequencySelectOptions(productId: string) {
@@ -123,9 +133,12 @@ function validateWebhookUrl(webhookUrl: string) {
 function validateAlertId() {}
 
 export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
-  const { product_id, currentMonitorAttributes, userAlerts } = props;
+  let { product_id, currentMonitorAttributes, userAlerts } = props;
 
   const createNewMonitor = currentMonitorAttributes === undefined;
+  currentMonitorAttributes = createFormPlaceholdersFromMonitor(
+    currentMonitorAttributes
+  );
 
   const initialValues = {
     url: currentMonitorAttributes?.url ? currentMonitorAttributes.url : "",
@@ -156,14 +169,19 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
       initialValues={initialValues}
       onSubmit={async (values, actions) => {
         if (createNewMonitor) {
-          await createMonitor(values);
+          await createMonitor(values, () =>
+            Router.push({
+              pathname: "/app/uptime",
+              query: { newMonitorCreated: "true" },
+            })
+          );
         } else {
           // augment the form values by merging the current monitor's attributes.
           const augmentedValues: any = values;
-          augmentedValues.monitor_id = currentMonitorAttributes.monitor_id;
-          augmentedValues.owner_id = currentMonitorAttributes.owner_id;
-          augmentedValues.created_at = currentMonitorAttributes.created_at;
-          augmentedValues.last_updated = currentMonitorAttributes.last_updated;
+          augmentedValues.monitor_id = currentMonitorAttributes?.monitor_id;
+          augmentedValues.owner_id = currentMonitorAttributes?.owner_id;
+          augmentedValues.created_at = currentMonitorAttributes?.created_at;
+          augmentedValues.last_updated = currentMonitorAttributes?.last_updated;
           await updateMonitor(augmentedValues);
         }
         actions.setSubmitting(false);

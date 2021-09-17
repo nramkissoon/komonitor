@@ -93,7 +93,8 @@ export async function deleteMonitor(
 export async function putMonitor(
   ddbClient: DynamoDBClient,
   tableName: string,
-  monitor: UptimeMonitor
+  monitor: UptimeMonitor,
+  isUpdate: boolean
 ) {
   try {
     const putItemCommandInput: PutItemCommandInput = {
@@ -102,7 +103,9 @@ export async function putMonitor(
         removeUndefinedValues: true,
         convertEmptyValues: true,
       }),
-      ConditionExpression: "attribute_not_exists(monitor_id)", // avoid overwriting preexisting monitors
+      ConditionExpression: isUpdate
+        ? "attribute_exists(monitor_id)" // ensure a monitor exists that can be updated
+        : "attribute_not_exists(monitor_id)", // avoid overwriting preexisting monitors when creating a new monitor
     };
     const response = await ddbClient.send(
       new PutItemCommand(putItemCommandInput)
@@ -111,6 +114,7 @@ export async function putMonitor(
     if (statusCode >= 200 && statusCode < 300) return true;
     return false;
   } catch (err) {
+    console.log(err);
     return false;
   }
 }
