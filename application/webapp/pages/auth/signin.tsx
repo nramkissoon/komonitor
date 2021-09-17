@@ -67,7 +67,7 @@ const Signin: ExtendedNextPage = () => {
       <Container
         p="0"
         shadow="md"
-        maxW="xl"
+        maxW="2xl"
         borderRadius="lg"
         mt="2em"
         bg={useColorModeValue("white", "gray.800")}

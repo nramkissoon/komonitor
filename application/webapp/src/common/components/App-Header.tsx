@@ -173,7 +173,7 @@ export const AppHeader = () => {
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
     w: "full",
-    px: { base: 2, sm: 4, md: "8em", xl: "12em" },
+    px: { base: 2, sm: 4, md: "6em", xl: "12em" },
     py: 4,
     bg: useColorModeValue("white", "gray.900"),
     borderBottomColor: useColorModeValue("gray.100", "gray.800"),
@@ -199,7 +199,7 @@ export const AppHeader = () => {
   };
 
   const defaultMobileNavHamburgerStyles: IconButtonProps = {
-    display: { base: "flex", md: "none" },
+    display: { base: "flex", md: "flex", lg: "none" },
     "aria-label": "Open menu",
     fontSize: "1.8em",
     color: useColorModeValue("gray.500", "inherit"),
@@ -211,7 +211,7 @@ export const AppHeader = () => {
 
   const defaultLinksHstackContainerStyles: StackProps = {
     spacing: "9",
-    display: { base: "none", md: "flex" },
+    display: { base: "none", md: "none", lg: "flex" },
     fontSize: "lg",
   };
 

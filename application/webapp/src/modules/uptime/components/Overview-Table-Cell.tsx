@@ -15,7 +15,7 @@ export function DescriptionCell(props: DescriptionCellProps) {
         <Box
           _hover={{
             cursor: "pointer",
-            color: useColorModeValue("purple.600", "purple.300"),
+            color: useColorModeValue("green.400", "green.300"),
           }}
           w="max-content"
         >

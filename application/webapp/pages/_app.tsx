@@ -52,5 +52,5 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
     return <React.Fragment>{children}</React.Fragment>;
   }
 
-  return <div>Loading... </div>;
+  return <div></div>;
 };

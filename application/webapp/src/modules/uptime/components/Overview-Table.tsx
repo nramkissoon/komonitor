@@ -1,4 +1,19 @@
-import { Input, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { SearchIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Input,
+  InputGroup,
+  InputGroupProps,
+  InputLeftElement,
+  InputProps,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React from "react";
 import {
   Column,
@@ -48,16 +63,32 @@ function GlobalFilter(props: {
   const onChange = useAsyncDebounce((value) => {
     props.setGlobalFilter(value || undefined);
   }, 200);
+
+  const spacing: InputGroupProps = {
+    w: ["100%", "60%", "50%", "40%", "30%"],
+    mb: "1em",
+  };
+
+  const styles: InputProps = {
+    shadow: "sm",
+    borderColor: "gray.400",
+    borderWidth: "1px",
+  };
+
   return (
-    <Input
-      type="text"
-      value={value || ""}
-      onChange={(e) => {
-        setValue(e.target.value);
-        onChange(e.target.value);
-      }}
-      placeholder="Search Monitors..."
-    />
+    <InputGroup {...spacing}>
+      <InputLeftElement children={<SearchIcon color="gray.500" />} />
+      <Input
+        type="text"
+        value={value || ""}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder="Search Monitors..."
+        {...styles}
+      />
+    </InputGroup>
   );
 }
 
@@ -125,7 +156,15 @@ export function OverviewTable(props: TableProps) {
   );
 
   return (
-    <>
+    <Box
+      w="100%"
+      shadow="lg"
+      bg={useColorModeValue("gray.100", "#0f131a")}
+      borderRadius="xl"
+      p="1.5em"
+      mb="2em"
+      overflow="hidden"
+    >
       {GlobalFilter({ globalFilter, setGlobalFilter })}
       <Table {...getTableProps()}>
         <Thead>
@@ -136,7 +175,12 @@ export function OverviewTable(props: TableProps) {
                   column.toggleHidden(true);
                 }
                 return (
-                  <Th {...column.getHeaderProps()}>
+                  <Th
+                    {...column.getHeaderProps()}
+                    fontSize="sm"
+                    fontWeight="medium"
+                    borderColor={useColorModeValue("gray.300", "gray.700")}
+                  >
                     {column.render("Header")}
                   </Th>
                 );
@@ -151,7 +195,12 @@ export function OverviewTable(props: TableProps) {
               <Tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <Td {...cell.getCellProps()}>{cell.render("Cell")} </Td>
+                    <Td
+                      {...cell.getCellProps()}
+                      borderColor={useColorModeValue("gray.300", "gray.700")}
+                    >
+                      {cell.render("Cell")}{" "}
+                    </Td>
                   );
                 })}
               </Tr>
@@ -159,6 +208,6 @@ export function OverviewTable(props: TableProps) {
           })}
         </Tbody>
       </Table>
-    </>
+    </Box>
   );
 }
