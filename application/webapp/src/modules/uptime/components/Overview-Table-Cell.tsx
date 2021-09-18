@@ -4,6 +4,7 @@ import {
   Flex,
   IconButton,
   Text,
+  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -53,30 +54,34 @@ interface ActionsCellProps {
 export function ActionsCell(props: ActionsCellProps) {
   return (
     <Flex justifyContent="flex-start">
-      <IconButton
-        aria-label="edit monitor"
-        icon={<EditIcon />}
-        colorScheme="blue"
-        color="white"
-        bgColor="blue.500"
-        mr="1.8em"
-        onClick={() => {
-          router.push("/app/uptime/" + props.cellValues.monitorId + "/edit");
-        }}
-      />
-      <IconButton
-        aria-label="delete monitor"
-        icon={<DeleteIcon />}
-        colorScheme="red"
-        onClick={() => {
-          props.openDeleteDialog(
-            props.cellValues.name,
-            props.cellValues.monitorId
-          );
-        }}
-        color="white"
-        bgColor="red.500"
-      />
+      <Tooltip label="Edit" openDelay={300}>
+        <IconButton
+          aria-label="edit monitor"
+          icon={<EditIcon />}
+          colorScheme="blue"
+          color="white"
+          bgColor="blue.500"
+          mr="1.8em"
+          onClick={() => {
+            router.push("/app/uptime/" + props.cellValues.monitorId + "/edit");
+          }}
+        />
+      </Tooltip>
+      <Tooltip label="Delete" openDelay={300}>
+        <IconButton
+          aria-label="delete monitor"
+          icon={<DeleteIcon />}
+          colorScheme="red"
+          onClick={() => {
+            props.openDeleteDialog(
+              props.cellValues.name,
+              props.cellValues.monitorId
+            );
+          }}
+          color="white"
+          bgColor="red.500"
+        />
+      </Tooltip>
     </Flex>
   );
 }
