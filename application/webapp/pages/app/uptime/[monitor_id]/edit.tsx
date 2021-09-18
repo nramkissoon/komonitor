@@ -18,7 +18,6 @@ const UptimeEdit: ExtendedNextPage = () => {
     isError: productIdIsError,
     isLoading: productIdIsLoading,
   } = useUserServicePlanProductId();
-
   const isLoading = monitorsIsLoading || productIdIsLoading;
   const isError = monitorsIsError || productIdIsError;
 
@@ -32,7 +31,7 @@ const UptimeEdit: ExtendedNextPage = () => {
   return (
     <>
       <AppHeader />
-      {!isError && !isLoading ? (
+      {!isError && !isLoading && monitor ? (
         <CreateUpdateForm
           product_id={data.productId as string}
           currentMonitorAttributes={monitor}

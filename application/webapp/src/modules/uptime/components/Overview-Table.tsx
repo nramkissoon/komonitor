@@ -22,6 +22,7 @@ import {
   usePagination,
   useTable,
 } from "react-table";
+import { useSWRConfig } from "swr";
 import { UptimeMonitor } from "types";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { ActionsCell, DescriptionCell } from "./Overview-Table-Cell";
@@ -103,6 +104,7 @@ function GlobalFilter(props: {
 
 export function OverviewTable(props: TableProps) {
   // Setup for delete dialog
+  const { mutate } = useSWRConfig();
   const [deleteMonitor, setDeleteMonitor] = React.useState({} as any);
   const onCloseDeleteDialog = () => setDeleteMonitor({});
   const cancelRef = React.useRef();
@@ -175,11 +177,14 @@ export function OverviewTable(props: TableProps) {
       data: data,
       autoResetSortBy: false,
       autoResetPage: false,
-      initialState: { pageIndex: 0, pageSize: 20 },
+      initialState: { pageIndex: 0, pageSize: 10 },
     },
     useGlobalFilter,
     usePagination
   );
+
+  // this is defined here to avoid adding more hook calls as rows are added
+  const tableBorderColor = useColorModeValue("gray.300", "gray.700");
 
   return (
     <Box
@@ -189,21 +194,6 @@ export function OverviewTable(props: TableProps) {
       borderRadius="xl"
       p="1.5em"
       mb="2em"
-      overflow="auto"
-      css={{
-        "&::-webkit-scrollbar": {
-          width: "10px",
-          height: "10px",
-        },
-        "&::-webkit-scrollbar-track": {
-          width: "10px",
-          height: "10px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: useColorModeValue("#E2E8F0", "#1A202C"),
-          borderRadius: "10px",
-        },
-      }}
     >
       {MonitorDeleteDialog({
         isOpen: deleteMonitor.monitorId !== undefined,
@@ -211,50 +201,68 @@ export function OverviewTable(props: TableProps) {
         monitorId: deleteMonitor.monitorId as string,
         onClose: onCloseDeleteDialog,
         leastDestructiveRef: cancelRef,
+        mutate: mutate,
       })}
       {GlobalFilter({ globalFilter, setGlobalFilter })}
-      <Table {...getTableProps()}>
-        <Thead>
-          {headerGroups.map((headerGroup) => (
-            <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => {
-                if (column.id === "filter-column") {
-                  column.toggleHidden(true);
-                }
-                return (
-                  <Th
-                    {...column.getHeaderProps()}
-                    fontSize="sm"
-                    fontWeight="medium"
-                    borderColor={useColorModeValue("gray.300", "gray.700")}
-                  >
-                    {column.render("Header")}
-                  </Th>
-                );
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
+      <Box
+        overflow="auto"
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "10px",
+            height: "10px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "10px",
+            height: "10px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: useColorModeValue("#E2E8F0", "#1A202C"),
+          },
+        }}
+      >
+        <Table {...getTableProps()}>
+          <Thead>
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => {
+                  if (column.id === "filter-column") {
+                    column.toggleHidden(true);
+                  }
                   return (
-                    <Td
-                      {...cell.getCellProps()}
-                      borderColor={useColorModeValue("gray.300", "gray.700")}
+                    <Th
+                      {...column.getHeaderProps()}
+                      fontSize="sm"
+                      fontWeight="medium"
+                      borderColor={tableBorderColor}
                     >
-                      {cell.render("Cell")}{" "}
-                    </Td>
+                      {column.render("Header")}
+                    </Th>
                   );
                 })}
               </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
+            ))}
+          </Thead>
+          <Tbody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <Td
+                        {...cell.getCellProps()}
+                        borderColor={tableBorderColor}
+                      >
+                        {cell.render("Cell")}{" "}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </Box>
     </Box>
   );
 }

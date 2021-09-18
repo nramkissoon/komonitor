@@ -76,7 +76,7 @@ export async function deleteMonitor(
   try {
     const deleteItemCommandInput: DeleteItemCommandInput = {
       TableName: tableName,
-      Key: { owner_id: { S: userId }, monitorId: { S: monitorId } },
+      Key: { owner_id: { S: userId }, monitor_id: { S: monitorId } },
     };
     const response = await ddbClient.send(
       new DeleteItemCommand(deleteItemCommandInput)

@@ -6,8 +6,8 @@ import {
 } from "types";
 import { env } from "../../common/client-utils";
 
-const monitorApiUrl = env.BASE_URL + "/api/uptime/monitors";
-const statusApiUrl = env.BASE_URL + "/api/uptime/statuses";
+export const monitorApiUrl = env.BASE_URL + "/api/uptime/monitors";
+export const statusApiUrl = env.BASE_URL + "/api/uptime/statuses";
 
 const getFetcher = (url: string) =>
   fetch(url, { method: "GET" }).then((r) => r.json());
@@ -42,8 +42,10 @@ export async function deleteMonitor(
   });
   if (response.ok) {
     onSuccess ? onSuccess() : null;
+    return true;
   } else {
     onError ? onError() : null;
+    return false;
   }
 }
 
