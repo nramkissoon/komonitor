@@ -12,5 +12,10 @@ const theme = extendTheme({
       },
     }),
   },
+  colors: {
+    gray: {
+      50: "#f5f8fc",
+    },
+  },
 });
 export default theme;

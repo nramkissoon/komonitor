@@ -12,18 +12,23 @@ const Uptime: ExtendedNextPage = () => {
   const { monitors, isLoading, isError } = useUptimeMonitors();
   return (
     <>
-      <AppHeader />
+      <Fade in={true}>
+        <AppHeader />
+      </Fade>
       <PageContainer>
-        <Flex mb="1.8em">
-          <Heading size="lg" fontWeight="normal">
-            Uptime Monitors{" "}
-            <Text fontSize="sm" color="gray.500">
-              (Last 24 hours)
-            </Text>
-          </Heading>
-          <Spacer />
-          <CreateButton />
-        </Flex>
+        <Fade in={true}>
+          <Flex mb="1.8em">
+            <Heading size="lg" fontWeight="normal">
+              Uptime Monitors{" "}
+              <Text fontSize="sm" color="gray.500">
+                (Last 24 hours)
+              </Text>
+            </Heading>
+            <Spacer />
+            <CreateButton />
+          </Flex>
+        </Fade>
+
         {isLoading ? (
           <Fade in={isLoading} delay={0.2}>
             {LoadingSpinner()}

@@ -23,7 +23,8 @@ import {
   useTable,
 } from "react-table";
 import { UptimeMonitor } from "types";
-import { DescriptionCell } from "./Overview-Table-Cell";
+import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
+import { ActionsCell, DescriptionCell } from "./Overview-Table-Cell";
 
 interface TableProps {
   data: UptimeMonitor[];
@@ -38,6 +39,10 @@ export interface RowProps {
   lastChecked: string;
   status: string;
   uptime: number;
+  actions: {
+    monitorId: string;
+    name: string;
+  };
   filter_string: string;
 }
 
@@ -51,6 +56,10 @@ function createRowPropsFromUptimeMonitor(monitor: UptimeMonitor): RowProps {
     lastChecked: "",
     status: "",
     uptime: 100,
+    actions: {
+      monitorId: monitor.monitor_id,
+      name: monitor.name,
+    },
     filter_string: [monitor.name, monitor.url].join(" "),
   };
 }
@@ -93,6 +102,14 @@ function GlobalFilter(props: {
 }
 
 export function OverviewTable(props: TableProps) {
+  // Setup for delete dialog
+  const [deleteMonitor, setDeleteMonitor] = React.useState({} as any);
+  const onCloseDeleteDialog = () => setDeleteMonitor({});
+  const cancelRef = React.useRef();
+  const openDeleteDialog = (name: string, id: string) =>
+    setDeleteMonitor({ name: name, monitorId: id });
+
+  // Setup for table
   const data = React.useMemo(
     () => props.data.map((monitor) => createRowPropsFromUptimeMonitor(monitor)),
     [props.data]
@@ -116,6 +133,15 @@ export function OverviewTable(props: TableProps) {
       {
         Header: "Last checked",
         accessor: "lastChecked",
+      },
+      {
+        Header: "Actions",
+        accessor: "actions",
+        Cell: (props) =>
+          ActionsCell({
+            cellValues: props.cell.value,
+            openDeleteDialog: openDeleteDialog,
+          }),
       },
       {
         id: "filter-column",
@@ -159,12 +185,33 @@ export function OverviewTable(props: TableProps) {
     <Box
       w="100%"
       shadow="lg"
-      bg={useColorModeValue("gray.100", "#0f131a")}
+      bg={useColorModeValue("gray.50", "#0f131a")}
       borderRadius="xl"
       p="1.5em"
       mb="2em"
-      overflow="hidden"
+      overflow="auto"
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "10px",
+          height: "10px",
+        },
+        "&::-webkit-scrollbar-track": {
+          width: "10px",
+          height: "10px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: useColorModeValue("#E2E8F0", "#1A202C"),
+          borderRadius: "10px",
+        },
+      }}
     >
+      {MonitorDeleteDialog({
+        isOpen: deleteMonitor.monitorId !== undefined,
+        name: deleteMonitor.name as string,
+        monitorId: deleteMonitor.monitorId as string,
+        onClose: onCloseDeleteDialog,
+        leastDestructiveRef: cancelRef,
+      })}
       {GlobalFilter({ globalFilter, setGlobalFilter })}
       <Table {...getTableProps()}>
         <Thead>
