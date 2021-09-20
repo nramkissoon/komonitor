@@ -1,3 +1,6 @@
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+
 export const env = {
   BASE_URL: process.env.BASE_URL as string,
 };
@@ -13,3 +16,6 @@ export const minutesToString: { [key: number]: string } = {
   720: "Every 12 hours",
   1440: "Every 24 hours",
 };
+
+TimeAgo.addDefaultLocale(en);
+export const timeAgo = new TimeAgo("en-US");

@@ -24,7 +24,7 @@ const Uptime: ExtendedNextPage = () => {
   } = use24HourMonitorStatuses(
     monitors ? monitors.map((monitor) => monitor.monitor_id) : []
   );
-
+  console.log(statuses);
   return (
     <>
       <Fade in={true}>

@@ -28,6 +28,7 @@ import {
   UptimeMonitorStatus,
   UptimeMonitorWithStatuses,
 } from "types";
+import { timeAgo } from "../../../common/client-utils";
 import { percentile } from "../../../common/utils";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { ActionsCell, DescriptionCell } from "./Overview-Table-Cell";
@@ -42,6 +43,7 @@ export interface RowProps {
     monitorId: string;
     name: string;
     url: string;
+    region: string;
   };
   lastChecked: string;
   status: string;
@@ -82,14 +84,16 @@ function createRowPropsFromMonitorData(
           return prev.timestamp > current.timestamp ? prev : current;
         })
       : null;
+  const now = Date.now();
   return {
     description: {
       monitorId: data.monitor_id,
       name: data.name,
       url: data.url,
+      region: data.region,
     },
     lastChecked: mostRecentStatus
-      ? mostRecentStatus.timestamp.toString()
+      ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
       : "N/A",
     status: mostRecentStatus ? mostRecentStatus.status : "N/A",
     uptime: calculateUptimeString(data.statuses),
