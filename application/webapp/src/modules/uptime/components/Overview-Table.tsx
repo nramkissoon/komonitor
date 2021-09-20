@@ -23,12 +23,18 @@ import {
   useTable,
 } from "react-table";
 import { useSWRConfig } from "swr";
-import { UptimeMonitor } from "types";
+import {
+  UptimeMonitor,
+  UptimeMonitorStatus,
+  UptimeMonitorWithStatuses,
+} from "types";
+import { percentile } from "../../../common/utils";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { ActionsCell, DescriptionCell } from "./Overview-Table-Cell";
 
 interface TableProps {
-  data: UptimeMonitor[];
+  statusesMap: { [monitorId: string]: UptimeMonitorStatus[] };
+  monitors: UptimeMonitor[];
 }
 
 export interface RowProps {
@@ -39,29 +45,65 @@ export interface RowProps {
   };
   lastChecked: string;
   status: string;
-  uptime: number;
+  uptime: string;
+  p90Latency: string;
   actions: {
     monitorId: string;
     name: string;
   };
-  filter_string: string;
+  filterString: string;
 }
 
-function createRowPropsFromUptimeMonitor(monitor: UptimeMonitor): RowProps {
+export function calculateUptimeString(
+  statuses: UptimeMonitorStatus[] | undefined
+) {
+  if (!statuses || statuses.length === 0) return "N/A";
+
+  const up = statuses.filter((status) => status.status === "up").length;
+  return ((up / statuses.length) * 100).toFixed(2).toString();
+}
+
+export function calculateP90LatencyString(
+  statuses: UptimeMonitorStatus[] | undefined
+) {
+  if (!statuses || statuses.length === 0) return "N/A";
+
+  const latencies = statuses.map((status) => status.latency);
+  const p90 = percentile(latencies, 90);
+  return p90?.toPrecision(4).toString() + "ms";
+}
+
+function createRowPropsFromMonitorData(
+  data: UptimeMonitorWithStatuses
+): RowProps {
+  const mostRecentStatus =
+    data.statuses && data.statuses.length > 0
+      ? data.statuses?.reduce((prev, current) => {
+          return prev.timestamp > current.timestamp ? prev : current;
+        })
+      : null;
   return {
     description: {
-      monitorId: monitor.monitor_id,
-      name: monitor.name,
-      url: monitor.url,
+      monitorId: data.monitor_id,
+      name: data.name,
+      url: data.url,
     },
-    lastChecked: "",
-    status: "",
-    uptime: 100,
+    lastChecked: mostRecentStatus
+      ? mostRecentStatus.timestamp.toString()
+      : "N/A",
+    status: mostRecentStatus ? mostRecentStatus.status : "N/A",
+    uptime: calculateUptimeString(data.statuses),
+    p90Latency: calculateP90LatencyString(data.statuses),
     actions: {
-      monitorId: monitor.monitor_id,
-      name: monitor.name,
+      monitorId: data.monitor_id,
+      name: data.name,
     },
-    filter_string: [monitor.name, monitor.url].join(" "),
+    filterString: [
+      data.name,
+      data.url,
+      mostRecentStatus ? mostRecentStatus : "",
+      data.region,
+    ].join(" "),
   };
 }
 
@@ -102,6 +144,21 @@ function GlobalFilter(props: {
   );
 }
 
+function createMonitorDataWithStatus(
+  statusesMap: { [monitorId: string]: UptimeMonitorStatus[] },
+  monitors: UptimeMonitor[]
+) {
+  const data: UptimeMonitorWithStatuses[] = [];
+  for (let monitor of monitors) {
+    const newData: UptimeMonitorWithStatuses = {
+      statuses: statusesMap[monitor.monitor_id] ?? [],
+      ...monitor,
+    };
+    data.push(newData);
+  }
+  return data;
+}
+
 export function OverviewTable(props: TableProps) {
   // Setup for delete dialog
   const { mutate } = useSWRConfig();
@@ -112,10 +169,11 @@ export function OverviewTable(props: TableProps) {
     setDeleteMonitor({ name: name, monitorId: id });
 
   // Setup for table
-  const data = React.useMemo(
-    () => props.data.map((monitor) => createRowPropsFromUptimeMonitor(monitor)),
-    [props.data]
-  );
+  const data = React.useMemo(() => {
+    return createMonitorDataWithStatus(props.statusesMap, props.monitors).map(
+      (monitor) => createRowPropsFromMonitorData(monitor)
+    );
+  }, [props.monitors, props.statusesMap]);
   const tableColumns = React.useMemo(
     (): Column[] => [
       {
@@ -133,6 +191,10 @@ export function OverviewTable(props: TableProps) {
         accessor: "uptime",
       },
       {
+        Header: "p90 Latency",
+        accessor: "p90Latency",
+      },
+      {
         Header: "Last checked",
         accessor: "lastChecked",
       },
@@ -148,7 +210,7 @@ export function OverviewTable(props: TableProps) {
       {
         id: "filter-column",
         filter: "includes",
-        accessor: "filter_string",
+        accessor: "filterString",
       },
     ],
     []

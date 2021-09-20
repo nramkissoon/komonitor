@@ -47,3 +47,7 @@ export interface UptimeMonitorWebhookNotification {
   monitor_type: MonitorType;
   latency: number;
 }
+
+export interface UptimeMonitorWithStatuses extends UptimeMonitor {
+  statuses?: UptimeMonitorStatus[];
+}

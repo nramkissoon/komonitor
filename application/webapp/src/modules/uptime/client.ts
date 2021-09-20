@@ -47,7 +47,7 @@ export function use24HourMonitorStatuses(monitorIds: string[]) {
   );
 
   return {
-    statuses: data as UptimeMonitorStatus[],
+    statuses: data as { [monitorId: string]: UptimeMonitorStatus[] },
     isLoading: !error && !data,
     isError: error,
   };

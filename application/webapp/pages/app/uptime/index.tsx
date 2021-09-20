@@ -25,7 +25,6 @@ const Uptime: ExtendedNextPage = () => {
     monitors ? monitors.map((monitor) => monitor.monitor_id) : []
   );
 
-  console.log(statuses);
   return (
     <>
       <Fade in={true}>
@@ -51,7 +50,10 @@ const Uptime: ExtendedNextPage = () => {
           </Fade>
         ) : (
           <Fade in={!monitorsIsLoading}>
-            <OverviewTable data={monitors} />
+            <OverviewTable
+              monitors={monitors}
+              statusesMap={statusesIsLoading ? {} : statuses}
+            />
           </Fade>
         )}
       </PageContainer>
