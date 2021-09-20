@@ -1,8 +1,12 @@
 import {
+  Box,
   Button,
+  Center,
+  Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -10,9 +14,10 @@ import {
   NumberInputField,
   Select,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import React from "react";
 import { Alert, UptimeMonitor } from "types";
 import { minutesToString } from "../../../common/client-utils";
@@ -133,6 +138,8 @@ function validateWebhookUrl(webhookUrl: string) {
 function validateAlertId() {}
 
 export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
+  const router = useRouter();
+
   let { product_id, currentMonitorAttributes, userAlerts } = props;
 
   const createNewMonitor = currentMonitorAttributes === undefined;
@@ -164,281 +171,330 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
   };
 
   return (
-    <Formik
-      enableReinitialize
-      initialValues={initialValues}
-      onSubmit={async (values, actions) => {
-        if (createNewMonitor) {
-          await createMonitor(values, () =>
-            Router.push({
-              pathname: "/app/uptime",
-              query: { newMonitorCreated: "true" },
-            })
-          );
-        } else {
-          // augment the form values by merging the current monitor's attributes.
-          const augmentedValues: any = values;
-          augmentedValues.monitor_id = currentMonitorAttributes?.monitor_id;
-          augmentedValues.owner_id = currentMonitorAttributes?.owner_id;
-          augmentedValues.created_at = currentMonitorAttributes?.created_at;
-          augmentedValues.last_updated = currentMonitorAttributes?.last_updated;
-          await updateMonitor(augmentedValues);
-        }
-        actions.setSubmitting(false);
-      }}
+    <Container
+      bg={useColorModeValue("white", "#0f131a")}
+      borderRadius="xl"
+      mb="3em"
+      p="0"
+      mt="2em"
+      shadow="lg"
+      maxW="3xl"
     >
-      {(props) => (
-        <Form>
-          <Field name="name" validate={validateName}>
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={form.errors.name ? form.touched.name : false}
-                isRequired
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="name">Monitor Name</FormLabel>
-                <Input {...field} id="name" placeholder="Monitor Name" />
-                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Field name="url" validate={validateUrl}>
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={form.errors.url ? form.touched.url : false}
-                isRequired
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="url">URL</FormLabel>
-                <InputGroup id="url">
-                  <InputLeftAddon children="https://" />
-                  <Input {...field} placeholder="your-website.com" />
-                </InputGroup>
-                <FormErrorMessage>{form.errors.url}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Field name="region" validate={validateRegion}>
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={form.errors.region ? form.touched.region : false}
-                isRequired
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="region">
-                  <Tooltip
-                    placement="right-end"
-                    label="AWS Region to run this monitor from."
-                    openDelay={500}
+      <Box
+        bgGradient={useColorModeValue(
+          "linear(to-b, blue.200, blue.100)",
+          "linear(to-b, blue.200, blue.300)"
+        )}
+        w="100%"
+        h="2em"
+        borderTopRadius="lg"
+        mb="1.5em"
+      />
+      <Box px="2em" pb="2em">
+        <Heading textAlign="center" mb="1em" size="lg" fontWeight="medium">
+          {createNewMonitor ? "Create Uptime Monitor" : "Edit Monitor"}
+        </Heading>
+        <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          onSubmit={async (values, actions) => {
+            if (createNewMonitor) {
+              await createMonitor(values, () =>
+                Router.push({
+                  pathname: "/app/uptime",
+                  query: { newMonitorCreated: "true" },
+                })
+              );
+            } else {
+              // augment the form values by merging the current monitor's attributes.
+              const augmentedValues: any = values;
+              augmentedValues.monitor_id = currentMonitorAttributes?.monitor_id;
+              augmentedValues.owner_id = currentMonitorAttributes?.owner_id;
+              augmentedValues.created_at = currentMonitorAttributes?.created_at;
+              augmentedValues.last_updated =
+                currentMonitorAttributes?.last_updated;
+              await updateMonitor(augmentedValues);
+            }
+            actions.setSubmitting(false);
+          }}
+        >
+          {(props) => (
+            <Form>
+              <Field name="name" validate={validateName}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={form.errors.name ? form.touched.name : false}
+                    isRequired
+                    mb="1.5em"
                   >
-                    Region
-                  </Tooltip>
-                </FormLabel>
-                <Select {...field} placeholder="Select Region">
-                  <option value="us-east-1">us-east-1</option>
-                </Select>
-                <FormErrorMessage>{form.errors.region}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Field name="frequency" validate={validateFrequency}>
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={
-                  form.errors.frequency ? form.touched.frequency : false
-                }
-                isRequired
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="frequency">
-                  <Tooltip
-                    placement="right-end"
-                    label="Frequency at which the monitor runs an uptime check."
-                    openDelay={500}
+                    <FormLabel htmlFor="name">Monitor Name</FormLabel>
+                    <Input {...field} id="name" placeholder="Monitor Name" />
+                    <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="url" validate={validateUrl}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={form.errors.url ? form.touched.url : false}
+                    isRequired
+                    mb="1.5em"
                   >
-                    Check Frequency
-                  </Tooltip>
-                </FormLabel>
-                <Select {...field} placeholder="Select Frequency">
-                  {createFrequencySelectOptions(product_id)}
-                </Select>
-                <FormErrorMessage>{form.errors.frequency}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Field name="retries" validate={validateRetries}>
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={form.errors.retries ? form.touched.retries : false}
-                isRequired
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="retries">
-                  <Tooltip
-                    placement="right-end"
-                    label="Number of retries before an uptime check is considered a failure."
-                    openDelay={500}
+                    <FormLabel htmlFor="url">URL</FormLabel>
+                    <InputGroup id="url">
+                      <InputLeftAddon children="https://" />
+                      <Input {...field} placeholder="your-website.com" />
+                    </InputGroup>
+                    <FormErrorMessage>{form.errors.url}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="region" validate={validateRegion}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={form.errors.region ? form.touched.region : false}
+                    isRequired
+                    mb="1.5em"
                   >
-                    Retry Checks
-                  </Tooltip>
-                </FormLabel>
-                <NumberInput
-                  min={0}
-                  step={1}
-                  max={product_id === PLAN_PRODUCT_IDS.FREE ? 1 : 5}
-                  clampValueOnBlur={false}
-                  value={field.value}
+                    <FormLabel htmlFor="region">
+                      <Tooltip
+                        placement="right-end"
+                        label="AWS Region to run this monitor from."
+                        openDelay={500}
+                      >
+                        Region
+                      </Tooltip>
+                    </FormLabel>
+                    <Select {...field} placeholder="Select Region">
+                      <option value="us-east-1">us-east-1</option>
+                    </Select>
+                    <FormErrorMessage>{form.errors.region}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="frequency" validate={validateFrequency}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={
+                      form.errors.frequency ? form.touched.frequency : false
+                    }
+                    isRequired
+                    mb="1.5em"
+                  >
+                    <FormLabel htmlFor="frequency">
+                      <Tooltip
+                        placement="right-end"
+                        label="Frequency at which the monitor runs an uptime check."
+                        openDelay={500}
+                      >
+                        Check Frequency
+                      </Tooltip>
+                    </FormLabel>
+                    <Select {...field} placeholder="Select Frequency">
+                      {createFrequencySelectOptions(product_id)}
+                    </Select>
+                    <FormErrorMessage>{form.errors.frequency}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="retries" validate={validateRetries}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={
+                      form.errors.retries ? form.touched.retries : false
+                    }
+                    isRequired
+                    mb="1.5em"
+                  >
+                    <FormLabel htmlFor="retries">
+                      <Tooltip
+                        placement="right-end"
+                        label="Number of retries before an uptime check is considered a failure."
+                        openDelay={500}
+                      >
+                        Retry Checks
+                      </Tooltip>
+                    </FormLabel>
+                    <NumberInput
+                      min={0}
+                      step={1}
+                      max={product_id === PLAN_PRODUCT_IDS.FREE ? 1 : 5}
+                      clampValueOnBlur={false}
+                      value={field.value}
+                    >
+                      <NumberInputField
+                        {...field}
+                        placeholder="Retry amount"
+                        value={field.value}
+                      />
+                    </NumberInput>
+                    <FormErrorMessage>{form.errors.retries}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="webhook" validate={validateWebhookUrl}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={
+                      form.errors.webhook_url ? form.touched.webhook_url : false
+                    }
+                    isDisabled={product_id === PLAN_PRODUCT_IDS.FREE}
+                    mb="1.5em"
+                  >
+                    <FormLabel htmlFor="webhookUrl">Webhook URL</FormLabel>
+                    <InputGroup id="webhookUrl">
+                      <InputLeftAddon children="https://" />
+                      <Input {...field} placeholder="your-webhook-url.com" />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {form.errors.webhook_url}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="alert" validate={validateAlertId}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={
+                      form.errors.alert_id ? form.touched.alert_id : false
+                    }
+                    mb="1.5em"
+                  >
+                    <FormLabel htmlFor="alert">Alert</FormLabel>
+                    <Select {...field} placeholder="Select Alert">
+                      {createAlertSelectOptions(userAlerts ?? [])}
+                    </Select>
+                    <FormErrorMessage>{form.errors.alert_id}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field
+                name="failures_before_alert"
+                validate={validateFailuresBeforeAlert}
+              >
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={
+                      form.errors.failures_before_alert
+                        ? form.touched.failures_before_alert
+                        : false
+                    }
+                    isRequired
+                    isDisabled={!props.values.alert}
+                    mb="1.5em"
+                  >
+                    <FormLabel htmlFor="failuresBeforeRetry">
+                      <Tooltip
+                        placement="right-end"
+                        label="Number of failed uptime checks before an alert is sent."
+                        openDelay={500}
+                      >
+                        {!props.values.alert
+                          ? "Failures Before Alert (Select an Alert to edit)"
+                          : "Failures Before Alert"}
+                      </Tooltip>
+                    </FormLabel>
+                    <NumberInput
+                      min={0}
+                      step={1}
+                      max={5}
+                      clampValueOnBlur={false}
+                      value={field.value}
+                    >
+                      <NumberInputField
+                        {...field}
+                        placeholder="Failure amount"
+                        value={field.value}
+                      />
+                    </NumberInput>
+                    <FormErrorMessage>
+                      {form.errors.failures_before_alert}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Center>
+                <Button
+                  size="lg"
+                  colorScheme="gray"
+                  bg="gray.400"
+                  color="white"
+                  shadow="md"
+                  fontSize="lg"
+                  fontWeight="medium"
+                  onClick={() => router.back()}
+                  _hover={{ bg: "gray.500" }}
+                  mr="1.4em"
                 >
-                  <NumberInputField
-                    {...field}
-                    placeholder="Retry amount"
-                    value={field.value}
-                  />
-                </NumberInput>
-                <FormErrorMessage>{form.errors.retries}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Field name="webhook" validate={validateWebhookUrl}>
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={
-                  form.errors.webhook_url ? form.touched.webhook_url : false
-                }
-                isDisabled={product_id === PLAN_PRODUCT_IDS.FREE}
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="webhookUrl">Webhook URL</FormLabel>
-                <InputGroup id="webhookUrl">
-                  <InputLeftAddon children="https://" />
-                  <Input {...field} placeholder="your-webhook-url.com" />
-                </InputGroup>
-                <FormErrorMessage>{form.errors.webhook_url}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Field name="alert" validate={validateAlertId}>
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={form.errors.alert_id ? form.touched.alert_id : false}
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="alert">Alert</FormLabel>
-                <Select {...field} placeholder="Select Alert">
-                  {createAlertSelectOptions(userAlerts ?? [])}
-                </Select>
-                <FormErrorMessage>{form.errors.alert_id}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Field
-            name="failures_before_alert"
-            validate={validateFailuresBeforeAlert}
-          >
-            {({
-              field,
-              form,
-            }: {
-              field: FieldInputProps<string>;
-              form: FormikFormProps;
-            }) => (
-              <FormControl
-                isInvalid={
-                  form.errors.failures_before_alert
-                    ? form.touched.failures_before_alert
-                    : false
-                }
-                isRequired
-                isDisabled={!props.values.alert}
-                mb="1.5em"
-              >
-                <FormLabel htmlFor="failuresBeforeRetry">
-                  <Tooltip
-                    placement="right-end"
-                    label="Number of failed uptime checks before an alert is sent."
-                    openDelay={500}
-                  >
-                    {!props.values.alert
-                      ? "Failures Before Alert (Select an Alert to edit)"
-                      : "Failures Before Alert"}
-                  </Tooltip>
-                </FormLabel>
-                <NumberInput
-                  min={0}
-                  step={1}
-                  max={5}
-                  clampValueOnBlur={false}
-                  value={field.value}
+                  Cancel
+                </Button>
+                <Button
+                  isLoading={props.isSubmitting}
+                  type="submit"
+                  size="lg"
+                  colorScheme="blue"
+                  color="white"
+                  bg="blue.400"
+                  shadow="md"
+                  fontSize="lg"
+                  fontWeight="medium"
+                  _hover={{ bg: "blue.600" }}
                 >
-                  <NumberInputField
-                    {...field}
-                    placeholder="Failure amount"
-                    value={field.value}
-                  />
-                </NumberInput>
-                <FormErrorMessage>
-                  {form.errors.failures_before_alert}
-                </FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-          <Button
-            isLoading={props.isSubmitting}
-            type="submit"
-            size="lg"
-            colorScheme="blue"
-            color="white"
-            bgGradient="linear(to-r, blue.300, blue.400)"
-            shadow="md"
-            fontSize="lg"
-            fontWeight="medium"
-          >
-            {createNewMonitor ? "Create" : "Update"}
-          </Button>
-        </Form>
-      )}
-    </Formik>
+                  {createNewMonitor ? "Create" : "Update"}
+                </Button>
+              </Center>
+            </Form>
+          )}
+        </Formik>
+      </Box>
+    </Container>
   );
 };

@@ -250,13 +250,13 @@ export function OverviewTable(props: TableProps) {
   );
 
   // this is defined here to avoid adding more hook calls as rows are added
-  const tableBorderColor = useColorModeValue("gray.300", "gray.700");
+  const tableBorderColor = useColorModeValue("gray.100", "gray.700");
 
   return (
     <Box
       w="100%"
       shadow="lg"
-      bg={useColorModeValue("gray.50", "#0f131a")}
+      bg={useColorModeValue("white", "#0f131a")}
       borderRadius="xl"
       p="1.5em"
       mb="2em"

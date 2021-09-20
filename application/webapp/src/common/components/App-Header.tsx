@@ -178,6 +178,7 @@ export const AppHeader = () => {
     bg: useColorModeValue("white", "gray.900"),
     borderBottomColor: useColorModeValue("gray.100", "gray.800"),
     borderBottomWidth: useColorModeValue("0px", "1px"),
+    shadow: "sm",
   };
 
   const defaultFlexContainerStyles: FlexProps = {
