@@ -1,8 +1,8 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { LambdaClient } from "@aws-sdk/client-lambda";
+import { performance } from "perf_hooks";
 import { config } from "./config";
 import { handleUptimeCheck } from "./handle-uptime-check/handles-uptime-check";
-import { performance } from "perf_hooks";
 
 export const handler = async (event: any) => {
   const start = performance.now();

@@ -4,8 +4,8 @@ import {
   CodeBuildAction,
   ManualApprovalAction,
 } from "@aws-cdk/aws-codepipeline-actions";
-import { LambdaCodeBucketProps } from "./../common/types";
 import { Construct } from "@aws-cdk/core";
+import { LambdaCodeBucketProps } from "./../common/types";
 import { BuildProjects } from "./build-projects";
 
 export class LambdaCodeBuildActions extends Construct {
@@ -52,7 +52,7 @@ export class LambdaCodeBuildActions extends Construct {
       runOrder: 3,
       actionName: "Job-Runner-Lambda-Build",
       input: sourceArtifact,
-      project: buildProjects.uptimeCheckLambdaBuild,
+      project: buildProjects.jobRunnerLambdaBuild,
       variablesNamespace: "job-runner-build",
       environmentVariables: {
         S3_BUCKET: {
