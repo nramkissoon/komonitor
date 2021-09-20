@@ -29,7 +29,7 @@ const asyncInvokeLambda = async (
   };
 
   const command = new InvokeCommand(input);
-  lambdaClient.send(command);
+  return await lambdaClient.send(command);
 };
 
 const checkUnmarshalledItemIsMonitorJob = (item: {
@@ -77,8 +77,9 @@ export const handleUptimeCheck = async (
       IndexName: config.uptimeCheckMonitorTableFrequencyGsiName,
       ExclusiveStartKey:
         lastEvaluatedKey === "init" ? undefined : lastEvaluatedKey,
+      ExpressionAttributeNames: { "#r": "region" },
       KeyConditionExpression:
-        "frequency = :partitionkeyval AND region = :sortkeyval",
+        "frequency = :partitionkeyval AND #r = :sortkeyval",
       ExpressionAttributeValues: {
         ":partitionkeyval": { N: frequency.toString() },
         ":sortkeyval": { S: config.region },
@@ -101,6 +102,7 @@ export const handleUptimeCheck = async (
 
       lastEvaluatedKey = response.LastEvaluatedKey || null;
       // TODO log count
+      console.log(`${response.Count} db items retrieved`);
       let offset = 0;
       let processed = 0;
       while (processed < response.Count) {
@@ -121,7 +123,10 @@ export const handleUptimeCheck = async (
             )
           );
         }
-        asyncInvokeLambda(lambda, jobs, config);
+        const res = await asyncInvokeLambda(lambda, jobs, config);
+        console.log(`${res.StatusCode} status code`);
+        console.log(`${jobs.length} jobs about to be sent to lambda`);
+        console.log("lambda invoked");
         processed += jobs.length;
         offset += config.uptimeCheckLambdaJobLimit;
       }
@@ -129,6 +134,7 @@ export const handleUptimeCheck = async (
     } catch (err) {
       lastEvaluatedKey = null;
       // TODO log err
+      console.log((err as Error).message);
       continue;
     }
   }

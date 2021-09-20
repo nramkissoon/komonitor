@@ -1,11 +1,11 @@
-import * as cdk from "@aws-cdk/core";
 import * as events from "@aws-cdk/aws-events";
 import * as targets from "@aws-cdk/aws-events-targets";
 import * as lambda from "@aws-cdk/aws-lambda";
+import * as cdk from "@aws-cdk/core";
 import { Duration } from "@aws-cdk/core";
 
 export class ScheduleRules extends cdk.Construct {
-  public readonly fiveMinuteRule: events.Rule;
+  public readonly thirtyMinuteRule: events.Rule;
   constructor(
     scope: cdk.Construct,
     id: string,
@@ -13,14 +13,20 @@ export class ScheduleRules extends cdk.Construct {
   ) {
     super(scope, id);
 
-    this.fiveMinuteRule = new events.Rule(this, "dev_uptime_check_5min_rule", {
-      schedule: events.Schedule.rate(Duration.minutes(5)),
-    });
+    this.thirtyMinuteRule = new events.Rule(
+      this,
+      "dev_uptime_check_30min_rule",
+      {
+        schedule: events.Schedule.rate(Duration.minutes(30)),
+      }
+    );
 
-    this.fiveMinuteRule.addTarget(
+    this.thirtyMinuteRule.addTarget(
       new targets.LambdaFunction(props.jobRunnerLambda, {
-        event: events.RuleTargetInput.fromObject({ periodInMinutes: 5 }),
+        event: events.RuleTargetInput.fromObject({ periodInMinutes: 30 }),
       })
     );
+
+    targets.addLambdaPermission(this.thirtyMinuteRule, props.jobRunnerLambda);
   }
 }

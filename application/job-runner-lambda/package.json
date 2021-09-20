@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npx lerna run build --scope=types && rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:build": "npm run build && cd dist && zip -r ../package.zip . * && cd .."
   },
   "keywords": [],
   "author": "",

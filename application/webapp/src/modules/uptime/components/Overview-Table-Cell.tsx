@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import router from "next/router";
 import React from "react";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 interface DescriptionCellProps {
   monitorId: string;
@@ -21,23 +22,25 @@ export function DescriptionCell(props: DescriptionCellProps) {
   return (
     <Box>
       <Link passHref href={`/app/uptime/${props.monitorId}`}>
-        <Box
-          _hover={{
-            cursor: "pointer",
-            color: useColorModeValue("green.400", "green.300"),
-          }}
-          w="max-content"
-        >
-          <Text
-            mb=".6em"
-            fontSize="xl"
-            fontWeight="normal"
-            letterSpacing="normal"
+        <Tooltip label="Details" openDelay={300}>
+          <Box
+            _hover={{
+              cursor: "pointer",
+              color: useColorModeValue("gray.400", "gray.500"),
+            }}
+            w="max-content"
           >
-            {props.name}
-          </Text>
-          <Text fontWeight="thin">{props.url}</Text>
-        </Box>
+            <Text
+              mb=".6em"
+              fontSize="xl"
+              fontWeight="normal"
+              letterSpacing="normal"
+            >
+              {props.name}
+            </Text>
+            <Text fontWeight="thin">{props.url}</Text>
+          </Box>
+        </Tooltip>
       </Link>
     </Box>
   );
@@ -54,6 +57,19 @@ interface ActionsCellProps {
 export function ActionsCell(props: ActionsCellProps) {
   return (
     <Flex justifyContent="flex-start">
+      <Tooltip label="Details" openDelay={300}>
+        <IconButton
+          aria-label="view monitor details"
+          icon={<AiOutlineInfoCircle />}
+          colorScheme="gray"
+          color="white"
+          bgColor="gray.500"
+          mr="1.3em"
+          onClick={() => {
+            router.push("/app/uptime/" + props.cellValues.monitorId);
+          }}
+        />
+      </Tooltip>
       <Tooltip label="Edit" openDelay={300}>
         <IconButton
           aria-label="edit monitor"
@@ -61,7 +77,7 @@ export function ActionsCell(props: ActionsCellProps) {
           colorScheme="blue"
           color="white"
           bgColor="blue.500"
-          mr="1.8em"
+          mr="1.3em"
           onClick={() => {
             router.push("/app/uptime/" + props.cellValues.monitorId + "/edit");
           }}

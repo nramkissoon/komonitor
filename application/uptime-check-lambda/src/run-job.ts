@@ -34,7 +34,8 @@ const fetchCall = async (url: string) => {
           } else {
             resolve({
               ok: response.statusCode
-                ? response.statusCode >= 200 && response.statusCode < 300
+                ? (response.statusCode >= 200 && response.statusCode < 300) ||
+                  response.statusCode === 429 // Too many requests
                 : false,
               latency: response.timingPhases?.total,
             });
@@ -134,12 +135,16 @@ export const runJob = async (job: UptimeMonitorJob) => {
   );
 
   try {
-    writeStatusToDB(status);
+    const dbWriteResponse = await writeStatusToDB(status);
   } catch (err) {}
 
   if (webhook_url) {
     const webhook = buildWebhook(status, url, name);
     // no await, keep it pushing
     webhookNotifyCall(webhook_url, webhook);
+  }
+
+  if (status.status === "down") {
+    // TODO invoke alert Lambda
   }
 };

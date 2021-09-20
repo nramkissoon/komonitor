@@ -12,7 +12,7 @@ export interface CoreUptimeMonitor {
   retries: number;
   failures_before_alert?: number;
   webhook_url?: string;
-  alert_ids?: string[];
+  alert_id?: string;
 }
 
 export interface UptimeMonitor extends CoreUptimeMonitor {

@@ -1,7 +1,7 @@
 import {
   DynamoDBClient,
-  PutItemCommandInput,
   PutItemCommand,
+  PutItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { UptimeMonitorStatus } from "types";

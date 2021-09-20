@@ -2,6 +2,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { LambdaClient } from "@aws-sdk/client-lambda";
 import { config } from "./config";
 import { handleUptimeCheck } from "./handle-uptime-check/handles-uptime-check";
+import { performance } from "perf_hooks";
 
 export const handler = async (event: any) => {
   const start = performance.now();
@@ -16,6 +17,7 @@ export const handler = async (event: any) => {
     ]);
   } else {
     // TODO log invalid event
+    console.log("invalid event");
   }
 
   const end = performance.now();

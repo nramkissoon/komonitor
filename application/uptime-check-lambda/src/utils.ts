@@ -1,5 +1,6 @@
 import { UptimeMonitorJob } from "types";
 
+// reads event object for any valid jobs
 export const getJobs = (event: any): UptimeMonitorJob[] => {
   if (!event.jobs) {
     return [];
