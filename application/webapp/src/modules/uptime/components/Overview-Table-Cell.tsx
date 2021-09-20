@@ -16,6 +16,7 @@ interface DescriptionCellProps {
   monitorId: string;
   name: string;
   url: string;
+  region: string;
 }
 
 export function DescriptionCell(props: DescriptionCellProps) {
@@ -39,6 +40,7 @@ export function DescriptionCell(props: DescriptionCellProps) {
               {props.name}
             </Text>
             <Text fontWeight="thin">{props.url}</Text>
+            <Text fontSize="sm">{props.region}</Text>
           </Box>
         </Tooltip>
       </Link>
