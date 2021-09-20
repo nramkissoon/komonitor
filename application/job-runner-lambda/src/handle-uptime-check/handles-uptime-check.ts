@@ -4,10 +4,10 @@ import {
   QueryCommand,
 } from "@aws-sdk/client-dynamodb";
 import {
-  LambdaClient,
+  InvocationType,
   InvokeCommand,
   InvokeCommandInput,
-  InvocationType,
+  LambdaClient,
 } from "@aws-sdk/client-lambda";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { Config } from "src/config";
@@ -36,7 +36,11 @@ const checkUnmarshalledItemIsMonitorJob = (item: {
   [key: string]: AttributeValue;
 }) => {
   return (
-    item.monitor_id && item.url && item.name && item.region && item.retries
+    item.monitor_id &&
+    item.url &&
+    item.name &&
+    item.region &&
+    item.retries !== undefined
   );
 };
 

@@ -1,8 +1,8 @@
-import * as cdk from "@aws-cdk/core";
-import * as lambda from "@aws-cdk/aws-lambda";
-import * as s3 from "@aws-cdk/aws-s3";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import * as iam from "@aws-cdk/aws-iam";
+import * as lambda from "@aws-cdk/aws-lambda";
+import * as s3 from "@aws-cdk/aws-s3";
+import * as cdk from "@aws-cdk/core";
 import { DEV_STACK } from "../common/names";
 
 class UptimeCheckLambda extends cdk.Construct {
@@ -87,7 +87,7 @@ class JobRunnerLambda extends cdk.Construct {
           props.uptimeCheckMonitorTableFrequencyGsiName,
         UPTIME_CHECK_LAMBDA_NAME: props.uptimeCheckLambda.lambda.functionName,
       },
-      timeout: cdk.Duration.minutes(5),
+      timeout: cdk.Duration.minutes(1),
     });
 
     // allow the check lambda to be able to be invoked by the job runner
