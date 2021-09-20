@@ -8,7 +8,13 @@ export const getJobs = (event: any): UptimeMonitorJob[] => {
 
   const jobs: UptimeMonitorJob[] = [];
   event.jobs.forEach((job: any) => {
-    if (job.monitor_id && job.url && job.name && job.region && job.retries) {
+    if (
+      job.monitor_id &&
+      job.url &&
+      job.name &&
+      job.region &&
+      job.retries !== undefined
+    ) {
       jobs.push(job);
     }
   });
