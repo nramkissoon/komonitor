@@ -3,6 +3,7 @@ import {
   CoreUptimeMonitor,
   UptimeCheckSupportedFrequenciesInMinutes,
   UptimeMonitor,
+  UptimeMonitorStatus,
 } from "types";
 import { env } from "../../common/client-utils";
 
@@ -23,10 +24,30 @@ export function useUptimeMonitors() {
 }
 
 // Used for the main uptime page, get status for all user monitors
-export function useAllUptimeMonitorStatuses() {
-  const fetcher = getFetcher;
-  const { data, error } = useSWR(statusApiUrl, fetcher);
+export function use24HourMonitorStatuses(monitorIds: string[]) {
+  const fetcher = (url: string, ...ids: string[]) => {
+    const yesterday = new Date().getTime() - 24 * 60 * 60 * 1000;
+    const urlWithParams =
+      url +
+      "?" +
+      ids.map((id) => "id=" + id).join("&") +
+      "&since=" +
+      yesterday.toString();
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+  const { data, error } = useSWR(
+    monitorIds.length > 0 // determines if we should call the API
+      ? [statusApiUrl, ...monitorIds]
+      : null,
+    fetcher,
+    {
+      shouldRetryOnError: true,
+      errorRetryInterval: 10000, // retry in 10 seconds
+    }
+  );
+
   return {
+    statuses: data as UptimeMonitorStatus[],
     isLoading: !error && !data,
     isError: error,
   };

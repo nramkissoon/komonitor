@@ -1,4 +1,4 @@
-import { CoreUptimeMonitor, UptimeMonitor } from "types";
+import { CoreUptimeMonitor, UptimeMonitor, UptimeMonitorStatus } from "types";
 import { v4 as uuidv4 } from "uuid";
 
 function createMonitorId() {
@@ -33,4 +33,21 @@ export function createUpdatedMonitor(monitor: UptimeMonitor) {
   if (!monitor.webhook_url) updatedMonitor.webhook_url = undefined;
   if (!monitor.alert_id) updatedMonitor.alert_id = undefined;
   return updatedMonitor;
+}
+
+export function createMonitorIdToStatusArrayMap(
+  ids: string[],
+  statuses: UptimeMonitorStatus[]
+) {
+  const map: { [key: string]: UptimeMonitorStatus[] } = {};
+  for (let id of ids) {
+    if (!map[id]) {
+      map[id] = [];
+    }
+  }
+  for (let status of statuses) {
+    const id = status.monitor_id;
+    map[id].push(status);
+  }
+  return map;
 }
