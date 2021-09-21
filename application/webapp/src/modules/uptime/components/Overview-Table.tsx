@@ -1,6 +1,7 @@
 import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Input,
   InputGroup,
   InputGroupProps,
@@ -14,7 +15,8 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React from "react";
+import Pagination from "@choc-ui/paginator";
+import React, { forwardRef, LegacyRef } from "react";
 import {
   Column,
   useAsyncDebounce,
@@ -245,6 +247,7 @@ export function OverviewTable(props: TableProps) {
     setPageSize,
     setGlobalFilter,
     preGlobalFilteredRows,
+    globalFilteredRows,
     state: { pageIndex, pageSize, globalFilter },
   } = useTable(
     {
@@ -257,6 +260,29 @@ export function OverviewTable(props: TableProps) {
     useGlobalFilter,
     usePagination
   );
+
+  // Pagination setup
+  const Prev = forwardRef((props, ref: LegacyRef<HTMLButtonElement>) => (
+    <Button ref={ref} {...props}>
+      Prev
+    </Button>
+  ));
+  const Next = forwardRef((props, ref: LegacyRef<HTMLButtonElement>) => (
+    <Button ref={ref} {...props}>
+      Next
+    </Button>
+  ));
+  const itemRender = (_: number | undefined, type?: string | undefined) => {
+    if (type === "prev") {
+      return Prev;
+    }
+    if (type === "next") {
+      return Next;
+    }
+  };
+  React.useEffect(() => {
+    gotoPage(0);
+  }, [globalFilter]);
 
   // this is defined here to avoid adding more hook calls as rows are added
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
@@ -337,6 +363,23 @@ export function OverviewTable(props: TableProps) {
             })}
           </Tbody>
         </Table>
+      </Box>
+      <Box>
+        <Pagination
+          defaultCurrent={pageIndex + 1}
+          current={pageIndex + 1} // 0 based index
+          pageSize={pageSize}
+          total={globalFilteredRows.length}
+          itemRender={itemRender}
+          colorScheme="gray"
+          onChange={(p) => {
+            gotoPage((p as number) - 1); // to get 0 based index
+          }}
+          paginationProps={{
+            display: "flex",
+            mt: "1em",
+          }}
+        />
       </Box>
     </Box>
   );

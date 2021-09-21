@@ -17,6 +17,7 @@
     "@chakra-ui/icons": "^1.0.15",
     "@chakra-ui/react": "^1.6.5",
     "@chakra-ui/theme-tools": "^1.2.0",
+    "@choc-ui/paginator": "^3.2.0",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@fontsource/roboto": "^4.5.0",
