@@ -31,7 +31,11 @@ import {
 import { timeAgo } from "../../../common/client-utils";
 import { percentile } from "../../../common/utils";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
-import { ActionsCell, DescriptionCell } from "./Overview-Table-Cell";
+import {
+  ActionsCell,
+  DescriptionCell,
+  StatusCell,
+} from "./Overview-Table-Cell";
 
 interface TableProps {
   statusesMap: { [monitorId: string]: UptimeMonitorStatus[] };
@@ -62,7 +66,7 @@ export function calculateUptimeString(
   if (!statuses || statuses.length === 0) return "N/A";
 
   const up = statuses.filter((status) => status.status === "up").length;
-  return ((up / statuses.length) * 100).toFixed(2).toString();
+  return ((up / statuses.length) * 100).toFixed(2).toString() + "%";
 }
 
 export function calculateP90LatencyString(
@@ -165,12 +169,17 @@ function createMonitorDataWithStatus(
 
 export function OverviewTable(props: TableProps) {
   // Setup for delete dialog
-  const { mutate } = useSWRConfig();
-  const [deleteMonitor, setDeleteMonitor] = React.useState({} as any);
+  let { mutate } = useSWRConfig();
+  let [deleteMonitor, setDeleteMonitor] = React.useState({} as any);
   const onCloseDeleteDialog = () => setDeleteMonitor({});
-  const cancelRef = React.useRef();
+  const cancelRef = React.useRef(true);
   const openDeleteDialog = (name: string, id: string) =>
     setDeleteMonitor({ name: name, monitorId: id });
+  React.useEffect(() => {
+    return () => {
+      cancelRef.current = false;
+    };
+  });
 
   // Setup for table
   const data = React.useMemo(() => {
@@ -188,7 +197,7 @@ export function OverviewTable(props: TableProps) {
       {
         Header: "Status",
         accessor: "status",
-        filter: "includes",
+        Cell: (props) => StatusCell({ status: props.cell.value }),
       },
       {
         Header: "Uptime",

@@ -15,7 +15,7 @@ export const CreateButton = () => {
         fontSize="lg"
         fontWeight="medium"
         color="white"
-        p="1em"
+        px="1em"
         shadow="md"
         _hover={{
           bgGradient: useColorModeValue(

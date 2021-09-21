@@ -12,12 +12,12 @@ import { OverviewTable } from "../../../src/modules/uptime/components/Overview-T
 import { ExtendedNextPage } from "../../_app";
 
 const Uptime: ExtendedNextPage = () => {
-  const {
+  let {
     monitors,
     isLoading: monitorsIsLoading,
     isError: monitorsIsError,
   } = useUptimeMonitors();
-  const {
+  let {
     statuses,
     isLoading: statusesIsLoading,
     isError: statusesIsError,

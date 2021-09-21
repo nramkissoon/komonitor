@@ -10,7 +10,7 @@ export const LoadingSpinner = () => {
         thickness="10px"
         speed=".8s"
         emptyColor={useColorModeValue("gray.200", "gray.700")}
-        color={useColorModeValue("red.400", "blue.300")}
+        color={useColorModeValue("blue.300", "blue.300")}
       />
     </Center>
   );
