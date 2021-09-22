@@ -15,6 +15,7 @@ import {
   Select,
   Tooltip,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import Router, { useRouter } from "next/router";
@@ -139,6 +140,17 @@ function validateAlertId() {}
 
 export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
   const router = useRouter();
+  const errorToast = useToast();
+  const postErrorToast = (message: string) =>
+    errorToast({
+      title: "Unable to create monitor.",
+      description: message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      variant: "solid",
+      position: "top",
+    });
 
   let { product_id, currentMonitorAttributes, userAlerts } = props;
 
@@ -199,11 +211,14 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
           initialValues={initialValues}
           onSubmit={async (values, actions) => {
             if (createNewMonitor) {
-              await createMonitor(values, () =>
-                Router.push({
-                  pathname: "/app/uptime",
-                  query: { newMonitorCreated: "true" },
-                })
+              await createMonitor(
+                values,
+                () =>
+                  Router.push({
+                    pathname: "/app/uptime",
+                    query: { newMonitorCreated: "true" },
+                  }),
+                postErrorToast
               );
             } else {
               // augment the form values by merging the current monitor's attributes.
@@ -213,12 +228,16 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
               augmentedValues.created_at = currentMonitorAttributes?.created_at;
               augmentedValues.last_updated =
                 currentMonitorAttributes?.last_updated;
-              await updateMonitor(augmentedValues, () => {
-                Router.push({
-                  pathname: "/app/uptime/" + augmentedValues.monitor_id,
-                  query: { monitorUpdated: "true" },
-                });
-              });
+              await updateMonitor(
+                augmentedValues,
+                () => {
+                  Router.push({
+                    pathname: "/app/uptime/" + augmentedValues.monitor_id,
+                    query: { monitorUpdated: "true" },
+                  });
+                },
+                postErrorToast
+              );
             }
             actions.setSubmitting(false);
           }}
