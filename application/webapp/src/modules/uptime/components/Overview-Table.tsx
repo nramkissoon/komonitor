@@ -101,7 +101,7 @@ function createRowPropsFromMonitorData(
     lastChecked: mostRecentStatus
       ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
       : "N/A",
-    status: mostRecentStatus ? mostRecentStatus.status : "N/A",
+    status: mostRecentStatus ? mostRecentStatus.status : "No Data",
     uptime: calculateUptimeString(data.statuses),
     p90Latency: calculateP90LatencyString(data.statuses),
     actions: {
@@ -177,11 +177,6 @@ export function OverviewTable(props: TableProps) {
   const cancelRef = React.useRef(true);
   const openDeleteDialog = (name: string, id: string) =>
     setDeleteMonitor({ name: name, monitorId: id });
-  React.useEffect(() => {
-    return () => {
-      cancelRef.current = false;
-    };
-  });
 
   // Setup for table
   const data = React.useMemo(() => {
@@ -206,7 +201,7 @@ export function OverviewTable(props: TableProps) {
         accessor: "uptime",
       },
       {
-        Header: "p90 Latency",
+        Header: "p90 Response Time",
         accessor: "p90Latency",
       },
       {
@@ -366,6 +361,15 @@ export function OverviewTable(props: TableProps) {
       </Box>
       <Box>
         <Pagination
+          responsive
+          hideOnSinglePage
+          showTotal={(total) => (
+            <Button
+              fontWeight="normal"
+              size="sm"
+              _hover={{ cursor: "default" }}
+            >{`${total} Monitors`}</Button>
+          )}
           defaultCurrent={pageIndex + 1}
           current={pageIndex + 1} // 0 based index
           pageSize={pageSize}

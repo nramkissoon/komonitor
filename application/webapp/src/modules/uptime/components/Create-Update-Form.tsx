@@ -213,7 +213,12 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
               augmentedValues.created_at = currentMonitorAttributes?.created_at;
               augmentedValues.last_updated =
                 currentMonitorAttributes?.last_updated;
-              await updateMonitor(augmentedValues);
+              await updateMonitor(augmentedValues, () => {
+                Router.push({
+                  pathname: "/app/uptime/" + augmentedValues.monitor_id,
+                  query: { monitorUpdated: "true" },
+                });
+              });
             }
             actions.setSubmitting(false);
           }}

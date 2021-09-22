@@ -5,6 +5,7 @@ import { UptimeMonitor } from "types";
 import { AppHeader } from "../../../../src/common/components/App-Header";
 import { LoadingSpinner } from "../../../../src/common/components/Loading-Spinner";
 import { PageContainer } from "../../../../src/common/components/Page-Container";
+import { useAlerts } from "../../../../src/modules/alerts/client";
 import { useUptimeMonitors } from "../../../../src/modules/uptime/client";
 import { CreateUpdateForm } from "../../../../src/modules/uptime/components/Create-Update-Form";
 import { useUserServicePlanProductId } from "../../../../src/modules/user/client";
@@ -21,7 +22,13 @@ const UptimeEdit: ExtendedNextPage = () => {
     isError: productIdIsError,
     isLoading: productIdIsLoading,
   } = useUserServicePlanProductId();
-  const isLoading = monitorsIsLoading || productIdIsLoading;
+  const {
+    alerts,
+    isLoading: alertsIsLoading,
+    isError: alertsIsError,
+  } = useAlerts();
+
+  const isLoading = monitorsIsLoading || productIdIsLoading || alertsIsLoading;
   const isError = monitorsIsError || productIdIsError;
 
   const router = useRouter();
@@ -42,6 +49,7 @@ const UptimeEdit: ExtendedNextPage = () => {
             <CreateUpdateForm
               product_id={data.productId as string}
               currentMonitorAttributes={monitor}
+              userAlerts={alerts}
             />
           </Fade>
         ) : (

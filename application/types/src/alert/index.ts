@@ -23,6 +23,7 @@ export interface EditableAlertAttributes {
 }
 
 export interface Alert extends EditableAlertAttributes {
+  type: AlertTypes;
   owner_id: string;
   alert_id: string;
   created_at: number;

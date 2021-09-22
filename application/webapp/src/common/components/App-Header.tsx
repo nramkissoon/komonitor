@@ -143,13 +143,13 @@ const MobileNavHeader = (props: {
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
-          text: "Settings",
-          href: "/app/settings",
+          text: "Alerts",
+          href: "/app/alerts",
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
-          text: "Docs",
-          href: "/docs",
+          text: "Settings",
+          href: "/settings",
           buttonProps: linkButtonStyles,
         })}
       </VStack>
@@ -211,7 +211,7 @@ export const AppHeader = () => {
   };
 
   const defaultLinksHstackContainerStyles: StackProps = {
-    spacing: "9",
+    spacing: "6",
     display: { base: "none", md: "none", lg: "flex" },
     fontSize: "lg",
   };
@@ -241,12 +241,12 @@ export const AppHeader = () => {
               href: "/app/lighthouse",
             })}
             {HeaderLink({
-              text: "Settings",
-              href: "/app/settings",
+              text: "Alerts",
+              href: "/app/alerts",
             })}
             {HeaderLink({
-              text: "Docs",
-              href: "/docs",
+              text: "Settings",
+              href: "/settings",
             })}
           </HStack>
         </Flex>

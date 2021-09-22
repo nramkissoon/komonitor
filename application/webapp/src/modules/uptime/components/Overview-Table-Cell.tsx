@@ -56,7 +56,7 @@ interface StatusCellProps {
 }
 
 export function StatusCell(props: StatusCellProps) {
-  let color = "yellow";
+  let color = "gray";
   if (props.status === "up") color = "green";
   if (props.status === "down") color = "red";
   return (
