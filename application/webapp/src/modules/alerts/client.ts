@@ -35,14 +35,14 @@ export async function deleteAlert(
   }
 }
 
-function createAlertFromFormData(formData: any) {}
+function createAlertEditableAttributesFromFormData(formData: any) {}
 
 export async function createAlert(
   formData: any,
   onSuccess?: () => void,
   onError?: () => void
 ) {
-  const alert = createAlertFromFormData(formData);
+  const alert = createAlertEditableAttributesFromFormData(formData);
   const response = await fetch(apiUrl, {
     method: "POST",
     headers: {

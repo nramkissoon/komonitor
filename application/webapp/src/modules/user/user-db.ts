@@ -96,3 +96,9 @@ export async function getServicePlanProductIdForUser(
     throw err;
   }
 }
+
+export async function setServicePlanProductIdForUser(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string
+) {}

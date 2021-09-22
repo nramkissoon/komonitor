@@ -118,10 +118,17 @@ function LineGraphTooltip(x: DatumValue, y: DatumValue) {
       <Text fontWeight="semibold">
         x: <chakra.span fontWeight="normal">{x.toString()}</chakra.span>
       </Text>
-      <Text fontWeight="semibold">
-        y:{" "}
-        <chakra.span fontWeight="normal">{yRounded.toString()}ms</chakra.span>
-      </Text>
+
+      {yRounded === "-1.00" ? (
+        <Text fontWeight="semibold" textColor="red.500">
+          Down Status
+        </Text>
+      ) : (
+        <Text fontWeight="semibold">
+          y:{" "}
+          <chakra.span fontWeight="normal">{yRounded.toString()}ms</chakra.span>
+        </Text>
+      )}
     </Box>
   );
 }
