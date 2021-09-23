@@ -12,7 +12,6 @@ import {
   InputLeftAddon,
   NumberInput,
   NumberInputField,
-  Select,
   Tooltip,
   useColorModeValue,
   useToast,
@@ -22,6 +21,7 @@ import Router, { useRouter } from "next/router";
 import React from "react";
 import { Alert, UptimeMonitor } from "types";
 import { minutesToString } from "../../../common/client-utils";
+import { ReactSelectFormik } from "../../../common/components/React-Select-Formik";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import { createMonitor, updateMonitor } from "./../client";
 
@@ -64,6 +64,7 @@ function createAlertSelectOptions(alerts: Alert[]) {
   }
 }
 
+// Used to prefill fields with current monitor attributes
 function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   if (!monitor) return undefined;
   const placeholders = { ...monitor };
@@ -73,18 +74,31 @@ function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   return placeholders;
 }
 
-function createFrequencySelectOptions(productId: string) {
-  return Object.getOwnPropertyNames(minutesToString).map((minutes) => (
-    <option
-      value={Number.parseInt(minutes)}
-      key={minutesToString[Number.parseInt(minutes)]}
-      disabled={
-        Number.parseInt(minutes) === 1 && productId === PLAN_PRODUCT_IDS.FREE
-      }
-    >
-      {minutesToString[Number.parseInt(minutes)]}
-    </option>
-  ));
+function createAlertSelectOptionsReactSelect(alerts: Alert[]) {
+  if (!alerts || alerts.length === 0) return [];
+  return alerts.map((alert) => ({
+    value: alert.alert_id,
+    label: alert.name,
+    isDisabled: false,
+  }));
+}
+
+function createFrequencySelectOptionsReactSelect(productId: string) {
+  return Object.getOwnPropertyNames(minutesToString).map((minutes) => ({
+    value: Number.parseInt(minutes).toString(),
+    label: minutesToString[Number.parseInt(minutes)],
+    isDisabled: productId === PLAN_PRODUCT_IDS.FREE && minutes === "1",
+  }));
+}
+
+function createRegionSelectOptions() {
+  return [
+    {
+      value: "us-east-1",
+      label: "us-east-1",
+      isDisabled: false,
+    },
+  ];
 }
 
 function validateName(name: string) {
@@ -158,6 +172,9 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
   currentMonitorAttributes = createFormPlaceholdersFromMonitor(
     currentMonitorAttributes
   );
+
+  const freqSelectFieldOptions =
+    createFrequencySelectOptionsReactSelect(product_id);
 
   const initialValues = {
     url: currentMonitorAttributes?.url ? currentMonitorAttributes.url : "",
@@ -307,9 +324,12 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                         Region
                       </Tooltip>
                     </FormLabel>
-                    <Select {...field} placeholder="Select Region">
-                      <option value="us-east-1">us-east-1</option>
-                    </Select>
+                    <ReactSelectFormik
+                      options={createRegionSelectOptions()}
+                      placeholder="Select Region"
+                      field={field}
+                      form={form}
+                    />
                     <FormErrorMessage>{form.errors.region}</FormErrorMessage>
                   </FormControl>
                 )}
@@ -338,9 +358,12 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                         Check Frequency
                       </Tooltip>
                     </FormLabel>
-                    <Select {...field} placeholder="Select Frequency">
-                      {createFrequencySelectOptions(product_id)}
-                    </Select>
+                    <ReactSelectFormik
+                      options={freqSelectFieldOptions}
+                      placeholder="Select Frequency"
+                      field={field}
+                      form={form}
+                    />
                     <FormErrorMessage>{form.errors.frequency}</FormErrorMessage>
                   </FormControl>
                 )}
@@ -427,9 +450,14 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                     mb="1.5em"
                   >
                     <FormLabel htmlFor="alert">Alert</FormLabel>
-                    <Select {...field} placeholder="Select Alert">
-                      {createAlertSelectOptions(userAlerts ?? [])}
-                    </Select>
+                    <ReactSelectFormik
+                      options={createAlertSelectOptionsReactSelect(
+                        userAlerts ?? []
+                      )}
+                      placeholder={"Select Alert"}
+                      field={field}
+                      form={form}
+                    />
                     <FormErrorMessage>{form.errors.alert_id}</FormErrorMessage>
                   </FormControl>
                 )}

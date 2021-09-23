@@ -50,7 +50,7 @@ export function OverviewPage(props: OverviewPageProps) {
     setDeleteMonitor({ name: name, monitorId: id });
 
   return (
-    <Box>
+    <Box mt=".5em">
       {MonitorDeleteDialog({
         isOpen: deleteMonitor.monitorId !== undefined,
         name: deleteMonitor.name as string,

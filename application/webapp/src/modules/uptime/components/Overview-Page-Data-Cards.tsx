@@ -51,6 +51,8 @@ export function OverviewPageDataCards(props: OverviePageDataCardsProps) {
   const { statuses, isLoading, isError } = use24HourMonitorStatuses([
     monitorId,
   ]);
+
+  // divider orientation is not responsive so we will have to use this hack to hide/show the vertical when necessary
   const verticalDividerHidden = useBreakpointValue({ base: true, sm: false });
 
   let perc90, perc95, uptime;
