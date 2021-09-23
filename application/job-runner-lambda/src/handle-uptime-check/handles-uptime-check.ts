@@ -55,6 +55,7 @@ const convertDdbItemsToUptimeMonitorJobs = (
     if (checkUnmarshalledItemIsMonitorJob(unmarshalled)) {
       const job: UptimeMonitorJob = {
         monitor_id: unmarshalled.monitor_id,
+        owner_id: unmarshalled.owner_id,
         url: unmarshalled.url,
         name: unmarshalled.name,
         region: unmarshalled.region,

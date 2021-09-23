@@ -10,6 +10,7 @@ export const getJobs = (event: any): UptimeMonitorJob[] => {
   event.jobs.forEach((job: any) => {
     if (
       job.monitor_id &&
+      job.owner_id &&
       job.url &&
       job.name &&
       job.region &&

@@ -1,11 +1,11 @@
+import AbortController from "abort-controller";
+import request from "request";
 import {
   SupportedRegion,
   UptimeMonitorJob,
   UptimeMonitorStatus,
   UptimeMonitorWebhookNotification,
 } from "types";
-import request from "request";
-import AbortController from "abort-controller";
 import { writeStatusToDB } from "./status-db";
 
 const controller = new AbortController();
@@ -106,7 +106,7 @@ const buildWebhook = (
 };
 
 export const runJob = async (job: UptimeMonitorJob) => {
-  const { name, url, retries, region, webhook_url, monitor_id } = job;
+  const { name, url, retries, region, webhook_url, monitor_id, owner_id } = job;
 
   const latencies: number[] = [];
 

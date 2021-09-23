@@ -24,6 +24,7 @@ export interface UptimeMonitor extends CoreUptimeMonitor {
 
 export interface UptimeMonitorJob {
   monitor_id: string;
+  owner_id: string;
   url: string;
   name: string;
   region: SupportedRegion;

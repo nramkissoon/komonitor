@@ -71,6 +71,7 @@ export function OverviewPage(props: OverviewPageProps) {
       <Tabs>
         <TabList mb="1em">
           <Tab>Overview</Tab>
+          <Tab>Statuses</Tab>
           <Tab>Alerts</Tab>
         </TabList>
         <TabPanels>
