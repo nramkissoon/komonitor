@@ -100,5 +100,33 @@ export async function getServicePlanProductIdForUser(
 export async function setServicePlanProductIdForUser(
   ddbClient: DynamoDBClient,
   userTableName: string,
-  userId: string
-) {}
+  userId: string,
+  servicePlanProductId: string
+) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: userTableName,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      ExpressionAttributeValues: {
+        ":p": { S: servicePlanProductId },
+      },
+      UpdateExpression: "SET product_id = :p",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    // TODO log
+    throw err;
+  }
+}

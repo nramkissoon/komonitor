@@ -23,11 +23,14 @@ interface OverviewPageGraphProps {
 
 interface LineGraphProps {
   data: Serie;
+
+  // min and max latencies are used to define graph axis limits
   minLatency: number | null;
   maxLatency: number | null;
-  colorMode: string;
+  colorMode: string; // dark or light
 }
 
+// use the chakra theme to style graph based on already defined colors
 function graphTheme(dark: boolean): Theme {
   const chakraTheme = theme;
 
@@ -78,6 +81,7 @@ function graphTheme(dark: boolean): Theme {
   };
 }
 
+// reduces an array to a desired length by removing elements evenly
 function reduceArrayLength(array: any[], desiredLength: number) {
   if (desiredLength >= array.length / 2 + 1) return array;
   let factor = Math.floor(array.length / desiredLength) + 1;
@@ -105,6 +109,7 @@ function buildGraphSerie(statuses: UptimeMonitorStatus[], monitorId: string) {
   return serie;
 }
 
+// Tooltip that is displayed whenever point on graph is hovered over
 function LineGraphTooltip(x: DatumValue, y: DatumValue) {
   const yRounded = (y as number).toFixed(2);
   return (
@@ -121,7 +126,7 @@ function LineGraphTooltip(x: DatumValue, y: DatumValue) {
 
       {yRounded === "-1.00" ? (
         <Text fontWeight="semibold" textColor="red.500">
-          Down Status
+          No Response - Down Status
         </Text>
       ) : (
         <Text fontWeight="semibold">
@@ -201,6 +206,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
 
   const { colorMode } = useColorMode();
 
+  // memos for graph attributes
   const serie = React.useMemo(
     () => (statuses ? buildGraphSerie(statuses[monitorId], monitorId) : null),
     [monitorId, statuses]
