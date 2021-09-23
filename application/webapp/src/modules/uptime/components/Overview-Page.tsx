@@ -13,6 +13,7 @@ import { useSWRConfig } from "swr";
 import { UptimeMonitor } from "types";
 import { use24HourMonitorStatuses } from "../client";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
+import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraph } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
 
@@ -76,6 +77,7 @@ export function OverviewPage(props: OverviewPageProps) {
         </TabList>
         <TabPanels>
           <TabPanel p="0">
+            <OverviewPageDataCards monitorId={monitor_id} />
             <OverviewPageGraph monitorId={monitor_id} />
           </TabPanel>
         </TabPanels>

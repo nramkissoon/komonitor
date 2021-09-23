@@ -245,7 +245,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
         bg={useColorModeValue("white", "#0f131a")}
         borderRadius="xl"
         p="1.5em"
-        mb="2em"
+        mb="3em"
         shadow="lg"
       >
         <Heading textAlign="center" fontSize="lg">
@@ -257,6 +257,9 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
           maxLatency={maxLatency}
           colorMode={colorMode}
         />
+        <Text mt=".3em" color="red.400">
+          *Subset of data points are displayed for legibility
+        </Text>
       </Box>
     </ScaleFade>
   );
