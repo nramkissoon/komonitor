@@ -7,7 +7,8 @@ export class DevStackDdbTables extends cdk.Construct {
   public readonly uptimeCheckMonitorTableFrequencyGsiName: string;
   public readonly userTable: dynamodb.Table;
   public readonly alertTable: dynamodb.Table;
-  public readonly alertStatusTable: dynamodb.Table;
+  public readonly alertInvocationTable: dynamodb.Table;
+  public readonly alertInvocationTableTimestampLsiName: string;
 
   constructor(scope: cdk.Construct, id: string, props: {}) {
     super(scope, id);
@@ -63,14 +64,22 @@ export class DevStackDdbTables extends cdk.Construct {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    this.alertStatusTable = new dynamodb.Table(this, "alert_status", {
+    this.alertInvocationTable = new dynamodb.Table(this, "alert_invocation", {
       partitionKey: {
         name: "alert_id",
         type: dynamodb.AttributeType.STRING,
       },
-      sortKey: { name: "timestamp", type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: "monitor_id", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
+    this.alertInvocationTableTimestampLsiName = "timestampLSI";
+
+    this.alertInvocationTable.addLocalSecondaryIndex({
+      indexName: this.alertInvocationTableTimestampLsiName,
+      sortKey: { name: "timestamp", type: dynamodb.AttributeType.NUMBER },
+      projectionType: dynamodb.ProjectionType.ALL,
     });
   }
 }

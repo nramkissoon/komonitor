@@ -3,10 +3,15 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
-    deleteAlert,
-    getAlertsForUser
+  deleteAlert,
+  getAlertsForUser,
+  putAlert,
 } from "../../../src/modules/alerts/alert-db";
+import { createNewAlertFromEditableAlertAttributesWithType } from "../../../src/modules/alerts/utils";
+import { isValidEditableAlertAttributesWithType } from "../../../src/modules/alerts/validation";
+import { getAlertAllowanceFromProductId } from "../../../src/modules/billing/plans";
 import { getMonitorsForUser } from "../../../src/modules/uptime/monitor-db";
+import { getServicePlanProductIdForUser } from "../../../src/modules/user/user-db";
 
 async function getHandler(
   req: NextApiRequest,
@@ -31,7 +36,54 @@ async function createHandler(
   req: NextApiRequest,
   res: NextApiResponse,
   session: Session
-) {}
+) {
+  try {
+    // check if user is allowed to create a new alert
+    const userId = session.uid as string;
+    const productId = await getServicePlanProductIdForUser(
+      ddbClient,
+      env.USER_TABLE_NAME,
+      userId
+    );
+    const allowance = getAlertAllowanceFromProductId(productId);
+    const currentAlertTotal = (
+      await getAlertsForUser(ddbClient, env.ALERT_TABLE_NAME, userId)
+    ).length;
+
+    if (allowance <= currentAlertTotal) {
+      res.status(403);
+      return;
+    }
+
+    // validate the new alert
+    const alert = req.body;
+    if (!alert || !isValidEditableAlertAttributesWithType(alert, productId)) {
+      res.status(400);
+      return;
+    }
+
+    const newAlert = createNewAlertFromEditableAlertAttributesWithType(
+      alert,
+      userId
+    );
+    const created = await putAlert(
+      ddbClient,
+      env.ALERT_TABLE_NAME,
+      newAlert,
+      false
+    );
+    if (created) {
+      res.status(200);
+      return;
+    }
+    res.status(500);
+    return;
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    return;
+  }
+}
 
 async function deleteHandler(
   req: NextApiRequest,
@@ -49,21 +101,21 @@ async function deleteHandler(
     // check if alert is attached to any monitors
     // TODO check for errors in fetching monitors
     const monitors = await getMonitorsForUser(
-        ddbClient,
-        env.UPTIME_MONITOR_TABLE_NAME,
-        userId
-      );
-    const attachedMonitors: string[] = []
+      ddbClient,
+      env.UPTIME_MONITOR_TABLE_NAME,
+      userId
+    );
+    const attachedMonitors: string[] = [];
     for (let monitor of monitors) {
-        if (monitor.alert_id === (alertId as string)) {
-            attachedMonitors.push(monitor.name)
-        }
+      if (monitor.alert_id === (alertId as string)) {
+        attachedMonitors.push(monitor.name);
+      }
     }
 
     if (attachedMonitors.length > 0) {
-        res.status(403)
-        res.json(attachedMonitors)
-        return
+      res.status(403);
+      res.json(attachedMonitors);
+      return;
     }
 
     const deleted = await deleteAlert(
@@ -76,7 +128,6 @@ async function deleteHandler(
   } catch (err) {
     res.status(500);
   }
-  
 }
 
 async function updateHandler(

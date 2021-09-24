@@ -57,7 +57,7 @@ function createAlertEditableAttributesFromFormData(formData: any) {
 export async function createAlert(
   formData: any,
   onSuccess?: () => void,
-  onError?: () => void
+  onError?: (message: string) => void
 ) {
   const alert = createAlertEditableAttributesFromFormData(formData);
   const response = await fetch(apiUrl, {
@@ -70,7 +70,20 @@ export async function createAlert(
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {
-    onError ? onError() : null;
+    let errorMessage;
+    switch (response.status) {
+      case 403:
+        errorMessage =
+          "Alert limit reached. Please consider deleting an existing alert or upgrading your account.";
+        break;
+      case 400:
+        errorMessage = "Invalid alert attributes sent to server.";
+      case 500:
+        errorMessage = "Internal server error. Please try again later.";
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError ? onError(errorMessage) : null;
   }
 }
 
@@ -85,10 +98,10 @@ function createUpdatedAlertFromFormData(formData: any) {
   return alert;
 }
 
-export async function updateLayoutMeasurement(
+export async function updateAlert(
   formData: any,
   onSuccess?: () => void,
-  onError?: () => void
+  onError?: (message: string) => void
 ) {
   const alert = createUpdatedAlertFromFormData(formData);
   const response = await fetch(apiUrl, {
@@ -101,6 +114,18 @@ export async function updateLayoutMeasurement(
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {
-    onError ? onError() : null;
+    let errorMessage;
+    switch (response.status) {
+      case 403:
+        errorMessage = "Alert does not belong to requester.";
+        break;
+      case 400:
+        errorMessage = "Invalid alert attributes sent to server.";
+      case 500:
+        errorMessage = "Internal server error. Please try again later.";
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError ? onError(errorMessage) : null;
   }
 }

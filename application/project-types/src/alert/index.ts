@@ -19,3 +19,10 @@ export interface Alert extends EditableAlertAttributes {
   created_at: number;
   last_updated: number;
 }
+
+export interface AlertInvocation {
+  alert_id: string;
+  timestamp: number;
+  monitor_id: string;
+  recipients: string[];
+}

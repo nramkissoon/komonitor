@@ -7,9 +7,11 @@ import {
   PutItemCommandInput,
   QueryCommand,
   QueryCommandInput,
+  UpdateItemCommand,
+  UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { Alert } from "project-types";
+import { Alert, AlertStatuses } from "project-types";
 
 export async function getAlertsForUser(
   ddbClient: DynamoDBClient,
@@ -121,5 +123,31 @@ export async function setAlertStatus(
   tableName: string,
   userId: string,
   alertId: string,
-  status: string
-) {}
+  status: AlertStatuses
+) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: tableName,
+      ConditionExpression: "attribute_exists(owner_id)", // asserts that the alert exists
+      Key: {
+        owner_id: { S: userId },
+        alert_id: { S: alertId },
+      },
+      ExpressionAttributeValues: {
+        ":status": { S: status },
+      },
+      UpdateExpression: "SET status = :status",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    // TODO log
+    throw err;
+  }
+}
