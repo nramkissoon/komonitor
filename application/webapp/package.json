@@ -34,10 +34,10 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.2.0",
-    "react-select": "^4.3.1",
+    "react-select": "5.0.0",
     "react-table": "^7.7.0",
     "swr": "^1.0.0",
-    "types": "^1.0.0",
+    "project-types": "^1.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -48,7 +48,6 @@
     "@types/nodemailer": "^6.4.4",
     "@types/react": "17.0.19",
     "@types/react-icons": "^3.0.0",
-    "@types/react-select": "^4.0.18",
     "@types/react-table": "^7.7.2",
     "@types/sinon": "^10.0.2",
     "@types/uuid": "^8.3.1",

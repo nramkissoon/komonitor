@@ -1,18 +1,8 @@
-export enum AlertTypes {
-  Email = "Email",
-  Slack = "Slack",
-}
+export type AlertTypes = "Email" | "Slack";
 
-export enum AlertSeverities {
-  Warning = "Warning",
-  Severe = "Severe",
-  Critical = "Critical",
-}
+export type AlertSeverities = "Warning" | "Severe" | "Critical";
 
-export enum AlertStatuses {
-  On = "on",
-  Paused = "paused",
-}
+export type AlertStatuses = "on" | "paused";
 
 export interface EditableAlertAttributes {
   name: string;

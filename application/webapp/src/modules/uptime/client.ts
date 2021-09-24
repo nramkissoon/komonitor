@@ -1,10 +1,10 @@
-import useSWR from "swr";
 import {
   CoreUptimeMonitor,
   UptimeCheckSupportedFrequenciesInMinutes,
   UptimeMonitor,
   UptimeMonitorStatus,
-} from "types";
+} from "project-types";
+import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
 export const monitorApiUrl = env.BASE_URL + "/api/uptime/monitors";

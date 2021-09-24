@@ -1,4 +1,4 @@
-import { UptimeMonitorJob } from "types";
+import { UptimeMonitorJob } from "project-types";
 
 // reads event object for any valid jobs
 export const getJobs = (event: any): UptimeMonitorJob[] => {

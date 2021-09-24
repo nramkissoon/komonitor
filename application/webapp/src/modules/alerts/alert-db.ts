@@ -9,7 +9,7 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { Alert } from "types";
+import { Alert } from "project-types";
 
 export async function getAlertsForUser(
   ddbClient: DynamoDBClient,
@@ -87,7 +87,7 @@ export async function deleteAlert(
 }
 
 // create or update = PUT
-export async function putMonitor(
+export async function putAlert(
   ddbClient: DynamoDBClient,
   tableName: string,
   alert: Alert,
@@ -101,8 +101,8 @@ export async function putMonitor(
         convertEmptyValues: true,
       }),
       ConditionExpression: isUpdate
-        ? "attribute_exists(alert_id)" // ensure a monitor exists that can be updated
-        : "attribute_not_exists(alert_id)", // avoid overwriting preexisting monitors when creating a new monitor
+        ? "attribute_exists(alert_id)" // ensure a alert exists that can be updated
+        : "attribute_not_exists(alert_id)", // avoid overwriting preexisting alerts when creating a new alert
     };
     const response = await ddbClient.send(
       new PutItemCommand(putItemCommandInput)
@@ -115,3 +115,11 @@ export async function putMonitor(
     return false;
   }
 }
+
+export async function setAlertStatus(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  userId: string,
+  alertId: string,
+  status: string
+) {}

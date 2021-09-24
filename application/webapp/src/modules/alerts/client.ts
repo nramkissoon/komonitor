@@ -1,5 +1,10 @@
+import {
+  Alert,
+  AlertSeverities,
+  AlertTypes,
+  EditableAlertAttributes,
+} from "project-types";
 import useSWR from "swr";
-import { Alert } from "types";
 import { env } from "../../common/client-utils";
 
 const apiUrl = env.BASE_URL + "/api/alerts";
@@ -35,7 +40,19 @@ export async function deleteAlert(
   }
 }
 
-function createAlertEditableAttributesFromFormData(formData: any) {}
+function createAlertEditableAttributesFromFormData(formData: any) {
+  const alertEditableAttributesWithType: EditableAlertAttributes & {
+    type: string;
+  } = {
+    name: formData.name,
+    description: formData.description,
+    severity: formData.severity as AlertSeverities,
+    recipients: formData.recipients,
+    status: "on",
+    type: formData.type as AlertTypes,
+  };
+  return alertEditableAttributesWithType;
+}
 
 export async function createAlert(
   formData: any,
@@ -57,7 +74,16 @@ export async function createAlert(
   }
 }
 
-function createUpdatedAlertFromFormData(formData: any) {}
+function createUpdatedAlertFromFormData(formData: any) {
+  const alert = {
+    ...createAlertEditableAttributesFromFormData(formData),
+    owner_id: formData.owner_id,
+    alert_id: formData.alert_id,
+    last_updated: Number.parseInt(formData.last_updated),
+    created_at: Number.parseInt(formData.created_at),
+  } as Alert;
+  return alert;
+}
 
 export async function updateLayoutMeasurement(
   formData: any,

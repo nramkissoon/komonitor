@@ -1,4 +1,8 @@
-import { CoreUptimeMonitor, UptimeMonitor, UptimeMonitorStatus } from "types";
+import {
+  CoreUptimeMonitor,
+  UptimeMonitor,
+  UptimeMonitorStatus,
+} from "project-types";
 import { v4 as uuidv4 } from "uuid";
 
 function createMonitorId() {

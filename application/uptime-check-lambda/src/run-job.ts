@@ -1,11 +1,11 @@
 import AbortController from "abort-controller";
-import request from "request";
 import {
   SupportedRegion,
   UptimeMonitorJob,
   UptimeMonitorStatus,
   UptimeMonitorWebhookNotification,
-} from "types";
+} from "project-types";
+import request from "request";
 import { writeStatusToDB } from "./status-db";
 
 const controller = new AbortController();

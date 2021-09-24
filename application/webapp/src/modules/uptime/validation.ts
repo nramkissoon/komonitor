@@ -1,4 +1,4 @@
-import { CoreUptimeMonitor, UptimeMonitor } from "types";
+import { CoreUptimeMonitor, UptimeMonitor } from "project-types";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
 export function isValidCoreUptimeMonitor(

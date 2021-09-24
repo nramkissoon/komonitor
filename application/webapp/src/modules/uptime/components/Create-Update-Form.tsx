@@ -18,8 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import Router, { useRouter } from "next/router";
+import { Alert, UptimeMonitor } from "project-types";
 import React from "react";
-import { Alert, UptimeMonitor } from "types";
 import { minutesToString } from "../../../common/client-utils";
 import { ReactSelectFormik } from "../../../common/components/React-Select-Formik";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";

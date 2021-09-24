@@ -1,6 +1,6 @@
 import { useColorModeValue, useToken } from "@chakra-ui/react";
 import { FieldInputProps, FormikFormProps } from "formik";
-import Select, { OptionTypeBase } from "react-select";
+import Select from "react-select";
 
 interface ReactSelectFormikProps {
   options: { value: string; label: string; isDisabled: boolean }[];
@@ -75,13 +75,19 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
       options={options}
       name={field.name}
       value={
-        (options
-          ? options.find((option) => option.value === field.value)
-          : "") as OptionTypeBase
+        options ? options.find((option) => option.value === field.value) : ""
       }
       onChange={(option: any) => form.setFieldValue(field.name, option.value)}
       onBlur={field.onBlur}
-      isOptionDisabled={(option) => option.isDisabled}
+      isOptionDisabled={(
+        option:
+          | string
+          | {
+              value: string;
+              label: string;
+              isDisabled: boolean;
+            }
+      ) => (typeof option === "string" ? false : option.isDisabled)}
     />
   );
 }

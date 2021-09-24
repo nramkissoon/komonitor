@@ -8,7 +8,7 @@ import {
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { User } from "types";
+import { User } from "project-types";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
 export async function getUserById(

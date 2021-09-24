@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { Theme } from "@nivo/core";
 import { Datum, DatumValue, ResponsiveLine, Serie } from "@nivo/line";
+import { UptimeMonitorStatus } from "project-types";
 import React from "react";
-import { UptimeMonitorStatus } from "types";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import theme from "../../../common/components/theme";
 import { use24HourMonitorStatuses } from "../client";

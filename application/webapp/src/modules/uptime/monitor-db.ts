@@ -9,7 +9,7 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { UptimeMonitor } from "types";
+import { UptimeMonitor } from "project-types";
 
 export async function getMonitorsForUser(
   ddbClient: DynamoDBClient,

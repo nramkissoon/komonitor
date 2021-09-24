@@ -16,6 +16,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Pagination from "@choc-ui/paginator";
+import {
+  UptimeMonitor,
+  UptimeMonitorStatus,
+  UptimeMonitorWithStatuses,
+} from "project-types";
 import React, { forwardRef, LegacyRef } from "react";
 import {
   Column,
@@ -25,11 +30,6 @@ import {
   useTable,
 } from "react-table";
 import { useSWRConfig } from "swr";
-import {
-  UptimeMonitor,
-  UptimeMonitorStatus,
-  UptimeMonitorWithStatuses,
-} from "types";
 import { timeAgo } from "../../../common/client-utils";
 import { percentile } from "../../../common/utils";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";

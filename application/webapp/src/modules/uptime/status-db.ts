@@ -4,7 +4,7 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { UptimeMonitorStatus } from "types";
+import { UptimeMonitorStatus } from "project-types";
 import { createMonitorIdToStatusArrayMap } from "./utils";
 
 async function getStatusesForMonitor(

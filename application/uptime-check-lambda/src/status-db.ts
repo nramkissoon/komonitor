@@ -4,7 +4,7 @@ import {
   PutItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-import { UptimeMonitorStatus } from "types";
+import { UptimeMonitorStatus } from "project-types";
 
 export const writeStatusToDB = async (
   status: UptimeMonitorStatus

@@ -8,9 +8,9 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import router from "next/router";
+import { UptimeMonitor } from "project-types";
 import React from "react";
 import { useSWRConfig } from "swr";
-import { UptimeMonitor } from "types";
 import { use24HourMonitorStatuses } from "../client";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
