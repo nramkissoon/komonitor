@@ -15,10 +15,10 @@ import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import theme from "../../../common/components/theme";
-import { use24HourMonitorStatuses } from "../client";
 
 interface OverviewPageGraphProps {
   monitorId: string;
+  statuses: UptimeMonitorStatus[] | undefined;
 }
 
 interface LineGraphProps {
@@ -199,16 +199,13 @@ function LineGraph(props: LineGraphProps) {
 }
 
 export function OverviewPageGraph(props: OverviewPageGraphProps) {
-  const { monitorId } = props;
-  const { statuses, isError, isLoading } = use24HourMonitorStatuses([
-    monitorId,
-  ]);
+  const { monitorId, statuses } = props;
 
   const { colorMode } = useColorMode();
 
   // memos for graph attributes
   const serie = React.useMemo(
-    () => (statuses ? buildGraphSerie(statuses[monitorId], monitorId) : null),
+    () => (statuses ? buildGraphSerie(statuses, monitorId) : null),
     [monitorId, statuses]
   );
   const minLatency = React.useMemo(
@@ -234,12 +231,12 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
     [serie]
   );
 
-  return isLoading && !statuses && serie === null ? (
-    <Fade in={isLoading} delay={0.2}>
+  return !statuses && serie === null ? (
+    <Fade in={!statuses} delay={0.2}>
       {LoadingSpinner()}
     </Fade>
   ) : (
-    <ScaleFade in={!isLoading} initialScale={0.8}>
+    <ScaleFade in={statuses !== undefined} initialScale={0.8}>
       <Box
         h="xl"
         bg={useColorModeValue("white", "#0f131a")}

@@ -26,7 +26,7 @@ export function useUptimeMonitors() {
 // Used for the main uptime page, get status for all user monitors
 export function use24HourMonitorStatuses(monitorIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {
-    const yesterday = new Date().getTime() - 24 * 60 * 60 * 1000;
+    const yesterday = 24 * 60 * 60 * 1000;
     const urlWithParams =
       url +
       "?" +

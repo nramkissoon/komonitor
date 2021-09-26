@@ -11,12 +11,13 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { percentile } from "../../../common/utils";
-import { use24HourMonitorStatuses } from "../client";
 
 interface OverviePageDataCardsProps {
   monitorId: string;
+  statuses: UptimeMonitorStatus[] | undefined;
 }
 
 interface StatWithLoadingProps {
@@ -47,29 +48,26 @@ function StatWithLoading(props: StatWithLoadingProps) {
 }
 
 export function OverviewPageDataCards(props: OverviePageDataCardsProps) {
-  const { monitorId } = props;
-  const { statuses, isLoading, isError } = use24HourMonitorStatuses([
-    monitorId,
-  ]);
+  const { monitorId, statuses } = props;
 
   // divider orientation is not responsive so we will have to use this hack to hide/show the vertical when necessary
   const verticalDividerHidden = useBreakpointValue({ base: true, sm: false });
 
   let perc90, perc95, uptime;
-  if (statuses && !isLoading) {
-    let responseTimes = statuses[monitorId].map((status) => status.latency);
+  if (statuses) {
+    let responseTimes = statuses.map((status) => status.latency);
     perc90 = percentile(responseTimes, 90)?.toFixed(2) + "ms";
     perc95 = percentile(responseTimes, 95)?.toFixed(2) + "ms";
     uptime =
       (
-        (statuses[monitorId].filter((status) => status.status === "up").length /
-          statuses[monitorId].length) *
+        (statuses.filter((status) => status.status === "up").length /
+          statuses.length) *
         100
       ).toFixed(2) + "%";
   }
 
   return (
-    <ScaleFade in={!isLoading} initialScale={0.8}>
+    <ScaleFade in={statuses !== undefined} initialScale={0.8}>
       <Box
         bg={useColorModeValue("white", "#0f131a")}
         shadow="md"

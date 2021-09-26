@@ -6,7 +6,8 @@ export const env = {
   UPTIME_MONITOR_STATUS_TABLE_NAME: process.env
     .UPTIME_MONITOR_STATUS_TABLE_NAME as string,
   ALERT_TABLE_NAME: process.env.ALERT_TABLE_NAME as string,
-  ALERT_STATUS_TABLE_NAME: process.env.ALERT_STATUS_TABLE_NAME as string,
+  ALERT_INVOCATION_TABLE_NAME: process.env
+    .ALERT_INVOCATION_TABLE_NAME as string,
 };
 
 export const ddbClient = new DynamoDBClient({ region: "us-east-1" });

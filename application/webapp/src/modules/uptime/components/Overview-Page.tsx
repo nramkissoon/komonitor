@@ -16,6 +16,7 @@ import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraph } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
+import { StatusTable } from "./Status-Table";
 
 interface OverviewPageProps {
   monitor: UptimeMonitor;
@@ -77,11 +78,24 @@ export function OverviewPage(props: OverviewPageProps) {
         </TabList>
         <TabPanels>
           <TabPanel p="0">
-            <OverviewPageDataCards monitorId={monitor_id} />
-            <OverviewPageGraph monitorId={monitor_id} />
+            <OverviewPageDataCards
+              monitorId={monitor_id}
+              statuses={statuses ? statuses[monitor_id] : undefined}
+            />
+            <OverviewPageGraph
+              monitorId={monitor_id}
+              statuses={statuses ? statuses[monitor_id] : undefined}
+            />
+          </TabPanel>
+          <TabPanel p="0">
+            <StatusTable
+              monitorId={monitor_id}
+              statuses={statuses ? statuses[monitor_id] : undefined}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
     </Box>
   );
 }
+//8======D
