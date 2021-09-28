@@ -32,11 +32,12 @@ export async function getAlertsForUser(
     while (!done) {
       const page = await query.next();
       done = page.done === undefined || page.done;
-      const queryItems = page.value.Items ? page.value.Items : [];
+      const queryItems = page.value?.Items ? page.value.Items : [];
       queryItems.forEach((item) => alerts.push(unmarshall(item) as Alert));
     }
     return alerts;
   } catch (err) {
+    console.log(err);
     return [];
   }
 }

@@ -16,12 +16,12 @@ export function isValidEditableAlertAttributesWithType(
     typeof obj.name === "string" &&
     typeof obj.description === "string" &&
     typeof obj.severity === "string" &&
-    typeof obj.status === "string" &&
+    typeof obj.state === "string" &&
     isValidName(obj.name) &&
     isValidDescription(obj.description) &&
     isValidRecipients(obj.recipients, productId) &&
     isValidSeverity(obj.severity) &&
-    isValidState(obj.recipients) &&
+    isValidState(obj.state) &&
     isValidType(obj.type)
   );
 }

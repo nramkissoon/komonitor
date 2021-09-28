@@ -76,8 +76,21 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
             : !props.isSelected
             ? useColorModeValue("", "")
             : "white",
-          background: props.isSelected ? blue300 : "",
+          background: props.isDisabled
+            ? "transparent"
+            : props.isSelected
+            ? blue300
+            : props.isFocused
+            ? useColorModeValue(blue100, blue800)
+            : "inherit",
           ":hover": {
+            background: props.isDisabled
+              ? "transparent"
+              : props.isSelected
+              ? blue300
+              : useColorModeValue(blue100, blue800),
+          },
+          ":active": {
             background: props.isDisabled
               ? "transparent"
               : props.isSelected
@@ -92,7 +105,10 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
       value={
         options ? options.find((option) => option.value === field.value) : ""
       }
-      onChange={(option: any) => form.setFieldValue(field.name, option.value)}
+      onChange={(option: any) =>
+        form.setFieldValue(field.name, option?.value ?? "")
+      }
+      isClearable
       onBlur={field.onBlur}
       isDisabled={isDisabled}
       isOptionDisabled={(

@@ -6,15 +6,15 @@ import {
   deleteAlert,
   getAlertForUserByAlertId,
   getAlertsForUser,
-  putAlert,
+  putAlert
 } from "../../../src/modules/alerts/alert-db";
 import {
   createNewAlertFromEditableAlertAttributesWithType,
-  createUpdatedAlert,
+  createUpdatedAlert
 } from "../../../src/modules/alerts/utils";
 import {
   isValidAlert,
-  isValidEditableAlertAttributesWithType,
+  isValidEditableAlertAttributesWithType
 } from "../../../src/modules/alerts/validation";
 import { getAlertAllowanceFromProductId } from "../../../src/modules/billing/plans";
 import { getMonitorsForUser } from "../../../src/modules/uptime/monitor-db";
@@ -35,6 +35,7 @@ async function getHandler(
     res.status(200);
     res.json(alerts);
   } catch (err) {
+    console.log(err)
     res.status(500);
   }
 }
