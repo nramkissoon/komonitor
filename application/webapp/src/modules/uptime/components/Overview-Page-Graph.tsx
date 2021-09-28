@@ -100,7 +100,7 @@ function buildGraphSerie(statuses: UptimeMonitorStatus[], monitorId: string) {
     id: monitorId,
     data: statuses.map((status) => {
       const dataPoint: Datum = {
-        x: new Date(status.timestamp).toISOString(),
+        x: new Date(status.timestamp).toUTCString(),
         y: status.latency,
       };
       return dataPoint;
@@ -187,7 +187,7 @@ function LineGraph(props: LineGraphProps) {
           .map((d) => {
             return d.x;
           }),
-        format: (v) => (v as string).slice(11, 19),
+        format: (v) => (v as string).slice(17, -3),
       }}
       enableGridX={false}
       enablePoints={true}

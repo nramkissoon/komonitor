@@ -14,7 +14,7 @@ const Overview: ExtendedNextPage = () => {
     monitors,
     isLoading: monitorsIsLoading,
     isError: monitorsIsError,
-  } = useUptimeMonitors();
+  } = useUptimeMonitors(); // use monitors at the root page because this is the minimum data we need to render children components
 
   const router = useRouter();
   const { monitor_id } = router.query;

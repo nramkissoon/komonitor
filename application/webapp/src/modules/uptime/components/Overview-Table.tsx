@@ -33,11 +33,7 @@ import { useSWRConfig } from "swr";
 import { timeAgo } from "../../../common/client-utils";
 import { percentile } from "../../../common/utils";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
-import {
-  ActionsCell,
-  DescriptionCell,
-  StatusCell,
-} from "./Overview-Table-Cell";
+import { ActionsCell, DescriptionCell, StatusCell } from "./Table-Cell";
 
 interface TableProps {
   statusesMap: { [monitorId: string]: UptimeMonitorStatus[] };

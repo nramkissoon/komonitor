@@ -1,5 +1,6 @@
 import {
   Alert,
+  AlertInvocation,
   AlertSeverities,
   AlertTypes,
   EditableAlertAttributes,
@@ -7,12 +8,13 @@ import {
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
-const apiUrl = env.BASE_URL + "/api/alerts";
+const alertApiUrl = env.BASE_URL + "/api/alerts";
+const invocationApiUrl = env.BASE_URL + "/api/alerts/invocations";
 
 export function useAlerts() {
   const fetcher = (url: string) =>
     fetch(url, { method: "GET" }).then((r) => r.json());
-  const { data, error } = useSWR(apiUrl, fetcher, {
+  const { data, error } = useSWR(alertApiUrl, fetcher, {
     errorRetryInterval: 10000,
   });
 
@@ -23,12 +25,42 @@ export function useAlerts() {
   };
 }
 
+export function use24HourAlertInvocations(alertIds: string[]) {
+  const fetcher = (url: string, ...ids: string[]) => {
+    const yesterday = 24 * 60 * 60 * 1000;
+    const urlWithParams =
+      url +
+      "?" +
+      ids.map((id) => "id=" + id).join("&") +
+      "&since=" +
+      yesterday.toString();
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+
+  const { data, error } = useSWR(
+    alertIds.length > 0 // determines if we should call the API
+      ? [invocationApiUrl, ...alertIds]
+      : null,
+    fetcher,
+    {
+      shouldRetryOnError: true,
+      errorRetryInterval: 10000, // retry in 10 seconds
+    }
+  );
+
+  return {
+    invocations: data as { [alertId: string]: AlertInvocation[] },
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
 export async function deleteAlert(
   alertId: string,
   onSuccess?: () => void,
   onError?: () => void
 ) {
-  const response = await fetch(apiUrl + `?alertId=${alertId}`, {
+  const response = await fetch(alertApiUrl + `?alertId=${alertId}`, {
     method: "DELETE",
   });
   if (response.ok) {
@@ -60,7 +92,7 @@ export async function createAlert(
   onError?: (message: string) => void
 ) {
   const alert = createAlertEditableAttributesFromFormData(formData);
-  const response = await fetch(apiUrl, {
+  const response = await fetch(alertApiUrl, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -104,7 +136,7 @@ export async function updateAlert(
   onError?: (message: string) => void
 ) {
   const alert = createUpdatedAlertFromFormData(formData);
-  const response = await fetch(apiUrl, {
+  const response = await fetch(alertApiUrl, {
     method: "PUT",
     headers: {
       "Content-type": "application/json; charset=UTF-8",

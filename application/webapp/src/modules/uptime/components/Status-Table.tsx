@@ -10,6 +10,7 @@ import {
   Box,
   Fade,
   Flex,
+  Heading,
   ScaleFade,
   Spacer,
   Table,
@@ -33,6 +34,7 @@ import {
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { TablePagination } from "../../../common/components/Table-Pagination";
 import { TableSortColumnUi } from "../../../common/components/Table-Sort-Column-UI";
+import { ResponseTimeCellProps, StatusCell, TimestampCell } from "./Table-Cell";
 
 export interface RowProps {
   status: string;
@@ -50,7 +52,7 @@ function createRowPropsFromMonitorStatus(
   status: UptimeMonitorStatus
 ): RowProps {
   return {
-    status: status.status,
+    status: status.status ?? "No Data",
     responseTime: status.latency,
     timestamp: status.timestamp,
     filterString: [status.status].join(" "),
@@ -98,7 +100,12 @@ export function StatusTable(props: TableProps) {
   const { monitorId, statuses } = props;
 
   const data = React.useMemo(() => {
-    return statuses?.map((status) => createRowPropsFromMonitorStatus(status));
+    return statuses
+      ? statuses
+          .map((status) => createRowPropsFromMonitorStatus(status))
+          .sort()
+          .reverse()
+      : [];
   }, [statuses]);
 
   const tableColumns = React.useMemo(
@@ -107,14 +114,18 @@ export function StatusTable(props: TableProps) {
         Header: "Status",
         id: "status",
         accessor: "status",
+        Cell: (props) => StatusCell({ status: props.cell.value }),
       },
       {
         Header: "Response Time",
         accessor: "responseTime",
+        Cell: (props) =>
+          ResponseTimeCellProps({ responseTime: props.cell.value }),
       },
       {
         Header: "Timestamp",
         accessor: "timestamp",
+        Cell: (props) => TimestampCell({ timestamp: props.cell.value }),
       },
       {
         id: "filter-column",
@@ -142,7 +153,7 @@ export function StatusTable(props: TableProps) {
       data: data ? data : [],
       autoResetSortBy: false,
       autoResetPage: false,
-      initialState: { pageIndex: 0, pageSize: 10 },
+      initialState: { pageIndex: 0, pageSize: 8 },
     },
     useGlobalFilter,
     useSortBy,
@@ -161,6 +172,9 @@ export function StatusTable(props: TableProps) {
       p="1.5em"
       mb="2em"
     >
+      <Heading textAlign="center" size="lg" mb=".7em">
+        Monitor Statuses
+      </Heading>
       {GlobalFilter({ globalFilter, setGlobalFilter })}
       {statuses ? (
         <ScaleFade in={statuses !== undefined} initialScale={0.8}>

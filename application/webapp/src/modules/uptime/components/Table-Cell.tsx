@@ -74,6 +74,24 @@ export function StatusCell(props: StatusCellProps) {
   );
 }
 
+interface ResponseTimeCellProps {
+  responseTime: number;
+}
+
+export function ResponseTimeCellProps(props: ResponseTimeCellProps) {
+  const { responseTime } = props;
+  return responseTime.toFixed(2) + "ms";
+}
+
+interface TimestampCellProps {
+  timestamp: number;
+}
+
+export function TimestampCell(props: TimestampCellProps) {
+  const { timestamp } = props;
+  return <>{new Date(timestamp).toUTCString()}</>;
+}
+
 interface ActionsCellProps {
   cellValues: {
     monitorId: string;

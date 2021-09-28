@@ -8,11 +8,13 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import router from "next/router";
-import { UptimeMonitor } from "project-types";
+import { Alert, UptimeMonitor } from "project-types";
 import React from "react";
 import { useSWRConfig } from "swr";
+import { use24HourAlertInvocations, useAlerts } from "../../alerts/client";
 import { use24HourMonitorStatuses } from "../client";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
+import { MonitorAlertsOverview } from "./Monitor-Alerts-Overview";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraph } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
@@ -24,12 +26,17 @@ interface OverviewPageProps {
 
 export function OverviewPage(props: OverviewPageProps) {
   const { monitor } = props;
-  const { name, url, monitor_id, region } = monitor;
+  const { name, url, monitor_id, region, alert_id } = monitor;
   const {
     statuses,
     isError: statusesIsError,
     isLoading: statusesIsLoading,
   } = use24HourMonitorStatuses([monitor_id as string]);
+  const {
+    alerts,
+    isError: alertsIsError,
+    isLoading: alertsIsLoading,
+  } = useAlerts();
 
   const mostRecentStatus = React.useMemo(() => {
     return statuses && statuses[monitor_id].length > 0
@@ -38,6 +45,20 @@ export function OverviewPage(props: OverviewPageProps) {
         })
       : null;
   }, [statuses]);
+
+  // this will be a list because monitors will eventually have multiple alerts
+  const alertsForMonitor: Alert[] = React.useMemo(() => {
+    return alerts ? alerts.filter((alert) => alert_id === alert.alert_id) : [];
+  }, [alert_id, alerts]);
+
+  // get the invocations for the relevant alerts
+  const {
+    invocations,
+    isError: invocationsIsError,
+    isLoading: invocationsIsLoading,
+  } = use24HourAlertInvocations(
+    alertsForMonitor.map((alert) => alert.alert_id)
+  );
 
   // Setup for delete dialog
   let { mutate } = useSWRConfig();
@@ -91,6 +112,12 @@ export function OverviewPage(props: OverviewPageProps) {
             <StatusTable
               monitorId={monitor_id}
               statuses={statuses ? statuses[monitor_id] : undefined}
+            />
+          </TabPanel>
+          <TabPanel p="0">
+            <MonitorAlertsOverview
+              alerts={alerts}
+              alertInvocations={invocations}
             />
           </TabPanel>
         </TabPanels>

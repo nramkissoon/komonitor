@@ -53,17 +53,6 @@ function getAlertNameFromList(alerts: Alert[] | undefined, id: string) {
   return name;
 }
 
-function createAlertSelectOptions(alerts: Alert[]) {
-  if (!alerts || alerts.length === 0) return <></>;
-  else {
-    return alerts.map((alert) => (
-      <option key={alert.alert_id} value={alert.alert_id}>
-        {alert.name}
-      </option>
-    ));
-  }
-}
-
 // Used to prefill fields with current monitor attributes
 function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   if (!monitor) return undefined;
@@ -157,7 +146,7 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
   const errorToast = useToast();
   const postErrorToast = (message: string) =>
     errorToast({
-      title: "Unable to create monitor.",
+      title: "Unable to perform action",
       description: message,
       status: "error",
       duration: 9000,

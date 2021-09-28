@@ -19,7 +19,6 @@ export function TablePagination(props: TablePaginationProps) {
     goToPage,
     globalFilter,
   } = props;
-
   const Prev = forwardRef((props, ref: LegacyRef<HTMLButtonElement>) => (
     <Button ref={ref} {...props}>
       Prev
