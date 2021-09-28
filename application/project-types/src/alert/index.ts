@@ -2,14 +2,14 @@ export type AlertTypes = "Email" | "Slack";
 
 export type AlertSeverities = "Warning" | "Severe" | "Critical";
 
-export type AlertStatuses = "on" | "paused";
+export type AlertStates = "enabled" | "disabled";
 
 export interface EditableAlertAttributes {
   name: string;
   description: string;
   severity: AlertSeverities;
   recipients: string[];
-  status: AlertStatuses;
+  state: AlertStates;
 }
 
 export interface Alert extends EditableAlertAttributes {

@@ -18,7 +18,7 @@ export function createNewAlertFromEditableAlertAttributesWithType(
     name: alert.name,
     description: alert.description,
     type: alert.type,
-    status: alert.status,
+    state: alert.state,
     severity: alert.severity,
     recipients: alert.recipients,
   };

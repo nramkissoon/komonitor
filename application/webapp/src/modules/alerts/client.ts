@@ -80,7 +80,7 @@ function createAlertEditableAttributesFromFormData(formData: any) {
     description: formData.description,
     severity: formData.severity as AlertSeverities,
     recipients: formData.recipients,
-    status: "on",
+    state: "enabled",
     type: formData.type as AlertTypes,
   };
   return alertEditableAttributesWithType;

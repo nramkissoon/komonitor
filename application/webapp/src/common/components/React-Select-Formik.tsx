@@ -10,20 +10,32 @@ interface ReactSelectFormikProps {
   placeholder: string;
   field: FieldInputProps<string>;
   form: FormikFormProps | any;
+  isDisabled?: boolean;
 }
 
 export function ReactSelectFormik(props: ReactSelectFormikProps) {
-  const { options, placeholder, field, form } = props;
-  const [gray900, gray50, blue100, blue300, gray400, gray600, blue800] =
-    useToken("colors", [
-      "gray.900",
-      "gray.50",
-      "blue.100",
-      "blue.300",
-      "gray.400",
-      "gray.600",
-      "blue.800",
-    ]);
+  const { options, placeholder, field, form, isDisabled } = props;
+  const [
+    gray900,
+    gray50,
+    blue100,
+    blue300,
+    gray400,
+    gray600,
+    blue800,
+    gray500,
+    whiteAlpha400,
+  ] = useToken("colors", [
+    "gray.900",
+    "gray.50",
+    "blue.100",
+    "blue.300",
+    "gray.400",
+    "gray.600",
+    "blue.800",
+    "gray.500",
+    "whiteAlpha.400",
+  ]);
 
   return (
     <Select
@@ -36,7 +48,7 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
         }),
         singleValue: (base, props) => ({
           ...base,
-          color: "inherit",
+          color: props.isDisabled ? whiteAlpha400 : "inherit",
         }),
         menu: (base, props) => ({
           ...base,
@@ -82,6 +94,7 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
       }
       onChange={(option: any) => form.setFieldValue(field.name, option.value)}
       onBlur={field.onBlur}
+      isDisabled={isDisabled}
       isOptionDisabled={(
         option:
           | string

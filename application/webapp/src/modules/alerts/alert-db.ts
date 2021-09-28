@@ -11,7 +11,7 @@ import {
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { Alert, AlertStatuses } from "project-types";
+import { Alert, AlertStates } from "project-types";
 
 export async function getAlertsForUser(
   ddbClient: DynamoDBClient,
@@ -123,7 +123,7 @@ export async function setAlertStatus(
   tableName: string,
   userId: string,
   alertId: string,
-  status: AlertStatuses
+  status: AlertStates
 ) {
   try {
     const updateCommandInput: UpdateItemCommandInput = {

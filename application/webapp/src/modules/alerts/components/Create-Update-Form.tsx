@@ -5,6 +5,7 @@ import {
   Container,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -13,11 +14,15 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
-import { useRouter } from "next/router";
-import { Alert, AlertSeverities } from "project-types";
+import Router, { useRouter } from "next/router";
+import { Alert, AlertSeverities, AlertStates, AlertTypes } from "project-types";
 import React from "react";
-import { MultiSelectTextInput } from "../../../common/components/React-Select-Formik";
+import {
+  MultiSelectTextInput,
+  ReactSelectFormik,
+} from "../../../common/components/React-Select-Formik";
 import { getAlertRecipientLimitFromProductId } from "../../billing/plans";
+import { createAlert, updateAlert } from "../client";
 
 interface CreateUpdateFormProps {
   productId: string;
@@ -29,9 +34,18 @@ type FormikFormProps = FormikProps<{
   description: string;
   severity: string;
   recipients: string[];
-  status: string;
+  state: string;
   type: string;
 }>;
+
+function alertTypeToRecipientHelpString(type: AlertTypes) {
+  switch (type) {
+    case "Email":
+      return "email addresses";
+    case "Slack":
+      return "Slack channel ID's";
+  }
+}
 
 function createSeveritySelectOptions() {
   const severities: AlertSeverities[] = ["Warning", "Severe", "Critical"];
@@ -42,7 +56,19 @@ function createSeveritySelectOptions() {
   }));
 }
 
-function createAlertTypeSelectOptions() {}
+function createAlertTypeSelectOptions() {
+  const types: AlertTypes[] = ["Email"];
+  return types.map((type) => ({ value: type, label: type, isDisabled: false }));
+}
+
+function createAlertStateOptions() {
+  const states: AlertStates[] = ["disabled", "enabled"];
+  return states.map((state) => ({
+    value: state,
+    label: state.charAt(0).toUpperCase() + state.slice(1),
+    isDisabled: false,
+  }));
+}
 
 function validateName(name: string) {
   let error;
@@ -55,7 +81,25 @@ function validateName(name: string) {
   return error;
 }
 
-function validateDescription(description: string) {}
+function validateType(type: string) {
+  if (!type) return "Type is required.";
+}
+
+function validateSeverity(severity: string) {
+  if (!severity) return "Severity is required";
+}
+
+function validateState(state: string) {
+  if (!state) return "State is required";
+}
+
+function validateDescription(description: string) {
+  let error;
+  if (!description) error = "Description is required.";
+  else if (description.length > 300)
+    error = "Description must be 300 characters or less.";
+  return error;
+}
 
 function validateRecipients(recipients: string[]) {
   let error;
@@ -84,9 +128,9 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
   const initialValues = {
     name: currentAlertAttributes?.name ?? "",
     description: currentAlertAttributes?.description ?? "",
-    severity: currentAlertAttributes?.severity ?? "",
+    severity: currentAlertAttributes?.severity ?? "Warning",
     recipients: currentAlertAttributes?.recipients ?? [],
-    status: currentAlertAttributes?.status ?? "on",
+    state: currentAlertAttributes?.state ?? "enabled",
     type: currentAlertAttributes?.type ?? "Email",
   };
 
@@ -117,8 +161,34 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          onSubmit={(values, actions) => {
-            console.log(values);
+          onSubmit={async (values, actions) => {
+            if (createNewAlert) {
+              await createAlert(
+                values,
+                () =>
+                  Router.push({
+                    pathname: "/app/alerts",
+                    query: { newAlertCreated: "true" },
+                  }),
+                postErrorToast
+              );
+            } else {
+              const augmentedValues = {
+                ...currentAlertAttributes,
+                ...values,
+              } as Alert;
+
+              await updateAlert(
+                augmentedValues,
+                () => {
+                  Router.push({
+                    pathname: "app/alerts" + augmentedValues.alert_id,
+                    query: { alertUpdated: "true" },
+                  });
+                },
+                postErrorToast
+              );
+            }
             actions.setSubmitting(false);
           }}
         >
@@ -143,6 +213,63 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                   </FormControl>
                 )}
               </Field>
+              <Field name="type" validate={validateType}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={form.errors.type ? form.touched.type : false}
+                    isRequired
+                    mb="1.5em"
+                    isDisabled={!createNewAlert} // disable when updating alert.
+                  >
+                    <FormLabel htmlFor="name">Alert Type</FormLabel>
+                    <ReactSelectFormik
+                      options={createAlertTypeSelectOptions()}
+                      placeholder="Alert type"
+                      field={field}
+                      form={form}
+                      isDisabled={!createNewAlert}
+                    />
+                    {!createNewAlert && (
+                      <FormHelperText>
+                        Alert types are not editable.
+                      </FormHelperText>
+                    )}
+                    <FormErrorMessage>{form.errors.type}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="severity" validate={validateSeverity}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={
+                      form.errors.severity ? form.touched.severity : false
+                    }
+                    isRequired
+                    mb="1.5em"
+                  >
+                    <FormLabel htmlFor="severity">Severity</FormLabel>
+                    <ReactSelectFormik
+                      options={createSeveritySelectOptions()}
+                      placeholder="Alert severity"
+                      field={field}
+                      form={form}
+                    />
+                    <FormErrorMessage>{form.errors.type}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
               <Field name="description" validate={validateDescription}>
                 {({
                   field,
@@ -158,14 +285,17 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                     isRequired
                     mb="1.5em"
                   >
-                    <FormLabel htmlFor="description">
-                      Alert Description
-                    </FormLabel>
+                    <FormLabel htmlFor="description">Description</FormLabel>
                     <Textarea
                       {...field}
                       id="description"
                       placeholder="Alert Description"
                     />
+                    <FormHelperText>
+                      Descriptions appear in the alert when they are sent. You
+                      should put useful information about the alert and/or
+                      incident action items here.
+                    </FormHelperText>
                     <FormErrorMessage>
                       {form.errors.description}
                     </FormErrorMessage>
@@ -191,7 +321,7 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                     isRequired
                     mb="1.5em"
                   >
-                    <FormLabel htmlFor="recipients">Alert Recipients</FormLabel>
+                    <FormLabel htmlFor="recipients">Recipients</FormLabel>
                     <MultiSelectTextInput
                       placeholder="Recipients"
                       field={field}
@@ -202,9 +332,53 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                       )}
                       postErrorToast={postErrorToast}
                     />
+                    <FormHelperText>
+                      Recipients should be{" "}
+                      {alertTypeToRecipientHelpString(
+                        form.values.type as AlertTypes
+                      )}
+                      .
+                    </FormHelperText>
                     <FormErrorMessage>
                       {form.errors.recipients}
                     </FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="state" validate={validateState}>
+                {({
+                  field,
+                  form,
+                }: {
+                  field: FieldInputProps<string>;
+                  form: FormikFormProps;
+                }) => (
+                  <FormControl
+                    isInvalid={form.errors.state ? form.touched.state : false}
+                    isRequired
+                    mb="1.5em"
+                    isDisabled={createNewAlert}
+                  >
+                    <FormLabel htmlFor="state">State</FormLabel>
+                    <ReactSelectFormik
+                      options={createAlertStateOptions()}
+                      placeholder="Alert state"
+                      field={field}
+                      form={form}
+                      isDisabled={createNewAlert}
+                    />
+                    {createNewAlert && (
+                      <FormHelperText>
+                        Alert state is set to default "enabled" on creation.
+                      </FormHelperText>
+                    )}
+                    {!createNewAlert && form.values.state === "disabled" && (
+                      <FormHelperText textColor="yellow.500">
+                        Disabled alerts will not send messaged to any
+                        recipients.
+                      </FormHelperText>
+                    )}
+                    <FormErrorMessage>{form.errors.state}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
