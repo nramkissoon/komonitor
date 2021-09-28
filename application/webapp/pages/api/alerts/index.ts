@@ -4,11 +4,18 @@ import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
   deleteAlert,
+  getAlertForUserByAlertId,
   getAlertsForUser,
   putAlert,
 } from "../../../src/modules/alerts/alert-db";
-import { createNewAlertFromEditableAlertAttributesWithType } from "../../../src/modules/alerts/utils";
-import { isValidEditableAlertAttributesWithType } from "../../../src/modules/alerts/validation";
+import {
+  createNewAlertFromEditableAlertAttributesWithType,
+  createUpdatedAlert,
+} from "../../../src/modules/alerts/utils";
+import {
+  isValidAlert,
+  isValidEditableAlertAttributesWithType,
+} from "../../../src/modules/alerts/validation";
 import { getAlertAllowanceFromProductId } from "../../../src/modules/billing/plans";
 import { getMonitorsForUser } from "../../../src/modules/uptime/monitor-db";
 import { getServicePlanProductIdForUser } from "../../../src/modules/user/user-db";
@@ -120,7 +127,7 @@ async function deleteHandler(
 
     const deleted = await deleteAlert(
       ddbClient,
-      env.UPTIME_MONITOR_TABLE_NAME,
+      env.ALERT_TABLE_NAME,
       alertId as string,
       userId
     );
@@ -134,7 +141,56 @@ async function updateHandler(
   req: NextApiRequest,
   res: NextApiResponse,
   session: Session
-) {}
+) {
+  try {
+    const userId = session.uid as string;
+    const productId = await getServicePlanProductIdForUser(
+      ddbClient,
+      env.USER_TABLE_NAME,
+      userId
+    );
+    const alert = req.body;
+    if (!alert || !isValidAlert(alert, productId)) {
+      res.status(400);
+      return;
+    }
+
+    // verify that the alert id belongs to the user before updating
+    const alertExistsForUser = await getAlertForUserByAlertId(
+      ddbClient,
+      env.ALERT_TABLE_NAME,
+      userId,
+      alert.alert_id
+    );
+    // check created_at and owner_id as a extra check against tampering with the request
+    if (
+      alertExistsForUser === null ||
+      alertExistsForUser?.created_at !== alert.created_at ||
+      alertExistsForUser.alert_id !== alert.alert_id
+    ) {
+      res.status(403);
+      return;
+    }
+
+    const updatedAlert = createUpdatedAlert(alert);
+    const updated = await putAlert(
+      ddbClient,
+      env.ALERT_TABLE_NAME,
+      updatedAlert,
+      true
+    );
+    if (updated) {
+      res.status(200);
+      return;
+    }
+    res.status(500);
+    return;
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    return;
+  }
+}
 
 export default async function handler(
   req: NextApiRequest,

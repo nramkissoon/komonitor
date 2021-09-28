@@ -27,7 +27,6 @@ export function isValidUptimeMonitor(
 ): obj is UptimeMonitor {
   return (
     typeof obj.owner_id === "string" &&
-    typeof obj.name === "string" &&
     typeof obj.created_at === "number" &&
     typeof obj.last_updated === "number" &&
     isValidCoreUptimeMonitor(obj, product_id)

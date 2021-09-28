@@ -23,3 +23,9 @@ export function createNewAlertFromEditableAlertAttributesWithType(
     recipients: alert.recipients,
   };
 }
+
+export function createUpdatedAlert(alert: Alert) {
+  const updatedAlert: Alert = { ...alert };
+  updatedAlert.last_updated = new Date().getTime();
+  return updatedAlert;
+}
