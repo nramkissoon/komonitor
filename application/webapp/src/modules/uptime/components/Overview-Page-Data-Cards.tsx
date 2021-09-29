@@ -54,7 +54,7 @@ export function OverviewPageDataCards(props: OverviePageDataCardsProps) {
   const verticalDividerHidden = useBreakpointValue({ base: true, sm: false });
 
   let perc90, perc95, uptime;
-  if (statuses) {
+  if (statuses && statuses.length !== 0) {
     let responseTimes = statuses.map((status) => status.latency);
     perc90 = percentile(responseTimes, 90)?.toFixed(2) + "ms";
     perc95 = percentile(responseTimes, 95)?.toFixed(2) + "ms";
@@ -64,6 +64,10 @@ export function OverviewPageDataCards(props: OverviePageDataCardsProps) {
           statuses.length) *
         100
       ).toFixed(2) + "%";
+  } else {
+    perc90 = "No Data";
+    perc95 = "No Data";
+    uptime = "No Data";
   }
 
   return (

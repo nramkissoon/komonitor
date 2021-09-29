@@ -9,7 +9,6 @@ interface MonitorAlertsOverviewProps {
 
 export function MonitorAlertsOverview(props: MonitorAlertsOverviewProps) {
   const { alerts, alertInvocations } = props;
-
   return alerts === undefined || alerts.length === 0 ? (
     <Box mt="2em">
       <ChakraAlert status="warning" variant="left-accent">

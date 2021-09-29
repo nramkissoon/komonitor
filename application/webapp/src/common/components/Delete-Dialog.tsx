@@ -12,8 +12,11 @@ import { useSWRConfig } from "swr";
 
 export function useDeleteDialog() {
   const { mutate } = useSWRConfig();
-  let [deleteItem, setDeleteItem] = React.useState({} as any);
-  const onCloseDeleteDialog = () => setDeleteItem({} as any);
+  let [deleteItem, setDeleteItem] = React.useState(
+    {} as { name: string; id: string }
+  );
+  const onCloseDeleteDialog = () =>
+    setDeleteItem({} as { name: string; id: string });
   const cancelRef = React.useRef(true);
   const openDeleteDialog = (item: { name: string; id: string }) =>
     setDeleteItem(item);
@@ -38,6 +41,7 @@ interface DeleteDialogProps {
   mutateApiUrl: string;
   deleteApiFunc: any;
   itemType: string;
+  onSuccess?: Function;
 }
 
 export function DeleteDialog(props: DeleteDialogProps) {
@@ -51,6 +55,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
     mutateApiUrl,
     deleteApiFunc,
     itemType,
+    onSuccess,
   } = props;
 
   return (
@@ -85,7 +90,10 @@ export function DeleteDialog(props: DeleteDialogProps) {
             bgColor="red.500"
             fontWeight="normal"
             onClick={async () => {
-              const deleted = await deleteApiFunc(itemId);
+              const deleted = await deleteApiFunc(
+                itemId,
+                onSuccess ?? undefined
+              );
               if (deleted) mutate(mutateApiUrl);
               onClose();
             }}

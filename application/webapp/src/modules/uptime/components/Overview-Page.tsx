@@ -8,12 +8,14 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import router from "next/router";
-import { Alert, UptimeMonitor } from "project-types";
+import { Alert, AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
-import { useSWRConfig } from "swr";
+import {
+  DeleteDialog,
+  useDeleteDialog,
+} from "../../../common/components/Delete-Dialog";
 import { use24HourAlertInvocations, useAlerts } from "../../alerts/client";
-import { use24HourMonitorStatuses } from "../client";
-import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
+import { deleteMonitor, use24HourMonitorStatuses } from "../client";
 import { MonitorAlertsOverview } from "./Monitor-Alerts-Overview";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraph } from "./Overview-Page-Graph";
@@ -60,26 +62,38 @@ export function OverviewPage(props: OverviewPageProps) {
     alertsForMonitor.map((alert) => alert.alert_id)
   );
 
+  // filter out the invocations not related to this specific monitor
+  let invocationsForMonitor: { [alertId: string]: AlertInvocation[] } = {};
+  for (let id of Object.keys(invocations ?? {})) {
+    let filteredInvocations: AlertInvocation[] = invocations[id].filter(
+      (invocation) => invocation.monitor_id === monitor_id
+    );
+    invocationsForMonitor[id] = filteredInvocations;
+  }
+
   // Setup for delete dialog
-  let { mutate } = useSWRConfig();
-  let [deleteMonitor, setDeleteMonitor] = React.useState({} as any);
-  const onCloseDeleteDialog = () => {
-    setDeleteMonitor({});
-    router.push("/app/uptime/?monitorDeleted=true");
-  };
-  const cancelRef = React.useRef(true);
-  const openDeleteDialog = (name: string, id: string) =>
-    setDeleteMonitor({ name: name, monitorId: id });
+  let {
+    mutate,
+    deleteItem,
+    setDeleteItem,
+    onCloseDeleteDialog,
+    openDeleteDialog,
+    cancelRef,
+  } = useDeleteDialog();
 
   return (
     <Box mt=".5em">
-      {MonitorDeleteDialog({
-        isOpen: deleteMonitor.monitorId !== undefined,
-        name: deleteMonitor.name as string,
-        monitorId: deleteMonitor.monitorId as string,
+      {DeleteDialog({
+        isOpen: deleteItem.id !== undefined,
+        itemName: deleteItem.name,
+        itemId: deleteItem.id,
         onClose: onCloseDeleteDialog,
         leastDestructiveRef: cancelRef,
         mutate: mutate,
+        mutateApiUrl: "/api/uptime/monitors",
+        deleteApiFunc: deleteMonitor,
+        itemType: "monitor",
+        onSuccess: () => router.push("/app/uptime"),
       })}
       <OverviewPageHeader
         monitorName={name}
@@ -116,7 +130,7 @@ export function OverviewPage(props: OverviewPageProps) {
           </TabPanel>
           <TabPanel p="0">
             <MonitorAlertsOverview
-              alerts={alerts}
+              alerts={alertsForMonitor}
               alertInvocations={invocations}
             />
           </TabPanel>

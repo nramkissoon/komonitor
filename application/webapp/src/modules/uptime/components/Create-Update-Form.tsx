@@ -20,6 +20,7 @@ import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import Router, { useRouter } from "next/router";
 import { Alert, UptimeMonitor } from "project-types";
 import React from "react";
+import { useSWRConfig } from "swr";
 import { minutesToString } from "../../../common/client-utils";
 import { ReactSelectFormik } from "../../../common/components/React-Select-Formik";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
@@ -41,17 +42,6 @@ type FormikFormProps = FormikProps<{
   webhook_url?: string;
   alert_id?: string;
 }>;
-
-function getAlertNameFromList(alerts: Alert[] | undefined, id: string) {
-  if (!alerts) return "";
-  let name = "";
-  for (let alert of alerts) {
-    if (alert.alert_id === id) {
-      name = alert.name;
-    }
-  }
-  return name;
-}
 
 // Used to prefill fields with current monitor attributes
 function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
@@ -128,8 +118,12 @@ function validateRetries(retries: string) {
 }
 function validateFailuresBeforeAlert(failures: string) {
   let error;
+  if (failures === "") return;
   let failuresAsNum = Number.parseInt(failures);
-  if (!(failuresAsNum >= 1 && failuresAsNum <= 5) && failuresAsNum)
+  if (
+    !(failuresAsNum >= 1 && failuresAsNum <= 5) &&
+    failuresAsNum !== undefined
+  )
     error = "Number of failures must be between 1 and 5 inclusive.";
   return error;
 }
@@ -142,6 +136,7 @@ function validateWebhookUrl(webhookUrl: string) {
 function validateAlertId() {}
 
 export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
+  const { mutate } = useSWRConfig();
   const router = useRouter();
   const errorToast = useToast();
   const postErrorToast = (message: string) =>
@@ -184,7 +179,7 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
       ? currentMonitorAttributes.webhook_url
       : "",
     alert: currentMonitorAttributes?.alert_id
-      ? getAlertNameFromList(userAlerts, currentMonitorAttributes.alert_id)
+      ? currentMonitorAttributes.alert_id
       : "",
   };
 
@@ -245,6 +240,7 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                 postErrorToast
               );
             }
+            mutate("/api/uptime/monitors", null, true);
             actions.setSubmitting(false);
           }}
         >
@@ -437,6 +433,11 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                       form.errors.alert_id ? form.touched.alert_id : false
                     }
                     mb="1.5em"
+                    onChange={() => {
+                      !props.values.alert
+                        ? form.setFieldValue("failures_before_alert", "")
+                        : null;
+                    }}
                   >
                     <FormLabel htmlFor="alert">Alert</FormLabel>
                     <ReactSelectFormik
@@ -488,12 +489,12 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                       step={1}
                       max={5}
                       clampValueOnBlur={false}
-                      value={field.value}
+                      value={props.values.alert ? field.value : ""}
                     >
                       <NumberInputField
                         {...field}
                         placeholder="Failure amount"
-                        value={field.value}
+                        value={props.values.alert ? field.value : ""}
                       />
                     </NumberInput>
                     <FormErrorMessage>

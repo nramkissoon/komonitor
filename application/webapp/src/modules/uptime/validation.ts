@@ -58,7 +58,7 @@ export function isValidWebhookUrl(product_id: string, url?: string) {
 }
 
 export function isValidFailuresBeforeAlert(failures?: number) {
-  if (!failures) return true;
+  if (!failures && failures !== 0) return true;
   return failures >= 1 && failures <= 5;
 }
 

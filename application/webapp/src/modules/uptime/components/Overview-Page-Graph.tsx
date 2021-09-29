@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   chakra,
   Fade,
   Heading,
@@ -210,7 +211,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
   );
   const minLatency = React.useMemo(
     () =>
-      serie !== null
+      serie !== null && serie.data.length !== 0
         ? (serie.data.reduce((prev, current) => {
             return (prev.y as DatumValue) < (current.y as DatumValue)
               ? prev
@@ -221,7 +222,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
   );
   const maxLatency = React.useMemo(
     () =>
-      serie !== null
+      serie !== null && serie.data.length !== 0
         ? (serie.data.reduce((prev, current) => {
             return (prev.y as DatumValue) >= (current.y as DatumValue)
               ? prev
@@ -248,15 +249,23 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
         <Heading textAlign="center" fontSize="lg">
           Response Time (Past 24 Hours)
         </Heading>
-        <LineGraph
-          data={serie as Serie}
-          minLatency={minLatency}
-          maxLatency={maxLatency}
-          colorMode={colorMode}
-        />
-        <Text mt=".3em" color="red.400">
-          *Subset of data points are displayed for legibility
-        </Text>
+        {serie?.data.length === 0 ? (
+          <Center mt="3em">
+            <Heading>No Data</Heading>
+          </Center>
+        ) : (
+          <>
+            <LineGraph
+              data={serie as Serie}
+              minLatency={minLatency}
+              maxLatency={maxLatency}
+              colorMode={colorMode}
+            />
+            <Text mt=".3em" color="red.400">
+              *Subset of data points are displayed for legibility
+            </Text>
+          </>
+        )}
       </Box>
     </ScaleFade>
   );

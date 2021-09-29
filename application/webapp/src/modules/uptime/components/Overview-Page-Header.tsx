@@ -41,7 +41,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
     openDeleteDialog,
     monitorRegion,
   } = props;
-  let color = "yellow";
+  let color = "gray";
   if (currentStatus === "up") color = "green";
   if (currentStatus === "down") color = "red";
   const now = Date.now();
@@ -64,12 +64,15 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
             px=".6em"
             borderRadius="md"
           >
-            {currentStatus ? currentStatus : "N/A"}
+            {currentStatus ? currentStatus : "No Data"}
           </Badge>
           <Text py=".1em" px=".6em">
-            Last checked{" "}
-            {lastChecked ? timeAgo.format(now - (now - lastChecked)) : "N/A"}{" "}
-            from {monitorRegion}
+            {lastChecked
+              ? "Last checked " +
+                timeAgo.format(now - (now - lastChecked)) +
+                "from " +
+                monitorRegion
+              : ""}
           </Text>
         </Flex>
       </Box>
@@ -116,7 +119,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
           }}
           fontWeight="normal"
           onClick={() => {
-            openDeleteDialog(monitorName, monitorId);
+            openDeleteDialog({ name: monitorName, id: monitorId });
           }}
         >
           Delete

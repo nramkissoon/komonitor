@@ -1,4 +1,4 @@
-import { Fade, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
+import { Fade, Flex, Heading, Spacer } from "@chakra-ui/react";
 import React from "react";
 import { AppHeader } from "../../../src/common/components/App-Header";
 import { PageContainer } from "../../../src/common/components/Page-Container";
@@ -22,11 +22,8 @@ const Alert: ExtendedNextPage = () => {
       <PageContainer mt=".5em">
         <Fade in={true}>
           <Flex mb="1.8em">
-            <Heading size="lg" fontWeight="normal">
-              Alerts{" "}
-              <Text fontSize="sm" color="gray.500">
-                (Last 24 hours)
-              </Text>
+            <Heading size="lg" fontWeight="normal" m="auto">
+              Alerts
             </Heading>
             <Spacer />
             <CreateButton />
