@@ -70,7 +70,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
             {lastChecked
               ? "Last checked " +
                 timeAgo.format(now - (now - lastChecked)) +
-                "from " +
+                " from " +
                 monitorRegion
               : ""}
           </Text>

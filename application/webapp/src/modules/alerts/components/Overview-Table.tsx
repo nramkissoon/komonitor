@@ -95,6 +95,7 @@ export function OverviewTable(props: OverViewTableProps) {
           rowPropsGeneratorFunction: rowPropsGeneratorFunction,
         },
         columns: columns,
+        itemType: "Alerts",
       })}
     </>
   );

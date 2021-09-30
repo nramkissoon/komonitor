@@ -1,6 +1,7 @@
 import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
+  BoxProps,
   Fade,
   Flex,
   Input,
@@ -33,6 +34,7 @@ import { TableSortColumnUi } from "./Table-Sort-Column-UI";
 function GlobalFilter(props: {
   globalFilter: any;
   setGlobalFilter: (filterValue: any) => void;
+  itemType: string;
 }) {
   const [value, setValue] = React.useState(props.globalFilter);
   const onChange = useAsyncDebounce((value) => {
@@ -60,7 +62,7 @@ function GlobalFilter(props: {
           setValue(e.target.value);
           onChange(e.target.value);
         }}
-        placeholder="Search Monitor Statuses..."
+        placeholder={"Search " + props.itemType + "..."}
         {...styles}
       />
     </InputGroup>
@@ -74,10 +76,12 @@ interface OverviewTableProps {
     rowPropsGeneratorFunction: (...args: any[]) => any;
   };
   columns: Column[];
+  itemType: string;
+  containerBoxProps?: BoxProps;
 }
 
 export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
-  const { data, columns } = props;
+  const { data, columns, itemType, containerBoxProps } = props;
 
   const rows: RowProps[] = React.useMemo(
     () => data.rowPropsGeneratorFunction(...data.dependencies),
@@ -121,8 +125,9 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
       borderRadius="xl"
       p="1.5em"
       mb="2em"
+      {...containerBoxProps}
     >
-      {GlobalFilter({ globalFilter, setGlobalFilter })}
+      {GlobalFilter({ globalFilter, setGlobalFilter, itemType })}
       {!data.dependenciesIsLoading ? (
         <Fade in={!data.dependenciesIsLoading}>
           <Box

@@ -131,7 +131,7 @@ export function OverviewPage(props: OverviewPageProps) {
           <TabPanel p="0">
             <MonitorAlertsOverview
               alerts={alertsForMonitor}
-              alertInvocations={invocations}
+              alertInvocations={invocationsForMonitor}
             />
           </TabPanel>
         </TabPanels>

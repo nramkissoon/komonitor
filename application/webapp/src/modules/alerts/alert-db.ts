@@ -119,12 +119,12 @@ export async function putAlert(
   }
 }
 
-export async function setAlertStatus(
+export async function setAlertState(
   ddbClient: DynamoDBClient,
   tableName: string,
   userId: string,
   alertId: string,
-  status: AlertStates
+  state: AlertStates
 ) {
   try {
     const updateCommandInput: UpdateItemCommandInput = {
@@ -135,9 +135,9 @@ export async function setAlertStatus(
         alert_id: { S: alertId },
       },
       ExpressionAttributeValues: {
-        ":status": { S: status },
+        ":state": { S: state },
       },
-      UpdateExpression: "SET status = :status",
+      UpdateExpression: "SET state = :state",
     };
     const response = await ddbClient.send(
       new UpdateItemCommand(updateCommandInput)
