@@ -8,15 +8,13 @@ import {
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
-const alertApiUrl = env.BASE_URL + "/api/alerts";
-const invocationApiUrl = env.BASE_URL + "/api/alerts/invocations";
+export const alertApiUrl = env.BASE_URL + "/api/alerts";
+export const invocationApiUrl = env.BASE_URL + "/api/alerts/invocations";
 
 export function useAlerts() {
   const fetcher = (url: string) =>
     fetch(url, { method: "GET" }).then((r) => r.json());
-  const { data, error } = useSWR(alertApiUrl, fetcher, {
-    errorRetryInterval: 10000,
-  });
+  const { data, error } = useSWR(alertApiUrl, fetcher);
 
   return {
     alerts: data as Alert[],

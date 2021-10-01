@@ -2,6 +2,7 @@ import { Alert, AlertInvocation } from "project-types";
 import { Column } from "react-table";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import {
+  AlertRecipientsCell,
   AlertSeverityCell,
   SimpleTimestampCell,
 } from "../../../common/components/Table-Cell";
@@ -56,7 +57,7 @@ export function InvocationTable(props: InvocationTableProps) {
       Header: "Recipients",
       disableSortBy: true,
       accessor: "recipients",
-      Cell: () => {},
+      Cell: (props) => AlertRecipientsCell({ recipients: props.cell.value }),
     },
   ];
 

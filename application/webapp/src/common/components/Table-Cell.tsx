@@ -109,11 +109,12 @@ export function AlertSeverityCell(props: AlertSeverityCellProps) {
     <Badge
       variant="subtle"
       colorScheme={colorScheme}
-      fontSize="lg"
+      fontSize="md"
       fontWeight="normal"
       py=".5em"
       px=".8em"
       borderRadius="lg"
+      letterSpacing="wider"
     >
       {severity}
     </Badge>
@@ -127,5 +128,11 @@ interface AlertRecipientsCellProps {
 export function AlertRecipientsCell(props: AlertRecipientsCellProps) {
   const { recipients } = props;
 
-  return <Box>{recipients.map((recip) => <Text>{ recip }</Text>) }</Box>
+  return (
+    <Box>
+      {recipients.map((recip) => (
+        <Text>{recip}</Text>
+      ))}
+    </Box>
+  );
 }

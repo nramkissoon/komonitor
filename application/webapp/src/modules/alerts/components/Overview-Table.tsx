@@ -5,13 +5,20 @@ import {
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
-import { ActionsCell } from "../../../common/components/Table-Cell";
-import { deleteAlert } from "../client";
+import {
+  ActionsCell,
+  AlertSeverityCell,
+} from "../../../common/components/Table-Cell";
+import { alertApiUrl, deleteAlert } from "../client";
+import { AlertNameAndTypeCell, AlertStateCell } from "./Table-Cell";
 
 interface RowProps {
-  name: string;
+  nameAndType: {
+    name: string;
+    id: string;
+    type: string;
+  };
   severity: string;
-  type: string;
   state: string;
   filterString: string;
   actions: {
@@ -23,9 +30,12 @@ interface RowProps {
 function rowPropsGeneratorFunction(alerts: Alert[]): RowProps[] {
   return alerts
     ? alerts.map((alert) => ({
-        name: alert.name,
+        nameAndType: {
+          name: alert.name,
+          id: alert.alert_id,
+          type: alert.type,
+        },
         severity: alert.severity,
-        type: alert.type,
         state: alert.state,
         filterString: [
           alert.name,
@@ -60,7 +70,21 @@ export function OverviewTable(props: OverViewTableProps) {
 
   const columns: Column[] = [
     { id: "filter-column", filter: "includes", accessor: "filterString" },
-    { Header: "Alert", accessor: "name" },
+    {
+      Header: "Alert",
+      accessor: "nameAndType",
+      Cell: (props) => AlertNameAndTypeCell({ ...props.cell.value }),
+    },
+    {
+      Header: "State",
+      accessor: "state",
+      Cell: (props) => AlertStateCell({ state: props.cell.value }),
+    },
+    {
+      Header: "Severity",
+      accessor: "severity",
+      Cell: (props) => AlertSeverityCell({ severity: props.cell.value }),
+    },
     {
       Header: "Actions",
       accessor: "actions",
@@ -84,13 +108,13 @@ export function OverviewTable(props: OverViewTableProps) {
         onClose: onCloseDeleteDialog,
         leastDestructiveRef: cancelRef,
         mutate: mutate,
-        mutateApiUrl: "/api/alerts",
+        mutateApiUrl: alertApiUrl,
         deleteApiFunc: deleteAlert,
         itemType: "alert",
       })}
       {CommonOverviewTable<RowProps>({
         data: {
-          dependencies: [alerts],
+          dependencies: [alerts], // pass in length to rerender if total items have changed
           dependenciesIsLoading: isLoading,
           rowPropsGeneratorFunction: rowPropsGeneratorFunction,
         },

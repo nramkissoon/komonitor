@@ -20,7 +20,6 @@ export function useDeleteDialog() {
   const cancelRef = React.useRef(true);
   const openDeleteDialog = (item: { name: string; id: string }) =>
     setDeleteItem(item);
-
   return {
     mutate,
     deleteItem,
