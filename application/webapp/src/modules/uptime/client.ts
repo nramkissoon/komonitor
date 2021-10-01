@@ -2,7 +2,7 @@ import {
   CoreUptimeMonitor,
   UptimeCheckSupportedFrequenciesInMinutes,
   UptimeMonitor,
-  UptimeMonitorStatus
+  UptimeMonitorStatus,
 } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";

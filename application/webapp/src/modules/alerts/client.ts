@@ -56,7 +56,7 @@ export function use24HourAlertInvocations(alertIds: string[]) {
 export async function deleteAlert(
   alertId: string,
   onSuccess?: () => void,
-  onError?: () => void
+  onError?: (msg: string) => void
 ) {
   const response = await fetch(alertApiUrl + `?alertId=${alertId}`, {
     method: "DELETE",
@@ -65,8 +65,21 @@ export async function deleteAlert(
     onSuccess ? onSuccess() : null;
     return true;
   } else {
-    onError ? onError() : null;
-    return false;
+    let errorMessage;
+    switch (response.status) {
+      case 403:
+        errorMessage = `Unable to delete alert while it is attached to monitors. \n Alert attached to the following monitors:\n ${(
+          (await response.json()) as any[]
+        ).join(", ")}`;
+        break;
+      case 400:
+        errorMessage = "Invalid request sent to server.";
+      case 500:
+        errorMessage = "Internal server error. Please try again later.";
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError ? onError(errorMessage) : null;
   }
 }
 

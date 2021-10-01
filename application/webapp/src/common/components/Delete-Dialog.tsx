@@ -41,6 +41,7 @@ interface DeleteDialogProps {
   deleteApiFunc: any;
   itemType: string;
   onSuccess?: Function;
+  onError?: Function;
 }
 
 export function DeleteDialog(props: DeleteDialogProps) {
@@ -55,6 +56,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
     deleteApiFunc,
     itemType,
     onSuccess,
+    onError,
   } = props;
 
   return (
@@ -91,7 +93,8 @@ export function DeleteDialog(props: DeleteDialogProps) {
             onClick={async () => {
               const deleted = await deleteApiFunc(
                 itemId,
-                onSuccess ?? undefined
+                onSuccess ?? undefined,
+                onError ?? undefined
               );
               if (deleted) mutate(mutateApiUrl);
               onClose();

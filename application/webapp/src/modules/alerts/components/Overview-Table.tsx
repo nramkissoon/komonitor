@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { Alert } from "project-types";
 import { Column } from "react-table";
 import {
@@ -59,6 +60,17 @@ interface OverViewTableProps {
 
 export function OverviewTable(props: OverViewTableProps) {
   const { alerts, isLoading } = props;
+  const errorToast = useToast();
+  const postErrorToast = (message: string) =>
+    errorToast({
+      title: "Unable to perform action",
+      description: message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      variant: "solid",
+      position: "top",
+    });
   const {
     openDeleteDialog,
     mutate,
@@ -111,6 +123,7 @@ export function OverviewTable(props: OverViewTableProps) {
         mutateApiUrl: alertApiUrl,
         deleteApiFunc: deleteAlert,
         itemType: "alert",
+        onError: postErrorToast,
       })}
       {CommonOverviewTable<RowProps>({
         data: {
