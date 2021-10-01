@@ -12,13 +12,16 @@ export interface EditableAlertAttributes {
   state: AlertStates;
 }
 
-export interface Alert extends EditableAlertAttributes {
-  type: AlertTypes;
+export type NewAlertAttributes = EditableAlertAttributes & { type: AlertTypes };
+
+export interface NonEditableAlertAttributes {
   owner_id: string;
   alert_id: string;
   created_at: number;
   last_updated: number;
 }
+
+export type Alert = NewAlertAttributes & NonEditableAlertAttributes;
 
 export interface AlertInvocation {
   alert_id: string;

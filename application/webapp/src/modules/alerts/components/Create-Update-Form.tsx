@@ -182,7 +182,7 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                 augmentedValues,
                 () => {
                   Router.push({
-                    pathname: "app/alerts" + augmentedValues.alert_id,
+                    pathname: "/app/alerts/" + augmentedValues.alert_id,
                     query: { alertUpdated: "true" },
                   });
                 },

@@ -93,7 +93,7 @@ export function OverviewTable(props: OverViewTableProps) {
         ActionsCell({
           cellValues: props.cell.value,
           itemType: "alert",
-          baseItemUrl: "app/alerts",
+          baseItemUrl: "/app/alerts",
           openDeleteDialog: openDeleteDialog,
         }),
     },

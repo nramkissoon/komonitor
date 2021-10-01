@@ -37,6 +37,11 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
     "whiteAlpha.400",
   ]);
 
+  const menuBackground = useColorModeValue(gray50, gray900);
+  const menuListBackground = useColorModeValue("#E2E8F0", "#1A202C");
+  const optionDisabledColor = useColorModeValue(gray400, gray600);
+  const optionFocusedBackground = useColorModeValue(blue100, blue800);
+
   return (
     <Select
       styles={{
@@ -52,7 +57,7 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
         }),
         menu: (base, props) => ({
           ...base,
-          background: useColorModeValue(gray50, gray900),
+          background: menuBackground,
         }),
         menuList: (base, props) => ({
           maxHeight: "300px",
@@ -66,36 +71,36 @@ export function ReactSelectFormik(props: ReactSelectFormikProps) {
             height: "10px",
           },
           "::-webkit-scrollbar-thumb": {
-            background: useColorModeValue("#E2E8F0", "#1A202C"),
+            background: menuListBackground,
           },
         }),
         option: (base, props) => ({
           ...base,
           color: props.isDisabled
-            ? useColorModeValue(gray400, gray600)
+            ? optionDisabledColor
             : !props.isSelected
-            ? useColorModeValue("", "")
+            ? ""
             : "white",
           background: props.isDisabled
             ? "transparent"
             : props.isSelected
             ? blue300
             : props.isFocused
-            ? useColorModeValue(blue100, blue800)
+            ? optionFocusedBackground
             : "inherit",
           ":hover": {
             background: props.isDisabled
               ? "transparent"
               : props.isSelected
               ? blue300
-              : useColorModeValue(blue100, blue800),
+              : optionFocusedBackground,
           },
           ":active": {
             background: props.isDisabled
               ? "transparent"
               : props.isSelected
               ? blue300
-              : useColorModeValue(blue100, blue800),
+              : optionFocusedBackground,
           },
         }),
       }}
@@ -173,6 +178,9 @@ export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
     "whiteAlpha.400",
   ]);
 
+  const createOption = (label: string) => ({ label, value: label });
+  const handleInputChange = (inputValue: string) => setInputValue(inputValue);
+
   const [inputValue, setInputValue] = React.useState("");
   const [value, setValue] = React.useState<{ label: string; value: string }[]>(
     initialValue && initialValue.length > 0
@@ -189,9 +197,6 @@ export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
       value.map((item: any) => item.value)
     );
   }, [value]);
-
-  const createOption = (label: string) => ({ label, value: label });
-  const handleInputChange = (inputValue: string) => setInputValue(inputValue);
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (!inputValue) return;

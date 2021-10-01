@@ -19,6 +19,7 @@ interface ActionsCellProps {
 
 export function ActionsCell(props: ActionsCellProps) {
   const { cellValues, openDeleteDialog, itemType, baseItemUrl } = props;
+
   return (
     <Flex justifyContent="flex-start">
       <Tooltip label="Details">
@@ -30,7 +31,7 @@ export function ActionsCell(props: ActionsCellProps) {
           bgColor="gray.500"
           mr="1.3em"
           onClick={() => {
-            router.push(baseItemUrl + cellValues.itemId);
+            router.push(baseItemUrl + "/" + cellValues.itemId);
           }}
           _hover={{
             bg: "gray.600",
@@ -46,7 +47,7 @@ export function ActionsCell(props: ActionsCellProps) {
           bgColor="blue.500"
           mr="1.3em"
           onClick={() => {
-            router.push(baseItemUrl + cellValues.itemId + "/edit");
+            router.push(baseItemUrl + "/" + cellValues.itemId + "/edit");
           }}
           _hover={{
             bg: "blue.600",
