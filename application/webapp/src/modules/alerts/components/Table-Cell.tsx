@@ -1,11 +1,10 @@
-import { Button } from "@chakra-ui/button";
-import { EmailIcon } from "@chakra-ui/icons";
 import { Badge, Box, Flex } from "@chakra-ui/layout";
 import { Text, useColorModeValue } from "@chakra-ui/react";
 import { Tooltip } from "@chakra-ui/tooltip";
 import Link from "next/link";
 import { AlertStates, AlertTypes } from "project-types";
 import React from "react";
+import { alertTypeToBadge } from "./Alert-Type-Badges";
 
 interface AlertStateCellProps {
   state: AlertStates;
@@ -30,6 +29,7 @@ export function AlertStateCell(props: AlertStateCellProps) {
       px=".8em"
       borderRadius="lg"
       letterSpacing="wider"
+      size="md"
     >
       {state}
     </Badge>
@@ -42,33 +42,10 @@ interface AlertNameAndTypeCellProps {
   type: AlertTypes;
 }
 
-const EmailTypeComponent = (
-  <Button
-    leftIcon={<EmailIcon />}
-    colorScheme="gray"
-    variant="outline"
-    as="div"
-    _hover={{}}
-    size="xs"
-    color="gray.500"
-    fontWeight="normal"
-  >
-    Email
-  </Button>
-);
-
 export function AlertNameAndTypeCell(props: AlertNameAndTypeCellProps) {
   const { name, id, type } = props;
 
-  let typeComponent;
-  switch (type) {
-    case "Email":
-      typeComponent = EmailTypeComponent;
-      break;
-    default:
-      typeComponent = <></>;
-      break;
-  }
+  let typeComponent = alertTypeToBadge(type as AlertTypes);
 
   return (
     <Box>

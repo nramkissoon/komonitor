@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { signOut, useSession } from "next-auth/client";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { HiMoon, HiSun } from "react-icons/hi";
@@ -32,9 +33,12 @@ const HeaderLink = (props: {
   buttonProps?: ButtonProps;
 }) => {
   const { text, href, buttonProps } = props;
+  const router = useRouter();
+
+  const selected = router.asPath.startsWith(href);
 
   const defaultButtonLinkStyles: ButtonProps = {
-    color: useColorModeValue("gray.900", "gray.400"),
+    color: !selected ? useColorModeValue("gray.900", "gray.400") : "blue.400",
     display: "inline-flex",
     alignItems: "center",
     variant: "ghost",

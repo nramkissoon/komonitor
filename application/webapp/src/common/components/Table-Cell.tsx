@@ -114,8 +114,9 @@ export function AlertSeverityCell(props: AlertSeverityCellProps) {
       fontWeight="normal"
       py=".5em"
       px=".8em"
-      borderRadius="lg"
+      borderRadius="md"
       letterSpacing="wider"
+      size="md"
     >
       {severity}
     </Badge>

@@ -1,4 +1,13 @@
-import { Box, Divider, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useToast,
+} from "@chakra-ui/react";
 import router from "next/router";
 import { Alert, UptimeMonitor } from "project-types";
 import React from "react";
@@ -8,6 +17,7 @@ import {
 } from "../../../common/components/Delete-Dialog";
 import { useUptimeMonitors } from "../../uptime/client";
 import { alertApiUrl, deleteAlert, use24HourAlertInvocations } from "../client";
+import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageHeader } from "./Overview-Page-Header";
 
 interface OverviewPageProps {
@@ -28,10 +38,13 @@ export function OverviewPage(props: OverviewPageProps) {
   } = alert;
 
   const {
-    monitors,
+    monitors: uptimeMonitors,
     isError: monitorsIsError,
     isLoading: monitorsIsLoading,
   } = useUptimeMonitors();
+
+  // TODO use lighthouse monitors
+  // TODO use browser monitors
 
   const {
     invocations,
@@ -61,11 +74,21 @@ export function OverviewPage(props: OverviewPageProps) {
       position: "top",
     });
 
-  let attachedMonitors: UptimeMonitor[] = [];
+  let attachedUptimeMonitors: UptimeMonitor[] = [];
   // TODO check for multiple alerts when applicable
-  attachedMonitors = monitors
-    ? monitors.filter((monitor) => alert_id === monitor.alert_id)
+  attachedUptimeMonitors = uptimeMonitors
+    ? uptimeMonitors.filter((monitor) => alert_id === monitor.alert_id)
     : [];
+
+  // TODO attached lighthouse
+  // TODO attached browser
+
+  let mostRecentInvocation: number | undefined = undefined;
+  mostRecentInvocation = invocations
+    ? invocations[alert_id].length === 0
+      ? -1
+      : invocations[alert_id].sort().reverse()[0].timestamp
+    : undefined;
 
   return (
     <Box>
@@ -90,6 +113,22 @@ export function OverviewPage(props: OverviewPageProps) {
         openDeleteDialog={openDeleteDialog}
       />
       <Divider mb="1em" />
+      <Tabs>
+        <TabList mb="1em">
+          <Tab>Overview</Tab>
+          <Tab>Invocations</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel p="0">
+            <OverviewPageDataCards
+              state={state}
+              severity={severity}
+              mostRecentInvocationTimestamp={undefined}
+            />
+          </TabPanel>
+          <TabPanel p="0"></TabPanel>
+        </TabPanels>
+      </Tabs>
     </Box>
   );
 }

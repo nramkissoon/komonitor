@@ -15,7 +15,7 @@ import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { percentile } from "../../../common/utils";
 
-interface OverviePageDataCardsProps {
+interface OverviewPageDataCardsProps {
   monitorId: string;
   statuses: UptimeMonitorStatus[] | undefined;
 }
@@ -47,7 +47,7 @@ function StatWithLoading(props: StatWithLoadingProps) {
   );
 }
 
-export function OverviewPageDataCards(props: OverviePageDataCardsProps) {
+export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
   const { monitorId, statuses } = props;
 
   // divider orientation is not responsive so we will have to use this hack to hide/show the vertical when necessary

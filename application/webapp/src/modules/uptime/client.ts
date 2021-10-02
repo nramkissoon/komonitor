@@ -4,7 +4,7 @@ import {
   UptimeMonitor,
   UptimeMonitorStatus,
 } from "project-types";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { env } from "../../common/client-utils";
 
 export const monitorApiUrl = env.BASE_URL + "/api/uptime/monitors";
@@ -165,4 +165,26 @@ export async function updateMonitor(
     }
     onError ? onError(errorMessage) : null;
   }
+}
+
+export async function detachAlertFromMonitor(
+  monitor: UptimeMonitor,
+  alertId: string
+) {
+  const { mutate } = useSWRConfig();
+
+  // TODO update to multiple alerts when applicable
+  if (monitor.alert_id !== alertId) return;
+  monitor.alert_id = undefined;
+  monitor.failures_before_alert = undefined;
+  const response = await fetch(monitorApiUrl, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(monitor),
+  });
+  if (response.ok) {
+    mutate(monitorApiUrl);
+  } // TODO handle errors
 }
