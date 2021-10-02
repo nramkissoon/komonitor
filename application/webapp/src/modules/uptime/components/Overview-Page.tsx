@@ -82,7 +82,7 @@ export function OverviewPage(props: OverviewPageProps) {
   } = useDeleteDialog();
 
   return (
-    <Box mt=".5em">
+    <Box>
       {DeleteDialog({
         isOpen: deleteItem.id !== undefined,
         itemName: deleteItem.name,
