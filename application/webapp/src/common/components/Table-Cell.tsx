@@ -1,11 +1,13 @@
 import { IconButton } from "@chakra-ui/button";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Badge, Box, Flex } from "@chakra-ui/layout";
-import { Text, Tooltip } from "@chakra-ui/react";
+import { Text, Tooltip, useColorModeValue } from "@chakra-ui/react";
+import Link from "next/link";
 import router from "next/router";
 import { AlertSeverities } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { getItemBaseUrlFromItemId } from "../utils";
 
 interface ActionsCellProps {
   cellValues: {
@@ -135,6 +137,37 @@ export function AlertRecipientsCell(props: AlertRecipientsCellProps) {
       {recipients.map((recip) => (
         <Text>{recip}</Text>
       ))}
+    </Box>
+  );
+}
+
+interface GenericMonitorNameCellProps {
+  name: string;
+  id: string;
+}
+
+export function GenericMonitorNameCell(props: GenericMonitorNameCellProps) {
+  const { name, id } = props;
+
+  return (
+    <Box>
+      <Tooltip label="Details">
+        <Box w="fit-content">
+          <Link passHref href={getItemBaseUrlFromItemId(id) + id}>
+            <Box
+              _hover={{
+                cursor: "pointer",
+                color: useColorModeValue("gray.400", "gray.500"),
+              }}
+              w="max-content"
+            >
+              <Text fontSize="xl" fontWeight="normal" letterSpacing="normal">
+                {name}
+              </Text>
+            </Box>
+          </Link>
+        </Box>
+      </Tooltip>
     </Box>
   );
 }

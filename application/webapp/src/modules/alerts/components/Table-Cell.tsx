@@ -1,5 +1,5 @@
 import { Badge, Box, Flex } from "@chakra-ui/layout";
-import { Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, Text, useColorModeValue } from "@chakra-ui/react";
 import { Tooltip } from "@chakra-ui/tooltip";
 import Link from "next/link";
 import { AlertStates, AlertTypes } from "project-types";
@@ -74,5 +74,32 @@ export function AlertNameAndTypeCell(props: AlertNameAndTypeCellProps) {
         </Box>
       </Tooltip>
     </Box>
+  );
+}
+
+interface DetachAlertCellProps {
+  item: any;
+  openDetachDialog: Function;
+}
+
+export function DetachAlertCell(props: DetachAlertCellProps) {
+  const { item, openDetachDialog } = props;
+  return (
+    <Tooltip label="Detach alert from monitor">
+      <Button
+        colorScheme="red"
+        fontWeight="normal"
+        color="white"
+        bgColor="red.500"
+        _hover={{
+          bg: "red.600",
+        }}
+        onClick={() => {
+          openDetachDialog(item);
+        }}
+      >
+        Detach
+      </Button>
+    </Tooltip>
   );
 }

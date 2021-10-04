@@ -32,9 +32,11 @@ interface DetachDialogProps {
     | ((
         item: any,
         alertId: string,
+        onSuccess?: () => void,
         onError?: (message: string) => void
       ) => Promise<void>)
     | null;
+  onSuccess?: () => void;
   onError?: (message: string) => void;
 }
 
@@ -46,6 +48,7 @@ export function DetachDialog(props: DetachDialogProps) {
     onClose,
     leastDestructiveRef,
     detachApiFunc,
+    onSuccess,
     onError,
   } = props;
 
@@ -78,7 +81,7 @@ export function DetachDialog(props: DetachDialogProps) {
             fontWeight="normal"
             onClick={async () => {
               if (detachApiFunc !== null)
-                await detachApiFunc(item, alertId, onError);
+                await detachApiFunc(item, alertId, onSuccess, onError);
               else {
                 // TODO log
               }
