@@ -17,6 +17,8 @@ import {
 } from "../../../common/components/Delete-Dialog";
 import { useUptimeMonitors } from "../../uptime/client";
 import { alertApiUrl, deleteAlert, use24HourAlertInvocations } from "../client";
+import { AttachedMonitorsTable } from "./Attached-Monitors-Table";
+import { OverviewPageBottomLayout } from "./Overview-Page-Bottom-Layout";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageHeader } from "./Overview-Page-Header";
 
@@ -82,6 +84,7 @@ export function OverviewPage(props: OverviewPageProps) {
 
   // TODO attached lighthouse
   // TODO attached browser
+  //TODO combine attached
 
   let mostRecentInvocation: number | undefined = undefined;
   mostRecentInvocation = invocations
@@ -124,6 +127,15 @@ export function OverviewPage(props: OverviewPageProps) {
               state={state}
               severity={severity}
               mostRecentInvocationTimestamp={undefined}
+            />
+            <OverviewPageBottomLayout
+              description={description}
+              recipients={recipients}
+            />
+            <AttachedMonitorsTable
+              alertId={alert_id}
+              attachedMonitors={attachedUptimeMonitors}
+              isLoading={monitorsIsLoading}
             />
           </TabPanel>
           <TabPanel p="0"></TabPanel>

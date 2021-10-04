@@ -53,12 +53,12 @@ function rowPropsGeneratorFunction(alerts: Alert[]): RowProps[] {
     : [];
 }
 
-interface OverViewTableProps {
+interface OverviewTableProps {
   alerts: Alert[] | undefined;
   isLoading: boolean;
 }
 
-export function OverviewTable(props: OverViewTableProps) {
+export function OverviewTable(props: OverviewTableProps) {
   const { alerts, isLoading } = props;
   const errorToast = useToast();
   const postErrorToast = (message: string) =>

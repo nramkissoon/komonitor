@@ -167,9 +167,10 @@ export async function updateMonitor(
   }
 }
 
-export async function detachAlertFromMonitor(
+export async function detachAlertFromUptimeMonitor(
   monitor: UptimeMonitor,
-  alertId: string
+  alertId: string,
+  onError?: (message: string) => void
 ) {
   const { mutate } = useSWRConfig();
 
@@ -186,5 +187,7 @@ export async function detachAlertFromMonitor(
   });
   if (response.ok) {
     mutate(monitorApiUrl);
-  } // TODO handle errors
+  } else {
+    onError ? onError("An error occurred. Please try again later.") : null;
+  }
 }
