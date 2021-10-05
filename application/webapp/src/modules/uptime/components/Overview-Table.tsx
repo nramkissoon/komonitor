@@ -74,6 +74,7 @@ export function calculateP90LatencyString(
 
   const latencies = statuses.map((status) => status.latency);
   const p90 = percentile(latencies, 90);
+  if (p90 === -1) return "N/A";
   return p90?.toPrecision(4).toString() + "ms";
 }
 

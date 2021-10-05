@@ -74,9 +74,11 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
 
 const SignOutButton = (props: { authed: boolean }) => {
   const { authed } = props;
+  const color = useColorModeValue("gray.900", "gray.400");
+  const hoverColor = useColorModeValue("gray.500", "white");
   return authed ? (
     <Button
-      color={useColorModeValue("gray.900", "gray.400")}
+      color={color}
       size="md"
       variant="ghost"
       fontSize="lg"
@@ -84,7 +86,7 @@ const SignOutButton = (props: { authed: boolean }) => {
       as="a"
       onClick={() => signOut({ callbackUrl: "/" })}
       _focus={{ boxShadow: "none" }}
-      _hover={{ color: useColorModeValue("gray.500", "white") }}
+      _hover={{ color: hoverColor }}
     >
       Sign out
     </Button>

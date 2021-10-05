@@ -56,8 +56,16 @@ export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
   let perc90, perc95, uptime;
   if (statuses && statuses.length !== 0) {
     let responseTimes = statuses.map((status) => status.latency);
-    perc90 = percentile(responseTimes, 90)?.toFixed(2) + "ms";
-    perc95 = percentile(responseTimes, 95)?.toFixed(2) + "ms";
+    perc90 = percentile(responseTimes, 90);
+    if (perc90 === -1) perc90 = "N/A";
+    else {
+      perc90 = perc90?.toFixed(2) + "ms";
+    }
+    perc95 = percentile(responseTimes, 95);
+    if (perc95 === -1) perc95 = "N/A";
+    else {
+      perc95 = perc95?.toFixed(2) + "ms";
+    }
     uptime =
       (
         (statuses.filter((status) => status.status === "up").length /

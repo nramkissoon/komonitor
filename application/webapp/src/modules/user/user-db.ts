@@ -131,7 +131,7 @@ export async function setServicePlanProductIdForUser(
   }
 }
 
-export async function setStripCustomerIdForUser(
+export async function setStripeCustomerIdForUser(
   ddbClient: DynamoDBClient,
   userTableName: string,
   userId: string,

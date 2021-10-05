@@ -200,13 +200,19 @@ function LineGraph(props: LineGraphProps) {
 }
 
 export function OverviewPageGraph(props: OverviewPageGraphProps) {
-  const { monitorId, statuses } = props;
+  let { monitorId, statuses } = props;
 
   const { colorMode } = useColorMode();
 
+  // Filter out failures where no response
+  const filteredStatuses = statuses
+    ? statuses?.filter((status) => status.latency !== -1)
+    : null;
+
   // memos for graph attributes
   const serie = React.useMemo(
-    () => (statuses ? buildGraphSerie(statuses, monitorId) : null),
+    () =>
+      filteredStatuses ? buildGraphSerie(filteredStatuses, monitorId) : null,
     [monitorId, statuses]
   );
   const minLatency = React.useMemo(
