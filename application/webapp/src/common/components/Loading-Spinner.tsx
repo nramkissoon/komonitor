@@ -3,7 +3,7 @@ import React from "react";
 
 export const LoadingSpinner = () => {
   return (
-    <Center w="80%" mt="10em" mx="auto">
+    <Center w="80%" mt="10em" mb="5em" mx="auto">
       <Spinner
         w="300px"
         h="300px"

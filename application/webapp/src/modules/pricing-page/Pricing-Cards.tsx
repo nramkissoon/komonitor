@@ -194,10 +194,12 @@ export function PricingCards() {
   return (
     <>
       {isLoading ? (
-        <LoadingSpinner />
+        <Fade in={isLoading} delay={0.2}>
+          <LoadingSpinner />
+        </Fade>
       ) : (
         <Fade in={!isLoading && !isError}>
-          <Box mb="2">
+          <Box mb="1.7em">
             <SimpleGrid columns={[1, null, null, 3]} gap={[16, 8]}>
               <PricingCard
                 price={0}
@@ -220,7 +222,7 @@ export function PricingCards() {
                 featureList={planFeatureList["FREELANCER"]}
               />
               <PricingCard
-                price={100}
+                price={80}
                 planName={"Business"}
                 ctaButtonProps={ctaButtonCharacteristics(
                   user,

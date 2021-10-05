@@ -8,7 +8,7 @@ export function PricingHeader() {
         Plans & Pricing
       </Heading>
       <Text
-        mb="5em"
+        mb="3em"
         fontSize="lg"
         color={useColorModeValue("gray.600", "gray.400")}
       >
