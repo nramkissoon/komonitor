@@ -4,7 +4,9 @@ import {
   chakra,
   Fade,
   Flex,
+  Icon,
   SimpleGrid,
+  Stack,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -12,15 +14,72 @@ import { useSession } from "next-auth/client";
 import Link from "next/link";
 import React from "react";
 import { LoadingSpinner } from "../../common/components/Loading-Spinner";
+import { PLAN_PRODUCT_IDS } from "../billing/plans";
 import { useUserServicePlanProductId } from "../user/client";
 
 interface PricingCardProps {
   price: number;
   planName: string;
+  ctaButtonProps: {
+    text: string;
+    href: string;
+  };
+  featureList: string[];
+}
+
+const planFeatureList: { [productId: string]: string[] } = {
+  FREE: [
+    "Free forever",
+    "Access to uptime, browser, and Google Lighthouse checks",
+    "Good for testing simple applications that could scale later",
+    "Basic email alerting",
+    "7-day data retention",
+  ],
+  FREELANCER: [
+    "Monitor several websites in production",
+    "Advanced alerting + integration with messaging services",
+    "Priority support and onboarding",
+    "30-day data retention",
+  ],
+  BUSINESS: [
+    "Scale to hundreds of monitors in production",
+    "Advanced alerting + integration with messaging services",
+    "Highest priority support and onboarding",
+    "Custom service limits to suit business needs",
+    "365-day data retention",
+  ],
+};
+
+function Feature(feature: string, key: string) {
+  return (
+    <Flex align="center" key={key}>
+      <Flex shrink={0}>
+        <Icon
+          boxSize={5}
+          mt={1}
+          mr={2}
+          color={useColorModeValue("blue.500", "blue.300")}
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+            clipRule="evenodd"
+          ></path>
+        </Icon>
+      </Flex>
+      <Box ml={4}>
+        <chakra.span mt={2} color={useColorModeValue("gray.700", "gray.400")}>
+          {feature}
+        </chakra.span>
+      </Box>
+    </Flex>
+  );
 }
 
 function PricingCard(props: PricingCardProps) {
-  const { price, planName } = props;
+  const { price, planName, ctaButtonProps, featureList } = props;
   return (
     <Box
       rounded="lg"
@@ -31,8 +90,8 @@ function PricingCard(props: PricingCardProps) {
       <Flex direction="column">
         <Box px={10} pb={5}>
           <Badge
-            mb={1}
-            fontSize="xs"
+            mb={2}
+            fontSize="sm"
             letterSpacing="wide"
             colorScheme="gray"
             fontWeight="medium"
@@ -59,7 +118,7 @@ function PricingCard(props: PricingCardProps) {
               /month
             </chakra.span>
           </Text>
-          <Link passHref href="/auth/signin">
+          <Link passHref href={ctaButtonProps.href}>
             <Box
               href=""
               w={["full"]}
@@ -80,10 +139,15 @@ function PricingCard(props: PricingCardProps) {
                 cursor: "pointer",
               }}
             >
-              Get started
+              {ctaButtonProps.text}
             </Box>
           </Link>
         </Box>
+        <Flex px={10} pt={5} pb={10} direction="column">
+          <Stack mb={5} spacing={4}>
+            {featureList.map((feature) => Feature(feature, planName + feature))}
+          </Stack>
+        </Flex>
       </Flex>
     </Box>
   );
@@ -99,12 +163,14 @@ function ctaButtonCharacteristics(
   let text = isCurrentPlan
     ? "Go to App"
     : isSignedIn
-    ? "Manage Subscription"
+    ? userProductId === PLAN_PRODUCT_IDS.FREE
+      ? "Upgrade Subscription"
+      : "Manage Subscription"
     : "Get Started";
   let href = isCurrentPlan
     ? "/app/"
     : isSignedIn
-    ? "/app/settings/tab=billing"
+    ? "/app/settings?tab=billing"
     : "/auth/signin";
   return {
     text: text,
@@ -133,7 +199,36 @@ export function PricingCards() {
         <Fade in={!isLoading && !isError}>
           <Box mb="2">
             <SimpleGrid columns={[1, null, null, 3]} gap={[16, 8]}>
-              <PricingCard price={0} planName={"Free"} />
+              <PricingCard
+                price={0}
+                planName={"Free"}
+                ctaButtonProps={ctaButtonCharacteristics(
+                  user,
+                  productId,
+                  PLAN_PRODUCT_IDS.FREE
+                )}
+                featureList={planFeatureList["FREE"]}
+              />
+              <PricingCard
+                price={20}
+                planName={"Freelancer"}
+                ctaButtonProps={ctaButtonCharacteristics(
+                  user,
+                  productId,
+                  PLAN_PRODUCT_IDS.FREELANCER
+                )}
+                featureList={planFeatureList["FREELANCER"]}
+              />
+              <PricingCard
+                price={100}
+                planName={"Business"}
+                ctaButtonProps={ctaButtonCharacteristics(
+                  user,
+                  productId,
+                  PLAN_PRODUCT_IDS.BUSINESS
+                )}
+                featureList={planFeatureList["BUSINESS"]}
+              />
             </SimpleGrid>
           </Box>
         </Fade>
