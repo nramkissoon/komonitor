@@ -70,6 +70,7 @@ export interface FullWidthFlyoutMenuProps {
 export interface SimpleLinkProps {
   text: string;
   href: string;
+  useColorModeValue: Function;
   styles?: {
     buttonLinkStyles?: ButtonProps;
   };
