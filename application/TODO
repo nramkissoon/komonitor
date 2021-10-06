@@ -1,7 +1,7 @@
 General:
-    ☐ Buy domain + google workspaces setup
+    ✔ Buy domain + google workspaces setup @done(21-10-06 14:00)
     ☐ verify domain on AWS SES
-    ☐ create stripe account + test creds
+    ✔ create stripe account + test creds @done(21-10-06 14:20)
 
 Webapp: 
     App Footer:
@@ -26,6 +26,9 @@ Webapp:
     Settings:
         ☐ implement account and billing tab menu
         ☐ add appearance color mode toggle 
+    Stripe:
+        ☐ create stripe customer on new user creation
+        ☐ prevent relay attack on webhooks
 
 Uptime Lambda:
     ☐ invoke alert lambda on monitor failure with monitor id and owner id
