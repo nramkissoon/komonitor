@@ -1,3 +1,4 @@
+import { SettingsIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -15,6 +16,7 @@ import {
   SlideProps,
   Spacer,
   StackProps,
+  Tooltip,
   useColorMode,
   useColorModeValue,
   useDisclosure,
@@ -22,10 +24,9 @@ import {
 } from "@chakra-ui/react";
 import { signOut, useSession } from "next-auth/client";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { HiMoon, HiSun } from "react-icons/hi";
 
 const HeaderLink = (props: {
   text: string;
@@ -152,8 +153,8 @@ const MobileNavHeader = (props: {
           buttonProps: linkButtonStyles,
         })}
         {HeaderLink({
-          text: "Settings",
-          href: "/settings",
+          text: "Docs",
+          href: "/docs",
           buttonProps: linkButtonStyles,
         })}
       </VStack>
@@ -168,11 +169,6 @@ export const AppHeader = () => {
   const authed = session?.user !== undefined;
 
   const { toggleColorMode: toggleMode } = useColorMode();
-  const colorModeText = useColorModeValue("dark", "light");
-  let darkIcon = HiMoon;
-  let lightIcon = HiSun;
-
-  let SwitchIcon = useColorModeValue(darkIcon, lightIcon);
 
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
@@ -192,15 +188,15 @@ export const AppHeader = () => {
     alignItems: "center",
   };
 
-  const defaultColorModeToggleStyles: IconButtonProps = {
+  const defaultSettingsCogStyles: IconButtonProps = {
     size: "md",
-    fontSize: "1.8em",
-    "aria-label": `Switch to ${colorModeText} mode`,
+    fontSize: "1.4em",
+    "aria-label": `Settings`,
     variant: "ghost",
     color: useColorModeValue("gray.500", "inherit"),
     ml: { base: "0", sm: "3" },
-    onClick: toggleMode,
-    icon: <SwitchIcon />,
+    onClick: () => router.push("/app/settings/"),
+    icon: <SettingsIcon />,
   };
 
   const defaultMobileNavHamburgerStyles: IconButtonProps = {
@@ -249,8 +245,8 @@ export const AppHeader = () => {
               href: "/app/alerts",
             })}
             {HeaderLink({
-              text: "Settings",
-              href: "/settings",
+              text: "Docs",
+              href: "/docs",
             })}
           </HStack>
         </Flex>
@@ -259,7 +255,9 @@ export const AppHeader = () => {
           <HStack justify="flex-end" align="center" color="gray.400">
             {SignOutButton({ authed: authed })}
           </HStack>
-          <IconButton {...defaultColorModeToggleStyles} />
+          <Tooltip label="Settings" placement="bottom">
+            <IconButton {...defaultSettingsCogStyles} />
+          </Tooltip>
           <IconButton {...defaultMobileNavHamburgerStyles} />
         </Flex>
       </Flex>

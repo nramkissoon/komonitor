@@ -1,4 +1,9 @@
-import { Alert, AlertTypes, EditableAlertAttributes } from "project-types";
+import {
+  Alert,
+  AlertInvocation,
+  AlertTypes,
+  EditableAlertAttributes,
+} from "project-types";
 import { v4 as uuidv4 } from "uuid";
 
 function createAlertId() {
@@ -28,4 +33,21 @@ export function createUpdatedAlert(alert: Alert) {
   const updatedAlert: Alert = { ...alert };
   updatedAlert.last_updated = new Date().getTime();
   return updatedAlert;
+}
+
+export function createAlertIdToInvocationArrayMap(
+  ids: string[],
+  invocations: AlertInvocation[]
+) {
+  const map: { [key: string]: AlertInvocation[] } = {};
+  for (let id of ids) {
+    if (!map[id]) {
+      map[id] = [];
+    }
+  }
+  for (let status of invocations) {
+    const id = status.monitor_id;
+    map[id].push(status);
+  }
+  return map;
 }

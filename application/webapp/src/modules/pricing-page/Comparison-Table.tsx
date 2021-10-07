@@ -105,7 +105,7 @@ export function ComparisonTable() {
         bg={useColorModeValue("white", "#0f131a")}
         borderRadius="lg"
         p="1.5em"
-        mb="2em"
+        mb="3em"
       >
         <Heading textAlign="center" fontSize="xl" fontWeight="normal" mb=".7em">
           Plan Comparison

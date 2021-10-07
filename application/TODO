@@ -1,13 +1,13 @@
 General:
     ✔ Buy domain + google workspaces setup @done(21-10-06 14:00)
-    ☐ verify domain on AWS SES
+    ✔ verify domain on AWS SES @done(21-10-07 12:49)
     ✔ create stripe account + test creds @done(21-10-06 14:20)
 
 Webapp: 
     App Footer:
         ☐ implement 
     Pricing page:
-        ☐ Add link to FAQ and email to contact
+        ✔ Add link to FAQ and email to contact @done(21-10-07 14:02)
     Regular Footer:
         ☐ design
         ☐ implement
@@ -18,8 +18,8 @@ Webapp:
         ☐ same as regular page container but for app pages
         ☐ migrate existing pages
     App Header:
-        ☐ Change color mode toggle to gear wheel linking to settings and remove settings link
-        ☐ Add links to doc in main link section -> make sure it is also in mobile nav
+        ✔ Change color mode toggle to gear wheel linking to settings and remove settings link @done(21-10-07 14:11)
+        ✔ Add links to doc in main link section -> make sure it is also in mobile nav @done(21-10-07 14:11)
     Alert:
         ☐ design invoke table in invocations tab
         ☐ implement invoke table
@@ -27,8 +27,11 @@ Webapp:
         ☐ implement account and billing tab menu
         ☐ add appearance color mode toggle 
     Stripe:
+        ✔ install stripe @done(21-10-07 14:15)
         ☐ create stripe customer on new user creation
         ☐ prevent relay attack on webhooks
+    Alert Invocations:
+        ✔ implement get handler @done(21-10-07 14:56)
 
 Uptime Lambda:
     ☐ invoke alert lambda on monitor failure with monitor id and owner id
@@ -46,3 +49,4 @@ Alert Lambda:
 CDK:
     ☐ add alert lambda to dev stack
     ☐ add invoke perm to uptime lambda
+    ☐ create dev stack ddb table for stripe webhooks

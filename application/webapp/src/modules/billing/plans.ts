@@ -37,6 +37,13 @@ export function getStatusHistoryAccessFromProductId(id: string | undefined) {
   }
 }
 
+// The same as monitor status access for now.
+export function getAlertInvocationHistoryAccessFromProductId(
+  id: string | undefined
+) {
+  return getStatusHistoryAccessFromProductId(id);
+}
+
 export function getAlertRecipientLimitFromProductId(id: string | undefined) {
   switch (id) {
     case PLAN_PRODUCT_IDS.FREELANCER:

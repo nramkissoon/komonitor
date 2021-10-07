@@ -8,6 +8,8 @@ export const env = {
   ALERT_TABLE_NAME: process.env.ALERT_TABLE_NAME as string,
   ALERT_INVOCATION_TABLE_NAME: process.env
     .ALERT_INVOCATION_TABLE_NAME as string,
+  ALERT_INVOCATION_TABLE_LSI_NAME: process.env
+    .ALERT_INVOCATION_TABLE_LSI_NAME as string,
   SERVER_HOSTNAME: process.env.SERVER_HOSTNAME as string,
 };
 
