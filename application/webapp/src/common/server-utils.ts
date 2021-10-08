@@ -14,10 +14,12 @@ export const env = {
   SERVER_HOSTNAME: process.env.SERVER_HOSTNAME as string,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
   STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY as string,
+  BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
 };
 
 export const ddbClient = new DynamoDBClient({ region: "us-east-1" });
 
 export const stripeClient = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
+  typescript: true,
 });

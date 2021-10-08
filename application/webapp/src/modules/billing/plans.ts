@@ -1,7 +1,13 @@
 export const PLAN_PRODUCT_IDS = {
   FREE: "FREE",
-  FREELANCER: process.env.FREELANCE_PRODUCT_ID as string,
-  BUSINESS: process.env.BUSINESS_PRODUCT_ID as string,
+  FREELANCER: process.env.NEXT_PUBLIC_FREELANCE_PRODUCT_ID as string,
+  BUSINESS: process.env.NEXT_PUBLIC_BUSINESS_PRODUCT_ID as string,
+};
+
+export const PLAN_PRICE_IDS = {
+  FREE: "FREE",
+  FREELANCER: process.env.NEXT_PUBLIC_FREELANCE_PRICE_ID as string,
+  BUSINESS: process.env.NEXT_PUBLIC_BUSINESS_PRICE_ID as string,
 };
 
 export function getUptimeMonitorAllowanceFromProductId(id: string | undefined) {

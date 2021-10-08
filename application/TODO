@@ -28,7 +28,8 @@ Webapp:
         ☐ add appearance color mode toggle 
     Stripe:
         ✔ install stripe @done(21-10-07 14:15)
-        ☐ create stripe customer on new user creation
+        ✘ create stripe customer on new user creation @cancelled(21-10-07 19:38)
+        ✔ getOrCreateStripeCustomerIdForUserId() @done(21-10-07 20:23)
         ☐ prevent relay attack on webhooks
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
@@ -50,3 +51,9 @@ CDK:
     ☐ add alert lambda to dev stack
     ☐ add invoke perm to uptime lambda
     ☐ create dev stack ddb table for stripe webhooks
+    ☐ create the prod ddb tables in us-east-1
+
+Logging and Error Handling:
+    ☐ Decide logging strategy for webapp
+    ☐ replace console.log/error in webapp with logging provider
+    ☐ Decide logging strategy for lambdas and implement

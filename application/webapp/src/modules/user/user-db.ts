@@ -9,6 +9,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { User } from "project-types";
+import { createStripeCustomer } from "../billing/customer";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
 export async function getUserById(
@@ -161,6 +162,42 @@ export async function setStripeCustomerIdForUser(
     throw new Error(response.$metadata.requestId);
   } catch (err) {
     // TODO log
+    throw err;
+  }
+}
+
+export async function getOrCreateStripeCustomerIdForUserId(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string
+) {
+  try {
+    const user = await getUserById(ddbClient, userTableName, userId);
+    if (user === undefined) throw new Error("user undefined");
+
+    // Check if already has customer id
+    const hasStripeCustomerId = user.customer_id !== undefined;
+    if (hasStripeCustomerId) return user.customer_id;
+
+    // create new Stripe customer
+    const stripeCustomer = await createStripeCustomer(
+      userId,
+      user.email as string,
+      user.name ?? undefined
+    );
+
+    // only return id if we have updated the user in DB
+    const updated = await setStripeCustomerIdForUser(
+      ddbClient,
+      userTableName,
+      userId,
+      stripeCustomer.id
+    );
+    if (updated) return stripeCustomer.id;
+
+    throw new Error("Failed to updated customer with Stripe customer ID");
+  } catch (err) {
+    console.log(err);
     throw err;
   }
 }

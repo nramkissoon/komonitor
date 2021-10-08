@@ -11,10 +11,10 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/client";
-import Link from "next/link";
+import router from "next/router";
 import React from "react";
 import { LoadingSpinner } from "../../common/components/Loading-Spinner";
-import { PLAN_PRODUCT_IDS } from "../billing/plans";
+import { PLAN_PRICE_IDS, PLAN_PRODUCT_IDS } from "../billing/plans";
 import { useUserServicePlanProductId } from "../user/client";
 
 interface PricingCardProps {
@@ -22,7 +22,7 @@ interface PricingCardProps {
   planName: string;
   ctaButtonProps: {
     text: string;
-    href: string;
+    onClickFunc: Function;
   };
   featureList: string[];
 }
@@ -118,30 +118,29 @@ function PricingCard(props: PricingCardProps) {
               /month
             </chakra.span>
           </Text>
-          <Link passHref href={ctaButtonProps.href}>
-            <Box
-              href=""
-              w={["full"]}
-              display="inline-flex"
-              alignItems="center"
-              justifyContent="center"
-              px={4}
-              py={3}
-              border="solid transparent"
-              fontWeight="normal"
-              fontSize="xl"
-              rounded="md"
-              shadow="md"
-              color="white"
-              bg={useColorModeValue("blue.400", "blue.500")}
-              _hover={{
-                bg: useColorModeValue("blue.600", "blue.700"),
-                cursor: "pointer",
-              }}
-            >
-              {ctaButtonProps.text}
-            </Box>
-          </Link>
+          <Box
+            as="button"
+            onClick={() => ctaButtonProps.onClickFunc()}
+            w={["full"]}
+            display="inline-flex"
+            alignItems="center"
+            justifyContent="center"
+            px={4}
+            py={3}
+            border="solid transparent"
+            fontWeight="normal"
+            fontSize="xl"
+            rounded="md"
+            shadow="md"
+            color="white"
+            bg={useColorModeValue("blue.400", "blue.500")}
+            _hover={{
+              bg: useColorModeValue("blue.600", "blue.700"),
+              cursor: "pointer",
+            }}
+          >
+            {ctaButtonProps.text}
+          </Box>
         </Box>
         <Flex px={10} pt={5} pb={10} direction="column">
           <Stack mb={5} spacing={4}>
@@ -156,7 +155,8 @@ function PricingCard(props: PricingCardProps) {
 function ctaButtonCharacteristics(
   user: any,
   userProductId: any,
-  productId: string
+  productId: string,
+  priceId: string
 ) {
   const isCurrentPlan = userProductId === productId;
   const isSignedIn = user !== undefined && user !== null;
@@ -167,14 +167,23 @@ function ctaButtonCharacteristics(
       ? "Upgrade Subscription"
       : "Manage Subscription"
     : "Get Started";
-  let href = isCurrentPlan
-    ? "/app/"
+  let onClickFunc = isCurrentPlan
+    ? () => router.push("/app/")
     : isSignedIn
-    ? "/app/settings?tab=billing"
-    : "/auth/signin";
+    ? userProductId === PLAN_PRODUCT_IDS.FREE
+      ? async () => {
+          const res = await fetch("/api/billing/checkout-session", {
+            method: "POST",
+            body: JSON.stringify(priceId),
+          });
+          const stripeUrl = (await res.json()).url;
+          router.push(stripeUrl);
+        }
+      : () => router.push("/app/settings?tab=billing")
+    : () => router.push("/auth/signin");
   return {
     text: text,
-    href: href,
+    onClickFunc: onClickFunc,
   };
 }
 
@@ -207,7 +216,8 @@ export function PricingCards() {
                 ctaButtonProps={ctaButtonCharacteristics(
                   user,
                   productId,
-                  PLAN_PRODUCT_IDS.FREE
+                  PLAN_PRODUCT_IDS.FREE,
+                  PLAN_PRICE_IDS.FREE
                 )}
                 featureList={planFeatureList["FREE"]}
               />
@@ -217,7 +227,8 @@ export function PricingCards() {
                 ctaButtonProps={ctaButtonCharacteristics(
                   user,
                   productId,
-                  PLAN_PRODUCT_IDS.FREELANCER
+                  PLAN_PRODUCT_IDS.FREELANCER,
+                  PLAN_PRICE_IDS.FREELANCER
                 )}
                 featureList={planFeatureList["FREELANCER"]}
               />
@@ -227,7 +238,8 @@ export function PricingCards() {
                 ctaButtonProps={ctaButtonCharacteristics(
                   user,
                   productId,
-                  PLAN_PRODUCT_IDS.BUSINESS
+                  PLAN_PRODUCT_IDS.BUSINESS,
+                  PLAN_PRICE_IDS.BUSINESS
                 )}
                 featureList={planFeatureList["BUSINESS"]}
               />

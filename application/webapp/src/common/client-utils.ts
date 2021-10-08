@@ -2,7 +2,7 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 
 export const env = {
-  BASE_URL: process.env.BASE_URL as string,
+  BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
 };
 
 export const minutesToString: { [key: number]: string } = {
