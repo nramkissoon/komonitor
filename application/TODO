@@ -24,7 +24,8 @@ Webapp:
         ✔ design invoke table in invocations tab @done(21-10-08 13:48)
         ✔ implement invoke table @done(21-10-08 13:48)
     Settings:
-        ☐ implement account and billing tab menu
+        ✔ implement account and billing tab menu @done(21-10-09 13:47)
+        ☐ verify cannot delete account when on paid plan
         ☐ add appearance color mode toggle 
     Stripe:
         ✔ install stripe @done(21-10-07 14:15)

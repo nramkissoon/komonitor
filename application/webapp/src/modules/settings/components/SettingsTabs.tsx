@@ -8,6 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
+import { AccountTab } from "./AccountTab";
 import { BillingTab } from "./BillingTab";
 
 interface SettingsTabsProps {
@@ -24,6 +25,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
       bg={useColorModeValue("white", "#0f131a")}
       borderRadius="xl"
       p="1.5em"
+      mb="1.5em"
     >
       <Tabs defaultIndex={initialTab === "billing" ? 1 : 0}>
         <TabList mb="1em">
@@ -31,7 +33,9 @@ export function SettingsTabs(props: SettingsTabsProps) {
           <Tab>Billing</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel p="0"></TabPanel>
+          <TabPanel p="0">
+            <AccountTab />
+          </TabPanel>
           <TabPanel p="0">
             <BillingTab />
           </TabPanel>

@@ -6,7 +6,7 @@ export function BillingTab() {
   return (
     <>
       <Text fontSize="lg" color="gray.500" mb=".7em">
-        Update/Cancel your subscription:
+        Update/Cancel your subscription and payment methods:
       </Text>
       <Button
         fontWeight="normal"

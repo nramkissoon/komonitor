@@ -8,8 +8,8 @@ import {
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
-export const alertApiUrl = env.BASE_URL + "/api/alerts";
-export const invocationApiUrl = env.BASE_URL + "/api/alerts/invocations";
+export const alertApiUrl = env.BASE_URL + "api/alerts";
+export const invocationApiUrl = env.BASE_URL + "api/alerts/invocations";
 
 export function useAlerts() {
   const fetcher = (url: string) =>
