@@ -95,7 +95,6 @@ export function MonitorAlertsOverview(props: MonitorAlertsOverviewProps) {
                   {ViewAlertButton}
                 </Flex>
                 <InvocationTable
-                  alert={alert}
                   invocations={
                     alertInvocations === undefined
                       ? alertInvocations

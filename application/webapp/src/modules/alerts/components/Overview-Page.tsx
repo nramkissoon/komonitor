@@ -1,6 +1,7 @@
 import {
   Box,
   Divider,
+  Heading,
   Tab,
   TabList,
   TabPanel,
@@ -16,6 +17,7 @@ import {
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
 import { useUptimeMonitors } from "../../uptime/client";
+import { InvocationTable } from "../../uptime/components/Invocation-Table";
 import { alertApiUrl, deleteAlert, use24HourAlertInvocations } from "../client";
 import { AttachedMonitorsTable } from "./Attached-Monitors-Table";
 import { OverviewPageBottomLayout } from "./Overview-Page-Bottom-Layout";
@@ -138,7 +140,19 @@ export function OverviewPage(props: OverviewPageProps) {
               isLoading={monitorsIsLoading}
             />
           </TabPanel>
-          <TabPanel p="0"></TabPanel>
+          <TabPanel p="0">
+            {!invocationsIsError && !invocationsIsLoading && invocations ? (
+              invocations[alert_id].length === 0 ? (
+                <Heading textAlign="center" mt="1em">
+                  No Invocations for this Alert
+                </Heading>
+              ) : (
+                <InvocationTable invocations={invocations[alert_id]} />
+              )
+            ) : (
+              "Error"
+            )}
+          </TabPanel>
         </TabPanels>
       </Tabs>
     </Box>

@@ -11,4 +11,10 @@ export type UptimeCheckSupportedFrequenciesInMinutes =
   | 720
   | 1440;
 
-export type MonitorType = "uptime";
+// Monitor types offered by service
+export type MonitorTypes =
+  | "uptime-monitor"
+  | "lighthouse-monitor"
+  | "browser-monitor";
+
+export type ItemTypes = MonitorTypes | "alert" | "alert-invocation";

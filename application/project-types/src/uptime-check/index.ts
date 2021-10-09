@@ -1,5 +1,4 @@
 import {
-  MonitorType,
   SupportedRegion,
   UptimeCheckSupportedFrequenciesInMinutes,
 } from "../config/index";
@@ -45,7 +44,7 @@ export interface UptimeMonitorWebhookNotification {
   name: string;
   trigger: "up" | "down";
   region: SupportedRegion;
-  monitor_type: MonitorType;
+  monitor_type: "uptime";
   latency: number;
 }
 

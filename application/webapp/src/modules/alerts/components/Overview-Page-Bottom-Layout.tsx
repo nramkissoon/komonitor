@@ -22,7 +22,7 @@ export function OverviewPageBottomLayout(props: OverviewPageBottomLayoutProps) {
     <ScaleFade in={true} initialScale={0.8}>
       <Flex
         wrap="wrap"
-        flexDir={["column", "row"]}
+        flexDir={["column", "column", "row"]}
         justifyContent="space-between"
       >
         <Box
@@ -31,7 +31,7 @@ export function OverviewPageBottomLayout(props: OverviewPageBottomLayoutProps) {
           mb="2em"
           borderRadius="xl"
           py="1.5em"
-          w={["100%", "48%"]}
+          w={["100%", "100%", "48%"]}
           px="1.5em"
         >
           <Heading fontWeight="medium" fontSize="lg" mb=".2em">
@@ -50,7 +50,7 @@ export function OverviewPageBottomLayout(props: OverviewPageBottomLayoutProps) {
           mb="2em"
           borderRadius="xl"
           py="1.5em"
-          w={["100%", "48%"]}
+          w={["100%", "100%", "48%"]}
           px="1.5em"
         >
           <Heading fontWeight="medium" fontSize="lg" mb=".2em">

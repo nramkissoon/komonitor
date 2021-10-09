@@ -9,6 +9,7 @@ export class DevStackDdbTables extends cdk.Construct {
   public readonly alertTable: dynamodb.Table;
   public readonly alertInvocationTable: dynamodb.Table;
   public readonly alertInvocationTableTimestampLsiName: string;
+  public readonly stripeWebhooksTable: dynamodb.Table;
 
   constructor(scope: cdk.Construct, id: string, props: {}) {
     super(scope, id);
@@ -80,6 +81,16 @@ export class DevStackDdbTables extends cdk.Construct {
       indexName: this.alertInvocationTableTimestampLsiName,
       sortKey: { name: "timestamp", type: dynamodb.AttributeType.NUMBER },
       projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    this.stripeWebhooksTable = new dynamodb.Table(this, "stripe_webhooks", {
+      partitionKey: {
+        name: "id",
+        type: dynamodb.AttributeType.STRING,
+      },
+      sortKey: { name: "created", type: dynamodb.AttributeType.NUMBER },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
   }
 }

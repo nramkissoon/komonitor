@@ -4,30 +4,40 @@ import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import {
   AlertRecipientsCell,
   AlertSeverityCell,
+  GenericMonitorNameCell,
   SimpleTimestampCell,
 } from "../../../common/components/Table-Cell";
+import { itemIdToDisplayStringInTableCell } from "../../../common/utils";
 
 interface RowProps {
   timestamp: number;
-  type: string;
   severity: string;
   recipients: string[];
+  monitorType: string;
+  monitor: {
+    id: string;
+    name: string;
+  };
   filterString: string;
 }
 
 function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
   return invocations
-    ? invocations.map((invocation) => ({
-        timestamp: invocation.timestamp,
-        type: invocation.alert.type,
-        severity: invocation.alert.severity,
-        recipients: invocation.alert.recipients,
-        filterString: [
-          invocation.alert.severity,
-          ...invocation.alert.recipients,
-          invocation.alert.type,
-        ].join(" "),
-      }))
+    ? invocations.map((invocation) => {
+        const { severity, recipients } = invocation.alert;
+        const { monitor_id, name, url } = invocation.monitor;
+        return {
+          timestamp: invocation.timestamp,
+          severity: severity,
+          recipients: recipients,
+          monitorType: itemIdToDisplayStringInTableCell(monitor_id),
+          monitor: {
+            id: monitor_id,
+            name: name,
+          },
+          filterString: [...recipients, name, severity, url].join(" "),
+        };
+      })
     : [];
 }
 
@@ -45,7 +55,14 @@ export function InvocationTable(props: InvocationTableProps) {
       accessor: "timestamp",
       Cell: (props) => SimpleTimestampCell({ timestamp: props.cell.value }),
     },
-    { Header: "Type", accessor: "type" },
+    {
+      Header: "Monitor",
+      accessor: "monitor",
+      Cell: (props) => GenericMonitorNameCell(props.cell.value),
+      disableSortBy: true,
+    },
+    { Header: "Monitor Type", accessor: "type" },
+
     {
       Header: "Severity",
       accessor: "severity",
@@ -69,13 +86,6 @@ export function InvocationTable(props: InvocationTableProps) {
         },
         columns: columns,
         itemType: "Alert Invocations",
-        containerBoxProps: {
-          py: "0",
-          px: "0",
-          shadow: "none",
-          bg: "inherit",
-          borderRadius: "none",
-        },
       })}
     </>
   );

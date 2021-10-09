@@ -45,6 +45,45 @@ export async function getInvocationsForAlert(
   }
 }
 
+export async function getInvocationsByAlertIdByMonitorId(
+  ddbClient: DynamoDBClient,
+  alertId: string,
+  monitorId: string,
+  tableName: string,
+  since: number
+) {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: tableName,
+      ExpressionAttributeNames: { "#t": "timestamp" },
+      KeyConditionExpression:
+        "alert_id = :partitionkeyval AND monitor_id >= :sortkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: alertId },
+        ":sortkeyval": { S: monitorId },
+        ":sinceval": { N: since.toString() },
+      },
+      FilterExpression: "#t >= :sinceval",
+    };
+    const query = paginateQuery({ client: ddbClient }, queryCommandInput);
+    const invocations: AlertInvocation[] = [];
+    let done = false;
+    while (!done) {
+      const page = await query.next();
+      done = page.done === undefined || page.done;
+      const queryItems = page.value?.Items ? page.value.Items : [];
+      queryItems.forEach((item) =>
+        invocations.push(unmarshall(item) as AlertInvocation)
+      );
+    }
+    return invocations;
+  } catch (err) {
+    console.error(err);
+    // throw the err up to the API route level
+    throw err;
+  }
+}
+
 export async function getInvocationsForMultipleAlerts(
   ddbClient: DynamoDBClient,
   alertIds: string[],
