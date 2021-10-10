@@ -1,5 +1,6 @@
-import { Button, Text, useToast } from "@chakra-ui/react";
+import { Button, Divider, Text, useToast } from "@chakra-ui/react";
 import React from "react";
+import { ColorModeToggle } from "./ColorModeToggle";
 import {
   DeleteAccountDialog,
   useDeleteAccountDialog,
@@ -29,6 +30,11 @@ export function AccountTab() {
         onError={postErrorToast}
       />
       <Text fontSize="lg" color="gray.500" mb=".7em">
+        Change app's appearance:
+      </Text>
+      <ColorModeToggle />
+      <Divider mb="1em" />
+      <Text fontSize="lg" color="gray.500" mb=".7em">
         Delete your account permanently:
       </Text>
       <Button
@@ -37,6 +43,7 @@ export function AccountTab() {
         bgColor="red.500"
         fontWeight="normal"
         onClick={onOpen}
+        shadow="sm"
         _hover={{
           bg: "red.600",
         }}

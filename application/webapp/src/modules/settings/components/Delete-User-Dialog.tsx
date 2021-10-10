@@ -89,6 +89,7 @@ export function DeleteAccountDialog(props: DeleteAccountDialogProps) {
             onChange={handleInputChange}
             placeholder="delete"
             mb="1"
+            shadow="sm"
           />
           <Text color="red.500">{inputIsError}</Text>
         </AlertDialogBody>

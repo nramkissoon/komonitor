@@ -13,6 +13,7 @@ export function BillingTab() {
         colorScheme="blue"
         color="white"
         bgColor="blue.500"
+        shadow="sm"
         onClick={() => createAndRedirectToCustomerPortal()}
         _hover={{
           bg: "blue.600",
