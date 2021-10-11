@@ -27,6 +27,7 @@ import Link from "next/link";
 import router, { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
+import { HeaderLogo } from "./Header-Logo";
 
 const HeaderLink = (props: {
   text: string;
@@ -222,7 +223,9 @@ export const AppHeader = () => {
         <Flex align="flex-start">
           <Link href="/" passHref>
             <HStack>
-              <Box w="5em">Company</Box>
+              <Box w="5em">
+                <HeaderLogo />
+              </Box>
             </HStack>
           </Link>
         </Flex>

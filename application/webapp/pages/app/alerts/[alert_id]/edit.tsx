@@ -2,9 +2,8 @@ import { Fade } from "@chakra-ui/transition";
 import { useRouter } from "next/router";
 import { Alert } from "project-types";
 import React from "react";
-import { AppHeader } from "../../../../src/common/components/App-Header";
 import { LoadingSpinner } from "../../../../src/common/components/Loading-Spinner";
-import { PageContainer } from "../../../../src/common/components/Page-Container";
+import { PageLayout } from "../../../../src/common/components/Page-Layout";
 import { useAlerts } from "../../../../src/modules/alerts/client";
 import { CreateUpdateForm } from "../../../../src/modules/alerts/components/Create-Update-Form";
 import { useUserServicePlanProductId } from "../../../../src/modules/user/client";
@@ -32,25 +31,20 @@ const AlertEdit: ExtendedNextPage = () => {
     if (a.alert_id === alert_id) alert = a;
   }
   return (
-    <>
-      <Fade in={true}>
-        <AppHeader />
-      </Fade>
-      <PageContainer>
-        {!isError && !isLoading && alert ? (
-          <Fade in={!isLoading}>
-            <CreateUpdateForm
-              productId={data.productId as string}
-              currentAlertAttributes={alert}
-            />
-          </Fade>
-        ) : (
-          <Fade in={isLoading} delay={0.2}>
-            {LoadingSpinner()}
-          </Fade>
-        )}
-      </PageContainer>
-    </>
+    <PageLayout isAppPage>
+      {!isError && !isLoading && alert ? (
+        <Fade in={!isLoading}>
+          <CreateUpdateForm
+            productId={data.productId as string}
+            currentAlertAttributes={alert}
+          />
+        </Fade>
+      ) : (
+        <Fade in={isLoading} delay={0.2}>
+          {LoadingSpinner()}
+        </Fade>
+      )}
+    </PageLayout>
   );
 };
 

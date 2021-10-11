@@ -2,9 +2,8 @@ import { Fade } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { UptimeMonitor } from "project-types";
 import React from "react";
-import { AppHeader } from "../../../../src/common/components/App-Header";
 import { LoadingSpinner } from "../../../../src/common/components/Loading-Spinner";
-import { PageContainer } from "../../../../src/common/components/Page-Container";
+import { PageLayout } from "../../../../src/common/components/Page-Layout";
 import { useAlerts } from "../../../../src/modules/alerts/client";
 import { useUptimeMonitors } from "../../../../src/modules/uptime/client";
 import { CreateUpdateForm } from "../../../../src/modules/uptime/components/Create-Update-Form";
@@ -39,26 +38,21 @@ const UptimeEdit: ExtendedNextPage = () => {
   }
 
   return (
-    <>
-      <Fade in={true}>
-        <AppHeader />
-      </Fade>
-      <PageContainer>
-        {!isError && !isLoading && monitor ? (
-          <Fade in={!isLoading}>
-            <CreateUpdateForm
-              product_id={data.productId as string}
-              currentMonitorAttributes={monitor}
-              userAlerts={alerts}
-            />
-          </Fade>
-        ) : (
-          <Fade in={isLoading} delay={0.2}>
-            {LoadingSpinner()}
-          </Fade>
-        )}
-      </PageContainer>
-    </>
+    <PageLayout isAppPage>
+      {!isError && !isLoading && monitor ? (
+        <Fade in={!isLoading}>
+          <CreateUpdateForm
+            product_id={data.productId as string}
+            currentMonitorAttributes={monitor}
+            userAlerts={alerts}
+          />
+        </Fade>
+      ) : (
+        <Fade in={isLoading} delay={0.2}>
+          {LoadingSpinner()}
+        </Fade>
+      )}
+    </PageLayout>
   );
 };
 

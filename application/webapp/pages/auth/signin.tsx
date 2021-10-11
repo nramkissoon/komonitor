@@ -18,7 +18,7 @@ import { signIn, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Header } from "../../src/common/components/Header";
+import { PageLayout } from "../../src/common/components/Page-Layout";
 import { getErrorStringFromErrorCode } from "../../src/modules/auth/errors";
 import { ExtendedNextPage } from "../_app";
 
@@ -62,8 +62,7 @@ const Signin: ExtendedNextPage = () => {
   const googleOnSubmit = () => signIn("google", { callbackUrl: "/app" });
 
   return (
-    <>
-      <Header />
+    <PageLayout>
       <Container
         p="0"
         shadow="md"
@@ -174,7 +173,7 @@ const Signin: ExtendedNextPage = () => {
           </Button>
         </Flex>
       </Container>
-    </>
+    </PageLayout>
   );
 };
 

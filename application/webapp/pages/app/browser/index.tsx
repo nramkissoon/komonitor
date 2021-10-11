@@ -1,8 +1,9 @@
-import { AppHeader } from "../../../src/common/components/App-Header";
+import React from "react";
+import { PageLayout } from "../../../src/common/components/Page-Layout";
 import { ExtendedNextPage } from "../../_app";
 
 const App: ExtendedNextPage = () => {
-  return <AppHeader />;
+  return <PageLayout isAppPage></PageLayout>;
 };
 
 App.requiresAuth = true;

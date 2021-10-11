@@ -12,21 +12,22 @@ Webapp:
         ☐ design
         ☐ implement
     Regular Page container:
-        ☐ create component where with fading header/footer and PageContainer as child
-        ☐ migrate existing pages to this new component
+        ✔ create component where with fading header/footer and PageContainer as child @done(21-10-11 14:00)
+        ✔ migrate existing pages to this new component @done(21-10-11 14:00)
     App Page container:
-        ☐ same as regular page container but for app pages
-        ☐ migrate existing pages
+        ✔ same as regular page container but for app pages @done(21-10-11 14:00)
+        ✔ migrate existing pages @done(21-10-11 14:00)
     App Header:
         ✔ Change color mode toggle to gear wheel linking to settings and remove settings link @done(21-10-07 14:11)
         ✔ Add links to doc in main link section -> make sure it is also in mobile nav @done(21-10-07 14:11)
+        ☐ color mode responsive logo
     Alert:
         ✔ design invoke table in invocations tab @done(21-10-08 13:48)
         ✔ implement invoke table @done(21-10-08 13:48)
     Settings:
         ✔ implement account and billing tab menu @done(21-10-09 13:47)
         ☐ verify cannot delete account when on paid plan
-        ☐ add appearance color mode toggle 
+        ✔ add appearance color mode toggle @done(21-10-11 13:05)
     Stripe:
         ✔ install stripe @done(21-10-07 14:15)
         ✘ create stripe customer on new user creation @cancelled(21-10-07 19:38)
@@ -37,7 +38,7 @@ Webapp:
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:
-        ☐ Style the email verification email
+        ✔ Style the email verification email @done(21-10-11 14:14)
 
 Uptime Lambda:
     ☐ invoke alert lambda on monitor failure with monitor id and owner id

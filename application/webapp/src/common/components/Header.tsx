@@ -25,6 +25,7 @@ import Link from "next/link";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { HiMoon, HiSun } from "react-icons/hi";
+import { HeaderLogo } from "./Header-Logo";
 
 const HeaderLink = (props: {
   text: string;
@@ -229,7 +230,9 @@ export const Header = () => {
         <Flex align="flex-start">
           <Link href="/" passHref>
             <HStack>
-              <Box w="5em">Company</Box>
+              <Box w="5em">
+                <HeaderLogo />
+              </Box>
             </HStack>
           </Link>
         </Flex>

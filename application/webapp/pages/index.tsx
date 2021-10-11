@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { Header } from "../src/common/components/Header";
+import { PageLayout } from "../src/common/components/Page-Layout";
 
 const Home: NextPage = () => {
-  return Header();
+  return <PageLayout isAppPage={false}></PageLayout>;
 };
 
 export default Home;

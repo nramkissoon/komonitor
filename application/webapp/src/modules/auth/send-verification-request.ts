@@ -30,19 +30,19 @@ function html({ url, host, email }: Record<"url" | "host" | "email", string>) {
   const escapedHost = `${host.replace(/\./g, "&#8203;.")}`;
 
   // Some simple styling options
-  const backgroundColor = "#f9f9f9";
+  const backgroundColor = "#171923";
   const textColor = "#444444";
   const mainBackgroundColor = "#ffffff";
-  const buttonBackgroundColor = "#346df1";
-  const buttonBorderColor = "#346df1";
+  const buttonBackgroundColor = "#3182CE";
+  const buttonBorderColor = "#3182CE";
   const buttonTextColor = "#ffffff";
 
   return `
-<body style="background: ${backgroundColor};">
+<body style="background: ${backgroundColor}; padding: 20px; border-radius: 20px;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td align="center" style="padding: 10px 0px 20px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${textColor};">
-        <strong>${escapedHost}</strong>
+      <td align="center" style="padding: 10px 0px 20px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: #ffffff;">
+        <strong>Komonitor</strong>
       </td>
     </tr>
   </table>

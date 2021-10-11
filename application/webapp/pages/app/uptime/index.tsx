@@ -1,8 +1,7 @@
 import { Fade, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
 import React from "react";
-import { AppHeader } from "../../../src/common/components/App-Header";
 import { LoadingSpinner } from "../../../src/common/components/Loading-Spinner";
-import { PageContainer } from "../../../src/common/components/Page-Container";
+import { PageLayout } from "../../../src/common/components/Page-Layout";
 import {
   use24HourMonitorStatuses,
   useUptimeMonitors,
@@ -26,38 +25,33 @@ const Uptime: ExtendedNextPage = () => {
   );
 
   return (
-    <>
+    <PageLayout isAppPage>
       <Fade in={true}>
-        <AppHeader />
+        <Flex mb="1.8em">
+          <Heading size="lg" fontWeight="normal">
+            Uptime Monitors{" "}
+            <Text fontSize="sm" color="gray.500">
+              (Last 24 hours)
+            </Text>
+          </Heading>
+          <Spacer />
+          <CreateButton />
+        </Flex>
       </Fade>
-      <PageContainer>
-        <Fade in={true}>
-          <Flex mb="1.8em">
-            <Heading size="lg" fontWeight="normal">
-              Uptime Monitors{" "}
-              <Text fontSize="sm" color="gray.500">
-                (Last 24 hours)
-              </Text>
-            </Heading>
-            <Spacer />
-            <CreateButton />
-          </Flex>
-        </Fade>
 
-        {monitorsIsLoading ? (
-          <Fade in={monitorsIsLoading} delay={0.2}>
-            {LoadingSpinner()}
-          </Fade>
-        ) : (
-          <Fade in={!monitorsIsLoading}>
-            <OverviewTable
-              monitors={monitors}
-              statusesMap={statusesIsLoading ? {} : statuses}
-            />
-          </Fade>
-        )}
-      </PageContainer>
-    </>
+      {monitorsIsLoading ? (
+        <Fade in={monitorsIsLoading} delay={0.2}>
+          {LoadingSpinner()}
+        </Fade>
+      ) : (
+        <Fade in={!monitorsIsLoading}>
+          <OverviewTable
+            monitors={monitors}
+            statusesMap={statusesIsLoading ? {} : statuses}
+          />
+        </Fade>
+      )}
+    </PageLayout>
   );
 };
 

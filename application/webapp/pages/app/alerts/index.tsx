@@ -1,7 +1,6 @@
 import { Fade, Flex, Heading, Spacer } from "@chakra-ui/react";
 import React from "react";
-import { AppHeader } from "../../../src/common/components/App-Header";
-import { PageContainer } from "../../../src/common/components/Page-Container";
+import { PageLayout } from "../../../src/common/components/Page-Layout";
 import { useAlerts } from "../../../src/modules/alerts/client";
 import { CreateButton } from "../../../src/modules/alerts/components/Create-Button";
 import { OverviewTable } from "../../../src/modules/alerts/components/Overview-Table";
@@ -15,23 +14,18 @@ const Alert: ExtendedNextPage = () => {
   } = useAlerts();
 
   return (
-    <>
+    <PageLayout isAppPage>
       <Fade in={true}>
-        <AppHeader />
+        <Flex mb="1.8em">
+          <Heading size="lg" fontWeight="normal" m="auto">
+            Alerts
+          </Heading>
+          <Spacer />
+          <CreateButton />
+        </Flex>
       </Fade>
-      <PageContainer mt=".5em">
-        <Fade in={true}>
-          <Flex mb="1.8em">
-            <Heading size="lg" fontWeight="normal" m="auto">
-              Alerts
-            </Heading>
-            <Spacer />
-            <CreateButton />
-          </Flex>
-        </Fade>
-        <OverviewTable alerts={alerts} isLoading={alertsIsLoading} />
-      </PageContainer>
-    </>
+      <OverviewTable alerts={alerts} isLoading={alertsIsLoading} />
+    </PageLayout>
   );
 };
 
