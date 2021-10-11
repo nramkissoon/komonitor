@@ -1,4 +1,4 @@
-import { MonitorTypes } from "src";
+import { MonitorTypes } from "./../config";
 
 export type AlertTypes = "Email" | "Slack";
 
