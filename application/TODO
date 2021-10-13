@@ -45,9 +45,10 @@ Webapp:
 
 Uptime Lambda:
     ☐ invoke alert lambda on monitor failure with monitor id and owner id
+    ☐ add status codes to status updates
 
 Alert Lambda:
-    ☐ Setup package
+    ✔ Setup package @done(21-10-13 14:08)
     ☐ lambda grabs monitor obj from db
     ☐ check if alert is attached to monitor, exit if none
     ☐ grab monitor statuses from status db
@@ -55,6 +56,7 @@ Alert Lambda:
     ☐ alert based on alert type
     ☐ design email alert
     ☐ implement email alert
+    ☐ lambda access to ddb, ses
 
 CDK:
     ☐ add alert lambda to dev stack

@@ -12,6 +12,7 @@ export class LambdaCodeBuildActions extends Construct {
   public manualApprovalAction: ManualApprovalAction;
   public uptimeCheckCodeBuildAction: CodeBuildAction;
   public jobRunnerCodeBuildAction: CodeBuildAction;
+  public lambdaCodeBuildAction: CodeBuildAction;
   constructor(
     scope: Construct,
     id: string,
@@ -62,6 +63,24 @@ export class LambdaCodeBuildActions extends Construct {
         S3_KEY: {
           type: BuildEnvironmentVariableType.PLAINTEXT,
           value: s3Props.jobRunnerLambdaCodeObjectKey,
+        },
+      },
+    });
+
+    this.lambdaCodeBuildAction = new CodeBuildAction({
+      runOrder: 4,
+      actionName: "Alert-Lambda-Build",
+      input: sourceArtifact,
+      project: buildProjects.alertLambdaBuild,
+      variablesNamespace: "alert-build",
+      environmentVariables: {
+        S3_BUCKET: {
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+          value: s3Props.bucketName,
+        },
+        S3_KEY: {
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+          value: s3Props.alertLambdaCodeObjectKey,
         },
       },
     });

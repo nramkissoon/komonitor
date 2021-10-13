@@ -15,7 +15,7 @@ class UptimeCheckLambda extends cdk.Construct {
       monitorStatusTable: dynamodb.Table;
       lambdaCodeIBucket: s3.IBucket;
       key: string;
-      //alertLambda: AlertLambda;
+      alertLambda: AlertLambda;
       region: string;
     }
   ) {
@@ -29,7 +29,7 @@ class UptimeCheckLambda extends cdk.Construct {
       environment: {
         REGION: props.region,
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
-        //ALERT_LAMBDA: props.alertLambda.lambda.functionArn,
+        ALERT_LAMBDA: props.alertLambda.lambda.functionArn,
       },
       timeout: cdk.Duration.seconds(60),
       memorySize: 140,
@@ -54,7 +54,7 @@ class UptimeCheckLambda extends cdk.Construct {
 
     this.lambda.role?.attachInlinePolicy(monitorStatusDbWritePolicy);
 
-    //props.alertLambda.lambda.grantInvoke(this.lambda);
+    props.alertLambda.lambda.grantInvoke(this.lambda);
   }
 }
 
@@ -103,9 +103,12 @@ class AlertLambda extends cdk.Construct {
     scope: cdk.Construct,
     id: string,
     props: {
+      key: string;
       lambdaCodeIBucket: s3.IBucket;
-      monitorStatusTable: dynamodb.Table;
-      uptimeCheckLambdaBucketUrl: string;
+      uptimeMonitorTable: dynamodb.Table;
+      uptimeMonitorStatusTable: dynamodb.Table;
+      alertTable: dynamodb.Table;
+      alertInvocationTable: dynamodb.Table;
     }
   ) {
     super(scope, id);
@@ -113,17 +116,34 @@ class AlertLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, "dev_uptime_check", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromBucket(
-        props.lambdaCodeIBucket,
-        "alert-lambda-package.zip"
-      ),
+      code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
       environment: {
-        MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
+        REGION: "us-east-1",
+        UPTIME_MONITOR_TABLE_NAME: props.uptimeMonitorTable.tableName,
+        UPTIME_MONITOR_STATUS_TABLE_NAME:
+          props.uptimeMonitorStatusTable.tableName,
+        ALERT_TABLE_NAME: props.alertTable.tableName,
+        ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
       },
-      timeout: cdk.Duration.minutes(1),
+      timeout: cdk.Duration.minutes(2),
     });
 
-    props.monitorStatusTable.grantReadData(this.lambda);
+    props.uptimeMonitorTable.grantReadData(this.lambda);
+    props.uptimeMonitorStatusTable.grantReadData(this.lambda);
+    props.alertTable.grantReadData(this.lambda);
+    props.alertInvocationTable.grantWriteData(this.lambda);
+
+    const sesSendPolicyStatement = new iam.PolicyStatement({
+      resources: ["*"],
+      effect: iam.Effect.ALLOW,
+      actions: ["ses:SendEmail", "ses:SendRawEmail"],
+    });
+
+    const sesSendPolicy = new iam.Policy(this, "ses_send_policy", {
+      statements: [sesSendPolicyStatement],
+    });
+
+    this.lambda.role?.attachInlinePolicy(sesSendPolicy);
   }
 }
 
@@ -140,10 +160,13 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeCheckMonitorStatusTable: dynamodb.Table;
       uptimeCheckMonitorTableFrequencyGsiName: string;
       uptimeCheckMonitorTable: dynamodb.Table;
+      alertTable: dynamodb.Table;
+      alertInvocationTable: dynamodb.Table;
       region: string;
       lambdaCodeBucketName: string;
       uptimeCheckLambdaBucketKey: string;
       jobRunnerLambdaBucketKey: string;
+      alertLambdaBucketKey: string;
     }
   ) {
     super(scope, id);
@@ -154,10 +177,14 @@ export class DevStackLambdas extends cdk.Construct {
       { bucketName: props.lambdaCodeBucketName }
     );
 
-    // this.alertLambda = new AlertLambda(this, "alert_lambda", {
-    //   lambdaCodeIBucket: this.lambdaCodeIBucket,
-    //   monitorStatusTable: props.monitorStatusTable,
-    // });
+    this.alertLambda = new AlertLambda(this, "alert_lambda", {
+      lambdaCodeIBucket: this.lambdaCodeIBucket,
+      key: props.alertLambdaBucketKey,
+      alertTable: props.alertTable,
+      alertInvocationTable: props.alertInvocationTable,
+      uptimeMonitorStatusTable: props.uptimeCheckMonitorStatusTable,
+      uptimeMonitorTable: props.uptimeCheckMonitorTable,
+    });
 
     this.uptimeCheckLambda = new UptimeCheckLambda(
       this,
@@ -167,7 +194,7 @@ export class DevStackLambdas extends cdk.Construct {
         lambdaCodeIBucket: this.lambdaCodeIBucket,
         key: props.uptimeCheckLambdaBucketKey,
         region: props.region,
-        //alertLambda: this.alertLambda,
+        alertLambda: this.alertLambda,
       }
     );
 

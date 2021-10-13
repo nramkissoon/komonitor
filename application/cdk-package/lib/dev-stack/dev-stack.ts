@@ -8,6 +8,7 @@ export interface DevStackProps extends StackProps {
   lambdaCodeBucketName: string;
   uptimeCheckLambdaBucketKey: string;
   jobRunnerLambdaBucketKey: string;
+  alertLambdaBucketKey: string;
 }
 
 export class DevStack extends cdk.Stack {
@@ -26,10 +27,13 @@ export class DevStack extends cdk.Stack {
       uptimeCheckMonitorTable: this.tables.uptimeMonitorTable,
       uptimeCheckMonitorTableFrequencyGsiName:
         this.tables.uptimeCheckMonitorTableFrequencyGsiName,
+      alertTable: this.tables.alertTable,
+      alertInvocationTable: this.tables.alertInvocationTable,
       region: props.env?.region || "us-east-1", // dev is always us-east-1 anyways
       lambdaCodeBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
       jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
+      alertLambdaBucketKey: props.alertLambdaBucketKey,
     });
 
     this.events = new ScheduleRules(this, "Events", {

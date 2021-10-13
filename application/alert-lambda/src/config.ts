@@ -6,6 +6,7 @@ interface Config {
   uptimeMonitorTableName: string;
   uptimeMonitorStatusTableName: string;
   alertTableName: string;
+  alertInvocationTableName: string;
 }
 
 export const config: Config = {
@@ -14,6 +15,7 @@ export const config: Config = {
   uptimeMonitorStatusTableName: process.env
     .UPTIME_MONITOR_STATUS_TABLE_NAME as string,
   alertTableName: process.env.ALERT_TABLE_NAME as string,
+  alertInvocationTableName: process.env.ALERT_INVOCATION_TABLE_NAME as string,
 };
 
 export const ddbClient = new DynamoDBClient({ region: "us-east-1" });

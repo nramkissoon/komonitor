@@ -1,6 +1,6 @@
-import { Construct, StackProps, Stage, StageProps } from "@aws-cdk/core";
-import { DevStack, DevStackProps } from "./../../dev-stack/dev-stack";
+import { Construct, StackProps, Stage } from "@aws-cdk/core";
 import { environments } from "../../common/environments";
+import { DevStack, DevStackProps } from "./../../dev-stack/dev-stack";
 
 export class DevStackStage extends Stage {
   public readonly stack: DevStack;
@@ -13,6 +13,7 @@ export class DevStackStage extends Stage {
       lambdaCodeBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
       jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
+      alertLambdaBucketKey: props.alertLambdaBucketKey,
     };
 
     this.stack = new DevStack(this, "DevStack", stackProps);

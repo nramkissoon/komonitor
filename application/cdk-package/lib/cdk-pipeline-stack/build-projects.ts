@@ -1,6 +1,6 @@
 import * as codebuild from "@aws-cdk/aws-codebuild";
-import { LinuxBuildImage, BuildSpec } from "@aws-cdk/aws-codebuild";
-import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
+import { BuildSpec, LinuxBuildImage } from "@aws-cdk/aws-codebuild";
+import { Bucket } from "@aws-cdk/aws-s3";
 import * as cdk from "@aws-cdk/core";
 
 const uptimeCheckBuildSpec = {
@@ -47,9 +47,32 @@ const jobRunnerBuildSpec = {
   },
 };
 
+const alertBuildSpec = {
+  version: "0.2",
+  env: {
+    "exported-variables": ["ARTIFACTS_PATH", "S3_BUCKET"],
+  },
+  phases: {
+    pre_build: {
+      commands: ["cd application/alert-lambda", "npx lerna bootstrap"],
+    },
+    build: {
+      commands: [
+        "export ARTIFACTS_PATH=s3://$S3_BUCKET/$S3_KEY",
+        "npm run build",
+        "cd dist",
+        "zip -r ../package.zip . *",
+        "cd ..",
+        "aws s3 cp package.zip $ARTIFACTS_PATH",
+      ],
+    },
+  },
+};
+
 export class BuildProjects extends cdk.Construct {
   public readonly uptimeCheckLambdaBuild: codebuild.PipelineProject;
   public readonly jobRunnerLambdaBuild: codebuild.PipelineProject;
+  public readonly alertLambdaBuild: codebuild.PipelineProject;
   constructor(scope: cdk.Construct, id: string, props: { s3: Bucket }) {
     super(scope, id);
 
@@ -71,7 +94,17 @@ export class BuildProjects extends cdk.Construct {
       }
     );
 
+    this.alertLambdaBuild = new codebuild.PipelineProject(
+      this,
+      "alertLambdaBuild",
+      {
+        buildSpec: BuildSpec.fromObjectToYaml(alertBuildSpec),
+        environment: { buildImage: LinuxBuildImage.STANDARD_5_0 },
+      }
+    );
+
     props.s3.grantReadWrite(this.uptimeCheckLambdaBuild);
     props.s3.grantReadWrite(this.jobRunnerLambdaBuild);
+    props.s3.grantReadWrite(this.alertLambdaBuild);
   }
 }
