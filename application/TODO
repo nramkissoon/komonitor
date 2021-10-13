@@ -35,6 +35,7 @@ Webapp:
         ☐ Style the checkout session
         ☐ Setup and style the customer portal
         ☐ prevent relay attack on webhooks
+        ✔ webhooks for cancellation, new sub, updated sub @done(21-10-12 22:12)
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:

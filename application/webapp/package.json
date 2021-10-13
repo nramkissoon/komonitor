@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "jest --config jest.config.js --maxWorkers=50%",
     "test:cov": "jest --config jest.config.js --maxWorkers=50% --coverage",
-    "reinstall": "rm -rf node_modules && rm package-lock.json && npm install"
+    "reinstall": "rm -rf node_modules && rm package-lock.json && npm install",
+    "stripe-listen": "stripe listen --forward-to localhost:3000/api/billing/stripe-webhooks --latest"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.30.0",
@@ -27,6 +28,8 @@
     "@next-auth/dynamodb-adapter": "^0.4.2",
     "aws-sdk": "^2.983.0",
     "formik": "^2.2.9",
+    "micro": "^9.3.4",
+    "micro-cors": "^0.1.1",
     "framer-motion": "^4.1.17",
     "javascript-time-ago": "^2.3.8",
     "next": "11.1.0",
@@ -53,6 +56,8 @@
     "@types/react-table": "^7.7.2",
     "@types/sinon": "^10.0.2",
     "@types/uuid": "^8.3.1",
+    "@types/micro": "^7.3.6",
+    "@types/micro-cors": "^0.1.2",
     "babel-jest": "^27.0.6",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.0",

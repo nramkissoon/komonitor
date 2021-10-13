@@ -9,7 +9,8 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { User } from "project-types";
-import { createStripeCustomer } from "../billing/customer";
+import Stripe from "stripe";
+import { createStripeCustomer, getStripeCustomer } from "../billing/customer";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
 export async function getUserById(
@@ -198,6 +199,106 @@ export async function getOrCreateStripeCustomerIdForUserId(
     throw new Error("Failed to updated customer with Stripe customer ID");
   } catch (err) {
     console.log(err);
+    throw err;
+  }
+}
+
+export async function downgradeUserToFreePlan(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string
+) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: userTableName,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      ExpressionAttributeValues: {
+        ":p": { S: PLAN_PRODUCT_IDS.FREE },
+      },
+      UpdateExpression:
+        "SET product_id = :p REMOVE subscription_status, current_period_end, subscription_id",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+// "provision" is the same as update
+export async function provisionSubscriptionProductForUser(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string,
+  subscriptionId: string,
+  subscriptionStatus: string,
+  currentPeriodEnd: number,
+  productId: string
+) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: userTableName,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      ExpressionAttributeValues: {
+        ":p": { S: productId },
+        ":i": { S: subscriptionId },
+        ":s": { S: subscriptionStatus },
+        ":c": { N: currentPeriodEnd.toString() },
+      },
+      UpdateExpression:
+        "SET product_id=:p, subscription_id=:i, current_period_end=:c, subscription_status=:s ",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function getUserFromStripeCustomerId(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  customerId: string
+) {
+  try {
+    const user = await getUserById(
+      ddbClient,
+      userTableName,
+      ((await getStripeCustomer(customerId)) as Stripe.Customer).metadata[
+        "user_id"
+      ]
+    );
+
+    if (user !== undefined) return user;
+    else {
+      throw new Error("undefined user");
+    }
+  } catch (err) {
+    console.error(err);
     throw err;
   }
 }

@@ -17,7 +17,7 @@ export interface NextAuthUserAttributes {
 export interface StripeAttributes {
   customer_id?: string;
   subscription_id?: string;
-  current_period_end?: string;
+  current_period_end?: number;
   subscription_status?: string;
   product_id?: string;
 }

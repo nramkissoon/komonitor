@@ -15,6 +15,7 @@ export const env = {
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
   STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY as string,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET as string,
+  STRIPE_WEBHOOK_TABLE_NAME: process.env.STRIPE_WEBHOOK_TABLE_NAME as string,
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
 };
 
