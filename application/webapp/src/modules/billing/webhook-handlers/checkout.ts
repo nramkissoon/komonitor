@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { ddbClient, env } from "../../../common/server-utils";
+import { convertStripeTimestampToAppTimestampWithBuffer } from "../../../common/utils";
 import { provisionSubscriptionProductForUser } from "../../user/user-db";
 import { getStripeCustomer } from "../customer";
 import { getStripeSubscription } from "../subscriptions";
@@ -21,7 +22,9 @@ export async function handleCheckoutSessionCompleted(
       userId,
       subscriptionId,
       subscription.status,
-      subscription.current_period_end,
+      convertStripeTimestampToAppTimestampWithBuffer(
+        subscription.current_period_end
+      ),
       subscription.items.data[0].price.product as string
     );
   } catch (err) {

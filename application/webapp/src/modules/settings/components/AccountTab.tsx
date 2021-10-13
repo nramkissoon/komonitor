@@ -10,7 +10,7 @@ export function AccountTab() {
   const errorToast = useToast();
   const postErrorToast = (message: string) =>
     errorToast({
-      title: "Unable to delete alert.",
+      title: "Unable to delete account.",
       description: message,
       status: "error",
       duration: 9000,
@@ -30,7 +30,7 @@ export function AccountTab() {
         onError={postErrorToast}
       />
       <Text fontSize="lg" color="gray.500" mb=".7em">
-        Change app's appearance:
+        Appearance:
       </Text>
       <ColorModeToggle />
       <Divider mb="1em" />

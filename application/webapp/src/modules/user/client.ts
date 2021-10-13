@@ -35,5 +35,7 @@ export async function deleteUser(onError: (message: string) => void) {
         errorMessage = "An unknown error occurred. Please try again later.";
     }
     onError(errorMessage);
+    return false;
   }
+  return true;
 }

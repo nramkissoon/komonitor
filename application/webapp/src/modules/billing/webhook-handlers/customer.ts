@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { ddbClient, env } from "../../../common/server-utils";
+import { convertStripeTimestampToAppTimestampWithBuffer } from "../../../common/utils";
 import {
   downgradeUserToFreePlan,
   provisionSubscriptionProductForUser,
@@ -35,7 +36,9 @@ export async function handleCustomerSubscriptionUpdated(
       userId,
       subscription.id,
       subscription.status,
-      subscription.current_period_end,
+      convertStripeTimestampToAppTimestampWithBuffer(
+        subscription.current_period_end
+      ),
       subscription.items.data[0].price.product as string
     );
   } catch (err) {

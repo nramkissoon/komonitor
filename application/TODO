@@ -40,6 +40,8 @@ Webapp:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:
         ✔ Style the email verification email @done(21-10-11 14:14)
+    API: 
+        ☐ check if subscriptions are valid in API's
 
 Uptime Lambda:
     ☐ invoke alert lambda on monitor failure with monitor id and owner id

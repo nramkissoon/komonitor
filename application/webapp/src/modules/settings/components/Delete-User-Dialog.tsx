@@ -46,8 +46,8 @@ export function DeleteAccountDialog(props: DeleteAccountDialogProps) {
       setInputIsError("Enter 'delete' in the input above to delete account.");
       return;
     } else if (inputVal === "delete") {
-      await deleteUser(onError);
-      signOut();
+      const deleted = await deleteUser(onError);
+      if (deleted) signOut();
       onClose();
     }
   };

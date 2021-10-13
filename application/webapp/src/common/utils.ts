@@ -1,4 +1,5 @@
 import { ItemTypes } from "project-types";
+import { PLAN_PRODUCT_IDS } from "../modules/billing/plans";
 
 export function percentile(values: number[], perc: number) {
   values = values.filter((value) => value !== -1); // REQUIRED BECAUSE -1 REPRESENTS NO RESPONSE / FAILURE
@@ -51,5 +52,34 @@ export function getItemBaseUrlFromItemId(id: string) {
       return "/app/browser/";
     default:
       return "/";
+  }
+}
+
+export function convertSecondsTimeStampToMilliSeconds(timestamp: number) {
+  return timestamp * 1000;
+}
+
+export function addThreeDaysToStripeTimeStamp(timestamp: number) {
+  return timestamp + 3 * 24 * 60 * 60;
+}
+
+export function convertStripeTimestampToAppTimestampWithBuffer(
+  timestamp: number
+) {
+  return convertSecondsTimeStampToMilliSeconds(
+    addThreeDaysToStripeTimeStamp(timestamp)
+  );
+}
+
+export function getDisplayStringFromPlanProductId(id: string) {
+  switch (id) {
+    case PLAN_PRODUCT_IDS.FREE:
+      return "Free Plan";
+    case PLAN_PRODUCT_IDS.FREELANCER:
+      return "Freelancer Plan";
+    case PLAN_PRODUCT_IDS.BUSINESS:
+      return "Business Plan";
+    default:
+      return "";
   }
 }
