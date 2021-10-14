@@ -75,7 +75,8 @@ export class CdkPipelineStack extends cdk.Stack {
     lambdaBuildStage.addActions(
       lambdaCodeBuildActions.manualApprovalAction,
       lambdaCodeBuildActions.uptimeCheckCodeBuildAction,
-      lambdaCodeBuildActions.jobRunnerCodeBuildAction
+      lambdaCodeBuildActions.jobRunnerCodeBuildAction,
+      lambdaCodeBuildActions.lambdaCodeBuildAction
     );
 
     const devStackStage = new DevStackStage(this, "DevStackStage", {
