@@ -1,3 +1,8 @@
+import {
+  InvocationType,
+  InvokeCommand,
+  InvokeCommandInput,
+} from "@aws-sdk/client-lambda";
 import AbortController from "abort-controller";
 import {
   SupportedRegion,
@@ -6,7 +11,22 @@ import {
   UptimeMonitorWebhookNotification,
 } from "project-types";
 import request from "request";
+import { config } from "./config";
 import { writeStatusToDB } from "./status-db";
+
+const asyncInvokeLambda = async (event: {
+  monitorId: string;
+  ownerId: string;
+}) => {
+  const input: InvokeCommandInput = {
+    FunctionName: config.ALERT_LAMBDA_NAME,
+    InvocationType: InvocationType.Event, // asynchronous invocation type
+    Payload: new Uint8Array(Buffer.from(JSON.stringify(event))),
+  };
+
+  const command = new InvokeCommand(input);
+  return await config.lambdaClient.send(command);
+};
 
 const controller = new AbortController();
 const fetchTimeout = setTimeout(() => {
@@ -140,11 +160,15 @@ export const runJob = async (job: UptimeMonitorJob) => {
 
   if (webhook_url) {
     const webhook = buildWebhook(status, url, name);
-    // no await, keep it pushing
-    webhookNotifyCall(webhook_url, webhook);
+
+    await webhookNotifyCall(webhook_url, webhook);
   }
 
   if (status.status === "down") {
-    // TODO invoke alert Lambda
+    const res = await asyncInvokeLambda({
+      monitorId: monitor_id,
+      ownerId: owner_id,
+    });
+    console.log(`${res.StatusCode} status code: alert lambda invocation`);
   }
 };

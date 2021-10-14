@@ -26,7 +26,7 @@ Webapp:
         ✔ implement invoke table @done(21-10-08 13:48)
     Settings:
         ✔ implement account and billing tab menu @done(21-10-09 13:47)
-        ☐ verify cannot delete account when on paid plan
+        ✔ verify cannot delete account when on paid plan @done(21-10-13 20:13)
         ✔ add appearance color mode toggle @done(21-10-11 13:05)
     Stripe:
         ✔ install stripe @done(21-10-07 14:15)
@@ -59,8 +59,8 @@ Alert Lambda:
     ☐ lambda access to ddb, ses
 
 CDK:
-    ☐ add alert lambda to dev stack
-    ☐ add invoke perm to uptime lambda
+    ✔ add alert lambda to dev stack @done(21-10-13 19:56)
+    ✔ add invoke perm to uptime lambda @done(21-10-13 19:56)
     ✔ create dev stack ddb table for stripe webhooks @done(21-10-08 14:29)
     ☐ create the prod ddb tables in us-east-1
 

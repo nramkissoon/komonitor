@@ -29,7 +29,7 @@ class UptimeCheckLambda extends cdk.Construct {
       environment: {
         REGION: props.region,
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
-        ALERT_LAMBDA: props.alertLambda.lambda.functionArn,
+        ALERT_LAMBDA_NAME: props.alertLambda.lambda.functionName,
       },
       timeout: cdk.Duration.seconds(60),
       memorySize: 140,
