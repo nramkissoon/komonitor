@@ -92,6 +92,7 @@ export class CdkPipelineStack extends cdk.Stack {
         commands: [
           `aws lambda update-function-code --function-name ${DEV_STACK.UPTIME_CHECK_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${UPTIME_CHECK_LAMBDA_CODE_KEY}`,
           `aws lambda update-function-code --function-name ${DEV_STACK.JOB_RUNNER_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${JOB_RUNNER_LAMBDA_CODE_KEY}`,
+          `aws lambda update-function-code --function-name ${DEV_STACK.ALERT_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${ALERT_LAMBDA_CODE_KEY}`,
         ],
         additionalArtifacts: [sourceArtifact],
         rolePolicyStatements: [

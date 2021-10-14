@@ -117,6 +117,7 @@ class AlertLambda extends cdk.Construct {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
       code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
+      functionName: DEV_STACK.ALERT_LAMBDA,
       environment: {
         REGION: "us-east-1",
         UPTIME_MONITOR_TABLE_NAME: props.uptimeMonitorTable.tableName,
