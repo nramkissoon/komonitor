@@ -17,7 +17,10 @@ import {
   isValidCoreUptimeMonitor,
   isValidUptimeMonitor,
 } from "../../../../src/modules/uptime/validation";
-import { getServicePlanProductIdForUser } from "../../../../src/modules/user/user-db";
+import {
+  getServicePlanProductIdForUser,
+  getUserSubscriptionIsValid,
+} from "../../../../src/modules/user/user-db";
 
 async function getHandler(
   req: NextApiRequest,
@@ -100,24 +103,24 @@ async function createHandler(
   try {
     // check if user is allowed to create a new monitor
     const userId = session.uid as string;
-    const product_id = await getServicePlanProductIdForUser(
+    const { productId, valid } = await getUserSubscriptionIsValid(
       ddbClient,
       env.USER_TABLE_NAME,
       session.uid as string
     );
-    const allowance = getUptimeMonitorAllowanceFromProductId(product_id);
+    const allowance = getUptimeMonitorAllowanceFromProductId(productId);
     const currentMonitorsTotal = (
       await getMonitorsForUser(ddbClient, env.UPTIME_MONITOR_TABLE_NAME, userId)
     ).length;
 
-    if (allowance <= currentMonitorsTotal) {
+    if (allowance <= currentMonitorsTotal || !valid) {
       res.status(403);
       return;
     }
 
     // validate the new monitor
     const monitor = req.body;
-    if (!monitor || !isValidCoreUptimeMonitor(monitor, product_id)) {
+    if (!monitor || !isValidCoreUptimeMonitor(monitor, productId)) {
       res.status(400);
       return;
     }

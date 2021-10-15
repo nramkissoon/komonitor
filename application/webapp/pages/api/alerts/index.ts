@@ -6,19 +6,22 @@ import {
   deleteAlert,
   getAlertForUserByAlertId,
   getAlertsForUser,
-  putAlert
+  putAlert,
 } from "../../../src/modules/alerts/alert-db";
 import {
   createNewAlertFromEditableAlertAttributesWithType,
-  createUpdatedAlert
+  createUpdatedAlert,
 } from "../../../src/modules/alerts/utils";
 import {
   isValidAlert,
-  isValidEditableAlertAttributesWithType
+  isValidEditableAlertAttributesWithType,
 } from "../../../src/modules/alerts/validation";
 import { getAlertAllowanceFromProductId } from "../../../src/modules/billing/plans";
 import { getMonitorsForUser } from "../../../src/modules/uptime/monitor-db";
-import { getServicePlanProductIdForUser } from "../../../src/modules/user/user-db";
+import {
+  getServicePlanProductIdForUser,
+  getUserSubscriptionIsValid,
+} from "../../../src/modules/user/user-db";
 
 async function getHandler(
   req: NextApiRequest,
@@ -35,7 +38,7 @@ async function getHandler(
     res.status(200);
     res.json(alerts);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500);
   }
 }
@@ -48,7 +51,7 @@ async function createHandler(
   try {
     // check if user is allowed to create a new alert
     const userId = session.uid as string;
-    const productId = await getServicePlanProductIdForUser(
+    const { productId, valid } = await getUserSubscriptionIsValid(
       ddbClient,
       env.USER_TABLE_NAME,
       userId
@@ -58,7 +61,7 @@ async function createHandler(
       await getAlertsForUser(ddbClient, env.ALERT_TABLE_NAME, userId)
     ).length;
 
-    if (allowance <= currentAlertTotal) {
+    if (allowance <= currentAlertTotal || !valid) {
       res.status(403);
       return;
     }

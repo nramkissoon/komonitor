@@ -49,14 +49,15 @@ Uptime Lambda:
 
 Alert Lambda:
     ✔ Setup package @done(21-10-13 14:08)
-    ☐ lambda grabs monitor obj from db
-    ☐ check if alert is attached to monitor, exit if none
+    ✔ lambda grabs monitor obj from db @done(21-10-14 13:19)
+    ✔ check if alert is attached to monitor, exit if none @done(21-10-14 13:19)
     ☐ grab monitor statuses from status db
     ☐ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused
     ☐ alert based on alert type
     ☐ design email alert
     ☐ implement email alert
-    ☐ lambda access to ddb, ses
+    ✔ lambda access to ddb, ses @done(21-10-14 12:26)
+    ☐ Promise.all the data dependancies
 
 CDK:
     ✔ add alert lambda to dev stack @done(21-10-13 19:56)

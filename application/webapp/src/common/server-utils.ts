@@ -25,3 +25,9 @@ export const stripeClient = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
   typescript: true,
 });
+
+export const API_ERROR_REASONS = {
+  SUBSCRIPTION_EXPIRED: 1,
+  CREATION_LIMIT_REACHED: 2,
+  RESOURCE_DOES_NOT_BELONG_TO_REQUESTER: 3,
+};

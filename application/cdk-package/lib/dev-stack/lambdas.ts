@@ -74,7 +74,7 @@ class JobRunnerLambda extends cdk.Construct {
   ) {
     super(scope, id);
 
-    this.lambda = new lambda.Function(this, "dev_uptime_check", {
+    this.lambda = new lambda.Function(this, "job-runner", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
       code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
@@ -109,11 +109,12 @@ class AlertLambda extends cdk.Construct {
       uptimeMonitorStatusTable: dynamodb.Table;
       alertTable: dynamodb.Table;
       alertInvocationTable: dynamodb.Table;
+      userTable: dynamodb.Table;
     }
   ) {
     super(scope, id);
 
-    this.lambda = new lambda.Function(this, "dev_uptime_check", {
+    this.lambda = new lambda.Function(this, "alert", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
       code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
@@ -125,6 +126,7 @@ class AlertLambda extends cdk.Construct {
           props.uptimeMonitorStatusTable.tableName,
         ALERT_TABLE_NAME: props.alertTable.tableName,
         ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
+        USER_TABLE_NAME: props.userTable.tableName,
       },
       timeout: cdk.Duration.minutes(2),
     });
@@ -133,6 +135,7 @@ class AlertLambda extends cdk.Construct {
     props.uptimeMonitorStatusTable.grantReadData(this.lambda);
     props.alertTable.grantReadData(this.lambda);
     props.alertInvocationTable.grantWriteData(this.lambda);
+    props.userTable.grantReadData(this.lambda);
 
     const sesSendPolicyStatement = new iam.PolicyStatement({
       resources: ["*"],
@@ -162,6 +165,7 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeCheckMonitorTableFrequencyGsiName: string;
       uptimeCheckMonitorTable: dynamodb.Table;
       alertTable: dynamodb.Table;
+      userTable: dynamodb.Table;
       alertInvocationTable: dynamodb.Table;
       region: string;
       lambdaCodeBucketName: string;
@@ -185,6 +189,7 @@ export class DevStackLambdas extends cdk.Construct {
       alertInvocationTable: props.alertInvocationTable,
       uptimeMonitorStatusTable: props.uptimeCheckMonitorStatusTable,
       uptimeMonitorTable: props.uptimeCheckMonitorTable,
+      userTable: props.userTable,
     });
 
     this.uptimeCheckLambda = new UptimeCheckLambda(

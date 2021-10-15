@@ -5,6 +5,7 @@ import {
 } from "@aws-sdk/client-lambda";
 import AbortController from "abort-controller";
 import {
+  MonitorTypes,
   SupportedRegion,
   UptimeMonitorJob,
   UptimeMonitorStatus,
@@ -17,6 +18,7 @@ import { writeStatusToDB } from "./status-db";
 const asyncInvokeLambda = async (event: {
   monitorId: string;
   ownerId: string;
+  monitorType: MonitorTypes;
 }) => {
   const input: InvokeCommandInput = {
     FunctionName: config.ALERT_LAMBDA_NAME,
@@ -168,6 +170,7 @@ export const runJob = async (job: UptimeMonitorJob) => {
     const res = await asyncInvokeLambda({
       monitorId: monitor_id,
       ownerId: owner_id,
+      monitorType: "uptime-monitor",
     });
     console.log(`${res.StatusCode} status code: alert lambda invocation`);
   }

@@ -99,6 +99,34 @@ export async function getServicePlanProductIdForUser(
   }
 }
 
+export async function getUserSubscriptionIsValid(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string
+) {
+  try {
+    const user = await getUserById(ddbClient, userTableName, userId);
+    if (!user) {
+      throw new Error("undefined user");
+    }
+    if (
+      user.product_id &&
+      user.product_id !== null &&
+      user.product_id !== PLAN_PRODUCT_IDS.FREE &&
+      user.current_period_end
+    ) {
+      const now = Date.now();
+      return {
+        valid: user.current_period_end >= now,
+        productId: user.product_id,
+      };
+    }
+    return { valid: true, productId: PLAN_PRODUCT_IDS.FREE };
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function setServicePlanProductIdForUser(
   ddbClient: DynamoDBClient,
   userTableName: string,
