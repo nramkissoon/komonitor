@@ -19,6 +19,7 @@ export class DevStackDdbTables extends cdk.Construct {
       sortKey: { name: "sk", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "komonitor-dev-user",
     });
 
     this.userTable.addGlobalSecondaryIndex({
@@ -33,6 +34,7 @@ export class DevStackDdbTables extends cdk.Construct {
       sortKey: { name: "monitor_id", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "komonitor-dev-uptime-monitor",
     });
 
     this.uptimeCheckMonitorTableFrequencyGsiName = "frequencyGSI";
@@ -55,6 +57,7 @@ export class DevStackDdbTables extends cdk.Construct {
         sortKey: { name: "timestamp", type: dynamodb.AttributeType.NUMBER },
         billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
         removalPolicy: cdk.RemovalPolicy.DESTROY,
+        tableName: "komonitor-dev-uptime-monitor-status",
       }
     );
 
@@ -63,6 +66,7 @@ export class DevStackDdbTables extends cdk.Construct {
       sortKey: { name: "alert_id", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "komonitor-dev-alert",
     });
 
     this.alertInvocationTable = new dynamodb.Table(this, "alert_invocation", {
@@ -73,6 +77,7 @@ export class DevStackDdbTables extends cdk.Construct {
       sortKey: { name: "monitor_id", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "komonitor-dev-alert-invocation",
     });
 
     this.alertInvocationTableTimestampLsiName = "timestampLSI";
@@ -91,6 +96,7 @@ export class DevStackDdbTables extends cdk.Construct {
       sortKey: { name: "created", type: dynamodb.AttributeType.NUMBER },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "komonitor-dev-stripe-webhook",
     });
   }
 }
