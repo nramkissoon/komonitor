@@ -5,7 +5,7 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { UptimeMonitor, UptimeMonitorStatus } from "project-types";
+import { Alert, UptimeMonitor, UptimeMonitorStatus, User } from "project-types";
 
 export async function getUptimeMonitorForUserByMonitorId(
   ddbClient: DynamoDBClient,
@@ -63,5 +63,54 @@ export async function getStatusesForUptimeMonitor(
   } catch (err) {
     console.error(err);
     return [];
+  }
+}
+
+export async function getUserById(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  id: string
+): Promise<User | undefined> {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: userTableName,
+      KeyConditionExpression: "pk = :partitionkeyval AND sk = :sortkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: "USER#" + id },
+        ":sortkeyval": { S: "USER#" + id },
+      },
+    };
+    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
+    if (response.Count && response.Count > 0 && response.Items) {
+      const user = unmarshall(response.Items[0]) as User;
+      return user;
+    }
+  } catch (err) {
+    return;
+  }
+}
+
+export async function getAlertForUserByAlertId(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  userId: string,
+  alertId: string
+) {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: tableName,
+      KeyConditionExpression:
+        "owner_id = :partitionkeyval AND alert_id = :sortkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: userId },
+        ":sortkeyval": { S: alertId },
+      },
+    };
+    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
+    if (response?.Count === 1 && response.Items) {
+      return unmarshall(response.Items[0]) as Alert;
+    }
+  } catch (err) {
+    return null;
   }
 }

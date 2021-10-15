@@ -51,7 +51,8 @@ Alert Lambda:
     ✔ Setup package @done(21-10-13 14:08)
     ✔ lambda grabs monitor obj from db @done(21-10-14 13:19)
     ✔ check if alert is attached to monitor, exit if none @done(21-10-14 13:19)
-    ☐ grab monitor statuses from status db
+    ✔ grab monitor statuses from status db @done(21-10-15 12:06)
+    ☐ get user email from user table
     ☐ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused
     ☐ alert based on alert type
     ☐ design email alert

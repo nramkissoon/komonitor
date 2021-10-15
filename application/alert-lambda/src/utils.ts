@@ -1,5 +1,6 @@
 import { config, ddbClient } from "./config";
 import {
+  getAlertForUserByAlertId,
   getStatusesForUptimeMonitor,
   getUptimeMonitorForUserByMonitorId,
 } from "./dynamo-db";
@@ -27,4 +28,17 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
     config.uptimeMonitorStatusTableName,
     (monitor.failures_before_alert as number) + 2 // +2 buffer
   );
+
+  const alert = await getAlertForUserByAlertId(
+    ddbClient,
+    config.alertTableName,
+    userId,
+    monitor.alert_id
+  );
+
+  if (alert === null || alert === undefined) {
+    throw new Error(`Alert is ${alert}`);
+  }
+
+  let alertShouldTrigger: boolean = true;
 }
