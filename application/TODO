@@ -5,12 +5,12 @@ General:
 
 Webapp: 
     App Footer:
-        ☐ implement 
+        ✔ implement @10/22 @done(21-10-18 12:00)
     Pricing page:
         ✔ Add link to FAQ and email to contact @done(21-10-07 14:02)
     Regular Footer:
-        ☐ design
-        ☐ implement
+        ✔ design @10/22 @done(21-10-18 14:30)
+        ✔ implement @10/22 @done(21-10-18 14:30)
     Regular Page container:
         ✔ create component where with fading header/footer and PageContainer as child @done(21-10-11 14:00)
         ✔ migrate existing pages to this new component @done(21-10-11 14:00)
@@ -20,7 +20,7 @@ Webapp:
     App Header:
         ✔ Change color mode toggle to gear wheel linking to settings and remove settings link @done(21-10-07 14:11)
         ✔ Add links to doc in main link section -> make sure it is also in mobile nav @done(21-10-07 14:11)
-        ☐ color mode responsive logo
+        ☐ color mode responsive logo @10/22
     Alert:
         ✔ design invoke table in invocations tab @done(21-10-08 13:48)
         ✔ implement invoke table @done(21-10-08 13:48)
@@ -32,31 +32,37 @@ Webapp:
         ✔ install stripe @done(21-10-07 14:15)
         ✘ create stripe customer on new user creation @cancelled(21-10-07 19:38)
         ✔ getOrCreateStripeCustomerIdForUserId() @done(21-10-07 20:23)
-        ☐ Style the checkout session
-        ☐ Setup and style the customer portal
-        ☐ prevent relay attack on webhooks
+        ☐ Style the checkout session @10/22
+        ☐ Setup and style the customer portal @10/22
+        ☐ prevent relay attack on webhooks @10/22
         ✔ webhooks for cancellation, new sub, updated sub @done(21-10-12 22:12)
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:
         ✔ Style the email verification email @done(21-10-11 14:14)
+        ☐ change hover color for create buttons and go to app button @10/22
     API: 
         ☐ check if subscriptions are valid in API's
+    Landing: 
+        ☐ create a design and sections @10/22
+
 
 Uptime Lambda:
-    ☐ invoke alert lambda on monitor failure with monitor id and owner id
+    ✔ invoke alert lambda on monitor failure with monitor id and owner id @done(21-10-17 22:14)
     ☐ add status codes to status updates
+    ✔ use user agent Komonitor @10/22 @done(21-10-18 14:31)
+    ☐ investigate response times
 
 Alert Lambda:
     ✔ Setup package @done(21-10-13 14:08)
     ✔ lambda grabs monitor obj from db @done(21-10-14 13:19)
     ✔ check if alert is attached to monitor, exit if none @done(21-10-14 13:19)
     ✔ grab monitor statuses from status db @done(21-10-15 12:06)
-    ☐ get user email from user table
-    ☐ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused
-    ☐ alert based on alert type
-    ☐ design email alert
-    ☐ implement email alert
+    ✘ get user email from user table @cancelled(21-10-17 09:45)
+    ☐ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused @10/22
+    ☐ alert based on alert type @10/22
+    ☐ design email alert @10/22
+    ☐ implement email alert @10/22
     ✔ lambda access to ddb, ses @done(21-10-14 12:26)
     ☐ Promise.all the data dependancies
 
@@ -70,3 +76,5 @@ Logging and Error Handling:
     ☐ Decide logging strategy for webapp
     ☐ replace console.log/error in webapp with logging provider
     ☐ Decide logging strategy for lambdas and implement
+
+☐ flesh out linux game

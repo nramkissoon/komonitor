@@ -1,4 +1,4 @@
-import { Button, useColorModeValue } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 
 export const CreateButton = () => {
@@ -7,21 +7,15 @@ export const CreateButton = () => {
       <Button
         size="lg"
         as="a"
-        bgGradient={useColorModeValue(
-          "linear(to-r, blue.500, blue.400)",
-          "linear(to-r, blue.300, blue.400)"
-        )}
-        colorScheme="blue"
         fontSize="lg"
         fontWeight="medium"
-        color="white"
         px="1em"
         shadow="md"
+        colorScheme="blue"
+        bgColor="blue.400"
+        color="white"
         _hover={{
-          bgGradient: useColorModeValue(
-            "linear(to-l, blue.300, blue.400)",
-            "linear(to-l, blue.500, blue.400)"
-          ),
+          bg: "blue.600",
         }}
       >
         Create Monitor

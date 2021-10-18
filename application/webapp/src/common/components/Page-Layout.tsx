@@ -16,7 +16,7 @@ export function PageLayout(props: PageLayoutProps & any) {
   const header = isAppPage ? <AppHeader /> : <Header />;
 
   return (
-    <Box display="flex" flexDir="column" minH="100vh" p={0} m={0}>
+    <Box display="flex" flexDir="column" minH="95vh" p={0} m={0}>
       <Fade in={true}>{header}</Fade>
       <PageContainer>{props.children}</PageContainer>
       {footer}

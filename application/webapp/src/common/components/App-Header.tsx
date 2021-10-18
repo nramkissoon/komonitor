@@ -17,7 +17,6 @@ import {
   Spacer,
   StackProps,
   Tooltip,
-  useColorMode,
   useColorModeValue,
   useDisclosure,
   VStack,
@@ -168,8 +167,6 @@ export const AppHeader = () => {
 
   const [session, loading] = useSession();
   const authed = session?.user !== undefined;
-
-  const { toggleColorMode: toggleMode } = useColorMode();
 
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",

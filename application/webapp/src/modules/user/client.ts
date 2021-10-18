@@ -36,6 +36,7 @@ export async function deleteUser(onError: (message: string) => void) {
     }
     onError(errorMessage);
     return false;
+    // ye mum was here
   }
   return true;
 }

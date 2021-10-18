@@ -47,7 +47,7 @@ const fetchCall = async (url: string) => {
           time: true,
           timeout: 5000,
           headers: {
-            "User-Agent": "isthisfine",
+            "User-Agent": "Komonitor",
           },
         },
         (err, response) => {
@@ -59,7 +59,7 @@ const fetchCall = async (url: string) => {
                 ? (response.statusCode >= 200 && response.statusCode < 300) ||
                   response.statusCode === 429 // Too many requests
                 : false,
-              latency: response.timingPhases?.total,
+              latency: response.timingPhases?.firstByte,
             });
           }
         }
@@ -81,7 +81,7 @@ const webhookNotifyCall = async (
     response = await fetch(url, {
       method: "POST",
       headers: {
-        "User-Agent": "isthisfine",
+        "User-Agent": "Komonitor",
         "Content-Type": "application/json",
       },
       signal: controller.signal,

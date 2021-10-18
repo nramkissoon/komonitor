@@ -62,10 +62,13 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
       <Button
         size="md"
         colorScheme="blue"
-        bgGradient="linear(to-r, blue.400, blue.300)"
+        bgColor="blue.400"
         fontSize="lg"
         fontWeight="medium"
         color="white"
+        _hover={{
+          bg: "blue.600",
+        }}
       >
         {authed ? "Go to App" : "Get Started"}
       </Button>
