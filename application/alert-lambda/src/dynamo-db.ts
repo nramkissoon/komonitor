@@ -5,7 +5,13 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { Alert, UptimeMonitor, UptimeMonitorStatus, User } from "project-types";
+import {
+  Alert,
+  AlertInvocation,
+  UptimeMonitor,
+  UptimeMonitorStatus,
+  User,
+} from "project-types";
 
 export async function getUptimeMonitorForUserByMonitorId(
   ddbClient: DynamoDBClient,
@@ -63,6 +69,35 @@ export async function getStatusesForUptimeMonitor(
   } catch (err) {
     console.error(err);
     return [];
+  }
+}
+
+export async function getPreviousInvocationForAlert(
+  ddbClient: DynamoDBClient,
+  alertId: string,
+  tableName: string,
+  invocationTableLsiName: string
+) {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: tableName,
+      IndexName: invocationTableLsiName,
+      KeyConditionExpression: "alert_id = :partitionkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: alertId },
+      },
+      ScanIndexForward: false,
+      Limit: 1,
+    };
+    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
+    if (response.Count && response.Count > 0 && response.Items) {
+      const invocation = unmarshall(response.Items[0]) as AlertInvocation;
+      return invocation;
+    }
+    return;
+  } catch (err) {
+    console.error(err);
+    return;
   }
 }
 

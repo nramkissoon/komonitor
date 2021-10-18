@@ -8,6 +8,7 @@ interface Config {
   alertTableName: string;
   alertInvocationTableName: string;
   userTableName: string;
+  alertInvocationTableTimeStampLsiName: string;
 }
 
 export const config: Config = {
@@ -18,6 +19,8 @@ export const config: Config = {
   alertTableName: process.env.ALERT_TABLE_NAME as string,
   alertInvocationTableName: process.env.ALERT_INVOCATION_TABLE_NAME as string,
   userTableName: process.env.USER_TABLE_NAME as string,
+  alertInvocationTableTimeStampLsiName: process.env
+    .ALERT_INVOCATION_TABLE_TIMESTAMP_LSI_NAME as string,
 };
 
 export const ddbClient = new DynamoDBClient({ region: "us-east-1" });

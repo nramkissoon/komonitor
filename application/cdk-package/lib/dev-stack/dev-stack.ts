@@ -35,6 +35,8 @@ export class DevStack extends cdk.Stack {
       jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
       alertLambdaBucketKey: props.alertLambdaBucketKey,
       userTable: this.tables.userTable,
+      alertInvocationTableTimeStampLsiName:
+        this.tables.alertInvocationTableTimestampLsiName,
     });
 
     this.events = new ScheduleRules(this, "Events", {

@@ -32,4 +32,8 @@ export interface AlertInvocation {
   monitor_id: string;
   monitor_type: MonitorTypes; // used to determine how to read the monitor field
   monitor: any;
+  statuses: {
+    id: string;
+    timestamp: number;
+  }[];
 }

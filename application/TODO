@@ -40,7 +40,7 @@ Webapp:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:
         ✔ Style the email verification email @done(21-10-11 14:14)
-        ☐ change hover color for create buttons and go to app button @10/22
+        ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
@@ -59,8 +59,8 @@ Alert Lambda:
     ✔ check if alert is attached to monitor, exit if none @done(21-10-14 13:19)
     ✔ grab monitor statuses from status db @done(21-10-15 12:06)
     ✘ get user email from user table @cancelled(21-10-17 09:45)
-    ☐ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused @10/22
-    ☐ alert based on alert type @10/22
+    ✔ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused @10/22 @done(21-10-18 14:50)
+    ✔ alert based on alert type @10/22 @done(21-10-18 16:52)
     ☐ design email alert @10/22
     ☐ implement email alert @10/22
     ✔ lambda access to ddb, ses @done(21-10-14 12:26)

@@ -1,5 +1,6 @@
 import { performance } from "perf_hooks";
 import { MonitorTypes } from "project-types";
+import { handleUptimeMonitor } from "./monitor-handlers";
 
 export const handler = async (event: any) => {
   const start = performance.now();
@@ -9,9 +10,11 @@ export const handler = async (event: any) => {
       event.ownerId !== undefined &&
       event.monitorType !== undefined
     ) {
-      let monitor;
-      let statuses;
       if ((event.monitorType as MonitorTypes) === "uptime-monitor") {
+        await handleUptimeMonitor(
+          event.monitorId as string,
+          event.ownerId as string
+        );
       }
     } else {
       // TODO log invalid event

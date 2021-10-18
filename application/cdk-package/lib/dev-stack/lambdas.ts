@@ -110,6 +110,7 @@ class AlertLambda extends cdk.Construct {
       alertTable: dynamodb.Table;
       alertInvocationTable: dynamodb.Table;
       userTable: dynamodb.Table;
+      alertInvocationTableTimeStampLsiName: string;
     }
   ) {
     super(scope, id);
@@ -127,6 +128,8 @@ class AlertLambda extends cdk.Construct {
         ALERT_TABLE_NAME: props.alertTable.tableName,
         ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
         USER_TABLE_NAME: props.userTable.tableName,
+        ALERT_INVOCATION_TABLE_TIMESTAMP_LSI_NAME:
+          props.alertInvocationTableTimeStampLsiName,
       },
       timeout: cdk.Duration.minutes(2),
     });
@@ -134,7 +137,7 @@ class AlertLambda extends cdk.Construct {
     props.uptimeMonitorTable.grantReadData(this.lambda);
     props.uptimeMonitorStatusTable.grantReadData(this.lambda);
     props.alertTable.grantReadData(this.lambda);
-    props.alertInvocationTable.grantWriteData(this.lambda);
+    props.alertInvocationTable.grantReadWriteData(this.lambda);
     props.userTable.grantReadData(this.lambda);
 
     const sesSendPolicyStatement = new iam.PolicyStatement({
@@ -172,6 +175,7 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeCheckLambdaBucketKey: string;
       jobRunnerLambdaBucketKey: string;
       alertLambdaBucketKey: string;
+      alertInvocationTableTimeStampLsiName: string;
     }
   ) {
     super(scope, id);
@@ -190,6 +194,8 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeMonitorStatusTable: props.uptimeCheckMonitorStatusTable,
       uptimeMonitorTable: props.uptimeCheckMonitorTable,
       userTable: props.userTable,
+      alertInvocationTableTimeStampLsiName:
+        props.alertInvocationTableTimeStampLsiName,
     });
 
     this.uptimeCheckLambda = new UptimeCheckLambda(
