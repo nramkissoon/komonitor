@@ -66,7 +66,7 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
   let alertShouldTrigger: boolean = true;
   const triggeringStatuses: UptimeMonitorStatus[] = [];
   let failureCount = monitor.failures_before_alert as number;
-  for (let i = 0; i < failureCount; i += 1) {
+  for (let i = 0; i < failureCount && i < statuses.length; i += 1) {
     if (statuses[i].status === "up") {
       alertShouldTrigger = false;
       break;
@@ -74,6 +74,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
       triggeringStatuses.push(statuses[i]);
     }
   }
+
+  if (triggeringStatuses.length !== failureCount) alertShouldTrigger = false;
 
   const previousInvocation = await getPreviousInvocationForAlert(
     ddbClient,
