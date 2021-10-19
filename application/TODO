@@ -34,7 +34,7 @@ Webapp:
         ✔ getOrCreateStripeCustomerIdForUserId() @done(21-10-07 20:23)
         ☐ Style the checkout session @10/22
         ☐ Setup and style the customer portal @10/22
-        ☐ prevent relay attack on webhooks @10/22
+        ✘ prevent relay attack on webhooks @10/22 @cancelled(21-10-19 14:26)
         ✔ webhooks for cancellation, new sub, updated sub @done(21-10-12 22:12)
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)

@@ -66,7 +66,7 @@ export function OverviewPage(props: OverviewPageProps) {
   let invocationsForMonitor: { [alertId: string]: AlertInvocation[] } = {};
   for (let id of Object.keys(invocations ?? {})) {
     let filteredInvocations: AlertInvocation[] = invocations[id].filter(
-      (invocation) => invocation.monitor_id === monitor_id
+      (invocation) => invocation.monitor_id_timestamp.startsWith(monitor_id)
     );
     invocationsForMonitor[id] = filteredInvocations;
   }

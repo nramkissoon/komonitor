@@ -80,7 +80,7 @@ export class DevStackDdbTables extends cdk.Construct {
       },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
-      tableName: "komonitor-dev-alert-invocation",
+      tableName: "komonitor-dev-alert-invocation2",
     });
 
     this.alertInvocationTableTimestampLsiName = "timestampLSI";
