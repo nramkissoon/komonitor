@@ -1,10 +1,12 @@
 import {
   DynamoDBClient,
   paginateQuery,
+  PutItemCommand,
+  PutItemCommandInput,
   QueryCommand,
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   Alert,
   AlertInvocation,
@@ -147,5 +149,30 @@ export async function getAlertForUserByAlertId(
     }
   } catch (err) {
     return null;
+  }
+}
+
+export async function writeAlertInvocation(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  invocation: AlertInvocation
+) {
+  try {
+    const putItemCommandInput: PutItemCommandInput = {
+      TableName: tableName,
+      Item: marshall(invocation, {
+        removeUndefinedValues: true,
+        convertEmptyValues: true,
+      }),
+    };
+    const response = await ddbClient.send(
+      new PutItemCommand(putItemCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+    return false;
+  } catch (err) {
+    console.error(err);
+    return false;
   }
 }

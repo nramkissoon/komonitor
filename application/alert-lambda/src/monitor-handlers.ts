@@ -1,10 +1,11 @@
-import { UptimeMonitorStatus } from "project-types";
+import { AlertInvocation, UptimeMonitorStatus } from "project-types";
 import { config, ddbClient } from "./config";
 import {
   getAlertForUserByAlertId,
   getPreviousInvocationForAlert,
   getStatusesForUptimeMonitor,
   getUptimeMonitorForUserByMonitorId,
+  writeAlertInvocation,
 } from "./dynamo-db";
 import { sendUptimeMonitorAlertEmail } from "./email-alert-handlers";
 
@@ -104,11 +105,36 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
   }
 
   const alertType = alert.type;
+  let alertTriggered = false;
+  const invocation: AlertInvocation = {
+    alert_id: alert.alert_id,
+    alert: alert,
+    timestamp: Date.now(),
+    monitor_id: monitorId,
+    monitor_type: "uptime-monitor",
+    monitor: monitor,
+    statuses: triggeringStatuses.map((status) => ({
+      id: status.monitor_id,
+      timestamp: status.timestamp,
+    })),
+  };
   switch (alertType) {
     case "Email":
-      await sendUptimeMonitorAlertEmail(monitor, alert, triggeringStatuses);
+      alertTriggered = await sendUptimeMonitorAlertEmail(
+        monitor,
+        alert,
+        triggeringStatuses
+      );
       break;
     default:
       break;
+  }
+
+  if (alertTriggered) {
+    await writeAlertInvocation(
+      ddbClient,
+      config.alertInvocationTableName,
+      invocation
+    );
   }
 }
