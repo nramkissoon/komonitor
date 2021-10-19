@@ -74,7 +74,10 @@ export class DevStackDdbTables extends cdk.Construct {
         name: "alert_id",
         type: dynamodb.AttributeType.STRING,
       },
-      sortKey: { name: "monitor_id", type: dynamodb.AttributeType.STRING },
+      sortKey: {
+        name: "monitor_id_timestamp",
+        type: dynamodb.AttributeType.STRING,
+      },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       tableName: "komonitor-dev-alert-invocation",

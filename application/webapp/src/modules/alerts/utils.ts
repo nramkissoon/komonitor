@@ -46,7 +46,7 @@ export function createAlertIdToInvocationArrayMap(
     }
   }
   for (let status of invocations) {
-    const id = status.monitor_id;
+    const id = status.alert_id;
     map[id].push(status);
   }
   return map;

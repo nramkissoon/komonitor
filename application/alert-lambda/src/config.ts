@@ -1,5 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { SESv2Client } from "@aws-sdk/client-sesv2";
+import ses from "@aws-sdk/client-sesv2";
+import nodemailer from "nodemailer";
 
 interface Config {
   region: string;
@@ -24,4 +25,7 @@ export const config: Config = {
 };
 
 export const ddbClient = new DynamoDBClient({ region: "us-east-1" });
-export const sesClient = new SESv2Client({ region: "us-east-1" });
+export const sesClient = new ses.SESv2({ region: "us-east-1" });
+export const emailTransporter = nodemailer.createTransport({
+  SES: { sesClient, ses },
+});

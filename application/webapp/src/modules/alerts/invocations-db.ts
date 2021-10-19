@@ -57,7 +57,7 @@ export async function getInvocationsByAlertIdByMonitorId(
       TableName: tableName,
       ExpressionAttributeNames: { "#t": "timestamp" },
       KeyConditionExpression:
-        "alert_id = :partitionkeyval AND monitor_id >= :sortkeyval",
+        "alert_id = :partitionkeyval AND begins_with(monitor_id, :sortkeyval)",
       ExpressionAttributeValues: {
         ":partitionkeyval": { S: alertId },
         ":sortkeyval": { S: monitorId },

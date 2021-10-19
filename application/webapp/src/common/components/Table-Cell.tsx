@@ -135,7 +135,7 @@ export function AlertRecipientsCell(props: AlertRecipientsCellProps) {
   return (
     <Box>
       {recipients.map((recip) => (
-        <Text>{recip}</Text>
+        <Text key={recip}>{recip}</Text>
       ))}
     </Box>
   );

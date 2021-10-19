@@ -29,7 +29,7 @@ export interface AlertInvocation {
   alert_id: string;
   alert: Alert; // Alert state at invocation
   timestamp: number;
-  monitor_id: string;
+  monitor_id_timestamp: string; // adding timestamp ensures unique sort key
   monitor_type: MonitorTypes; // used to determine how to read the monitor field
   monitor: any;
   statuses: {

@@ -14,6 +14,8 @@ function wasStatusTriggeredPreviousAlert(
   previousStatuses: { id: string; timestamp: number }[]
 ) {
   for (let previousStatus of previousStatuses) {
+    console.log(status);
+    console.log(previousStatus);
     if (
       previousStatus.id === status.id &&
       previousStatus.timestamp === status.timestamp
@@ -85,6 +87,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
     config.alertInvocationTableTimeStampLsiName
   );
 
+  console.log(previousInvocation);
+
   // check if previous invocation was triggered by any of the statuses, don't check if no invocation
   if (previousInvocation) {
     for (let status of triggeringStatuses) {
@@ -106,11 +110,12 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
 
   const alertType = alert.type;
   let alertTriggered = false;
+  const now = Date.now();
   const invocation: AlertInvocation = {
     alert_id: alert.alert_id,
     alert: alert,
-    timestamp: Date.now(),
-    monitor_id: monitorId,
+    timestamp: now,
+    monitor_id_timestamp: monitorId + "#" + now.toString(),
     monitor_type: "uptime-monitor",
     monitor: monitor,
     statuses: triggeringStatuses.map((status) => ({
