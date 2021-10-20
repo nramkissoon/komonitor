@@ -7,26 +7,28 @@ export async function sendUptimeMonitorAlertEmail(
   alert: Alert,
   statuses: UptimeMonitorStatus[]
 ): Promise<boolean> {
-  // TEST
-  console.log(`TEST EMAIL ALERT: ${monitor.monitor_id} - ${alert.alert_id}`);
   try {
-    const email = new Email({
-      message: {
-        from: "no-reply@komonitor.com",
-      },
-      send: true,
-      transport: emailTransporter,
+    const email = new Email();
+    const html = await email.render("uptime/html", {
+      severity: alert.severity.toUpperCase(),
+      monitor: monitor,
+      alert: alert,
+      failures: monitor.failures_before_alert,
+      statuses: statuses,
     });
-    const res = await email.send({
-      template: "./email-templates/uptime",
-      message: {
-        to: alert.recipients,
-      },
-      locals: {
-        severity: alert.severity,
-        monitorName: monitor.name,
-        alertName: alert.name,
-      },
+    const subject = await email.render("uptime/subject", {
+      severity: alert.severity.toUpperCase(),
+      monitorName: monitor.name,
+      monitorRegion: monitor.region.toUpperCase(),
+      alertName: alert.name,
+      failures: monitor.failures_before_alert,
+      statuses: statuses,
+    });
+    await emailTransporter.sendMail({
+      from: "no-reply@komonitor.com",
+      to: alert.recipients,
+      html: html,
+      subject: subject,
     });
     return true;
   } catch (err) {

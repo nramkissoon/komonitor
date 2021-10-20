@@ -1,5 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import aws, { SESv2 } from "@aws-sdk/client-sesv2";
+import { SendRawEmailCommand, SES } from "@aws-sdk/client-ses";
 import nodemailer from "nodemailer";
 
 interface Config {
@@ -25,7 +25,11 @@ export const config: Config = {
 };
 
 export const ddbClient = new DynamoDBClient({ region: "us-east-1" });
-export const ses = new SESv2({ region: "us-east-1" });
+export const ses = new SES({
+  apiVersion: "2010-12-01",
+  region: "us-east-1",
+});
+
 export const emailTransporter = nodemailer.createTransport({
-  SES: { ses, aws },
+  SES: { ses: ses, aws: { SendRawEmailCommand } },
 });
