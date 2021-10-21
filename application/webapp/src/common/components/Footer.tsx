@@ -80,24 +80,24 @@ export function Footer() {
         <LinkColumn
           header="Komonitor"
           links={[
-            <HeaderLink text="About" href="/about" />,
-            <HeaderLink text="Status" href="/status" />,
-            <HeaderLink text="Contact" href="/contact" />,
+            <HeaderLink text="About" href="/about" key="about" />,
+            <HeaderLink text="Status" href="/status" key="status" />,
+            <HeaderLink text="Contact" href="/contact" key="contact" />,
           ]}
         />
         <LinkColumn
           header="Resources"
           links={[
-            <HeaderLink text="Documentation" href="/docs" />,
-            <HeaderLink text="Changelog" href="/changelog" />,
-            <HeaderLink text="Roadmap" href="/roadmap" />,
+            <HeaderLink text="Documentation" href="/docs" key="docs" />,
+            <HeaderLink text="Changelog" href="/changelog" key="changelog" />,
+            <HeaderLink text="Roadmap" href="/roadmap" key="roadmap" />,
           ]}
         />
         <LinkColumn
           header="Legal"
           links={[
-            <HeaderLink text="Privacy" href="/privacy" />,
-            <HeaderLink text="Terms of Service" href="/tos" />,
+            <HeaderLink text="Privacy" href="/privacy" key="privacy" />,
+            <HeaderLink text="Terms of Service" href="/tos" key="tos" />,
           ]}
         />
       </SimpleGrid>

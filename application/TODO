@@ -20,7 +20,7 @@ Webapp:
     App Header:
         ✔ Change color mode toggle to gear wheel linking to settings and remove settings link @done(21-10-07 14:11)
         ✔ Add links to doc in main link section -> make sure it is also in mobile nav @done(21-10-07 14:11)
-        ☐ color mode responsive logo @10/22
+        ✔ color mode responsive logo and set avatar @10/22 @done(21-10-20 21:03)
     Alert:
         ✔ design invoke table in invocations tab @done(21-10-08 13:48)
         ✔ implement invoke table @done(21-10-08 13:48)
@@ -32,8 +32,8 @@ Webapp:
         ✔ install stripe @done(21-10-07 14:15)
         ✘ create stripe customer on new user creation @cancelled(21-10-07 19:38)
         ✔ getOrCreateStripeCustomerIdForUserId() @done(21-10-07 20:23)
-        ☐ Style the checkout session @10/22
-        ☐ Setup and style the customer portal @10/22
+        ✔ Style the checkout session @10/22 @done(21-10-20 21:11)
+        ✔ Setup and style the customer portal @10/22 @done(21-10-20 21:11)
         ✘ prevent relay attack on webhooks @10/22 @cancelled(21-10-19 14:26)
         ✔ webhooks for cancellation, new sub, updated sub @done(21-10-12 22:12)
     Alert Invocations:
@@ -41,17 +41,33 @@ Webapp:
     UI:
         ✔ Style the email verification email @done(21-10-11 14:14)
         ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
+        ☐ view invocation object modal when clicked on in invocation tables
+        ☐ create a coming soon page
+        ☐ create 404 page
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
         ☐ create a design and sections @10/22
+    Signup: 
+        ☐ add checkbox for agreeing to email updates on product
+        ☐ store value in db
+        ☐ add toggle for emails in settings
+    Slack Alerts:
+        ☐ Form changes when slack type is selected
+        ☐ form has connect to slack button
+        ☐ research slack auth flows
+    Docs:
+        ☐ Create 3 column design 
+        ☐ define sections and subsections
+        ☐ implement sidebar nav
+        ☐ fill content
 
 
 Uptime Lambda:
     ✔ invoke alert lambda on monitor failure with monitor id and owner id @done(21-10-17 22:14)
     ☐ add status codes to status updates
     ✔ use user agent Komonitor @10/22 @done(21-10-18 14:31)
-    ☐ investigate response times
+    ✔ investigate response times @done(21-10-19 19:54)
 
 Alert Lambda:
     ✔ Setup package @done(21-10-13 14:08)
@@ -61,8 +77,9 @@ Alert Lambda:
     ✘ get user email from user table @cancelled(21-10-17 09:45)
     ✔ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused @10/22 @done(21-10-18 14:50)
     ✔ alert based on alert type @10/22 @done(21-10-18 16:52)
-    ☐ design email alert @10/22
-    ☐ implement email alert @10/22
+    ✔ design email alert @10/22 @done(21-10-20 12:03)
+    ✔ implement the email design in pug files @10/22 @done(21-10-20 13:31)
+    ✔ implement email alert @10/22 @done(21-10-19 17:16)
     ✔ lambda access to ddb, ses @done(21-10-14 12:26)
     ☐ Promise.all the data dependancies
 

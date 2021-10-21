@@ -233,7 +233,7 @@ export const Header = () => {
         <Flex align="flex-start">
           <Link href="/" passHref>
             <HStack>
-              <Box w="5em">
+              <Box w="fit-content">
                 <HeaderLogo />
               </Box>
             </HStack>

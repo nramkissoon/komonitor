@@ -80,6 +80,7 @@ interface ResponseTimeCellProps {
 
 export function ResponseTimeCellProps(props: ResponseTimeCellProps) {
   const { responseTime } = props;
+  if (responseTime === -1) return "No Response";
   return responseTime.toFixed(2) + "ms";
 }
 
