@@ -2,6 +2,7 @@ import {
   Alert,
   AlertInvocation,
   AlertSeverities,
+  AlertStates,
   AlertTypes,
   EditableAlertAttributes,
 } from "project-types";
@@ -91,7 +92,7 @@ function createAlertEditableAttributesFromFormData(formData: any) {
     description: formData.description,
     severity: formData.severity as AlertSeverities,
     recipients: formData.recipients,
-    state: "enabled",
+    state: formData.state as AlertStates,
     type: formData.type as AlertTypes,
   };
   return alertEditableAttributesWithType;

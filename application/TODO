@@ -42,12 +42,14 @@ Webapp:
         ✔ Style the email verification email @done(21-10-11 14:14)
         ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
         ☐ view invocation object modal when clicked on in invocation tables
-        ☐ create a coming soon page
-        ☐ create 404 page
+        ☐ create a coming soon page @10/29
+        ☐  coming soon page redirects to roadmap page
+        ☐ create 404 page @10/29
+        ☐ check aws region to locations in webapp client @10/29
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
-        ☐ create a design and sections @10/22
+        ✔ create a design and sections @10/22 @done(21-10-22 13:37)
     Signup: 
         ☐ add checkbox for agreeing to email updates on product
         ☐ store value in db
@@ -55,12 +57,16 @@ Webapp:
     Slack Alerts:
         ☐ Form changes when slack type is selected
         ☐ form has connect to slack button
+        ☐ verify we can redirect with the form after user has added bot to workspace
         ☐ research slack auth flows
     Docs:
         ☐ Create 3 column design 
         ☐ define sections and subsections
         ☐ implement sidebar nav
         ☐ fill content
+    Roadmap Page: 
+        ☐  create design 
+        ☐ implement design
 
 
 Uptime Lambda:
@@ -87,11 +93,9 @@ CDK:
     ✔ add alert lambda to dev stack @done(21-10-13 19:56)
     ✔ add invoke perm to uptime lambda @done(21-10-13 19:56)
     ✔ create dev stack ddb table for stripe webhooks @done(21-10-08 14:29)
-    ☐ create the prod ddb tables in us-east-1
+    ☐ create the prod ddb tables in us-east-1 @10/29
 
 Logging and Error Handling:
-    ☐ Decide logging strategy for webapp
+    ☐ Decide logging strategy for webapp @10/29
     ☐ replace console.log/error in webapp with logging provider
     ☐ Decide logging strategy for lambdas and implement
-
-☐ flesh out linux game

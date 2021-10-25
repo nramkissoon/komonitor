@@ -56,9 +56,13 @@ function createSeveritySelectOptions() {
   }));
 }
 
-function createAlertTypeSelectOptions() {
+function createAlertTypeSelectOptions(origType?: AlertTypes) {
   const types: AlertTypes[] = ["Email"];
-  return types.map((type) => ({ value: type, label: type, isDisabled: false }));
+  return types.map((type) => ({
+    value: type,
+    label: type,
+    isDisabled: origType ? origType !== type : false,
+  }));
 }
 
 function createAlertStateOptions() {
@@ -177,7 +181,6 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                 ...currentAlertAttributes,
                 ...values,
               } as Alert;
-
               await updateAlert(
                 augmentedValues,
                 () => {
@@ -227,13 +230,18 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                     mb="1.5em"
                     isDisabled={!createNewAlert} // disable when updating alert.
                   >
-                    <FormLabel htmlFor="name">Alert Type</FormLabel>
+                    <FormLabel htmlFor="type">Alert Type</FormLabel>
                     <ReactSelectFormik
-                      options={createAlertTypeSelectOptions()}
+                      options={createAlertTypeSelectOptions(
+                        !createAlert ? initialValues.type : undefined
+                      )}
                       placeholder="Alert type"
-                      field={field}
+                      field={
+                        !createNewAlert
+                          ? { ...field, value: initialValues.type }
+                          : field
+                      }
                       form={form}
-                      isDisabled={!createNewAlert}
                     />
                     {!createNewAlert && (
                       <FormHelperText>
