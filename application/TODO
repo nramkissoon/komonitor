@@ -42,14 +42,19 @@ Webapp:
         ✔ Style the email verification email @done(21-10-11 14:14)
         ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
         ☐ view invocation object modal when clicked on in invocation tables
-        ☐ create a coming soon page @10/29
-        ☐  coming soon page redirects to roadmap page
-        ☐ create 404 page @10/29
-        ☐ check aws region to locations in webapp client @10/29
+        ✔ create a coming soon page component @10/29 @done(21-10-26 13:26)
+        ✔  coming soon page redirects to roadmap page @10/29 @done(21-10-26 13:26)
+        ✔ create 404 page @10/29 @done(21-10-25 14:03)
+        ✘ check aws region to locations in webapp client @10/29 @started(21-10-26 13:30) @cancelled(21-10-26 13:32) @wasted(2m48s)
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
         ✔ create a design and sections @10/22 @done(21-10-22 13:37)
+        ✔ Copy @10/22 @started(21-10-26 13:42) @done(21-10-26 15:18) @lasted(1h36m23s)
+        ☐ implement the design
+    Legal: 
+        ☐ PP
+        ☐ TOS
     Signup: 
         ☐ add checkbox for agreeing to email updates on product
         ☐ store value in db
@@ -59,6 +64,10 @@ Webapp:
         ☐ form has connect to slack button
         ☐ verify we can redirect with the form after user has added bot to workspace
         ☐ research slack auth flows
+    Webhook Alerts: 
+        ☐ initial design
+    SNS Topic Alerts:
+        ☐ scope possibility
     Docs:
         ☐ Create 3 column design 
         ☐ define sections and subsections
@@ -93,7 +102,8 @@ CDK:
     ✔ add alert lambda to dev stack @done(21-10-13 19:56)
     ✔ add invoke perm to uptime lambda @done(21-10-13 19:56)
     ✔ create dev stack ddb table for stripe webhooks @done(21-10-08 14:29)
-    ☐ create the prod ddb tables in us-east-1 @10/29
+    ☐ create the prod ddb tables in us-east-1
+    ☐ create us-east-1 prod stack
 
 Logging and Error Handling:
     ☐ Decide logging strategy for webapp @10/29

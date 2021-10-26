@@ -19,3 +19,7 @@ export const minutesToString: { [key: number]: string } = {
 
 TimeAgo.addDefaultLocale(en);
 export const timeAgo = new TimeAgo("en-US");
+
+export const regionToLocationStringMap = {
+  "us-east-1": "US East (N. Virginia)",
+};

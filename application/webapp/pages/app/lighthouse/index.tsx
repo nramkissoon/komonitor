@@ -5,7 +5,7 @@ import { ExtendedNextPage } from "../../_app";
 const App: ExtendedNextPage = () => {
   return (
     <ComingSoonPage
-      feature={"Browser Monitors"}
+      feature={"Lighthouse Monitors"}
       isAppPage={true}
     ></ComingSoonPage>
   );
