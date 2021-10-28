@@ -46,6 +46,7 @@ Webapp:
         ✔  coming soon page redirects to roadmap page @10/29 @done(21-10-26 13:26)
         ✔ create 404 page @10/29 @done(21-10-25 14:03)
         ✘ check aws region to locations in webapp client @10/29 @started(21-10-26 13:30) @cancelled(21-10-26 13:32) @wasted(2m48s)
+        ☐  timezones based on user pref 
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
@@ -54,7 +55,7 @@ Webapp:
         ☐ implement the design
     Legal: 
         ☐ PP
-        ☐ TOS
+        ☐ TOS 
     Signup: 
         ☐ add checkbox for agreeing to email updates on product
         ☐ store value in db
@@ -69,7 +70,8 @@ Webapp:
     SNS Topic Alerts:
         ☐ scope possibility
     Docs:
-        ☐ Create 3 column design 
+        ✔ Create 3 column design @done(21-10-26 18:48)
+        ☐ Set up mdx
         ☐ define sections and subsections
         ☐ implement sidebar nav
         ☐ fill content

@@ -62,7 +62,7 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
       <Button
         size="md"
         colorScheme="blue"
-        bgColor="blue.400"
+        bgColor="blue.300"
         fontSize="lg"
         fontWeight="medium"
         color="white"
@@ -82,6 +82,7 @@ const SignOutButton = (props: { authed: boolean }) => {
   const hoverColor = useColorModeValue("gray.500", "white");
   return authed ? (
     <Button
+      display={{ base: "none", md: "flex" }}
       color={color}
       size="md"
       variant="ghost"
@@ -184,7 +185,7 @@ export const Header = () => {
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
     w: "full",
-    px: { base: 2, sm: 4, md: "8em", xl: "12em" },
+    px: { base: 2, sm: 4, md: 4, xl: "12em" },
     py: 4,
     bg: useColorModeValue("white", "gray.900"),
     borderBottomColor: useColorModeValue("gray.100", "gray.800"),
@@ -211,7 +212,7 @@ export const Header = () => {
   };
 
   const defaultMobileNavHamburgerStyles: IconButtonProps = {
-    display: { base: "flex", md: "none" },
+    display: { base: "flex", md: "flex", lg: "none" },
     "aria-label": "Open menu",
     fontSize: "1.8em",
     color: useColorModeValue("gray.500", "inherit"),
@@ -223,7 +224,7 @@ export const Header = () => {
 
   const defaultLinksHstackContainerStyles: StackProps = {
     spacing: "9",
-    display: { base: "none", md: "flex" },
+    display: { base: "none", md: "none", lg: "flex" },
     fontSize: "lg",
   };
 

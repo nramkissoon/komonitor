@@ -57,7 +57,6 @@ export function AppFooter() {
 
   const defaultLinksHstackContainerStyles: StackProps = {
     spacing: "6",
-    display: { base: "none", md: "none", lg: "flex" },
     fontSize: "lg",
   };
 

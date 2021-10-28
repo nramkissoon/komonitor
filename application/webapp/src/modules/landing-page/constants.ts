@@ -1,6 +1,6 @@
 export const Copy = {
   MainBanner: {
-    Header: "Effective Website Monitoring Made Simple.",
+    Header: "Simple Website Monitoring.",
     Subheader:
       "No-code monitoring and alerting built for any website and business.",
     CtaButtonText: "Get Started For Free",
