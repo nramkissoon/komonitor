@@ -2,7 +2,7 @@ export const Copy = {
   MainBanner: {
     Header: "Simple Website Monitoring.",
     Subheader:
-      "No-code monitoring and alerting built for any website and business.",
+      "No-code monitoring and alerting built for any website and business. Set up and deploy in minutes.",
     CtaButtonText: "Get Started For Free",
     CtaButtonHelperText: "No credit card information required.",
   },
@@ -38,24 +38,24 @@ export const Copy = {
   },
   ComingSoon: {
     Header: "Features That Are On The Way",
-    List: [
-      {
+    List: {
+      browser: {
         title: "Browser Monitors",
         desc: "Monitor browser content and behavior shown to users.",
       },
-      {
+      lighthouse: {
         title: "Lighthouse Monitors",
         desc: "Run Google Lighthouse jobs and define alerts on any page metric.",
       },
-      {
+      api: {
         title: "Komonitor API",
         desc: "Create and manage your monitors and alerts through an API instead of the web app.",
       },
-      {
+      alert: {
         title: "More Alert Integrations",
         desc: "Receive alerts through Slack, Discord, and more.",
       },
-    ],
+    },
   },
   Cta: {
     Header: "Ready to get started with Komonitor?",

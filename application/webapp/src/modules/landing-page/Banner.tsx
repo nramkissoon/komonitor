@@ -53,6 +53,7 @@ export function Banner() {
             fontWeight="extrabold"
             color={useColorModeValue("gray.800", "gray.100")}
             lineHeight="shorter"
+            mb=".3em"
           >
             {Copy.MainBanner.Header}
           </chakra.h1>
@@ -66,7 +67,7 @@ export function Banner() {
             w={["70%"]}
             mx="auto"
             color={useColorModeValue("gray.600", "gray.400")}
-            mb=".7em"
+            mb=".8em"
           >
             {Copy.MainBanner.Subheader}
           </chakra.h2>

@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { Banner } from "../src/modules/landing-page/Banner";
+import { ComingSoon } from "../src/modules/landing-page/Coming-Soon";
+import { CTA } from "../src/modules/landing-page/Cta";
 import { Features } from "../src/modules/landing-page/Features";
 
 const Home: NextPage = () => {
@@ -8,6 +10,8 @@ const Home: NextPage = () => {
     <PageLayout isAppPage={false}>
       <Banner />
       <Features />
+      <ComingSoon />
+      <CTA />
       {/* <Flex>
         <Box mr="3em">
           <Heading

@@ -108,7 +108,7 @@ function Feature(props: FeatureProps) {
 export function Features() {
   const { domRef: headerRef, isVisible: headerIsVisible } = useFadeInView();
   return (
-    <Flex mb="4em" flexDir="column" alignItems="center">
+    <Flex mb="3em" flexDir="column" alignItems="center">
       <SlideFade in={headerIsVisible} offsetY="40px" delay={0.1}>
         <chakra.h1
           ref={headerRef as RefObject<HTMLHeadingElement>}
