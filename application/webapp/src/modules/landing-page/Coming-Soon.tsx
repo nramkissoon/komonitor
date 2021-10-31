@@ -84,7 +84,7 @@ export function ComingSoon() {
         lineHeight="shorter"
         mb="1.3em"
       >
-        Coming Soon
+        New Features Coming Soon
       </chakra.h1>
       <SimpleGrid
         columns={{ base: 1, sm: 2, md: 2, lg: 4 }}

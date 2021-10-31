@@ -33,10 +33,11 @@ export function CTA() {
       flexDir="column"
       alignItems="center"
       bg={useColorModeValue("white", "#0f131a")}
-      borderRadius="2xl"
+      borderRadius="3xl"
       shadow="xl"
       pt="2.5em"
       pb="1em"
+      px="2em"
     >
       <Box>
         <chakra.h1

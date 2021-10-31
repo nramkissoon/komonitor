@@ -4,14 +4,17 @@ import { Banner } from "../src/modules/landing-page/Banner";
 import { ComingSoon } from "../src/modules/landing-page/Coming-Soon";
 import { CTA } from "../src/modules/landing-page/Cta";
 import { Features } from "../src/modules/landing-page/Features";
+import { NoCode } from "../src/modules/landing-page/Nocode";
 
 const Home: NextPage = () => {
   return (
     <PageLayout isAppPage={false}>
       <Banner />
+      <NoCode />
       <Features />
       <ComingSoon />
       <CTA />
+
       {/* <Flex>
         <Box mr="3em">
           <Heading

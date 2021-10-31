@@ -2,7 +2,7 @@ export const Copy = {
   MainBanner: {
     Header: "Simple Website Monitoring.",
     Subheader:
-      "No-code monitoring and alerting built for any website and business. Set up and deploy in minutes.",
+      "Monitoring and alerting for your websites where user experience is nonnegotiable. Set up and deploy in minutes.",
     CtaButtonText: "Get Started For Free",
     CtaButtonHelperText: "No credit card information required.",
   },
@@ -21,7 +21,7 @@ export const Copy = {
       Subheader:
         "We let you know something's wrong so you have better peace of mind.",
       List: [
-        "Receive alerts via email.",
+        "Receive alerts via email or webhooks.",
         "Alerts are actionable and let you know exactly what went wrong.",
         "Enable and disable alerts for any monitor you wish.",
       ],
@@ -30,7 +30,7 @@ export const Copy = {
   NoCode: {
     Header: "Built With No-Coders In Mind",
     Subheader:
-      "All Komonitor features are accessible through the web app. No coding skills required.",
+      "Less code means less barriers to entry. All Komonitor features are accessible through the web app. No coding experience required.",
     UI: "Intuitive Alert + Monitor Management",
     Dashboard: "Elegant Dashboards",
     SectionBottom:

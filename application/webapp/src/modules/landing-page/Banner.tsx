@@ -35,6 +35,7 @@ const CtaButton = () => {
           bg: "blue.600",
         }}
         shadow="md"
+        mb=".5em"
       >
         {Copy.MainBanner.CtaButtonText}
       </Button>
