@@ -251,10 +251,6 @@ export const Header = () => {
               text: "Docs",
               href: "/docs",
             })}
-            {HeaderLink({
-              text: "About",
-              href: "/about",
-            })}
           </HStack>
         </Flex>
         <Flex justify="flex-end" align="center" color="gray.400">

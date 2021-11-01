@@ -81,16 +81,17 @@ export function Footer() {
           header="Komonitor"
           links={[
             <HeaderLink text="About" href="/about" key="about" />,
-            <HeaderLink text="Status" href="/status" key="status" />,
             <HeaderLink text="Contact" href="/contact" key="contact" />,
+            <HeaderLink text="Pricing" href="/pricing" key="pricing" />,
           ]}
         />
         <LinkColumn
           header="Resources"
           links={[
             <HeaderLink text="Documentation" href="/docs" key="docs" />,
-            <HeaderLink text="Changelog" href="/changelog" key="changelog" />,
+
             <HeaderLink text="Roadmap" href="/roadmap" key="roadmap" />,
+            <HeaderLink text="Blog" href="/blog" key="blog" />,
           ]}
         />
         <LinkColumn

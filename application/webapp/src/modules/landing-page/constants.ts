@@ -30,11 +30,11 @@ export const Copy = {
   NoCode: {
     Header: "Built With No-Coders In Mind",
     Subheader:
-      "Less code means less barriers to entry. All Komonitor features are accessible through the web app. No coding experience required.",
+      "Less code means less barriers to entry. No coding experience required.",
     UI: "Intuitive Alert + Monitor Management",
     Dashboard: "Elegant Dashboards",
     SectionBottom:
-      "Komonitor offers modern DevOps and monitoring tools to everyone.",
+      "Komonitor offers modern alerting and monitoring tools to everyone. 🙌",
   },
   ComingSoon: {
     Header: "Features That Are On The Way",
@@ -49,7 +49,7 @@ export const Copy = {
       },
       api: {
         title: "Komonitor API",
-        desc: "Create and manage your monitors and alerts through an API instead of the web app.",
+        desc: "Programmatically create and manage your monitors and alerts through an API instead of the web app.",
       },
       alert: {
         title: "More Alert Integrations",
