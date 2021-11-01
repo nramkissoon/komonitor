@@ -57,6 +57,7 @@ Webapp:
     Legal: 
         ☐ PP
         ☐ TOS 
+        ☐ GDPR cookie acceptance
     Signup: 
         ☐ add checkbox for agreeing to email updates on product
         ☐ store value in db

@@ -92,7 +92,9 @@ export function OverviewPage(props: OverviewPageProps) {
   mostRecentInvocation = invocations
     ? invocations[alert_id].length === 0
       ? -1
-      : invocations[alert_id].sort().reverse()[0].timestamp
+      : invocations[alert_id]
+          .sort((a, b) => a.timestamp - b.timestamp)
+          .reverse()[0].timestamp
     : undefined;
 
   return (
@@ -128,7 +130,7 @@ export function OverviewPage(props: OverviewPageProps) {
             <OverviewPageDataCards
               state={state}
               severity={severity}
-              mostRecentInvocationTimestamp={undefined}
+              mostRecentInvocationTimestamp={mostRecentInvocation}
             />
             <OverviewPageBottomLayout
               description={description}

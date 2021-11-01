@@ -122,7 +122,7 @@ export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
                   <Text fontWeight="normal">No Recent Invocations</Text>
                 ) : (
                   <Text fontWeight="normal">
-                    {timeAgo.format(mostRecentInvocationTimestamp)}
+                    {timeAgo.format(new Date(mostRecentInvocationTimestamp))}
                   </Text>
                 )
               ) : (
