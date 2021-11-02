@@ -14,7 +14,7 @@ export default function Custom404() {
         </Box>
         <Box fontSize="2xl" fontWeight="bold">
           If you think this is a mistake, please{" "}
-          <Link href="/contact">
+          <Link href="mailto:nick@komonitor.com">
             <chakra.span
               color={useColorModeValue("blue.500", "blue.400")}
               _hover={{ color: "gray.500", cursor: "pointer" }}
