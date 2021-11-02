@@ -31,7 +31,26 @@ export const Copy = {
     Header: "Built With No-Coders In Mind",
     Subheader:
       "Less code means less barriers to entry. No coding experience required.",
-    UI: "Intuitive Alert + Monitor Management",
+    Intuitive: {
+      header: "Intuitive UI",
+      subheader:
+        "Create, edit, and manage your alerts and monitors with just a few clicks.",
+    },
+    Infra: {
+      header: "Prebuilt Infrastructure",
+      subheader:
+        "Remove the need to build out monitoring and alerting infrastructure for your online business. Focus on features your customers love instead.",
+    },
+    Data: {
+      header: "Data Access",
+      subheader:
+        "Monitor and alert data is available for download in common formats (CSV, JSON) for further processing or spreadsheet analysis.",
+    },
+    Learn: {
+      header: "Comprehensive Documentation",
+      subheader:
+        "Learn how to quickly set up and manage effective monitors for your websites through our comprehensive docs and tutorials.",
+    },
     Dashboard: "Elegant Dashboards",
     SectionBottom:
       "Komonitor offers modern alerting and monitoring tools to everyone. 🙌",

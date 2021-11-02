@@ -47,7 +47,8 @@ Webapp:
         ✔ create 404 page @10/29 @done(21-10-25 14:03)
         ✘ check aws region to locations in webapp client @10/29 @started(21-10-26 13:30) @cancelled(21-10-26 13:32) @wasted(2m48s)
         ☐  timezones based on user pref 
-        ☐  convert service SLA's to monitor resolutions SRE p62
+        ☐  convert service SLA's to monitor resolutions SRE p62\
+        ☐  download data as csv or json
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
@@ -80,6 +81,9 @@ Webapp:
     Roadmap Page: 
         ☐  create design 
         ☐ implement design
+    App Index:
+        ☐  Design page
+        ☐  implement design
 
 
 Uptime Lambda:
