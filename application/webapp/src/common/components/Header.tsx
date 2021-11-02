@@ -79,7 +79,7 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
 const SignOutButton = (props: { authed: boolean }) => {
   const { authed } = props;
   const color = useColorModeValue("gray.900", "gray.400");
-  const hoverColor = useColorModeValue("gray.500", "white");
+  const hoverColor = useColorModeValue("red.500", "red.400");
   return authed ? (
     <Button
       display={{ base: "none", md: "flex" }}
@@ -91,7 +91,7 @@ const SignOutButton = (props: { authed: boolean }) => {
       as="a"
       onClick={() => signOut({ callbackUrl: "/" })}
       _focus={{ boxShadow: "none" }}
-      _hover={{ color: hoverColor }}
+      _hover={{ color: hoverColor, cursor: "pointer" }}
     >
       Sign out
     </Button>

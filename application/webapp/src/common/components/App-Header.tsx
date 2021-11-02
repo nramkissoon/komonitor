@@ -72,7 +72,7 @@ const SignOutButton = (props: { authed: boolean }) => {
       onClick={() => signOut({ callbackUrl: "/" })}
       _focus={{ boxShadow: "none" }}
       _hover={{
-        color: useColorModeValue("gray.500", "red.200"),
+        color: useColorModeValue("red.500", "red.400"),
         cursor: "pointer",
       }}
     >
