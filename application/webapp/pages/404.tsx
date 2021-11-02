@@ -6,12 +6,14 @@ export default function Custom404() {
   return (
     <PageLayout isAppPage={false}>
       <Flex justifyContent="center" flexDir="column" textAlign="center">
-        <Box fontWeight="bold" fontSize="8xl">
+        <Box fontWeight="extrabold" fontSize="8xl">
           404
         </Box>
-        <Box fontSize="xl">Oops! Looks like this page does not exist.</Box>
-        <Box fontSize="xl">
-          If you think this is a mistake. Please{" "}
+        <Box fontSize="2xl" fontWeight="bold">
+          Oops! Looks like this page does not exist.
+        </Box>
+        <Box fontSize="2xl" fontWeight="bold">
+          If you think this is a mistake, please{" "}
           <Link href="/contact">
             <chakra.span
               color={useColorModeValue("blue.500", "blue.400")}

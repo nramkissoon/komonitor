@@ -140,7 +140,7 @@ export const TableOfContents = () => {
   useIntersectionObserver(setActiveId);
 
   return (
-    <chakra.nav aria-label="Table of contents" position="sticky" mt="700px">
+    <chakra.nav aria-label="Table of contents" position="sticky">
       <Headings headings={nestedHeadings} activeId={activeId} />
     </chakra.nav>
   );
