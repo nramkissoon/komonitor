@@ -187,6 +187,7 @@ export function NoCode() {
             imageRendering: "-webkit-optimize-contrast",
           }}
           fallback="no-code-dashboard-1.jpg"
+          alt="Komonitor App dashboard with light and dark mode variants."
         />
       </Box>
 

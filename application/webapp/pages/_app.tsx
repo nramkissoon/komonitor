@@ -11,6 +11,7 @@ import {
   signIn,
   useSession,
 } from "next-auth/client";
+import { DefaultSeo } from "next-seo";
 import React from "react";
 import theme from "../src/common/components/theme";
 
@@ -31,6 +32,22 @@ export default function App({
 }: ExtendedAppProps) {
   return (
     <ChakraProvider theme={theme}>
+      <DefaultSeo
+        title={undefined}
+        titleTemplate={"Komonitor | %s"}
+        defaultTitle="Komonitor"
+        openGraph={{
+          type: "website",
+          locale: "en_IE",
+          url: "https://komonitor.com/",
+          site_name: "Komonitor",
+        }}
+        twitter={{
+          handle: "@komonitor",
+          site: "@komonitor",
+          cardType: "summary_large_image",
+        }}
+      />
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
           <Auth>

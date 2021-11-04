@@ -102,6 +102,7 @@ export function Banner() {
             css={{
               imageRendering: "-webkit-optimize-contrast",
             }}
+            alt="Komonitor App Dashboard"
           />
         </Box>
       </SlideFade>

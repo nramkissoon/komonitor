@@ -80,7 +80,7 @@ export function Footer() {
         <LinkColumn
           header="Komonitor"
           links={[
-            <HeaderLink text="About" href="/about" key="about" />,
+            <HeaderLink text="FAQ" href="/faq" key="faq" />,
             <HeaderLink
               text="Contact"
               href="mailto:nick@komonitor.com"

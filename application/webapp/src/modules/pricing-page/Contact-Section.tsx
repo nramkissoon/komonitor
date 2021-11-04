@@ -32,13 +32,13 @@ export function ContactSection() {
             </chakra.span>
           </Link>{" "}
           page covers commonly asked pricing/plan questions. For any other
-          questions, feel free to reach out at our{" "}
+          questions, feel free to{" "}
           <Link href="mailto:nick@komonitor.com">
             <chakra.span
               color={useColorModeValue("blue.500", "blue.400")}
               _hover={{ color: "gray.500", cursor: "pointer" }}
             >
-              Contact Page
+              contact us
             </chakra.span>
           </Link>
           .

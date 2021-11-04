@@ -45,7 +45,7 @@ export function createSections() {
           <Center h="8em" my="1em">
             <Divider
               orientation="vertical"
-              borderColor={useColorModeValue("gray.500", "gray.200")}
+              borderColor={useColorModeValue("gray.400", "gray.600")}
               borderWidth="2px"
             />
           </Center>
@@ -72,7 +72,7 @@ export function RoadmapPageContent() {
             fontWeight="extrabold"
             color={useColorModeValue("gray.800", "gray.100")}
             lineHeight="shorter"
-            mb="1em"
+            mb=".5em"
             mt="1em"
           >
             Product Roadmap

@@ -98,6 +98,7 @@ function Feature(props: FeatureProps) {
             css={{
               imageRendering: "-webkit-optimize-contrast",
             }}
+            alt={"Komonitor " + header + " dashboard"}
           />
         </Box>
       </Flex>
