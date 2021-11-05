@@ -92,7 +92,11 @@ export function Footer() {
         <LinkColumn
           header="Resources"
           links={[
-            <HeaderLink text="Documentation" href="/docs" key="docs" />,
+            <HeaderLink
+              text="Documentation"
+              href="/docs/getting-started/introduction"
+              key="docs"
+            />,
 
             <HeaderLink text="Roadmap" href="/roadmap" key="roadmap" />,
             <HeaderLink text="Blog" href="/blog" key="blog" />,

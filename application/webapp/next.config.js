@@ -10,4 +10,4 @@ module.exports = (withMDX(withImages(
   withBundleAnalyzer(
     {reactStrictMode: true,
        pageExtensions: ['ts', 'tsx',],
-        async redirects() {return [{source: '/docs', destination: '/docs/getting-started/overview', permanent: true}]}}))))
+        async redirects() {return [{source: '/docs', destination: '/docs/getting-started/introduction', permanent: true}]}}))))

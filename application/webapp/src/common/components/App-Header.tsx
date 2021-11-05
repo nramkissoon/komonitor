@@ -246,7 +246,7 @@ export const AppHeader = () => {
             })}
             {HeaderLink({
               text: "Docs",
-              href: "/docs",
+              href: "/docs/getting-started/introduction",
             })}
           </HStack>
         </Flex>

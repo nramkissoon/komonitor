@@ -1,4 +1,4 @@
-import { Box, chakra, Flex } from "@chakra-ui/react";
+import { Box, chakra, Divider, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { Footer } from "../../../common/components/Footer";
@@ -49,7 +49,14 @@ function PageContainer(props: PageContainerProps) {
   return (
     <>
       <Header />
-      <Box as="main" className="main-content" w="full" maxW="8xl" mx="auto">
+      <Box
+        as="main"
+        className="main-content"
+        w="full"
+        maxW="8xl"
+        mx="auto"
+        mb="4em"
+      >
         <Box display={{ md: "flex" }}>
           {sidebar || null}
           <Box flex="1" minW="0">
@@ -72,6 +79,8 @@ function PageContainer(props: PageContainerProps) {
                     {title}
                   </chakra.h1>
                   {children}
+                  <Divider mt="2em" />
+                  <Box mt="20px">{pagination || null}</Box>
                 </Box>
                 <TableOfContents headings={headings} />
               </Flex>

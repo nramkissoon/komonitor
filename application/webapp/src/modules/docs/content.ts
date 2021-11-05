@@ -10,18 +10,26 @@ interface SidebarRouteSection {
 
 export const SidebarRoutes: SidebarRouteSection[] = [
   {
-    title: "Getting Started",
+    title: "🚀 Getting Started",
     path: "/docs/getting-started",
     heading: true,
     routes: [
       {
-        title: "Overview",
-        path: "/docs/getting-started/overview",
+        title: "Introduction",
+        path: "/docs/getting-started/introduction",
+      },
+      {
+        title: "Quick Start Guide",
+        path: "/docs/getting-started/quick-start",
+      },
+      {
+        title: "Support",
+        path: "/docs/getting-started/support",
       },
     ],
   },
   {
-    title: "Uptime Monitors",
+    title: "✅ Uptime Monitors",
     path: "/docs/uptime-monitors",
     heading: true,
     routes: [
@@ -42,6 +50,10 @@ export const SidebarRoutes: SidebarRouteSection[] = [
         path: "/docs/uptime-monitor/delete-monitor",
       },
       {
+        title: "Uptime Monitor Statuses",
+        path: "/docs/uptime-monitor/statuses",
+      },
+      {
         title: "Supported Regions",
         path: "/docs/uptime-monitor/supported-regions",
       },
@@ -52,7 +64,7 @@ export const SidebarRoutes: SidebarRouteSection[] = [
     ],
   },
   {
-    title: "Alerts",
+    title: "🚨 Alerts",
     path: "/docs/alerts",
     heading: true,
     routes: [
@@ -79,6 +91,10 @@ export const SidebarRoutes: SidebarRouteSection[] = [
       {
         title: "Alert Types",
         path: "/docs/alerts/alert-types",
+      },
+      {
+        title: "Alert Invocations",
+        path: "/docs/alerts/invocations",
       },
       {
         title: "Quick Reference",

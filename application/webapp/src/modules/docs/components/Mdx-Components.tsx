@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { chakra } from "@chakra-ui/react";
+import { Alert, chakra } from "@chakra-ui/react";
 
 export const MDXComponents = {
   ...Chakra,
@@ -21,5 +21,17 @@ export const MDXComponents = {
   ),
   h3: (props: any) => (
     <chakra.h3 apply="mdx.h3" fontWeight="bold" fontSize="3xl" {...props} />
+  ),
+  blockquote: (props: any) => (
+    <Alert
+      mt="4"
+      role="none"
+      colorScheme="purple"
+      variant="left-accent"
+      as="blockquote"
+      rounded="10px"
+      my="1.5rem"
+      {...props}
+    />
   ),
 };

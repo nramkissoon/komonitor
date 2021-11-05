@@ -8,6 +8,7 @@ Webapp:
         ✔ implement @10/22 @done(21-10-18 12:00)
     Pricing page:
         ✔ Add link to FAQ and email to contact @done(21-10-07 14:02)
+        ☐  move loading spinner to CTA buttons
     Regular Footer:
         ✔ design @10/22 @done(21-10-18 14:30)
         ✔ implement @10/22 @done(21-10-18 14:30)
@@ -49,6 +50,8 @@ Webapp:
         ☐  timezones based on user pref 
         ☐  convert service SLA's to monitor resolutions SRE p62\
         ☐  download data as csv or json
+        ✔  Add alts to all images @done(21-11-03 15:52)
+        ☐  disable alert from dashboard
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
@@ -84,6 +87,19 @@ Webapp:
     App Index:
         ☐  Design page
         ☐  implement design
+    Blog:
+        ☐ Setup MDX
+        ☐ design index
+        ☐ implement index
+    SEO:
+        ✔  Define SEO strategy @done(21-11-03 14:38)
+        ✔  implement components if necessary @done(21-11-03 15:49)
+        ✔  define what pages need SEO @done(21-11-03 15:49)
+        ☐  create images for SEO
+        ☐  research how to ignore pages in SEO (robot.txt??)
+        ☐  index SEO
+        ☐  About SEO
+        ☐  Blog SEO
 
 
 Uptime Lambda:

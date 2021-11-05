@@ -9,6 +9,7 @@ import {
 } from "./../../mdx-utils/find-route-by-path";
 import { MDXComponents } from "./Mdx-Components";
 import PageContainer from "./Page-Container";
+import Pagination from "./Paginations";
 import Sidebar, { RouteItem } from "./Sidebar";
 
 export function MDXLayoutProvider({ children }: any) {
@@ -36,6 +37,12 @@ export default function MDXLayout(props: MDXLayoutProps) {
       <PageContainer
         frontmatter={frontmatter}
         sidebar={<Sidebar routes={routes} />}
+        pagination={
+          <Pagination
+            next={routeContext.nextRoute}
+            previous={routeContext.prevRoute}
+          />
+        }
       >
         {children}
       </PageContainer>

@@ -5,7 +5,7 @@ import {
   ListItem,
   OrderedList,
   Text,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import * as React from "react";
 
@@ -43,7 +43,7 @@ interface TableOfContentProps extends BoxProps {
 function TableOfContent(props: TableOfContentProps) {
   const { headings, ...rest } = props;
   const activeId = useScrollSpy(
-    headings.map(({ id }: any) => `[id="${id}"]`),
+    headings.map(({ id }: any) => `[id="${id}"]`).reverse(),
     {
       rootMargin: "0% 0% -24% 0%",
     }
@@ -72,7 +72,7 @@ function TableOfContent(props: TableOfContentProps) {
         id="toc-title"
         textTransform="uppercase"
         fontWeight="bold"
-        fontSize="xs"
+        fontSize="md"
         color={useColorModeValue("gray.700", "gray.400")}
         letterSpacing="wide"
       >
@@ -85,11 +85,16 @@ function TableOfContent(props: TableOfContentProps) {
               py="1"
               display="block"
               fontWeight={id === activeId ? "bold" : "medium"}
+              fontSize="lg"
               href={`#${id}`}
               aria-current={id === activeId ? "location" : undefined}
-              color={useColorModeValue("gray.600", "gray.400")}
+              color={
+                id === activeId
+                  ? useColorModeValue("blue.400", "blue.300")
+                  : useColorModeValue("gray.600", "gray.400")
+              }
               _hover={{
-                color: useColorModeValue("gray.900", "gray.600"),
+                color: useColorModeValue("blue.400", "blue.300"),
               }}
             >
               {text}
