@@ -122,35 +122,12 @@ function App({ Component }) {
 }
 ```
 
-### ChakraProvider Props
-
-| Name             | Type             | Default               | Description                                         |
-| ---------------- | ---------------- | --------------------- | --------------------------------------------------- |
-| resetCSS         | `boolean`        | `true`                | automatically includes `<CSSReset />`               |
-| theme            | `Theme`          | `@chakra-ui/theme`    | optional custom theme                               |
-| colorModeManager | `StorageManager` | `localStorageManager` | manager to persist a users color mode preference in |
-| portalZIndex     | `number`         | `undefined`           | common z-index to use for `Portal`                  |
-
-That's it, you're good to go!
-
 ## Optional Packages
 
 - Icons: If you want to use the icons from Chakra UI, install `@chakra-ui/icons`
 - Theme Tools: If you intend to customize components or build your own design
   system, this package includes useful utilities. Install
   `@chakra-ui/theme-tools`.
-
-## Notes on TypeScript 🚨
-
-Please note that when adding Chakra UI to a TypeScript project, a minimum
-TypeScript version of `4.1.0` is required.
-
-If you're adding Chakra UI to a `create-react-app` project, this means you'll
-need to manually upgrade `typescript` to `^4.1.0`.
-
-See [the guide for our create-react-app](/guides/integrations/with-cra)
-templates if you'd like to generate a Chakra-enabled `create-react-app` project
-from scratch.
 
 ## Contributing
 

@@ -77,9 +77,9 @@ Webapp:
         ☐ scope possibility
     Docs:
         ✔ Create 3 column design @done(21-10-26 18:48)
-        ☐ Set up mdx
-        ☐ define sections and subsections
-        ☐ implement sidebar nav
+        ✔ Set up mdx @done(21-11-05 11:17)
+        ✔ define sections and subsections @done(21-11-05 11:17)
+        ✔ implement sidebar nav @done(21-11-05 11:17)
         ☐ fill content
     Roadmap Page: 
         ✔  create design @done(21-11-02 12:32)

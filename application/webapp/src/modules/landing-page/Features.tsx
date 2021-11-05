@@ -118,7 +118,7 @@ export function Features() {
           fontWeight="extrabold"
           color={useColorModeValue("gray.800", "gray.100")}
           lineHeight="shorter"
-          mb=".8em"
+          mb=".4em"
         >
           Features
         </chakra.h1>

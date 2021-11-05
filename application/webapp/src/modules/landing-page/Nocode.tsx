@@ -99,7 +99,7 @@ export function NoCode() {
         columns={{ base: 1, sm: 1, md: 2 }}
         spacingX={{ base: 16, lg: 24 }}
         spacingY={{ base: 10, md: 20 }}
-        mb="3em"
+        mb="4em"
       >
         <Feature
           title={Copy.NoCode.Intuitive.header}

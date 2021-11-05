@@ -64,7 +64,17 @@ function TableOfContent(props: TableOfContentProps) {
       alignSelf="start"
       maxHeight="calc(100vh - 8rem)"
       overflowY="auto"
+      pl="1em"
       sx={{ overscrollBehavior: "contain" }}
+      _after={{
+        content: '""',
+        position: "absolute",
+        background: useColorModeValue("gray.300", "gray.700"),
+        height: "85%",
+        w: "1px",
+        left: "0",
+        top: "2.5em",
+      }}
       {...rest}
     >
       <Text
