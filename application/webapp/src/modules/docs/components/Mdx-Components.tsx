@@ -26,11 +26,12 @@ export const MDXComponents = {
     <Alert
       mt="4"
       role="none"
-      colorScheme="purple"
+      colorScheme="red"
       variant="left-accent"
       as="blockquote"
-      rounded="10px"
+      rounded="4px"
       my="1.5rem"
+      shadow="md"
       {...props}
     />
   ),
