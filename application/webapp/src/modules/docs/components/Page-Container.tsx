@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Footer } from "../../../common/components/Footer";
 import { Header } from "../../../common/components/Header";
+import Seo from "./Seo";
 import TableOfContents from "./Table-Of-Contents";
 
 function useHeadingFocusOnRouteChange() {
@@ -48,6 +49,7 @@ function PageContainer(props: PageContainerProps) {
 
   return (
     <>
+      <Seo title={title} description={description} />
       <Header />
       <Box
         as="main"
