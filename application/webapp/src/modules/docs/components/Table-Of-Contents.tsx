@@ -70,7 +70,7 @@ function TableOfContent(props: TableOfContentProps) {
         content: '""',
         position: "absolute",
         background: useColorModeValue("gray.300", "gray.700"),
-        height: "85%",
+        height: "80%",
         w: "1px",
         left: "0",
         top: "2.5em",

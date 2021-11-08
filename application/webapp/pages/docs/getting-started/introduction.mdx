@@ -1,135 +1,30 @@
 ---
-title: Getting Started
-description: How to install and set up Chakra UI in your project
+title: Introduction
+description: Introduction to Komonitor documentation
 ---
 
-## Watch the Egghead Course
+## What is Komonitor?
 
-## Installation
+Komonitor is a **website monitoring and alerting service**. You can use the service to create and manage monitors and alerts for your websites.
+Komonitor can regularly monitor your websites for:
 
-Inside your React project directory, install Chakra UI by running either of the
-following:
+- uptime status
+- rendered content in the browser
+- website vitals such as time to first paint
 
-```bash
-npm i @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
-```
+A core component of the service is **alerting**. You can define alerts ant its delivery method and attach them to your monitors. Komonitor will alert you when your
+monitor detects a failure.
 
-```bash
-yarn add @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
-```
+## Where Should I Start?
 
-> For `create-react-app` installation instructions, check this
-> [CRA templates guide](/guides/integrations/with-cra).
+You must create an account and sign in to the web app in order to use Komonitor. Creating a new account will immediately give you access to our **free-tier**.
+You can learn more about the free-tier service on the [pricing page](/pricing).
 
-## Set up Provider
+For a simple tutorial on how to set up an uptime monitor and attach an alert to it, go to the [Quick Start Guide](/docs/getting-started/quick-start). You will
+learn how to create a basic monitor and become familiar with the Komonitor user interface.
 
-For Chakra UI to work correctly, you need to set up the `ChakraProvider` at the
-root of your application.
+For detailed documentation on a specific feature, use the menu on the left.
 
-Go to the root of your application and do this:
+## More About Komonitor
 
-```jsx live=false
-import * as React from "react";
-
-// 1. import `ChakraProvider` component
-import { ChakraProvider } from "@chakra-ui/react";
-
-function App({ Component }) {
-  // 2. Use at the root of your app
-  return (
-    <ChakraProvider>
-      <Component />
-    </ChakraProvider>
-  );
-}
-```
-
-> - For Create React App, you need to set this up in `index.js` or `index.tsx`
-
-### Next.js
-
-Go to `pages/_app.js` or `pages/_app.tsx` (create if it doesn't exist) and add
-this:
-
-```jsx live=false
-import { ChakraProvider } from "@chakra-ui/react";
-
-function MyApp({ Component, pageProps }) {
-  return (
-    <ChakraProvider>
-      <Component {...pageProps} />
-    </ChakraProvider>
-  );
-}
-
-export default MyApp;
-```
-
-### Gatsby
-
-Add the
-[@chakra-ui/gatsby-plugin](https://www.gatsbyjs.com/plugins/@chakra-ui/gatsby-plugin/).
-It does everything automatically for you!
-
-```bash
-npm i @chakra-ui/gatsby-plugin
-```
-
-```bash
-yarn add @chakra-ui/gatsby-plugin
-```
-
-Then add the plugin to your `gatsby-config`.
-
-```js
-// gatsby-config.js
-
-module.exports = {
-  plugins: ["@chakra-ui/gatsby-plugin"],
-};
-```
-
-## Add custom theme (Optional)
-
-If you need to customize the default chakra theme to match your design
-requirements, you can extend the `theme` from `@chakra-ui/react`.
-
-Chakra UI provides an `extendTheme` function that deep merges the default theme
-with your customizations.
-
-```jsx live=false
-// 1. Import the extendTheme function
-import { extendTheme } from "@chakra-ui/react";
-
-// 2. Extend the theme to include custom colors, fonts, etc
-const colors = {
-  brand: {
-    900: "#1a365d",
-    800: "#153e75",
-    700: "#2a69ac",
-  },
-};
-
-const theme = extendTheme({ colors });
-
-// 3. Pass the `theme` prop to the `ChakraProvider`
-function App({ Component }) {
-  return (
-    <ChakraProvider theme={theme}>
-      <Component />
-    </ChakraProvider>
-  );
-}
-```
-
-## Optional Packages
-
-- Icons: If you want to use the icons from Chakra UI, install `@chakra-ui/icons`
-- Theme Tools: If you intend to customize components or build your own design
-  system, this package includes useful utilities. Install
-  `@chakra-ui/theme-tools`.
-
-## Contributing
-
-Please see our [contribution guidelines](/docs/contributing) to learn how you
-can contribute to this project.
+Komonitor is a 100% self-funded and independent service built by [@nickramki](https://twitter.com/nickramki). ❤️

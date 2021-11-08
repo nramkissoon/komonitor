@@ -16,12 +16,15 @@ export const MDXComponents = {
       apply="mdx.h2"
       fontWeight="extrabold"
       fontSize="4xl"
+      mb=".4em"
+      mt=".7em"
       {...props}
     />
   ),
   h3: (props: any) => (
     <chakra.h3 apply="mdx.h3" fontWeight="bold" fontSize="3xl" {...props} />
   ),
+  p: (props: any) => <chakra.p fontSize="xl" mt="1em" {...props} />,
   blockquote: (props: any) => (
     <Alert
       mt="4"

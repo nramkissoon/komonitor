@@ -41,6 +41,15 @@ export default function App({
           locale: "en_IE",
           url: "https://komonitor.com/",
           site_name: "Komonitor",
+          images: [
+            {
+              url: "/https://komonitor.com/og-image-1.png",
+              width: 800,
+              height: 600,
+              alt: "Open Graph Komonitor Logo",
+              type: "image/png",
+            },
+          ],
         }}
         twitter={{
           handle: "@komonitor",
