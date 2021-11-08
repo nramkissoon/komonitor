@@ -49,6 +49,13 @@ export default function App({
               alt: "Open Graph Komonitor Logo",
               type: "image/png",
             },
+            {
+              url: "/https://komonitor.com/og-image-2.png",
+              width: 900,
+              height: 800,
+              alt: "Open Graph Komonitor Logo",
+              type: "image/png",
+            },
           ],
         }}
         twitter={{

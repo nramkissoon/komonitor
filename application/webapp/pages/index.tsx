@@ -8,41 +8,18 @@ import { NoCode } from "../src/modules/landing-page/Nocode";
 
 const Home: NextPage = () => {
   return (
-    <PageLayout isAppPage={false}>
+    <PageLayout
+      isAppPage={false}
+      seoProps={{
+        description:
+          "Komonitor is an online service for creating and managing monitors and alerts for your websites.",
+      }}
+    >
       <Banner />
       <NoCode />
       <Features />
       <ComingSoon />
       <CTA />
-
-      {/* <Flex>
-        <Box mr="3em">
-          <Heading
-            as="h2"
-            className="content"
-            mb="500px"
-            id="cum"
-            pt="16px"
-            mt="-16px"
-          >
-            cum
-          </Heading>
-          <Heading
-            as="h2"
-            className="content"
-            mb="500px"
-            id="shit"
-            pt="16px"
-            mt="-16px"
-          >
-            shit
-          </Heading>
-          <Heading as="h3" className="content" id="piss" pt="16px" mt="-16px">
-            piss
-          </Heading>
-        </Box>
-        <TableOfContents />
-      </Flex> */}
     </PageLayout>
   );
 };
