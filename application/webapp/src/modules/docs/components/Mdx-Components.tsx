@@ -36,6 +36,7 @@ export const MDXComponents = {
       </chakra.a>
     </NextLink>
   ),
+  li: (props: any) => <chakra.li fontSize="xl" mt=".2em" ml="1em" {...props} />,
   blockquote: (props: any) => (
     <Alert
       mt="4"
