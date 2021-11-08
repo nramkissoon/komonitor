@@ -1,5 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
-import { Alert, chakra } from "@chakra-ui/react";
+import { Alert, chakra, useColorModeValue } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 export const MDXComponents = {
   ...Chakra,
@@ -25,6 +26,16 @@ export const MDXComponents = {
     <chakra.h3 apply="mdx.h3" fontWeight="bold" fontSize="3xl" {...props} />
   ),
   p: (props: any) => <chakra.p fontSize="xl" mt="1em" {...props} />,
+  a: (props: any) => (
+    <NextLink href={props.href} passHref>
+      <chakra.a
+        color={useColorModeValue("blue.400", "blue.500")}
+        _hover={{ cursor: "pointer", color: "gray.500" }}
+      >
+        {props.children}
+      </chakra.a>
+    </NextLink>
+  ),
   blockquote: (props: any) => (
     <Alert
       mt="4"
