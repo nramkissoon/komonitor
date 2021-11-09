@@ -1,13 +1,13 @@
 import * as chakraComponents from "@chakra-ui/react";
 import { MDXProvider } from "@mdx-js/react";
 import * as React from "react";
+import { MDXComponents } from "../../../common/components/Mdx-Components";
 import { getRouteContext } from "../../mdx-utils/get-route-context";
 import { SidebarRoutes } from "../content";
 import {
   findRouteByPath,
   removeFromLast,
 } from "./../../mdx-utils/find-route-by-path";
-import { MDXComponents } from "./Mdx-Components";
 import PageContainer from "./Page-Container";
 import Pagination from "./Paginations";
 import Sidebar, { RouteItem } from "./Sidebar";

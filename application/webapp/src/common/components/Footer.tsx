@@ -75,7 +75,7 @@ export function Footer() {
         columns={[1, 1, 2, 3]}
         spacingX={[6, 40]}
         spacingY={[20]}
-        mb="1.5em"
+        mb="2em"
       >
         <LinkColumn
           header="Komonitor"

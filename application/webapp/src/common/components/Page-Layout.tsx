@@ -11,10 +11,11 @@ import Seo from "./Seo";
 interface PageLayoutProps {
   isAppPage: boolean;
   seoProps: Pick<NextSeoProps, "title" | "description">;
+  maxW?: string[];
 }
 
 export function PageLayout(props: PageLayoutProps & any) {
-  const { isAppPage, seoProps } = props;
+  const { isAppPage, seoProps, maxW } = props;
   const footer = isAppPage ? <AppFooter /> : <Footer />;
   const header = isAppPage ? <AppHeader /> : <Header />;
 
@@ -23,7 +24,7 @@ export function PageLayout(props: PageLayoutProps & any) {
       <Seo {...seoProps} />
       <Box display="flex" flexDir="column" minH="95vh" p={0} m={0}>
         <Fade in={true}>{header}</Fade>
-        <PageContainer>{props.children}</PageContainer>
+        <PageContainer maxW={maxW}>{props.children}</PageContainer>
         {footer}
       </Box>
     </>

@@ -27,6 +27,11 @@ export const FaqPageContent: Faq[] = [
       "Komonitor was built as a no-code monitoring tool. However, we are developing an API for our power-users to consume. We'll keep you updated on our roadmap page.",
   },
   {
+    question: "What is the 'complimentary setup' offered for paid plans?",
+    answer:
+      "If you don't have the time to setup your monitors and alerting system, you can contact us and we'll do it for you, free of any extra charge.",
+  },
+  {
     question: "What is the meaning of life?",
     answer:
       "We don't know. What we do know is that effective monitoring allows you to spend more of your life enjoying it rather than worrying about your websites going down unnoticed 😉.",

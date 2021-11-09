@@ -1,10 +1,11 @@
 import { Container } from "@chakra-ui/react";
 import React from "react";
 
-export const PageContainer = (props: any) => {
+export const PageContainer = (props: { maxW?: string[] } & any) => {
+  const { maxW } = props;
   return (
     <Container
-      maxW={["sm", "xl", "3xl", "5xl", "6xl", "7xl"]}
+      maxW={maxW ? maxW : ["sm", "xl", "3xl", "5xl", "6xl", "7xl"]}
       mt="3em"
       mb="3em"
       pt=".3em"

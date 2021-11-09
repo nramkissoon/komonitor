@@ -30,7 +30,7 @@ export function FaqPage() {
         </Box>
       </Flex>
       <Center>
-        <Accordion allowMultiple w={["70%"]}>
+        <Accordion allowMultiple w={["100%", "85%", "70%"]}>
           {FaqPageContent.map((faq) => (
             <AccordionItem key={faq.question} py="1em">
               <chakra.h2>

@@ -2,8 +2,8 @@
 
 import { InferGetStaticPropsType } from "next";
 import { MDXRemote } from "next-mdx-remote";
+import { MDXComponents } from "../../src/common/components/Mdx-Components";
 import MDXLayout from "../../src/modules/docs/components/Mdx";
-import { MDXComponents } from "../../src/modules/docs/components/Mdx-Components";
 import loadMDXFromPages from "../../src/modules/mdx-utils/load-mdx-dir";
 
 const CONTENT_PATH = "docs";

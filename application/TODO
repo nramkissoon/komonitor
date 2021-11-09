@@ -100,7 +100,14 @@ Webapp:
         ✔  index SEO @done(21-11-08 13:48)
         ✘  About SEO @cancelled(21-11-08 13:48)
         ☐  Blog SEO
+    SSL checks: 
+        ☐ scope
 
+Blog: 
+    ☐ Ecommerce use case - high latency -> lost revenue
+    ☐ Buy vs. build -> time spent on product vs. infra
+    ☐ Monitoring tenets -> SRE chapter
+    ☐ Twitter alert use case -> better comm with users + public
 
 Uptime Lambda:
     ✔ invoke alert lambda on monitor failure with monitor id and owner id @done(21-10-17 22:14)
@@ -133,3 +140,6 @@ Logging and Error Handling:
     ☐ Decide logging strategy for webapp @10/29
     ☐ replace console.log/error in webapp with logging provider
     ☐ Decide logging strategy for lambdas and implement
+
+Bugs: 
+    ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
