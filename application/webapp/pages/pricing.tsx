@@ -8,7 +8,14 @@ import { PricingHeader } from "../src/modules/pricing-page/Pricing-Header";
 
 const Pricing: NextPage = () => {
   return (
-    <PageLayout isAppPage={false}>
+    <PageLayout
+      isAppPage={false}
+      seoProps={{
+        title: "Pricing",
+        description:
+          "Komonitor is an online service for creating and managing monitors and alerts for your websites. Know when things go wrong and fix them before your customers even notice.",
+      }}
+    >
       <PricingHeader />
       <PricingCards />
       <ComparisonTable />

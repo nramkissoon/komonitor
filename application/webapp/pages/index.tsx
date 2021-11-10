@@ -11,7 +11,7 @@ const Home: NextPage = () => {
     <PageLayout
       isAppPage={false}
       seoProps={{
-        title: "Komonitor - Website Monitoring and Alerting",
+        title: "Website Monitoring and Alerting",
         description:
           "Komonitor is an online service for creating and managing monitors and alerts for your websites. Know when things go wrong and fix them before your customers even notice.",
       }}
