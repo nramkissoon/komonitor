@@ -17,9 +17,19 @@ export const env = {
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET as string,
   STRIPE_WEBHOOK_TABLE_NAME: process.env.STRIPE_WEBHOOK_TABLE_NAME as string,
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
+  AWS_ACCESS_KEY_ID_KOMONITOR: process.env
+    .AWS_ACCESS_KEY_ID_KOMONITOR as string,
+  AWS_SECRET_ACCESS_KEY_KOMONITOR: process.env
+    .AWS_SECRET_ACCESS_KEY_KOMONITOR as string,
 };
 
-export const ddbClient = new DynamoDBClient({ region: "us-east-1" });
+export const ddbClient = new DynamoDBClient({
+  region: "us-east-1",
+  credentials: {
+    accessKeyId: env.AWS_ACCESS_KEY_ID_KOMONITOR,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY_KOMONITOR,
+  },
+});
 
 export const stripeClient = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",

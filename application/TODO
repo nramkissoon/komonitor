@@ -2,6 +2,8 @@ General:
     ✔ Buy domain + google workspaces setup @done(21-10-06 14:00)
     ✔ verify domain on AWS SES @done(21-10-07 12:49)
     ✔ create stripe account + test creds @done(21-10-06 14:20)
+    ☐ Google sign in api switch to prod
+    ☐ Stripe switch to prod
 
 Webapp: 
     App Footer:
