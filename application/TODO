@@ -62,8 +62,8 @@ Webapp:
         ✔ implement the design @done(21-11-02 12:01)
     Legal: 
         ☐ PP
-        ☐ TOS 
-        ☐ GDPR cookie acceptance
+        ✔ TOS @done(21-11-10 12:36)
+        ✘ GDPR cookie acceptance @cancelled(21-11-10 11:06)
     Signup: 
         ☐ add checkbox for agreeing to email updates on product
         ☐ store value in db
@@ -87,7 +87,7 @@ Webapp:
         ✔  create design @done(21-11-02 12:32)
         ✔ implement design @done(21-11-02 14:06)
     App Index:
-        ☐  Design page
+        ✔  Design page @done(21-11-10 11:02)
         ☐  implement design
     Blog:
         ☐ Setup MDX

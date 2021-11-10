@@ -26,7 +26,6 @@ export async function getStaticProps({ params }: any) {
   const pages = await loadMDXFromPages(CONTENT_PATH);
 
   const page = pages.find((page: any) => {
-    console.log(page);
     return combinedPageSlug === page.slug;
   });
 
