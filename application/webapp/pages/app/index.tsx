@@ -1,9 +1,14 @@
 import { PageLayout } from "../../src/common/components/Page-Layout";
+import { AppIndexPage } from "../../src/modules/app-index-page/App-Index-Page";
 import { ExtendedNextPage } from "../_app";
 
-const App: ExtendedNextPage = () => {
-  return <PageLayout isAppPage></PageLayout>;
+const Page: ExtendedNextPage = () => {
+  return (
+    <PageLayout isAppPage>
+      <AppIndexPage />
+    </PageLayout>
+  );
 };
 
-App.requiresAuth = true;
-export default App;
+Page.requiresAuth = true;
+export default Page;
