@@ -27,6 +27,7 @@ Webapp:
     Alert:
         ✔ design invoke table in invocations tab @done(21-10-08 13:48)
         ✔ implement invoke table @done(21-10-08 13:48)
+        ☐ email alert only to account owner
     Settings:
         ✔ implement account and billing tab menu @done(21-10-09 13:47)
         ✔ verify cannot delete account when on paid plan @done(21-10-13 20:13)
@@ -104,6 +105,16 @@ Webapp:
         ☐  Blog SEO
     SSL checks: 
         ☐ scope
+
+Uptime HTTP:
+    ☐  design new creation and edit form
+    ☐  implement HTTP headers in model
+    ☐  add HTTP headers to check in lambda
+    ☐  remove retries param from model
+    ☐  remove retries from lambda
+    ☐  remove retries from verification and create and edit forms
+    ☐  add HTTP headers to forms
+    ☐  design dashboard to show HTTP headers
 
 Blog: 
     ☐ Ecommerce use case - high latency -> lost revenue

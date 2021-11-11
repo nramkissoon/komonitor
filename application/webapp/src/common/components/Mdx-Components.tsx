@@ -23,7 +23,14 @@ export const MDXComponents = {
     />
   ),
   h3: (props: any) => (
-    <chakra.h3 apply="mdx.h3" fontWeight="bold" fontSize="3xl" {...props} />
+    <chakra.h3
+      apply="mdx.h3"
+      fontWeight="bold"
+      fontSize="3xl"
+      mb=".4em"
+      mt=".7em"
+      {...props}
+    />
   ),
   p: (props: any) => <chakra.p fontSize="xl" mt="1em" {...props} />,
   a: (props: any) => (
