@@ -51,7 +51,7 @@ export async function getStaticProps({ params }: any) {
     throw new Error(`No content found for slug "${slug.join("/")}"`);
   }
 
-  const { mdxSource, ...frontMatter } = page;
+  const { mdxSource, ...frontMatter } = page as any;
 
   return {
     props: {
