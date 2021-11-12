@@ -33,7 +33,7 @@ export async function getStaticProps({ params }: any) {
     throw new Error(`No content found for TOS`);
   }
 
-  const { mdxSource, ...frontMatter } = page;
+  const { mdxSource, ...frontMatter } = page as tos;
 
   return {
     props: {
