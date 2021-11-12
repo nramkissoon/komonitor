@@ -207,7 +207,7 @@ export function PricingCards() {
           <LoadingSpinner />
         </Fade>
       ) : (
-        <Fade in={!isLoading && !isError}>
+        <Fade in={!isLoading}>
           <Box mb="1.7em">
             <SimpleGrid columns={[1, null, null, 3]} gap={[16, 8]}>
               <PricingCard
