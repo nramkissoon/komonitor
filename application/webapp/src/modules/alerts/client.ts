@@ -28,11 +28,7 @@ export function use24HourAlertInvocations(alertIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {
     const yesterday = 24 * 60 * 60 * 1000;
     const urlWithParams =
-      url +
-      "?" +
-      ids.map((id) => "id=" + id).join("&") +
-      "&since=" +
-      yesterday.toString();
+      url + "?" + ids.map((id) => "id=" + id).join("&") + "&since=" + yesterday;
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 
