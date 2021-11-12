@@ -36,9 +36,18 @@ export default NextAuth({
       return url.startsWith(baseUrl) ? url : baseUrl + url; // allow relative urls
     },
   },
-  adapter: DynamoDBAdapter(new AWS.DynamoDB.DocumentClient(), {
-    tableName: process.env.USER_TABLE_NAME || "",
-  }),
+  adapter: DynamoDBAdapter(
+    new AWS.DynamoDB.DocumentClient({
+      region: "us-east-1",
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID_KOMONITOR as string,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_KOMONITOR as string,
+      },
+    }),
+    {
+      tableName: process.env.USER_TABLE_NAME || "",
+    }
+  ),
   pages: {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
