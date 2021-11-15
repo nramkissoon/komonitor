@@ -56,9 +56,9 @@ Webapp:
         ✔  Add alts to all images @done(21-11-03 15:52)
         ☐  disable alert from dashboard
         ✔  convert regions to place names @started(21-11-15 11:34) @done(21-11-15 11:56) @lasted(22m24s)
-        ☐  view uptime statuses up to 30 days ago
-        ☐  fix uptime graph x axis
-        ☐  graph weirdness when switching since
+        ✔  view uptime statuses up to 30 days ago @done(21-11-15 15:29)
+        ✔  fix uptime graph x axis @done(21-11-15 15:29)
+        ✔  graph weirdness when switching since @done(21-11-15 15:29)
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 

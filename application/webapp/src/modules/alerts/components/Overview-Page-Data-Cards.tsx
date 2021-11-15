@@ -115,7 +115,7 @@ export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
             my="1em"
           />
           <StatWithLoading
-            label="Last Invocation (24H)"
+            label="Last Invocation"
             child={
               mostRecentInvocationTimestamp ? (
                 noRecentInvocations ? (

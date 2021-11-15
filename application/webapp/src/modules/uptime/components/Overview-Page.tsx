@@ -15,7 +15,7 @@ import {
   DeleteDialog,
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
-import { use24HourAlertInvocations, useAlerts } from "../../alerts/client";
+import { useAlertInvocationsAllTime, useAlerts } from "../../alerts/client";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import { useUserServicePlanProductId } from "../../user/client";
 import { deleteMonitor, useMonitorStatusHistory } from "../client";
@@ -78,7 +78,7 @@ export function OverviewPage(props: OverviewPageProps) {
     invocations,
     isError: invocationsIsError,
     isLoading: invocationsIsLoading,
-  } = use24HourAlertInvocations(
+  } = useAlertInvocationsAllTime(
     alertsForMonitor.map((alert) => alert.alert_id)
   );
 

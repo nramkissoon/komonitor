@@ -24,11 +24,11 @@ export function useAlerts() {
   };
 }
 
-export function use24HourAlertInvocations(alertIds: string[]) {
+export function useAlertInvocationsAllTime(alertIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {
-    const yesterday = 24 * 60 * 60 * 1000;
+    const allTime = Date.now();
     const urlWithParams =
-      url + "?" + ids.map((id) => "id=" + id).join("&") + "&since=" + yesterday;
+      url + "?" + ids.map((id) => "id=" + id).join("&") + "&since=" + allTime;
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 

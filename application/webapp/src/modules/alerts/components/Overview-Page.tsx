@@ -18,7 +18,11 @@ import {
 } from "../../../common/components/Delete-Dialog";
 import { useUptimeMonitors } from "../../uptime/client";
 import { InvocationTable } from "../../uptime/components/Invocation-Table";
-import { alertApiUrl, deleteAlert, use24HourAlertInvocations } from "../client";
+import {
+  alertApiUrl,
+  deleteAlert,
+  useAlertInvocationsAllTime,
+} from "../client";
 import { AttachedMonitorsTable } from "./Attached-Monitors-Table";
 import { OverviewPageBottomLayout } from "./Overview-Page-Bottom-Layout";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
@@ -54,7 +58,7 @@ export function OverviewPage(props: OverviewPageProps) {
     invocations,
     isError: invocationsIsError,
     isLoading: invocationsIsLoading,
-  } = use24HourAlertInvocations([alert_id]);
+  } = useAlertInvocationsAllTime([alert_id]);
 
   // Setup for delete dialog
   let {

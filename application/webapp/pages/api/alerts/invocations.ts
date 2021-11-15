@@ -3,7 +3,6 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import { getInvocationsForMultipleAlerts } from "../../../src/modules/alerts/invocations-db";
-import { getAlertInvocationHistoryAccessFromProductId } from "../../../src/modules/billing/plans";
 import { getServicePlanProductIdForUser } from "../../../src/modules/user/user-db";
 
 async function getHandler(
@@ -20,13 +19,13 @@ async function getHandler(
       env.USER_TABLE_NAME,
       userId
     );
-    if (
-      Number.parseInt(since as string) >
-      getAlertInvocationHistoryAccessFromProductId(productId)
-    ) {
-      res.status(403);
-      return;
-    }
+    // if (
+    //   Number.parseInt(since as string) >
+    //   getAlertInvocationHistoryAccessFromProductId(productId)
+    // ) {
+    //   res.status(403);
+    //   return;
+    // }
 
     const sinceAsNumber =
       new Date().getTime() - Number.parseInt(since as string);
