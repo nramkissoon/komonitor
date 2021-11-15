@@ -38,20 +38,8 @@ export const SidebarRoutes: SidebarRouteSection[] = [
         path: "/docs/uptime-monitor/what-is-it",
       },
       {
-        title: "Create a Monitor",
-        path: "/docs/uptime-monitor/create-monitor",
-      },
-      {
-        title: "Edit a Monitor",
-        path: "/docs/uptime-monitor/edit-monitor",
-      },
-      {
-        title: "Delete a Monitor",
-        path: "/docs/uptime-monitor/delete-monitor",
-      },
-      {
-        title: "Uptime Monitor Statuses",
-        path: "/docs/uptime-monitor/statuses",
+        title: "Working with Uptime Monitors",
+        path: "/docs/uptime-monitor/working-with-uptime-monitors",
       },
       {
         title: "Supported Regions",
@@ -73,29 +61,10 @@ export const SidebarRoutes: SidebarRouteSection[] = [
         path: "/docs/alerts/what-is-it",
       },
       {
-        title: "Create an Alert",
-        path: "/docs/alerts/create-alert",
+        title: "Working with Uptime Alerts",
+        path: "/docs/alerts/working-with-alerts",
       },
-      {
-        title: "Edit an Alert",
-        path: "/docs/alerts/edit-alert",
-      },
-      {
-        title: "Delete an Alert",
-        path: "/docs/alerts/delete-alert",
-      },
-      {
-        title: "Disable an Alert",
-        path: "/docs/alerts/disable-alert",
-      },
-      {
-        title: "Alert Types",
-        path: "/docs/alerts/alert-types",
-      },
-      {
-        title: "Alert Invocations",
-        path: "/docs/alerts/invocations",
-      },
+
       {
         title: "Quick Reference",
         path: "/docs/alert/reference",

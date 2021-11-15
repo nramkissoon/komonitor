@@ -42,37 +42,6 @@ export function CTA() {
       <Box>
         <chakra.h1
           textAlign="center"
-          fontSize="2xl"
-          fontWeight="extrabold"
-          color={useColorModeValue("gray.800", "gray.100")}
-          lineHeight="shorter"
-          mb=".4em"
-        >
-          Unexpected downtime erodes{" "}
-          <chakra.span color={useColorModeValue("red.500", "red.300")}>
-            customer trust
-          </chakra.span>{" "}
-          and ultimately lowers{" "}
-          <chakra.span color={useColorModeValue("red.500", "red.300")}>
-            revenue
-          </chakra.span>
-          .
-        </chakra.h1>
-        <chakra.h1
-          textAlign="center"
-          fontSize="2xl"
-          fontWeight="extrabold"
-          color={useColorModeValue("gray.800", "gray.100")}
-          lineHeight="shorter"
-          mb="1em"
-          w="70%"
-          mx="auto"
-        >
-          Give your customers and yourself a first-class user experience with
-          monitoring tools built for the modern web.
-        </chakra.h1>
-        <chakra.h1
-          textAlign="center"
           fontSize="5xl"
           fontWeight="extrabold"
           color={useColorModeValue("gray.800", "gray.100")}

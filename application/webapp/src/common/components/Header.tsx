@@ -70,7 +70,7 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
           bg: "blue.600",
         }}
       >
-        {authed ? "Go to App" : "Get Started"}
+        {authed ? "Dashboard" : "Get Started"}
       </Button>
     </Link>
   );

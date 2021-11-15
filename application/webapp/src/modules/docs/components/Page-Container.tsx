@@ -1,4 +1,4 @@
-import { Box, chakra, Divider, Flex } from "@chakra-ui/react";
+import { Badge, Box, chakra, Divider, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { Footer } from "../../../common/components/Footer";
@@ -35,6 +35,11 @@ interface PageContainerProps {
     editUrl?: string;
     version?: string;
     headings?: Heading[];
+    readTimeMinutes?: number;
+    lastEdited?: {
+      date: string;
+      author: string;
+    };
   };
   children: React.ReactNode;
   sidebar?: any;
@@ -45,7 +50,15 @@ function PageContainer(props: PageContainerProps) {
   const { frontmatter, children, sidebar, pagination } = props;
   useHeadingFocusOnRouteChange();
 
-  const { title, description, editUrl, version, headings = [] } = frontmatter;
+  const {
+    title,
+    description,
+    editUrl,
+    version,
+    headings = [],
+    lastEdited,
+    readTimeMinutes,
+  } = frontmatter;
 
   return (
     <>
@@ -76,10 +89,20 @@ function PageContainer(props: PageContainerProps) {
                     apply="mdx.h1"
                     fontWeight="extrabold"
                     fontSize="6xl"
-                    mb=".5em"
                   >
                     {title}
                   </chakra.h1>
+                  <Badge
+                    colorScheme="green"
+                    fontSize="md"
+                    borderRadius="sm"
+                    variant="subtle"
+                    fontWeight="medium"
+                    p=".3em"
+                    mb="1em"
+                  >
+                    {readTimeMinutes} minute read
+                  </Badge>
                   {children}
                   <Divider mt="2em" />
                   <Box mt="20px">{pagination || null}</Box>
