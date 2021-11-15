@@ -16,10 +16,12 @@ import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import theme from "../../../common/components/theme";
+import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "../utils";
 
 interface OverviewPageGraphProps {
   monitorId: string;
   statuses: UptimeMonitorStatus[] | undefined;
+  since: number;
 }
 
 interface LineGraphProps {
@@ -30,6 +32,12 @@ interface LineGraphProps {
   maxLatency: number | null;
   colorMode: string; // dark or light
 }
+
+const sinceToStringMap = {
+  [yesterday]: "(Past 24 Hours)",
+  [sevenDaysAgo]: "(Past 7 Days)",
+  [thirtyDaysAgo]: "(Past 30 Days)",
+};
 
 // use the chakra theme to style graph based on already defined colors
 function graphTheme(dark: boolean): Theme {
@@ -145,6 +153,7 @@ function LineGraph(props: LineGraphProps) {
   const { data, minLatency, maxLatency, colorMode } = props;
   return (
     <ResponsiveLine
+      animate={true}
       data={[data]}
       margin={{ top: 5, right: 60, bottom: 100, left: 60 }}
       enableArea
@@ -153,7 +162,7 @@ function LineGraph(props: LineGraphProps) {
       tooltip={(props) =>
         LineGraphTooltip(props.point.data.x, props.point.data.y)
       }
-      motionConfig="stiff"
+      motionConfig="slow"
       curve="monotoneX"
       xScale={{ type: "point" }}
       yScale={{
@@ -181,13 +190,18 @@ function LineGraph(props: LineGraphProps) {
         legend: "Time (UTC)",
         legendOffset: 70,
         legendPosition: "middle",
-        tickValues: data.data // every other tick
-          .filter((value, i) => {
-            return i % (data.data.length / 16) === 0; // ensures there are ~ 16 ticks on the graph
-          })
-          .map((d) => {
-            return d.x;
-          }),
+        tickValues:
+          data.data.length <= 12
+            ? data.data.map((d) => {
+                return d.x; // do nothing, less than or eq 12 data points anyways
+              })
+            : data.data // every other tick
+                .filter((value, i) => {
+                  return i % 4 === 0; // ensures there are ~ 12 ticks on the graph
+                })
+                .map((d) => {
+                  return d.x;
+                }),
         format: (v) => (v as string).slice(17, -3),
       }}
       enableGridX={false}
@@ -200,7 +214,7 @@ function LineGraph(props: LineGraphProps) {
 }
 
 export function OverviewPageGraph(props: OverviewPageGraphProps) {
-  let { monitorId, statuses } = props;
+  let { monitorId, statuses, since } = props;
 
   const { colorMode } = useColorMode();
 
@@ -213,7 +227,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
   const serie = React.useMemo(
     () =>
       filteredStatuses ? buildGraphSerie(filteredStatuses, monitorId) : null,
-    [monitorId, statuses]
+    [monitorId, statuses, since]
   );
   const minLatency = React.useMemo(
     () =>
@@ -253,7 +267,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
         shadow="lg"
       >
         <Heading textAlign="center" fontSize="lg">
-          Response Time (Past 24 Hours)
+          Response Time {sinceToStringMap[since]}
         </Heading>
         {serie?.data.length === 0 ? (
           <Center mt="3em">
@@ -268,7 +282,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
               colorMode={colorMode}
             />
             <Text mt=".3em" color="red.400">
-              *Subset of data points are displayed for legibility
+              *Subset of data points are displayed on graph for legibility
             </Text>
           </>
         )}

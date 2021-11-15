@@ -16,11 +16,15 @@ import {
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
 import { use24HourAlertInvocations, useAlerts } from "../../alerts/client";
-import { deleteMonitor, use24HourMonitorStatuses } from "../client";
+import { PLAN_PRODUCT_IDS } from "../../billing/plans";
+import { useUserServicePlanProductId } from "../../user/client";
+import { deleteMonitor, useMonitorStatusHistory } from "../client";
+import { yesterday } from "../utils";
 import { MonitorAlertsOverview } from "./Monitor-Alerts-Overview";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraph } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
+import { SelectStatusHistoryRadioButtons } from "./SelectStatusHistoryRadioButtons";
 import { StatusTable } from "./Status-Table";
 
 interface OverviewPageProps {
@@ -28,13 +32,28 @@ interface OverviewPageProps {
 }
 
 export function OverviewPage(props: OverviewPageProps) {
+  // string because the radio select component is a bitch
+  const [monitorStatusSince, setMonitorStatusSince] = React.useState<string>(
+    yesterday.toString()
+  );
+
+  const {
+    data,
+    isLoading: productIdIsLoading,
+    isError: productIdIsError,
+  } = useUserServicePlanProductId();
+
   const { monitor } = props;
   const { name, url, monitor_id, region, alert_id } = monitor;
+
   const {
     statuses,
     isError: statusesIsError,
     isLoading: statusesIsLoading,
-  } = use24HourMonitorStatuses([monitor_id as string]);
+  } = useMonitorStatusHistory(
+    monitor_id as string,
+    Number.parseInt(monitorStatusSince)
+  );
   const {
     alerts,
     isError: alertsIsError,
@@ -106,6 +125,15 @@ export function OverviewPage(props: OverviewPageProps) {
         openDeleteDialog={openDeleteDialog}
       />
       <Divider mb="1em" />
+      <SelectStatusHistoryRadioButtons
+        setValue={setMonitorStatusSince}
+        value={Number.parseInt(monitorStatusSince)}
+        productId={
+          productIdIsError || productIdIsLoading
+            ? PLAN_PRODUCT_IDS.FREE
+            : (data.productId as string)
+        }
+      />
       <Tabs>
         <TabList mb="1em">
           <Tab>Overview</Tab>
@@ -117,10 +145,12 @@ export function OverviewPage(props: OverviewPageProps) {
             <OverviewPageDataCards
               monitorId={monitor_id}
               statuses={statuses ? statuses[monitor_id] : undefined}
+              since={Number.parseInt(monitorStatusSince)}
             />
             <OverviewPageGraph
               monitorId={monitor_id}
               statuses={statuses ? statuses[monitor_id] : undefined}
+              since={Number.parseInt(monitorStatusSince)}
             />
           </TabPanel>
           <TabPanel p="0">

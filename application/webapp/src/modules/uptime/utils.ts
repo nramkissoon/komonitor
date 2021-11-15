@@ -9,6 +9,10 @@ function createMonitorId() {
   return "up-" + uuidv4();
 }
 
+export const yesterday = 24 * 60 * 60 * 1000;
+export const sevenDaysAgo = 7 * 24 * 60 * 60 * 1000;
+export const thirtyDaysAgo = 30 * 24 * 60 * 60 * 1000;
+
 export function createNewMonitorFromCore(
   core: CoreUptimeMonitor,
   userId: string

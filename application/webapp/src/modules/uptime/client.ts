@@ -6,6 +6,7 @@ import {
 } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
+import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "./utils";
 
 export const monitorApiUrl = env.BASE_URL + "api/uptime/monitors";
 export const statusApiUrl = env.BASE_URL + "api/uptime/statuses";
@@ -26,7 +27,6 @@ export function useUptimeMonitors() {
 // Used for the main uptime page, get status for all user monitors
 export function use24HourMonitorStatuses(monitorIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {
-    const yesterday = 24 * 60 * 60 * 1000;
     const urlWithParams =
       url + "?" + ids.map((id) => "id=" + id).join("&") + "&since=" + yesterday;
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
@@ -41,6 +41,71 @@ export function use24HourMonitorStatuses(monitorIds: string[]) {
       errorRetryInterval: 10000, // retry in 10 seconds
     }
   );
+
+  return {
+    statuses: data as { [monitorId: string]: UptimeMonitorStatus[] },
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+// This function and the 30 day version is used for specific monitor views
+export function use7DayMonitorStatuses(monitorId: string) {
+  const fetcher = (url: string, ...ids: string[]) => {
+    const urlWithParams =
+      url +
+      "?" +
+      ids.map((id) => "id=" + id).join("&") +
+      "&since=" +
+      sevenDaysAgo;
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+  const { data, error } = useSWR([statusApiUrl, monitorId], fetcher, {
+    shouldRetryOnError: true,
+    errorRetryInterval: 10000, // retry in 10 seconds
+  });
+
+  return {
+    statuses: data as { [monitorId: string]: UptimeMonitorStatus[] },
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function use30DayMonitorStatuses(monitorId: string) {
+  const fetcher = (url: string, ...ids: string[]) => {
+    const urlWithParams =
+      url +
+      "?" +
+      ids.map((id) => "id=" + id).join("&") +
+      "&since=" +
+      thirtyDaysAgo;
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+  const { data, error } = useSWR([statusApiUrl, monitorId], fetcher, {
+    shouldRetryOnError: true,
+    errorRetryInterval: 10000, // retry in 10 seconds
+  });
+
+  return {
+    statuses: data as { [monitorId: string]: UptimeMonitorStatus[] },
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+// wrapper function to be able to programmatically input how much time from now
+export function useMonitorStatusHistory(monitorId: string, since: number) {
+  const fetcher = (url: string, ...ids: string[]) => {
+    const urlWithParams =
+      url + "?" + ids.map((id) => "id=" + id).join("&") + "&since=" + since;
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+
+  const { data, error } = useSWR([statusApiUrl, monitorId, since], fetcher, {
+    shouldRetryOnError: true,
+    errorRetryInterval: 10000, // retry in 10 seconds
+  });
 
   return {
     statuses: data as { [monitorId: string]: UptimeMonitorStatus[] },

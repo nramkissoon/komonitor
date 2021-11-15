@@ -14,16 +14,24 @@ import {
 import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { percentile } from "../../../common/utils";
+import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "../utils";
 
 interface OverviewPageDataCardsProps {
   monitorId: string;
   statuses: UptimeMonitorStatus[] | undefined;
+  since: number;
 }
 
 interface StatWithLoadingProps {
   label: string;
   stat: string | undefined;
 }
+
+const sinceToStringMap = {
+  [yesterday]: "24H",
+  [sevenDaysAgo]: "7-day",
+  [thirtyDaysAgo]: "30-day",
+};
 
 function StatWithLoading(props: StatWithLoadingProps) {
   const { label, stat } = props;
@@ -48,7 +56,7 @@ function StatWithLoading(props: StatWithLoadingProps) {
 }
 
 export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
-  const { monitorId, statuses } = props;
+  const { monitorId, statuses, since } = props;
 
   // divider orientation is not responsive so we will have to use this hack to hide/show the vertical when necessary
   const verticalDividerHidden = useBreakpointValue({ base: true, sm: false });
@@ -88,7 +96,7 @@ export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
         py="1.5em"
       >
         <Heading textAlign="center" fontSize="xl" mb="1em">
-          24H Monitor Statistics
+          {sinceToStringMap[since]} Monitor Statistics
         </Heading>
         <StatGroup
           h={[null, "4em"]}
