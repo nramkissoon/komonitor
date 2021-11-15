@@ -2,7 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
+import { deleteAlertsForUser } from "../../../src/modules/alerts/alert-db";
 import { PLAN_PRODUCT_IDS } from "../../../src/modules/billing/plans";
+import { deleteAllMonitorsForUser } from "../../../src/modules/uptime/monitor-db";
 import {
   deleteUserById,
   getServicePlanProductIdForUser,
@@ -25,6 +27,18 @@ async function deleteHandler(
       res.status(403);
       return;
     }
+
+    const uptimeMonitorsDeleted = await deleteAllMonitorsForUser(
+      ddbClient,
+      env.UPTIME_MONITOR_TABLE_NAME,
+      userId
+    );
+
+    const alertsDeleted = await deleteAlertsForUser(
+      ddbClient,
+      env.ALERT_TABLE_NAME,
+      userId
+    );
 
     const deleted = await deleteUserById(
       ddbClient,

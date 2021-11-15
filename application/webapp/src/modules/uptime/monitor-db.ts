@@ -85,6 +85,24 @@ export async function deleteMonitor(
     if (statusCode >= 200 && statusCode < 300) return true;
     return false;
   } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export async function deleteAllMonitorsForUser(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  userId: string
+) {
+  try {
+    const monitors = await getMonitorsForUser(ddbClient, tableName, userId);
+    const monitorIds = monitors.map((monitor) => monitor.monitor_id);
+    for (let monitorId of monitorIds) {
+      await deleteMonitor(ddbClient, tableName, monitorId, userId);
+    }
+  } catch (err) {
+    console.log(err);
     return false;
   }
 }

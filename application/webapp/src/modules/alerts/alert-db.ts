@@ -85,6 +85,24 @@ export async function deleteAlert(
     if (statusCode >= 200 && statusCode < 300) return true;
     return false;
   } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export async function deleteAlertsForUser(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  userId: string
+) {
+  try {
+    const alerts = await getAlertsForUser(ddbClient, tableName, userId);
+    const alertIds = alerts.map((alert) => alert.alert_id);
+    for (let alertId of alertIds) {
+      await deleteAlert(ddbClient, tableName, alertId, userId);
+    }
+  } catch (err) {
+    console.log(err);
     return false;
   }
 }

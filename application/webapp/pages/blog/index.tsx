@@ -8,7 +8,6 @@ const CONTENT_PATH = "blog/posts";
 export default function Page({
   frontMatters,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  console.log(frontMatters);
   return (
     <PageLayout
       seoProps={{

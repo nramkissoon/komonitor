@@ -58,8 +58,6 @@ export async function deleteUserById(
   }
 }
 
-export function deleteAllUserDataById() {} // TODO
-
 export async function updateUserIfExists(
   ddbClient: DynamoDBClient,
   userTableName: string,

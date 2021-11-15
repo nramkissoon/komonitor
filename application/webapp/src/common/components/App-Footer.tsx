@@ -66,7 +66,7 @@ export function AppFooter() {
     <Flex {...containerBoxStyles}>
       <HStack {...defaultLinksHstackContainerStyles} mb="1em">
         <HeaderLink text="Docs" href="/docs" />
-        <HeaderLink text="Changelog" href="/changelog" />
+        <HeaderLink text="Blog" href="/blog" />
       </HStack>
       © {year} Nicholas Ramkissoon. All rights reserved.
     </Flex>
