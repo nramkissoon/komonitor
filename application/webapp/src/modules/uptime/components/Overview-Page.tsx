@@ -10,6 +10,7 @@ import {
 import router from "next/router";
 import { Alert, AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
+import { regionToLocationStringMap } from "../../../common/client-utils";
 import {
   DeleteDialog,
   useDeleteDialog,
@@ -101,7 +102,7 @@ export function OverviewPage(props: OverviewPageProps) {
         currentStatus={mostRecentStatus?.status as string}
         lastChecked={mostRecentStatus?.timestamp}
         monitorId={monitor_id}
-        monitorRegion={region}
+        monitorRegion={regionToLocationStringMap[region]}
         openDeleteDialog={openDeleteDialog}
       />
       <Divider mb="1em" />

@@ -3,6 +3,7 @@ import { useToast } from "@chakra-ui/toast";
 import { UptimeMonitor } from "project-types";
 import { Column } from "react-table";
 import { useSWRConfig } from "swr";
+import { regionToLocationStringMap } from "../../../common/client-utils";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import { GenericMonitorNameCell } from "../../../common/components/Table-Cell";
 import {
@@ -71,7 +72,7 @@ function rowPropsGeneratorFunction(
           name: monitor.name,
           id: monitor.monitor_id,
         },
-        region: monitor.region,
+        region: regionToLocationStringMap[monitor.region],
         failuresBeforeAlert: monitor.failures_before_alert as number,
         actions: {
           item: monitor,
@@ -82,6 +83,7 @@ function rowPropsGeneratorFunction(
           monitor.url,
           monitor.failures_before_alert,
           monitor.region,
+          regionToLocationStringMap[monitor.region],
         ].join(" "),
       }))
     : [];

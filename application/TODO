@@ -55,6 +55,7 @@ Webapp:
         ☐  download data as csv or json
         ✔  Add alts to all images @done(21-11-03 15:52)
         ☐  disable alert from dashboard
+        ☐  convert regions to place names @started(21-11-15 11:34)
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
@@ -91,9 +92,10 @@ Webapp:
         ✔  Design page @done(21-11-10 11:02)
         ✔  implement design @done(21-11-11 16:01)
     Blog:
-        ☐ Setup MDX
-        ☐ design index
-        ☐ implement index
+        ✔ Setup MDX @done(21-11-14 20:19)
+        ✔ design index @done(21-11-14 20:19)
+        ✔ implement index @done(21-11-14 20:19)
+         ✔ [[slug]] @done(21-11-15 10:29)
     SEO:
         ✔  Define SEO strategy @done(21-11-03 14:38)
         ✔  implement components if necessary @done(21-11-03 15:49)
@@ -102,9 +104,13 @@ Webapp:
         ✘  research how to ignore pages in SEO (robot.txt??) @cancelled(21-11-08 13:34)
         ✔  index SEO @done(21-11-08 13:48)
         ✘  About SEO @cancelled(21-11-08 13:48)
-        ☐  Blog SEO
+        ✔  Blog SEO @done(21-11-15 10:30)
     SSL checks: 
         ☐ scope
+    Delete by user id:
+        ✔  uptime monitors @done(21-11-14 20:54)
+        ✔  alerts @done(21-11-14 20:54)
+        ✔  add to delete user api @done(21-11-14 20:54)
 
 Uptime HTTP:
     ☐  design new creation and edit form
@@ -146,8 +152,8 @@ CDK:
     ✔ add alert lambda to dev stack @done(21-10-13 19:56)
     ✔ add invoke perm to uptime lambda @done(21-10-13 19:56)
     ✔ create dev stack ddb table for stripe webhooks @done(21-10-08 14:29)
-    ☐ create the prod ddb tables in us-east-1
-    ☐ create us-east-1 prod stack
+    ☐ create the prod ddb tables in us-east-1 @started(21-11-15 11:33)
+    ☐ create us-east-1 prod stack @started(21-11-15 11:34)
 
 Logging and Error Handling:
     ☐ Decide logging strategy for webapp @10/29

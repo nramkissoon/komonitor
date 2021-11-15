@@ -1,6 +1,6 @@
 import Email from "email-templates";
 import { Alert, UptimeMonitor, UptimeMonitorStatus } from "project-types";
-import { emailTransporter } from "./config";
+import { emailTransporter, regionToLocationStringMap } from "./config";
 
 export async function sendUptimeMonitorAlertEmail(
   monitor: UptimeMonitor,
@@ -19,7 +19,7 @@ export async function sendUptimeMonitorAlertEmail(
     const subject = await email.render("uptime/subject", {
       severity: alert.severity.toUpperCase(),
       monitorName: monitor.name,
-      monitorRegion: monitor.region.toUpperCase(),
+      monitorRegion: regionToLocationStringMap[monitor.region],
       alertName: alert.name,
       failures: monitor.failures_before_alert,
       statuses: statuses,

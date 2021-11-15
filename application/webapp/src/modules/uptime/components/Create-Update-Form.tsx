@@ -21,7 +21,10 @@ import Router, { useRouter } from "next/router";
 import { Alert, UptimeMonitor } from "project-types";
 import React from "react";
 import { useSWRConfig } from "swr";
-import { minutesToString } from "../../../common/client-utils";
+import {
+  minutesToString,
+  regionToLocationStringMap,
+} from "../../../common/client-utils";
 import { ReactSelectFormik } from "../../../common/components/React-Select-Formik";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import { createMonitor, updateMonitor } from "./../client";
@@ -74,7 +77,7 @@ function createRegionSelectOptions() {
   return [
     {
       value: "us-east-1",
-      label: "us-east-1",
+      label: regionToLocationStringMap["us-east-1"],
       isDisabled: false,
     },
   ];

@@ -1,5 +1,6 @@
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
+import { ManualApprovalAction } from "@aws-cdk/aws-codepipeline-actions";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import * as cdk from "@aws-cdk/core";
 import {
@@ -102,6 +103,13 @@ export class CdkPipelineStack extends cdk.Stack {
             resources: ["*"],
           }),
         ],
+      })
+    );
+
+    this.pipeline.addStage("PromoteToProduction").addActions(
+      new ManualApprovalAction({
+        actionName: "Lambda-Build-Manual-Approval",
+        runOrder: 1,
       })
     );
   }

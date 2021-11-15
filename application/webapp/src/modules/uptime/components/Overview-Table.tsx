@@ -30,7 +30,10 @@ import {
   useTable,
 } from "react-table";
 import { useSWRConfig } from "swr";
-import { timeAgo } from "../../../common/client-utils";
+import {
+  regionToLocationStringMap,
+  timeAgo,
+} from "../../../common/client-utils";
 import { percentile } from "../../../common/utils";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { ActionsCell, DescriptionCell, StatusCell } from "./Table-Cell";
@@ -93,7 +96,7 @@ function createRowPropsFromMonitorData(
       monitorId: data.monitor_id,
       name: data.name,
       url: data.url,
-      region: data.region,
+      region: regionToLocationStringMap[data.region],
     },
     lastChecked: mostRecentStatus
       ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
