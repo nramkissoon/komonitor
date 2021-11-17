@@ -10,7 +10,7 @@ export const Content: Section[] = [
   {
     Header: "Novemeber 2021",
     Features: [
-      { completed: false, feature: "View data up to 30 days old." },
+      { completed: true, feature: "View data up to 30 days old." },
       { completed: false, feature: "User preferred timezone support." },
       { completed: false, feature: "Webhook alerts added as an alert type." },
     ],

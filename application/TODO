@@ -1,45 +1,16 @@
 General:
-    ✔ Buy domain + google workspaces setup @done(21-10-06 14:00)
-    ✔ verify domain on AWS SES @done(21-10-07 12:49)
-    ✔ create stripe account + test creds @done(21-10-06 14:20)
     ☐ Google sign in api switch to prod
     ☐ Stripe switch to prod
 
 Webapp: 
-    App Footer:
-        ✔ implement @10/22 @done(21-10-18 12:00)
     Pricing page:
-        ✔ Add link to FAQ and email to contact @done(21-10-07 14:02)
         ☐  move loading spinner to CTA buttons
-    Regular Footer:
-        ✔ design @10/22 @done(21-10-18 14:30)
-        ✔ implement @10/22 @done(21-10-18 14:30)
-    Regular Page container:
-        ✔ create component where with fading header/footer and PageContainer as child @done(21-10-11 14:00)
-        ✔ migrate existing pages to this new component @done(21-10-11 14:00)
-    App Page container:
-        ✔ same as regular page container but for app pages @done(21-10-11 14:00)
-        ✔ migrate existing pages @done(21-10-11 14:00)
-    App Header:
-        ✔ Change color mode toggle to gear wheel linking to settings and remove settings link @done(21-10-07 14:11)
-        ✔ Add links to doc in main link section -> make sure it is also in mobile nav @done(21-10-07 14:11)
-        ✔ color mode responsive logo and set avatar @10/22 @done(21-10-20 21:03)
     Alert:
-        ✔ design invoke table in invocations tab @done(21-10-08 13:48)
-        ✔ implement invoke table @done(21-10-08 13:48)
         ☐ email alert only to account owner
     Settings:
-        ✔ implement account and billing tab menu @done(21-10-09 13:47)
-        ✔ verify cannot delete account when on paid plan @done(21-10-13 20:13)
-        ✔ add appearance color mode toggle @done(21-10-11 13:05)
+        
     Stripe:
-        ✔ install stripe @done(21-10-07 14:15)
-        ✘ create stripe customer on new user creation @cancelled(21-10-07 19:38)
-        ✔ getOrCreateStripeCustomerIdForUserId() @done(21-10-07 20:23)
-        ✔ Style the checkout session @10/22 @done(21-10-20 21:11)
-        ✔ Setup and style the customer portal @10/22 @done(21-10-20 21:11)
-        ✘ prevent relay attack on webhooks @10/22 @cancelled(21-10-19 14:26)
-        ✔ webhooks for cancellation, new sub, updated sub @done(21-10-12 22:12)
+        
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:
@@ -88,32 +59,16 @@ Webapp:
         ✔ define sections and subsections @done(21-11-05 11:17)
         ✔ implement sidebar nav @done(21-11-05 11:17)
         ☐ fill content
-    Roadmap Page: 
-        ✔  create design @done(21-11-02 12:32)
-        ✔ implement design @done(21-11-02 14:06)
-    App Index:
-        ✔  Design page @done(21-11-10 11:02)
-        ✔  implement design @done(21-11-11 16:01)
-    Blog:
-        ✔ Setup MDX @done(21-11-14 20:19)
-        ✔ design index @done(21-11-14 20:19)
-        ✔ implement index @done(21-11-14 20:19)
-         ✔ [[slug]] @done(21-11-15 10:29)
     SEO:
-        ✔  Define SEO strategy @done(21-11-03 14:38)
-        ✔  implement components if necessary @done(21-11-03 15:49)
-        ✔  define what pages need SEO @done(21-11-03 15:49)
-        ✔  create images for SEO @done(21-11-08 13:34) 
-        ✘  research how to ignore pages in SEO (robot.txt??) @cancelled(21-11-08 13:34)
-        ✔  index SEO @done(21-11-08 13:48)
-        ✘  About SEO @cancelled(21-11-08 13:48)
-        ✔  Blog SEO @done(21-11-15 10:30)
     SSL checks: 
         ☐ scope
     Delete by user id:
         ✔  uptime monitors @done(21-11-14 20:54)
         ✔  alerts @done(21-11-14 20:54)
         ✔  add to delete user api @done(21-11-14 20:54)
+        ☐  verify
+    Website View:
+        ☐  scope
 
 Uptime HTTP:
     ☐  design new creation and edit form
@@ -138,23 +93,10 @@ Uptime Lambda:
     ✔ investigate response times @done(21-10-19 19:54)
 
 Alert Lambda:
-    ✔ Setup package @done(21-10-13 14:08)
-    ✔ lambda grabs monitor obj from db @done(21-10-14 13:19)
-    ✔ check if alert is attached to monitor, exit if none @done(21-10-14 13:19)
-    ✔ grab monitor statuses from status db @done(21-10-15 12:06)
-    ✘ get user email from user table @cancelled(21-10-17 09:45)
-    ✔ check monitor alert config with monitor statuses to determine if need to alert, get failures before alert number x and compare to the last x statuses, check if alert is paused @10/22 @done(21-10-18 14:50)
-    ✔ alert based on alert type @10/22 @done(21-10-18 16:52)
-    ✔ design email alert @10/22 @done(21-10-20 12:03)
-    ✔ implement the email design in pug files @10/22 @done(21-10-20 13:31)
-    ✔ implement email alert @10/22 @done(21-10-19 17:16)
-    ✔ lambda access to ddb, ses @done(21-10-14 12:26)
+
     ☐ Promise.all the data dependancies
 
 CDK:
-    ✔ add alert lambda to dev stack @done(21-10-13 19:56)
-    ✔ add invoke perm to uptime lambda @done(21-10-13 19:56)
-    ✔ create dev stack ddb table for stripe webhooks @done(21-10-08 14:29)
     ☐ create the prod ddb tables in us-east-1 @started(21-11-15 11:33)
     ☐ create us-east-1 prod stack @started(21-11-15 11:34)
 
@@ -165,3 +107,4 @@ Logging and Error Handling:
 
 Bugs: 
     ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
+    ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link

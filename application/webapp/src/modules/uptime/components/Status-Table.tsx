@@ -31,6 +31,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { TablePagination } from "../../../common/components/Table-Pagination";
 import { TableSortColumnUi } from "../../../common/components/Table-Sort-Column-UI";
@@ -55,7 +56,10 @@ function createRowPropsFromMonitorStatus(
     status: status.status ?? "No Data",
     responseTime: status.latency,
     timestamp: status.timestamp,
-    filterString: [status.status].join(" "),
+    filterString: [
+      status.status,
+      new Date(status.timestamp).toUTCString(),
+    ].join(" "),
   };
 }
 
@@ -175,7 +179,13 @@ export function StatusTable(props: TableProps) {
       <Heading textAlign="center" size="lg" mb=".7em">
         Monitor Statuses
       </Heading>
-      {GlobalFilter({ globalFilter, setGlobalFilter })}
+      <Flex flexDir="row" justifyContent="space-between">
+        {GlobalFilter({ globalFilter, setGlobalFilter })}
+        <JSONDownloadButton
+          data={statuses ? statuses : {}}
+          filename={"monitor-statuses.json"}
+        />
+      </Flex>
       {statuses ? (
         <ScaleFade in={statuses !== undefined} initialScale={0.8}>
           <Box

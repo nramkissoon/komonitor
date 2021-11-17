@@ -9,7 +9,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
 
 const HeaderLink = (props: {
@@ -18,12 +17,9 @@ const HeaderLink = (props: {
   buttonProps?: ButtonProps;
 }) => {
   const { text, href, buttonProps } = props;
-  const router = useRouter();
-
-  const selected = router.asPath.startsWith(href);
 
   const defaultButtonLinkStyles: ButtonProps = {
-    color: !selected ? useColorModeValue("gray.900", "gray.400") : "blue.400",
+    color: useColorModeValue("gray.900", "gray.400"),
     display: "inline-flex",
     alignItems: "center",
     variant: "ghost",

@@ -17,13 +17,13 @@ import {
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
 import { useUptimeMonitors } from "../../uptime/client";
-import { InvocationTable } from "../../uptime/components/Invocation-Table";
 import {
   alertApiUrl,
   deleteAlert,
   useAlertInvocationsAllTime,
 } from "../client";
 import { AttachedMonitorsTable } from "./Attached-Monitors-Table";
+import { InvocationTable } from "./Invocation-Table";
 import { OverviewPageBottomLayout } from "./Overview-Page-Bottom-Layout";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageHeader } from "./Overview-Page-Header";

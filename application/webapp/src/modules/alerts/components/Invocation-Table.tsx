@@ -35,7 +35,13 @@ function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
             id: monitor_id,
             name: name,
           },
-          filterString: [...recipients, name, severity, url].join(" "),
+          filterString: [
+            ...recipients,
+            name,
+            severity,
+            url,
+            new Date(invocation.timestamp).toUTCString(),
+          ].join(" "),
         };
       })
     : [];
@@ -61,7 +67,7 @@ export function InvocationTable(props: InvocationTableProps) {
       Cell: (props) => GenericMonitorNameCell(props.cell.value),
       disableSortBy: true,
     },
-    { Header: "Monitor Type", accessor: "type" },
+    { Header: "Monitor Type", accessor: "monitorType" },
 
     {
       Header: "Severity",

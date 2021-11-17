@@ -33,7 +33,7 @@ export function createSections() {
                 w="90%"
                 mx="auto"
               >
-                <chakra.span mr="1.5em">
+                <chakra.span mr={feature.completed ? ".5em" : "1.5em"}>
                   {feature.completed ? "✅ " : "-"}
                 </chakra.span>
                 <chakra.span>{feature.feature}</chakra.span>

@@ -44,7 +44,7 @@ export const Copy = {
     Data: {
       header: "Data Access",
       subheader:
-        "Monitor and alert data is available for download in common formats (CSV, JSON) for further processing or spreadsheet analysis.",
+        "Monitor and alert data is available for download in JSON for further processing or spreadsheet analysis.",
     },
     Learn: {
       header: "Comprehensive Documentation",
