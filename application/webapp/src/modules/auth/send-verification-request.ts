@@ -15,7 +15,7 @@ export async function sendVerificationRequest({
     to: email,
     from,
     subject: `Sign in to ${host}`,
-    text: text({ url, host }),
+    text: text(),
     html: html({ url, host, email }),
   });
 }
@@ -72,6 +72,6 @@ function html({ url, host, email }: Record<"url" | "host" | "email", string>) {
 }
 
 // Email Text body (fallback for email clients that don't render HTML, e.g. feature phones)
-function text({ url, host }: Record<"url" | "host", string>) {
-  return `Sign in to ${host}\n${url}\n\n`;
+function text() {
+  return `Sign in to Komonitor\n\n`;
 }
