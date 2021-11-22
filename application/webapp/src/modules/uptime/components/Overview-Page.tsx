@@ -17,7 +17,10 @@ import {
 } from "../../../common/components/Delete-Dialog";
 import { useAlertInvocationsAllTime, useAlerts } from "../../alerts/client";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
-import { useUserServicePlanProductId } from "../../user/client";
+import {
+  useUserServicePlanProductId,
+  useUserTimezoneAndOffset,
+} from "../../user/client";
 import { deleteMonitor, useMonitorStatusHistory } from "../client";
 import { yesterday } from "../utils";
 import { MonitorAlertsOverview } from "./Monitor-Alerts-Overview";
@@ -42,6 +45,12 @@ export function OverviewPage(props: OverviewPageProps) {
     isLoading: productIdIsLoading,
     isError: productIdIsError,
   } = useUserServicePlanProductId();
+
+  const {
+    data: tzAndOffset,
+    isLoading: tzPrefIsLoading,
+    isError: tzPrefIsError,
+  } = useUserTimezoneAndOffset();
 
   const { monitor } = props;
   const { name, url, monitor_id, region, alert_id } = monitor;
@@ -151,18 +160,21 @@ export function OverviewPage(props: OverviewPageProps) {
               monitorId={monitor_id}
               statuses={statuses ? statuses[monitor_id] : undefined}
               since={Number.parseInt(monitorStatusSince)}
+              tzOffset={tzAndOffset?.offset ?? 0}
             />
           </TabPanel>
           <TabPanel p="0">
             <StatusTable
               monitorId={monitor_id}
               statuses={statuses ? statuses[monitor_id] : undefined}
+              offset={tzAndOffset?.offset ?? 0}
             />
           </TabPanel>
           <TabPanel p="0">
             <MonitorAlertsOverview
               alerts={alertsForMonitor}
               alertInvocations={invocationsForMonitor}
+              tzOffset={tzAndOffset?.offset ?? 0}
             />
           </TabPanel>
         </TabPanels>

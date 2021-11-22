@@ -22,4 +22,6 @@ export interface StripeAttributes {
   product_id?: string;
 }
 
-export interface User extends NextAuthUserAttributes, StripeAttributes {}
+export interface User extends NextAuthUserAttributes, StripeAttributes {
+  tz?: string;
+}

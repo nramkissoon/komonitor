@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
 const userPlanApiUrl = env.BASE_URL + "api/user/plan";
+const userTzApiUrl = env.BASE_URL + "api/user/tz";
 const userApiUrl = env.BASE_URL + "api/user";
 
 export function useUserServicePlanProductId() {
@@ -11,6 +12,18 @@ export function useUserServicePlanProductId() {
   const { data, error } = useSWR(userPlanApiUrl, fetcher);
   return {
     data: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
+export function useUserTimezoneAndOffset() {
+  const fetcher = (url: string) =>
+    fetch(url, { method: "GET" }).then((r) => r.json());
+
+  const { data, error } = useSWR(userTzApiUrl, fetcher);
+  return {
+    data: data as { tz: string; offset: number },
     isLoading: !error && !data,
     isError: error,
   };

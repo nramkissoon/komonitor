@@ -14,6 +14,7 @@ import { Theme } from "@nivo/core";
 import { Datum, DatumValue, ResponsiveLine, Serie } from "@nivo/line";
 import { UptimeMonitorStatus } from "project-types";
 import React from "react";
+import { getTimeString } from "../../../common/client-utils";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import theme from "../../../common/components/theme";
 import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "../utils";
@@ -22,6 +23,7 @@ interface OverviewPageGraphProps {
   monitorId: string;
   statuses: UptimeMonitorStatus[] | undefined;
   since: number;
+  tzOffset: number;
 }
 
 interface LineGraphProps {
@@ -31,6 +33,7 @@ interface LineGraphProps {
   minLatency: number | null;
   maxLatency: number | null;
   colorMode: string; // dark or light
+  offset: number;
 }
 
 const sinceToStringMap = {
@@ -102,14 +105,18 @@ function reduceArrayLength(array: any[], desiredLength: number) {
   return result;
 }
 
-function buildGraphSerie(statuses: UptimeMonitorStatus[], monitorId: string) {
+function buildGraphSerie(
+  statuses: UptimeMonitorStatus[],
+  monitorId: string,
+  offset: number
+) {
   statuses.sort((a, b) => a.timestamp - b.timestamp);
   statuses = reduceArrayLength(statuses, 48);
   const serie: Serie = {
     id: monitorId,
     data: statuses.map((status) => {
       const dataPoint: Datum = {
-        x: new Date(status.timestamp).toUTCString(),
+        x: getTimeString(offset, status.timestamp),
         y: status.latency,
       };
       return dataPoint;
@@ -150,7 +157,15 @@ function LineGraphTooltip(x: DatumValue, y: DatumValue) {
 function LineGraph(props: LineGraphProps) {
   const [blue600] = useToken("colors", ["blue.600"]);
 
-  const { data, minLatency, maxLatency, colorMode } = props;
+  const { data, minLatency, maxLatency, colorMode, offset } = props;
+
+  let offsetString = "";
+  if (offset > 0) {
+    offsetString = "+" + offset;
+  } else if (offset < 0) {
+    offsetString = offset.toString();
+  }
+
   return (
     <ResponsiveLine
       animate={true}
@@ -187,8 +202,8 @@ function LineGraph(props: LineGraphProps) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 45,
-        legend: "Time (UTC)",
-        legendOffset: 70,
+        legend: `Time (UTC${offsetString})`,
+        legendOffset: 80,
         legendPosition: "middle",
         tickValues:
           data.data.length <= 12
@@ -202,7 +217,7 @@ function LineGraph(props: LineGraphProps) {
                 .map((d) => {
                   return d.x;
                 }),
-        format: (v) => (v as string).slice(17, -3),
+        format: (v) => (v as string).slice(14),
       }}
       enableGridX={false}
       enablePoints={true}
@@ -214,7 +229,7 @@ function LineGraph(props: LineGraphProps) {
 }
 
 export function OverviewPageGraph(props: OverviewPageGraphProps) {
-  let { monitorId, statuses, since } = props;
+  let { monitorId, statuses, since, tzOffset } = props;
 
   const { colorMode } = useColorMode();
 
@@ -226,8 +241,10 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
   // memos for graph attributes
   const serie = React.useMemo(
     () =>
-      filteredStatuses ? buildGraphSerie(filteredStatuses, monitorId) : null,
-    [monitorId, statuses, since]
+      filteredStatuses
+        ? buildGraphSerie(filteredStatuses, monitorId, tzOffset)
+        : null,
+    [monitorId, statuses, since, tzOffset]
   );
   const minLatency = React.useMemo(
     () =>
@@ -280,6 +297,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
               minLatency={minLatency}
               maxLatency={maxLatency}
               colorMode={colorMode}
+              offset={tzOffset}
             />
             <Text mt=".3em" color="red.400">
               *Subset of data points are displayed on graph for legibility

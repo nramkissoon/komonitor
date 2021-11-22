@@ -53,6 +53,8 @@
     "lodash": "^4.17.21",
     "shelljs": "^0.8.4",
     "project-types": "^1.0.0",
+    "react-timezone-select": "^1.1.15",
+    "spacetime": "^6.16.3",
     "uuid": "^8.3.2",
     "github-slugger": "^1.4.0",
     "remark": "^13.0.0",
@@ -63,7 +65,9 @@
     "remark-slug": "^6.0.0",
     "date-fns": "^2.25.0",
     "remark-toc": "^7.0.0",
-    "remark-unwrap-images": "^2.0.0"
+    "remark-unwrap-images": "^2.0.0",
+    "next-transpile-modules": "^9.0.0",
+    "luxon": "^2.1.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -80,6 +84,7 @@
     "@types/micro": "^7.3.6",
     "@types/micro-cors": "^0.1.2",
     "@types/shelljs": "0.8.9",
+    "@types/luxon": "^2.0.7",
     "next-images": "^1.8.1",
     "babel-jest": "^27.0.6",
     "eslint": "7.32.0",

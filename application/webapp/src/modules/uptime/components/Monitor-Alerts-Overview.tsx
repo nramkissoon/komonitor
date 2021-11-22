@@ -22,10 +22,11 @@ import { InvocationTable } from "./Invocation-Table";
 interface MonitorAlertsOverviewProps {
   alerts: Alert[] | undefined;
   alertInvocations: { [alertId: string]: AlertInvocation[] } | undefined;
+  tzOffset: number;
 }
 
 export function MonitorAlertsOverview(props: MonitorAlertsOverviewProps) {
-  const { alerts, alertInvocations } = props;
+  const { alerts, alertInvocations, tzOffset } = props;
 
   return alerts === undefined || alerts.length === 0 ? (
     <Box mt="2em">
@@ -100,6 +101,7 @@ export function MonitorAlertsOverview(props: MonitorAlertsOverviewProps) {
                       ? alertInvocations
                       : alertInvocations[alert.alert_id] ?? []
                   }
+                  tzOffset={tzOffset}
                 />
               </TabPanel>
             );

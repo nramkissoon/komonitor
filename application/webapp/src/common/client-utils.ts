@@ -1,5 +1,6 @@
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import { DateTime } from "luxon";
 
 export const env = {
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
@@ -39,3 +40,15 @@ export const regionToLocationStringMap = {
   "eu-north-1": "Stockholm, Sweden",
   "sa-east-1": "São Paulo, Brazil",
 };
+
+export function getTimeString(offset: number, timestamp: number) {
+  let offsetString = "";
+  if (offset > 0) {
+    offsetString = "+" + offset;
+  } else if (offset < 0) {
+    offsetString = offset.toString();
+  }
+  return DateTime.fromMillis(timestamp)
+    .setZone("UTC" + offsetString)
+    .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
+}

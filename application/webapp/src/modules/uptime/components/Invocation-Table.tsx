@@ -33,17 +33,19 @@ function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
 
 interface InvocationTableProps {
   invocations: AlertInvocation[] | undefined;
+  tzOffset: number;
 }
 
 export function InvocationTable(props: InvocationTableProps) {
-  const { invocations } = props;
+  const { invocations, tzOffset } = props;
 
   const columns: Column[] = [
     { id: "filter-column", filter: "includes", accessor: "filterString" },
     {
       Header: "Timestamp",
       accessor: "timestamp",
-      Cell: (props) => SimpleTimestampCell({ timestamp: props.cell.value }),
+      Cell: (props) =>
+        SimpleTimestampCell({ timestamp: props.cell.value, offset: tzOffset }),
     },
     { Header: "Type", accessor: "type" },
     {
@@ -63,7 +65,7 @@ export function InvocationTable(props: InvocationTableProps) {
     <>
       {CommonOverviewTable<RowProps>({
         data: {
-          dependencies: [invocations],
+          dependencies: [invocations, tzOffset],
           dependenciesIsLoading: invocations === undefined,
           rowPropsGeneratorFunction: rowPropsGeneratorFunction,
         },

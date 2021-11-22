@@ -80,6 +80,58 @@ export async function updateUserIfExists(
   }
 }
 
+export async function getTimezonePreferenceForUser(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string
+): Promise<string> {
+  try {
+    const user = await getUserById(ddbClient, userTableName, userId);
+    if (!user) {
+      throw new Error("undefined user: " + user + ", id: " + userId);
+    }
+    if (user.tz) return user.tz;
+    return "Etc/GMT";
+  } catch (err) {
+    console.log(err);
+    return "Etc/GMT";
+  }
+}
+
+export async function setTimezonePreferenceForUser(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string,
+  timezone: string
+) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: userTableName,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      ExpressionAttributeValues: {
+        ":p": { S: timezone },
+      },
+      UpdateExpression: "SET tz = :p",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 export async function getServicePlanProductIdForUser(
   ddbClient: DynamoDBClient,
   userTableName: string,

@@ -70,6 +70,16 @@ Webapp:
     Website View:
         ☐  scope
 
+User pref dates:
+    ✔ new branch @done(21-11-22 09:51)
+    ✔ create useSWR call for using user date pref @done(21-11-22 10:50)
+    ✔ install https://www.npmjs.com/package/react-timezone-select @done(21-11-22 10:44)
+    ✔ create new select component that displays current pref using hook and add to user account settings @done(21-11-22 12:42)
+    ✔ create save component that calls post user data @done(21-11-22 11:37)
+    ✔ create toast that is called on successfule user info update @done(21-11-22 11:37)
+    ✔ create user post api -> verify nonchangeable fields cannot be changed -> only timezone @done(21-11-22 11:09)
+    ✔ use new hook wherever applicable -> find all date strings and mass replace @done(21-11-22 13:41)
+
 Uptime HTTP:
     ☐  design new creation and edit form
     ☐  implement HTTP headers in model

@@ -1,10 +1,12 @@
 import { Button, Divider, Text, useToast } from "@chakra-ui/react";
 import React from "react";
+import { useUserTimezoneAndOffset } from "../../user/client";
 import { ColorModeToggle } from "./ColorModeToggle";
 import {
   DeleteAccountDialog,
   useDeleteAccountDialog,
 } from "./Delete-User-Dialog";
+import { TimezoneSelector } from "./Timezone-Selector";
 
 export function AccountTab() {
   const errorToast = useToast();
@@ -18,6 +20,12 @@ export function AccountTab() {
       variant: "solid",
       position: "top",
     });
+
+  const {
+    data: tzAndOffset,
+    isLoading: tzPrefIsLoading,
+    isError: tzPrefIsError,
+  } = useUserTimezoneAndOffset();
 
   const { cancelRef, isOpen, onClose, onOpen } = useDeleteAccountDialog();
 
@@ -33,6 +41,15 @@ export function AccountTab() {
         Appearance:
       </Text>
       <ColorModeToggle />
+      <Divider mb="1em" />
+      <Text fontSize="lg" color="gray.500" mb=".7em">
+        Timezone Preference:
+      </Text>
+      {!tzPrefIsLoading ? (
+        <TimezoneSelector initialTz={tzAndOffset?.tz ?? "Etc/GMT"} />
+      ) : (
+        <></>
+      )}
       <Divider mb="1em" />
       <Text fontSize="lg" color="gray.500" mb=".7em">
         Delete your account permanently:

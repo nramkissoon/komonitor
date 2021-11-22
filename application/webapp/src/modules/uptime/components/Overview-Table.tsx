@@ -2,11 +2,13 @@ import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Flex,
   Input,
   InputGroup,
   InputGroupProps,
   InputLeftElement,
   InputProps,
+  Spacer,
   Table,
   Tbody,
   Td,
@@ -27,6 +29,7 @@ import {
   useAsyncDebounce,
   useGlobalFilter,
   usePagination,
+  useSortBy,
   useTable,
 } from "react-table";
 import { useSWRConfig } from "swr";
@@ -34,7 +37,7 @@ import {
   regionToLocationStringMap,
   timeAgo,
 } from "../../../common/client-utils";
-import { percentile } from "../../../common/utils";
+import { TableSortColumnUi } from "../../../common/components/Table-Sort-Column-UI";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { ActionsCell, DescriptionCell, StatusCell } from "./Table-Cell";
 
@@ -53,7 +56,6 @@ export interface RowProps {
   lastChecked: string;
   status: string;
   uptime: string;
-  p90Latency: string;
   actions: {
     monitorId: string;
     name: string;
@@ -68,17 +70,6 @@ export function calculateUptimeString(
 
   const up = statuses.filter((status) => status.status === "up").length;
   return ((up / statuses.length) * 100).toFixed(2).toString() + "%";
-}
-
-export function calculateP90LatencyString(
-  statuses: UptimeMonitorStatus[] | undefined
-) {
-  if (!statuses || statuses.length === 0) return "N/A";
-
-  const latencies = statuses.map((status) => status.latency);
-  const p90 = percentile(latencies, 90);
-  if (p90 === -1) return "N/A";
-  return p90?.toPrecision(4).toString() + "ms";
 }
 
 function createRowPropsFromMonitorData(
@@ -103,7 +94,6 @@ function createRowPropsFromMonitorData(
       : "N/A",
     status: mostRecentStatus ? mostRecentStatus.status : "No Data",
     uptime: calculateUptimeString(data.statuses),
-    p90Latency: calculateP90LatencyString(data.statuses),
     actions: {
       monitorId: data.monitor_id,
       name: data.name,
@@ -201,10 +191,6 @@ export function OverviewTable(props: TableProps) {
         accessor: "uptime",
       },
       {
-        Header: "p90 Response Time",
-        accessor: "p90Latency",
-      },
-      {
         Header: "Last checked",
         accessor: "lastChecked",
       },
@@ -243,6 +229,7 @@ export function OverviewTable(props: TableProps) {
     setGlobalFilter,
     preGlobalFilteredRows,
     globalFilteredRows,
+    toggleSortBy,
     state: { pageIndex, pageSize, globalFilter },
   } = useTable(
     {
@@ -253,6 +240,7 @@ export function OverviewTable(props: TableProps) {
       initialState: { pageIndex: 0, pageSize: 10 },
     },
     useGlobalFilter,
+    useSortBy,
     usePagination
   );
 
@@ -331,7 +319,20 @@ export function OverviewTable(props: TableProps) {
                       fontWeight="medium"
                       borderColor={tableBorderColor}
                     >
-                      {column.render("Header")}
+                      <Flex>
+                        <Box my="auto">{column.render("Header")}</Box>
+                        {column.id !== "actions" ? (
+                          <>
+                            <Spacer />
+                            <TableSortColumnUi
+                              column={column}
+                              toggleSortBy={toggleSortBy}
+                            />
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </Flex>
                     </Th>
                   );
                 })}

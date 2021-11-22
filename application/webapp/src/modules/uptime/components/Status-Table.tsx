@@ -31,6 +31,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { getTimeString } from "../../../common/client-utils";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { TablePagination } from "../../../common/components/Table-Pagination";
@@ -47,19 +48,20 @@ export interface RowProps {
 interface TableProps {
   monitorId: string;
   statuses: UptimeMonitorStatus[] | undefined;
+  offset: number;
 }
 
 function createRowPropsFromMonitorStatus(
-  status: UptimeMonitorStatus
+  status: UptimeMonitorStatus,
+  offset: number
 ): RowProps {
   return {
     status: status.status ?? "No Data",
     responseTime: status.latency,
     timestamp: status.timestamp,
-    filterString: [
-      status.status,
-      new Date(status.timestamp).toUTCString(),
-    ].join(" "),
+    filterString: [status.status, getTimeString(offset, status.timestamp)].join(
+      " "
+    ),
   };
 }
 
@@ -101,16 +103,16 @@ function GlobalFilter(props: {
 }
 
 export function StatusTable(props: TableProps) {
-  const { monitorId, statuses } = props;
+  const { monitorId, statuses, offset } = props;
 
   const data = React.useMemo(() => {
     return statuses
       ? statuses
-          .map((status) => createRowPropsFromMonitorStatus(status))
+          .map((status) => createRowPropsFromMonitorStatus(status, offset))
           .sort()
           .reverse()
       : [];
-  }, [statuses]);
+  }, [statuses, offset]);
 
   const tableColumns = React.useMemo(
     (): Column[] => [
@@ -129,7 +131,8 @@ export function StatusTable(props: TableProps) {
       {
         Header: "Timestamp",
         accessor: "timestamp",
-        Cell: (props) => TimestampCell({ timestamp: props.cell.value }),
+        Cell: (props) =>
+          TimestampCell({ timestamp: props.cell.value, offset: offset }),
       },
       {
         id: "filter-column",
@@ -137,7 +140,7 @@ export function StatusTable(props: TableProps) {
         accessor: "filterString",
       },
     ],
-    []
+    [offset]
   );
 
   const {

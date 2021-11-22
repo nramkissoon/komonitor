@@ -12,6 +12,7 @@ import Link from "next/link";
 import router from "next/router";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { getTimeString } from "../../../common/client-utils";
 
 interface DescriptionCellProps {
   monitorId: string;
@@ -86,11 +87,12 @@ export function ResponseTimeCellProps(props: ResponseTimeCellProps) {
 
 interface TimestampCellProps {
   timestamp: number;
+  offset: number;
 }
 
 export function TimestampCell(props: TimestampCellProps) {
-  const { timestamp } = props;
-  return <>{new Date(timestamp).toUTCString()}</>;
+  const { timestamp, offset } = props;
+  return <>{getTimeString(offset, timestamp)}</>;
 }
 
 interface ActionsCellProps {

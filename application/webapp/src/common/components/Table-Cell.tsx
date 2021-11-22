@@ -7,6 +7,7 @@ import router from "next/router";
 import { AlertSeverities } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { getTimeString } from "../client-utils";
 import { getItemBaseUrlFromItemId } from "../utils";
 
 interface ActionsCellProps {
@@ -80,10 +81,11 @@ export function ActionsCell(props: ActionsCellProps) {
 
 interface SimpleTimestampCellProps {
   timestamp: number;
+  offset: number;
 }
 
 export function SimpleTimestampCell(props: SimpleTimestampCellProps) {
-  return <>{new Date(props.timestamp).toUTCString()}</>;
+  return <>{getTimeString(props.offset, props.timestamp)}</>;
 }
 
 interface AlertSeverityCellProps {
