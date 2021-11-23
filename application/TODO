@@ -110,6 +110,11 @@ CDK:
     ☐ create the prod ddb tables in us-east-1 @started(21-11-15 11:33)
     ☐ create us-east-1 prod stack @started(21-11-15 11:34)
 
+Prod Stack:
+    ☐ abstract lambdas
+    ☐ abstract rules
+    ☐ lambdas call us-east-1 db but refer to each other
+
 Logging and Error Handling:
     ☐ Decide logging strategy for webapp @10/29
     ☐ replace console.log/error in webapp with logging provider

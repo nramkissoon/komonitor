@@ -8,6 +8,7 @@ import {
   SimpleTimestampCell,
 } from "../../../common/components/Table-Cell";
 import { itemIdToDisplayStringInTableCell } from "../../../common/utils";
+import { useUserTimezoneAndOffset } from "../../user/client";
 
 interface RowProps {
   timestamp: number;
@@ -53,13 +54,22 @@ interface InvocationTableProps {
 
 export function InvocationTable(props: InvocationTableProps) {
   const { invocations } = props;
+  const {
+    data: tzAndOffset,
+    isLoading: tzPrefIsLoading,
+    isError: tzPrefIsError,
+  } = useUserTimezoneAndOffset();
 
   const columns: Column[] = [
     { id: "filter-column", filter: "includes", accessor: "filterString" },
     {
       Header: "Timestamp",
       accessor: "timestamp",
-      Cell: (props) => SimpleTimestampCell({ timestamp: props.cell.value }),
+      Cell: (props) =>
+        SimpleTimestampCell({
+          timestamp: props.cell.value,
+          offset: tzAndOffset?.offset ?? 0,
+        }),
     },
     {
       Header: "Monitor",

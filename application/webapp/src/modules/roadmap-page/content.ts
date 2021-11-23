@@ -11,7 +11,7 @@ export const Content: Section[] = [
     Header: "Novemeber 2021",
     Features: [
       { completed: true, feature: "View data up to 30 days old." },
-      { completed: false, feature: "User preferred timezone support." },
+      { completed: true, feature: "User preferred timezone support." },
       { completed: false, feature: "Webhook alerts added as an alert type." },
     ],
   },
