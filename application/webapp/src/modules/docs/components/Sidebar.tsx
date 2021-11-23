@@ -37,7 +37,6 @@ export function SidebarContent(props: SidebarContentProps) {
             {lvl1.heading && (
               <chakra.h4
                 fontSize="md"
-                fontWeight="bold"
                 my="1.25rem"
                 textTransform="uppercase"
                 letterSpacing="wider"

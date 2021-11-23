@@ -1,4 +1,4 @@
-import { Button, Divider, Text, useToast } from "@chakra-ui/react";
+import { Button, Divider, ScaleFade, Text, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useUserTimezoneAndOffset } from "../../user/client";
 import { ColorModeToggle } from "./ColorModeToggle";
@@ -46,7 +46,9 @@ export function AccountTab() {
         Timezone Preference:
       </Text>
       {!tzPrefIsLoading ? (
-        <TimezoneSelector initialTz={tzAndOffset?.tz ?? "Etc/GMT"} />
+        <ScaleFade in={true} initialScale={0.8}>
+          <TimezoneSelector initialTz={tzAndOffset?.tz ?? "Etc/GMT"} />
+        </ScaleFade>
       ) : (
         <></>
       )}

@@ -108,7 +108,7 @@ export class CdkPipelineStack extends cdk.Stack {
 
     this.pipeline.addStage("PromoteToProduction").addActions(
       new ManualApprovalAction({
-        actionName: "Lambda-Build-Manual-Approval",
+        actionName: "Promote-To-Prod-Manual-Approval",
         runOrder: 1,
       })
     );

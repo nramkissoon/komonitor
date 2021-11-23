@@ -1,4 +1,4 @@
-import { Button, useToast } from "@chakra-ui/react";
+import { Button, ScaleFade, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useSWRConfig } from "swr";
 
@@ -41,32 +41,37 @@ export function SaveButton(props: SaveButtonProps) {
     });
 
   return (
-    <Button
-      isLoading={isLoading}
-      loadingText="Saving"
-      size="md"
-      fontSize="md"
-      fontWeight="medium"
-      px="1em"
-      colorScheme="blue"
-      bgColor="blue.400"
-      color="white"
-      _hover={{
-        bg: "blue.600",
-      }}
-      display={
-        newData === initialData || newData.value === initialData
-          ? "none"
-          : "block"
-      }
-      onClick={async () => {
-        setIsLoading(true);
-        await postFunction(newData.value, postSuccessToast, postErrorToast);
-        mutate(mutateApi, null, true);
-        setIsLoading(false);
-      }}
+    <ScaleFade
+      in={!(newData === initialData || newData.value === initialData)}
+      initialScale={0.8}
     >
-      Save Changes
-    </Button>
+      <Button
+        isLoading={isLoading}
+        loadingText="Saving"
+        size="md"
+        fontSize="md"
+        fontWeight="medium"
+        px="1em"
+        colorScheme="blue"
+        bgColor="blue.400"
+        color="white"
+        _hover={{
+          bg: "blue.600",
+        }}
+        display={
+          newData === initialData || newData.value === initialData
+            ? "hidden"
+            : "block"
+        }
+        onClick={async () => {
+          setIsLoading(true);
+          await postFunction(newData.value, postSuccessToast, postErrorToast);
+          mutate(mutateApi, null, true);
+          setIsLoading(false);
+        }}
+      >
+        Save Changes
+      </Button>
+    </ScaleFade>
   );
 }

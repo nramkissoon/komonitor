@@ -34,13 +34,13 @@ const Panel = (props: {
       px="1.5em"
       flexDir="column"
     >
-      <chakra.h1 fontSize="4xl" fontWeight="extrabold" mb=".6em">
+      <chakra.h1 fontSize="4xl" fontWeight="normal" mb=".6em">
         {type}
       </chakra.h1>
       <chakra.h3
         mb="1em"
         fontSize="2xl"
-        fontWeight="bold"
+        fontWeight="normal"
         textAlign={["center", "center", "left"]}
       >
         {description}

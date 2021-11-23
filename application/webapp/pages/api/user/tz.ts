@@ -42,8 +42,6 @@ async function postHandler(
     const userId = session.uid as string;
     const timezone = req.body;
 
-    console.log(timezone);
-
     if (!Object.keys(allTimezones).includes(timezone)) {
       res.status(400);
       return;
