@@ -112,7 +112,7 @@ CDK:
 
 Prod Stack:
     ☐ abstract lambdas
-    ☐ abstract rules
+    ✔ abstract rules @done(21-11-25 21:01)
     ☐ lambdas call us-east-1 db but refer to each other
 
 Logging and Error Handling:

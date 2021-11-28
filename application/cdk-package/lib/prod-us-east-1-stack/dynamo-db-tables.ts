@@ -4,7 +4,7 @@ import * as cdk from "@aws-cdk/core";
 export class ProdDdbTables extends cdk.Construct {
   public readonly uptimeMonitorTable: dynamodb.Table;
   public readonly uptimeMonitorStatusTable: dynamodb.Table;
-  public readonly uptimeCheckMonitorTableFrequencyGsiName: string;
+  public readonly uptimeMonitorTableFrequencyGsiName: string;
   public readonly userTable: dynamodb.Table;
   public readonly alertTable: dynamodb.Table;
   public readonly alertInvocationTable: dynamodb.Table;
@@ -39,10 +39,10 @@ export class ProdDdbTables extends cdk.Construct {
       tableName: "komonitor-prod-uptime-monitor",
     });
 
-    this.uptimeCheckMonitorTableFrequencyGsiName = "frequencyGSI";
+    this.uptimeMonitorTableFrequencyGsiName = "frequencyGSI";
 
     this.uptimeMonitorTable.addGlobalSecondaryIndex({
-      indexName: this.uptimeCheckMonitorTableFrequencyGsiName,
+      indexName: this.uptimeMonitorTableFrequencyGsiName,
       partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
       sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
