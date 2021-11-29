@@ -3,6 +3,7 @@ import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { ShellScriptAction } from "@aws-cdk/pipelines";
 
 export function getNewProdLambdaCodeDeployAction(args: {
+  name: string;
   sourceArtifact: codepipeline.Artifact;
   uptimeLambdaName: string;
   jobRunnerLambdaName: string;
@@ -13,7 +14,7 @@ export function getNewProdLambdaCodeDeployAction(args: {
   alertCodeKey: string;
 }) {
   return new ShellScriptAction({
-    actionName: "DevStackLambdaDeploy",
+    actionName: args.name,
     commands: [
       `aws lambda update-function-code --function-name ${args.uptimeLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.uptimeCodeKey}`,
       `aws lambda update-function-code --function-name ${args.jobRunnerLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.jobRunnerCodeKey}`,

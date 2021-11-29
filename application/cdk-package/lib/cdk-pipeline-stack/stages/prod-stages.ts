@@ -29,7 +29,7 @@ export interface ProdCommonStackStageProps extends CommonStackProps {
 export class ProdCommonStackStage extends Stage {
   public readonly stack: CommonStack;
 
-  constructor(scope: Construct, id: string, props: CommonStackProps) {
+  constructor(scope: Construct, id: string, props: ProdCommonStackStageProps) {
     super(scope, id, props);
 
     this.stack = new CommonStack(this, "ProdCommonStack", {

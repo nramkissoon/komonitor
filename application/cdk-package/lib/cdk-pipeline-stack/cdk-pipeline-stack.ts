@@ -8,6 +8,7 @@ import {
   ShellScriptAction,
   SimpleSynthAction,
 } from "@aws-cdk/pipelines";
+import { environments } from "../common/environments";
 import {
   ALERT_LAMBDA_CODE_KEY,
   DEV_STACK,
@@ -21,7 +22,11 @@ import { LambdaCodeBuildActions } from "./lambda-code-build-actions";
 import { getNewProdLambdaCodeDeployAction } from "./lambda-code-deploy-action";
 import { LambdaCodeS3 } from "./lambda-code-s3";
 import { DevStackStage } from "./stages/dev-stack-stage";
-import { ProdUsEast1StackStage } from "./stages/prod-stages";
+import {
+  ProdCommonStackStage,
+  ProdCommonStackStageProps,
+  ProdUsEast1StackStage,
+} from "./stages/prod-stages";
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
@@ -129,6 +134,7 @@ export class CdkPipelineStack extends cdk.Stack {
 
     this.pipeline.addApplicationStage(prodUsEast1StackStage).addActions(
       getNewProdLambdaCodeDeployAction({
+        name: "LambdaDeploy",
         sourceArtifact: sourceArtifact,
         uptimeLambdaName: prodLambdaName("us-east-1", "uptime"),
         jobRunnerLambdaName: prodLambdaName("us-east-1", "jobrunner"),
@@ -139,5 +145,49 @@ export class CdkPipelineStack extends cdk.Stack {
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
       })
     );
+
+    //-----------------PROD us-west-1 -----------------------------------
+
+    const prodTables = prodUsEast1StackStage.stack.tables;
+
+    const prodUsWest1StackStageProps: ProdCommonStackStageProps = {
+      env: environments.prodUsWest1,
+      lambdaCodeBucketName: LAMBDA_CODE_BUCKET,
+      uptimeLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
+      jobRunnerLambdaBucketKey: JOB_RUNNER_LAMBDA_CODE_KEY,
+      alertLambdaBucketKey: ALERT_LAMBDA_CODE_KEY,
+      region: "us-west-1",
+      uptimeMonitorStatusTable: prodTables.uptimeMonitorStatusTable,
+      uptimeMonitorTableFrequencyGsiName:
+        prodTables.uptimeMonitorTableFrequencyGsiName,
+      uptimeMonitorTable: prodTables.uptimeMonitorTable,
+      alertTable: prodTables.alertTable,
+      userTable: prodTables.userTable,
+      alertInvocationTable: prodTables.alertInvocationTable,
+      alertInvocationTableTimestampLsiName:
+        prodTables.alertInvocationTableTimestampLsiName,
+    };
+
+    const prodUsWest1StackStage = new ProdCommonStackStage(
+      this,
+      "ProdUsWest1StackStage",
+      prodUsWest1StackStageProps
+    );
+
+    this.pipeline.addApplicationStage(prodUsWest1StackStage).addActions(
+      getNewProdLambdaCodeDeployAction({
+        name: "LambdaDeploy",
+        sourceArtifact: sourceArtifact,
+        uptimeLambdaName: prodLambdaName("us-west-1", "uptime"),
+        jobRunnerLambdaName: prodLambdaName("us-west-1", "jobrunner"),
+        alertLambdaName: prodLambdaName("us-west-1", "alert"),
+        codeBucketName: LAMBDA_CODE_BUCKET,
+        uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
+        jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
+        alertCodeKey: ALERT_LAMBDA_CODE_KEY,
+      })
+    );
+
+    //-------------------------------------------------------------------
   }
 }
