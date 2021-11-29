@@ -146,6 +146,8 @@ export class CdkPipelineStack extends cdk.Stack {
       })
     );
 
+    // IMPORTANT!!!! BOOTSTRAP NEW ENVIRONMENT USING `export CDK_NEW_BOOTSTRAP=1` FOR EACH NEW REGION https://docs.aws.amazon.com/cdk/latest/guide/cdk_pipeline.html
+
     //-----------------PROD us-west-1 -----------------------------------
 
     const prodTables = prodUsEast1StackStage.stack.tables;

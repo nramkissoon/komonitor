@@ -28,7 +28,7 @@ export class CommonConstruct extends cdk.Construct {
     Tags.of(this).add("application", "Komonitor");
     Tags.of(this).add("environment", "production");
 
-    this.lambdas = new Lambdas(this, "dev_lambdas", {
+    this.lambdas = new Lambdas(this, "lambdas", {
       uptimeMonitorStatusTable: props.uptimeMonitorStatusTable,
       uptimeMonitorTable: props.uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName:

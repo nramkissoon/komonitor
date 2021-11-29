@@ -225,7 +225,7 @@ export class Lambdas extends cdk.Construct {
     this.lambdaCodeIBucket = s3.Bucket.fromBucketAttributes(
       this,
       "prodLambdaCodeBucket",
-      { bucketName: lambdaCodeBucketName }
+      { bucketName: lambdaCodeBucketName, region: "us-east-1" }
     );
 
     this.alertLambda = new AlertLambda(this, "prodAlertLambda", {
