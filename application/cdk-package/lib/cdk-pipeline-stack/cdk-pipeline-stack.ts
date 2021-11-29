@@ -13,12 +13,15 @@ import {
   DEV_STACK,
   JOB_RUNNER_LAMBDA_CODE_KEY,
   LAMBDA_CODE_BUCKET,
+  prodLambdaName,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
 } from "../common/names";
 import { BuildProjects } from "./build-projects";
 import { LambdaCodeBuildActions } from "./lambda-code-build-actions";
+import { getNewProdLambdaCodeDeployAction } from "./lambda-code-deploy-action";
 import { LambdaCodeS3 } from "./lambda-code-s3";
 import { DevStackStage } from "./stages/dev-stack-stage";
+import { ProdUsEast1StackStage } from "./stages/prod-stages";
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
@@ -110,6 +113,30 @@ export class CdkPipelineStack extends cdk.Stack {
       new ManualApprovalAction({
         actionName: "Promote-To-Prod-Manual-Approval",
         runOrder: 1,
+      })
+    );
+
+    const prodUsEast1StackStage = new ProdUsEast1StackStage(
+      this,
+      "ProdUsEast1StackStage",
+      {
+        lambdaCodeBucketName: LAMBDA_CODE_BUCKET,
+        uptimeCheckLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
+        jobRunnerLambdaBucketKey: JOB_RUNNER_LAMBDA_CODE_KEY,
+        alertLambdaBucketKey: ALERT_LAMBDA_CODE_KEY,
+      }
+    );
+
+    this.pipeline.addApplicationStage(prodUsEast1StackStage).addActions(
+      getNewProdLambdaCodeDeployAction({
+        sourceArtifact: sourceArtifact,
+        uptimeLambdaName: prodLambdaName("us-east-1", "uptime"),
+        jobRunnerLambdaName: prodLambdaName("us-east-1", "jobrunner"),
+        alertLambdaName: prodLambdaName("us-east-1", "alert"),
+        codeBucketName: LAMBDA_CODE_BUCKET,
+        uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
+        jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
+        alertCodeKey: ALERT_LAMBDA_CODE_KEY,
       })
     );
   }
