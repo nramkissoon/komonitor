@@ -1,3 +1,4 @@
+import { LinuxBuildImage } from "@aws-cdk/aws-codebuild";
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { ShellScriptAction } from "@aws-cdk/pipelines";
@@ -41,12 +42,15 @@ export function getNewProdLambdaCodeDeployAction(args: {
   region: string;
 }) {
   return new ShellScriptAction({
-    environmentVariables: {
-      AWS_REGION: {
-        value: args.region,
-      },
-      AWS_DEFAULT_REGION: {
-        value: args.region,
+    environment: {
+      buildImage: LinuxBuildImage.STANDARD_5_0,
+      environmentVariables: {
+        AWS_REGION: {
+          value: args.region,
+        },
+        AWS_DEFAULT_REGION: {
+          value: args.region,
+        },
       },
     },
     runOrder: 11,
