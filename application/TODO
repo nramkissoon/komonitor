@@ -123,3 +123,5 @@ Logging and Error Handling:
 Bugs: 
     ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
     ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link
+
+☐ hire in public

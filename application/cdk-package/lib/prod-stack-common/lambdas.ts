@@ -13,21 +13,18 @@ class UptimeMonitorLambda extends cdk.Construct {
     id: string,
     props: {
       monitorStatusTable: dynamodb.Table;
-      lambdaCodeIBucket: s3.IBucket;
-      key: string;
       alertLambda: AlertLambda;
       region: string;
     }
   ) {
     super(scope, id);
 
-    const { monitorStatusTable, lambdaCodeIBucket, alertLambda, region, key } =
-      props;
+    const { monitorStatusTable, alertLambda, region } = props;
 
     this.lambda = new lambda.Function(this, region + "_prod_uptime_monitor", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromBucket(lambdaCodeIBucket, key),
+      code: lambda.Code.fromInline(""), // WE GET THE CODE FROM A LATER STEP IN THE STAGE FROM COPYING
       functionName: prodLambdaName(region, "uptime"),
       environment: {
         REGION: region,
@@ -68,8 +65,6 @@ class JobRunnerLambda extends cdk.Construct {
     id: string,
     props: {
       uptimeMonitorLambda: UptimeMonitorLambda;
-      lambdaCodeIBucket: s3.IBucket;
-      key: string;
       region: string;
       uptimeMonitorTable: dynamodb.Table;
       uptimeMonitorTableFrequencyGsiName: string;
@@ -79,8 +74,6 @@ class JobRunnerLambda extends cdk.Construct {
 
     const {
       uptimeMonitorLambda,
-      lambdaCodeIBucket,
-      key,
       region,
       uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName,
@@ -89,7 +82,7 @@ class JobRunnerLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, region + "_prod_job_runner", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromBucket(lambdaCodeIBucket, key),
+      code: lambda.Code.fromInline(""),
       functionName: prodLambdaName(region, "jobrunner"),
       environment: {
         REGION: region,
@@ -114,8 +107,6 @@ class AlertLambda extends cdk.Construct {
     scope: cdk.Construct,
     id: string,
     props: {
-      key: string;
-      lambdaCodeIBucket: s3.IBucket;
       uptimeMonitorTable: dynamodb.Table;
       uptimeMonitorStatusTable: dynamodb.Table;
       alertTable: dynamodb.Table;
@@ -128,8 +119,6 @@ class AlertLambda extends cdk.Construct {
     super(scope, id);
 
     const {
-      key,
-      lambdaCodeIBucket,
       uptimeMonitorStatusTable,
       uptimeMonitorTable,
       alertInvocationTable,
@@ -142,7 +131,7 @@ class AlertLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, region + "_prod_alert", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromBucket(lambdaCodeIBucket, key),
+      code: lambda.Code.fromInline(""),
       functionName: prodLambdaName(region, "alert"),
       environment: {
         REGION: region,
@@ -199,9 +188,6 @@ export class Lambdas extends cdk.Construct {
       alertInvocationTable: dynamodb.Table;
       region: string;
       lambdaCodeBucketName: string;
-      uptimeLambdaBucketKey: string;
-      jobRunnerLambdaBucketKey: string;
-      alertLambdaBucketKey: string;
       alertInvocationTableTimeStampLsiName: string;
     }
   ) {
@@ -209,28 +195,23 @@ export class Lambdas extends cdk.Construct {
 
     const {
       lambdaCodeBucketName,
-      uptimeLambdaBucketKey,
       uptimeMonitorStatusTable,
       uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName,
       alertInvocationTable,
       alertInvocationTableTimeStampLsiName,
-      alertLambdaBucketKey,
       alertTable,
       region,
-      jobRunnerLambdaBucketKey,
       userTable,
     } = props;
 
     this.lambdaCodeIBucket = s3.Bucket.fromBucketAttributes(
       this,
       "prodLambdaCodeBucket",
-      { bucketName: lambdaCodeBucketName, region: "us-east-1" }
+      { bucketName: lambdaCodeBucketName }
     );
 
     this.alertLambda = new AlertLambda(this, "prodAlertLambda", {
-      lambdaCodeIBucket: this.lambdaCodeIBucket,
-      key: alertLambdaBucketKey,
       alertInvocationTable: alertInvocationTable,
       alertTable: alertTable,
       alertInvocationTableTimeStampLsiName:
@@ -246,8 +227,6 @@ export class Lambdas extends cdk.Construct {
       "prodUptimeMonitorLambda",
       {
         monitorStatusTable: uptimeMonitorStatusTable,
-        lambdaCodeIBucket: this.lambdaCodeIBucket,
-        key: uptimeLambdaBucketKey,
         region: region,
         alertLambda: this.alertLambda,
       }
@@ -255,8 +234,6 @@ export class Lambdas extends cdk.Construct {
 
     this.jobRunnerLambda = new JobRunnerLambda(this, "prodJobRunnerLambda", {
       uptimeMonitorLambda: this.uptimeLambda,
-      lambdaCodeIBucket: this.lambdaCodeIBucket,
-      key: jobRunnerLambdaBucketKey,
       uptimeMonitorTable: uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName: uptimeMonitorTableFrequencyGsiName,
       region: region,

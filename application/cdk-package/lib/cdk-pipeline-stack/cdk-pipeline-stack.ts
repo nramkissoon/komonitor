@@ -13,13 +13,17 @@ import {
   ALERT_LAMBDA_CODE_KEY,
   DEV_STACK,
   JOB_RUNNER_LAMBDA_CODE_KEY,
-  LAMBDA_CODE_BUCKET,
+  LAMBDA_CODE_DEV_BUCKET,
+  prodLambdaCodeBucketName,
   prodLambdaName,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
 } from "../common/names";
 import { BuildProjects } from "./build-projects";
 import { LambdaCodeBuildActions } from "./lambda-code-build-actions";
-import { getNewProdLambdaCodeDeployAction } from "./lambda-code-deploy-action";
+import {
+  getNewCopyLambdaCodeToRegionAction,
+  getNewProdLambdaCodeDeployAction,
+} from "./lambda-code-deploy-action";
 import { LambdaCodeS3 } from "./lambda-code-s3";
 import { DevStackStage } from "./stages/dev-stack-stage";
 import {
@@ -73,7 +77,7 @@ export class CdkPipelineStack extends cdk.Stack {
       {
         sourceArtifact: sourceArtifact,
         s3Props: {
-          bucketName: LAMBDA_CODE_BUCKET,
+          bucketName: LAMBDA_CODE_DEV_BUCKET,
           uptimeCheckLambdaCodeObjectKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
           jobRunnerLambdaCodeObjectKey: JOB_RUNNER_LAMBDA_CODE_KEY,
           alertLambdaCodeObjectKey: ALERT_LAMBDA_CODE_KEY,
@@ -89,7 +93,7 @@ export class CdkPipelineStack extends cdk.Stack {
     );
 
     const devStackStage = new DevStackStage(this, "DevStackStage", {
-      lambdaCodeBucketName: LAMBDA_CODE_BUCKET,
+      lambdaCodeBucketName: LAMBDA_CODE_DEV_BUCKET,
       uptimeCheckLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
       jobRunnerLambdaBucketKey: JOB_RUNNER_LAMBDA_CODE_KEY,
       alertLambdaBucketKey: ALERT_LAMBDA_CODE_KEY,
@@ -99,9 +103,9 @@ export class CdkPipelineStack extends cdk.Stack {
       new ShellScriptAction({
         actionName: "DevStackLambdaDeploy",
         commands: [
-          `aws lambda update-function-code --function-name ${DEV_STACK.UPTIME_CHECK_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${UPTIME_CHECK_LAMBDA_CODE_KEY}`,
-          `aws lambda update-function-code --function-name ${DEV_STACK.JOB_RUNNER_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${JOB_RUNNER_LAMBDA_CODE_KEY}`,
-          `aws lambda update-function-code --function-name ${DEV_STACK.ALERT_LAMBDA} --s3-bucket ${LAMBDA_CODE_BUCKET} --s3-key ${ALERT_LAMBDA_CODE_KEY}`,
+          `aws lambda update-function-code --function-name ${DEV_STACK.UPTIME_CHECK_LAMBDA} --s3-bucket ${LAMBDA_CODE_DEV_BUCKET} --s3-key ${UPTIME_CHECK_LAMBDA_CODE_KEY}`,
+          `aws lambda update-function-code --function-name ${DEV_STACK.JOB_RUNNER_LAMBDA} --s3-bucket ${LAMBDA_CODE_DEV_BUCKET} --s3-key ${JOB_RUNNER_LAMBDA_CODE_KEY}`,
+          `aws lambda update-function-code --function-name ${DEV_STACK.ALERT_LAMBDA} --s3-bucket ${LAMBDA_CODE_DEV_BUCKET} --s3-key ${ALERT_LAMBDA_CODE_KEY}`,
         ],
         additionalArtifacts: [sourceArtifact],
         rolePolicyStatements: [
@@ -125,7 +129,7 @@ export class CdkPipelineStack extends cdk.Stack {
       this,
       "ProdUsEast1StackStage",
       {
-        lambdaCodeBucketName: LAMBDA_CODE_BUCKET,
+        lambdaCodeBucketName: LAMBDA_CODE_DEV_BUCKET,
         uptimeCheckLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerLambdaBucketKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertLambdaBucketKey: ALERT_LAMBDA_CODE_KEY,
@@ -133,13 +137,21 @@ export class CdkPipelineStack extends cdk.Stack {
     );
 
     this.pipeline.addApplicationStage(prodUsEast1StackStage).addActions(
+      getNewCopyLambdaCodeToRegionAction({
+        name: "CopyLambdaCode",
+        region: "us-east-1",
+        sourceBucket: LAMBDA_CODE_DEV_BUCKET,
+      })
+    );
+
+    this.pipeline.stage("ProdUsEast1StackStage").addAction(
       getNewProdLambdaCodeDeployAction({
         name: "LambdaDeploy",
         sourceArtifact: sourceArtifact,
         uptimeLambdaName: prodLambdaName("us-east-1", "uptime"),
         jobRunnerLambdaName: prodLambdaName("us-east-1", "jobrunner"),
         alertLambdaName: prodLambdaName("us-east-1", "alert"),
-        codeBucketName: LAMBDA_CODE_BUCKET,
+        codeBucketName: prodLambdaCodeBucketName("us-east-1"),
         uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
@@ -154,7 +166,7 @@ export class CdkPipelineStack extends cdk.Stack {
 
     const prodUsWest1StackStageProps: ProdCommonStackStageProps = {
       env: environments.prodUsWest1,
-      lambdaCodeBucketName: LAMBDA_CODE_BUCKET,
+      lambdaCodeBucketName: LAMBDA_CODE_DEV_BUCKET,
       uptimeLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
       jobRunnerLambdaBucketKey: JOB_RUNNER_LAMBDA_CODE_KEY,
       alertLambdaBucketKey: ALERT_LAMBDA_CODE_KEY,
@@ -177,13 +189,21 @@ export class CdkPipelineStack extends cdk.Stack {
     );
 
     this.pipeline.addApplicationStage(prodUsWest1StackStage).addActions(
+      getNewCopyLambdaCodeToRegionAction({
+        name: "CopyLambdaCode",
+        region: "us-west-1",
+        sourceBucket: LAMBDA_CODE_DEV_BUCKET,
+      })
+    );
+
+    this.pipeline.stage("ProdUsWest1StackStage").addAction(
       getNewProdLambdaCodeDeployAction({
         name: "LambdaDeploy",
         sourceArtifact: sourceArtifact,
         uptimeLambdaName: prodLambdaName("us-west-1", "uptime"),
         jobRunnerLambdaName: prodLambdaName("us-west-1", "jobrunner"),
         alertLambdaName: prodLambdaName("us-west-1", "alert"),
-        codeBucketName: LAMBDA_CODE_BUCKET,
+        codeBucketName: prodLambdaCodeBucketName("us-west-1"),
         uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,

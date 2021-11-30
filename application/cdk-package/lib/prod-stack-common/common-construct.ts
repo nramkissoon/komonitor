@@ -1,6 +1,8 @@
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
+import { BlockPublicAccess, Bucket } from "@aws-cdk/aws-s3";
 import * as cdk from "@aws-cdk/core";
 import { Tags } from "@aws-cdk/core";
+import { prodLambdaCodeBucketName } from "../common/names";
 import { Lambdas } from "./lambdas";
 import { ScheduleRules } from "./schedule-rules";
 
@@ -22,11 +24,17 @@ export interface CommonConstructProps {
 export class CommonConstruct extends cdk.Construct {
   public readonly lambdas: Lambdas;
   public readonly events: ScheduleRules;
+  public readonly codeBucket: Bucket;
   constructor(scope: cdk.Construct, id: string, props: CommonConstructProps) {
     super(scope, id);
 
     Tags.of(this).add("application", "Komonitor");
     Tags.of(this).add("environment", "production");
+
+    this.codeBucket = new Bucket(this, "LambdaCodeBucket", {
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      bucketName: prodLambdaCodeBucketName(props.region),
+    });
 
     this.lambdas = new Lambdas(this, "lambdas", {
       uptimeMonitorStatusTable: props.uptimeMonitorStatusTable,
@@ -37,9 +45,6 @@ export class CommonConstruct extends cdk.Construct {
       alertInvocationTable: props.alertInvocationTable,
       region: props.region,
       lambdaCodeBucketName: props.lambdaCodeBucketName,
-      uptimeLambdaBucketKey: props.uptimeLambdaBucketKey,
-      jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
-      alertLambdaBucketKey: props.alertLambdaBucketKey,
       userTable: props.userTable,
       alertInvocationTableTimeStampLsiName:
         props.alertInvocationTableTimestampLsiName,
