@@ -141,6 +141,7 @@ export class CdkPipelineStack extends cdk.Stack {
         name: "CopyLambdaCode",
         region: "us-east-1",
         sourceBucket: LAMBDA_CODE_DEV_BUCKET,
+        sourceArtifact: sourceArtifact,
       })
     );
 
@@ -193,6 +194,7 @@ export class CdkPipelineStack extends cdk.Stack {
         name: "CopyLambdaCode",
         region: "us-west-1",
         sourceBucket: LAMBDA_CODE_DEV_BUCKET,
+        sourceArtifact: sourceArtifact,
       })
     );
 

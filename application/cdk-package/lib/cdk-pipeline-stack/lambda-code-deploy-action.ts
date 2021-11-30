@@ -7,10 +7,12 @@ export function getNewCopyLambdaCodeToRegionAction(args: {
   name: string;
   region: string;
   sourceBucket: string;
+  sourceArtifact: codepipeline.Artifact;
 }) {
   return new ShellScriptAction({
     runOrder: 10,
     actionName: args.name,
+    additionalArtifacts: [args.sourceArtifact], // required for no fucking reason
     commands: [
       `aws s3 cp s3://${args.sourceBucket} s3://${prodLambdaCodeBucketName(
         args.region
