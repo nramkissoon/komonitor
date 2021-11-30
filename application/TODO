@@ -107,21 +107,22 @@ Alert Lambda:
     ☐ Promise.all the data dependancies
 
 CDK:
-    ☐ create the prod ddb tables in us-east-1 @started(21-11-15 11:33)
-    ☐ create us-east-1 prod stack @started(21-11-15 11:34)
+    ✔ create the prod ddb tables in us-east-1 @started(21-11-15 11:33) @done(21-11-30 13:14) @lasted(2w1d1h41m11s)
+    ✔ create us-east-1 prod stack @started(21-11-15 11:34) @done(21-11-30 13:14) @lasted(2w1d1h40m12s)
 
 Prod Stack:
-    ☐ abstract lambdas
+    ✔ abstract lambdas @done(21-11-30 13:14)
     ✔ abstract rules @done(21-11-25 21:01)
-    ☐ lambdas call us-east-1 db but refer to each other
+    ✔ lambdas call us-east-1 db but refer to each other @done(21-11-30 13:14)
 
 Logging and Error Handling:
-    ☐ Decide logging strategy for webapp @10/29
-    ☐ replace console.log/error in webapp with logging provider
-    ☐ Decide logging strategy for lambdas and implement
+    ✔ Decide logging strategy for webapp @10/29 @done(21-11-30 13:14)
+    ✔ replace console.log/error in webapp with logging provider @done(21-11-30 13:14)
+    ✔ Decide logging strategy for lambdas and implement @done(21-11-30 13:14)
 
 Bugs: 
     ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
     ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link
 
 ☐ hire in public
+☐ product gif generation

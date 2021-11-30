@@ -25,5 +25,5 @@ export function prodLambdaName(
 }
 
 export function prodLambdaCodeBucketName(region: string) {
-  return _.camelCase(region) + "ProdLambdaCodeBucket-Komonitor";
+  return region + "-prod-lambda-code-bucket-komonitor";
 }
