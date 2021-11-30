@@ -15,6 +15,7 @@ import {
   JOB_RUNNER_LAMBDA_CODE_KEY,
   LAMBDA_CODE_DEV_BUCKET,
   prodLambdaCodeBucketName,
+  prodLambdaName,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
 } from "../common/names";
 import { BuildProjects } from "./build-projects";
@@ -148,15 +149,9 @@ export class CdkPipelineStack extends cdk.Stack {
       getNewProdLambdaCodeDeployAction({
         name: "LambdaDeploy",
         sourceArtifact: sourceArtifact,
-        uptimeLambdaName:
-          prodUsEast1StackStage.stack.commonConstruct.lambdas.uptimeLambda
-            .lambda.functionArn,
-        jobRunnerLambdaName:
-          prodUsEast1StackStage.stack.commonConstruct.lambdas.jobRunnerLambda
-            .lambda.functionArn,
-        alertLambdaName:
-          prodUsEast1StackStage.stack.commonConstruct.lambdas.alertLambda.lambda
-            .functionArn,
+        uptimeLambdaName: prodLambdaName("us-east-1", "uptime"),
+        jobRunnerLambdaName: prodLambdaName("us-east-1", "jobrunner"),
+        alertLambdaName: prodLambdaName("us-east-1", "alert"),
         codeBucketName: prodLambdaCodeBucketName("us-east-1"),
         uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
@@ -208,15 +203,9 @@ export class CdkPipelineStack extends cdk.Stack {
       getNewProdLambdaCodeDeployAction({
         name: "LambdaDeploy",
         sourceArtifact: sourceArtifact,
-        uptimeLambdaName:
-          prodUsWest1StackStage.stack.commonConstruct.lambdas.uptimeLambda
-            .lambda.functionArn,
-        jobRunnerLambdaName:
-          prodUsWest1StackStage.stack.commonConstruct.lambdas.jobRunnerLambda
-            .lambda.functionArn,
-        alertLambdaName:
-          prodUsWest1StackStage.stack.commonConstruct.lambdas.alertLambda.lambda
-            .functionArn,
+        uptimeLambdaName: prodLambdaName("us-west-1", "uptime"),
+        jobRunnerLambdaName: prodLambdaName("us-west-1", "jobrunner"),
+        alertLambdaName: prodLambdaName("us-west-1", "alert"),
         codeBucketName: prodLambdaCodeBucketName("us-west-1"),
         uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
