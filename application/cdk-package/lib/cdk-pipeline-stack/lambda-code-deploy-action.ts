@@ -41,6 +41,14 @@ export function getNewProdLambdaCodeDeployAction(args: {
   region: string;
 }) {
   return new ShellScriptAction({
+    environmentVariables: {
+      AWS_REGION: {
+        value: args.region,
+      },
+      AWS_DEFAULT_REGION: {
+        value: args.region,
+      },
+    },
     runOrder: 11,
     actionName: args.name,
     commands: [
