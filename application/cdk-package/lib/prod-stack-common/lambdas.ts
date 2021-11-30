@@ -24,7 +24,7 @@ class UptimeMonitorLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, region + "_prod_uptime_monitor", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromInline(""), // WE GET THE CODE FROM A LATER STEP IN THE STAGE FROM COPYING
+      code: lambda.Code.fromInline("export handler = () => {}"), // WE GET THE CODE FROM A LATER STEP IN THE STAGE FROM COPYING
       functionName: prodLambdaName(region, "uptime"),
       environment: {
         REGION: region,
@@ -82,7 +82,7 @@ class JobRunnerLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, region + "_prod_job_runner", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromInline(""),
+      code: lambda.Code.fromInline("export handler = () => {}"),
       functionName: prodLambdaName(region, "jobrunner"),
       environment: {
         REGION: region,
@@ -131,7 +131,7 @@ class AlertLambda extends cdk.Construct {
     this.lambda = new lambda.Function(this, region + "_prod_alert", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "index.handler",
-      code: lambda.Code.fromInline(""),
+      code: lambda.Code.fromInline("export handler = () => {}"),
       functionName: prodLambdaName(region, "alert"),
       environment: {
         REGION: region,
