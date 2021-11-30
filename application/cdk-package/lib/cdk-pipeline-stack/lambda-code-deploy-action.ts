@@ -52,7 +52,6 @@ export function getNewProdLambdaCodeDeployAction(args: {
     runOrder: 11,
     actionName: args.name,
     commands: [
-      `aws configure set region ${args.region}`,
       `aws lambda update-function-code --function-name ${args.uptimeLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.uptimeCodeKey}`,
       `aws lambda update-function-code --function-name ${args.jobRunnerLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.jobRunnerCodeKey}`,
       `aws lambda update-function-code --function-name ${args.alertLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.alertCodeKey}`,
