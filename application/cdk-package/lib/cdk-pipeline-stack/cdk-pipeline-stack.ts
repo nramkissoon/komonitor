@@ -161,6 +161,7 @@ export class CdkPipelineStack extends cdk.Stack {
         uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
+        region: "us-east-1",
       })
     );
 
@@ -220,6 +221,7 @@ export class CdkPipelineStack extends cdk.Stack {
         uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
+        region: "us-west-1",
       })
     );
 
