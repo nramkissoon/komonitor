@@ -21,6 +21,7 @@ ol.spaced
             div
                 p!= `<span class="bold">Timestamp (UTC):</span> ${new Date(status.timestamp).toUTCString()}`
                 p!= `<span class="bold">Status:</span> <span class="red-500 bold">Down</span>`
+                p!= `<span class="bold">Status Code:</span> <span class="red-500 bold">${new Date(status.response_status_code).toUTCString()}</span>`
 
 p.spaced!= `<span class="bold">Need to disable or edit this alert?</span> You can do so in the <a href="komonitor.com/app/alerts/${alert.alert_id}">Komonitor console</a>.`
 p!= `This is a no-reply email. For support, please contact us here: <a href="komonitor.com/contact">komonitor.com/contact</a>.`

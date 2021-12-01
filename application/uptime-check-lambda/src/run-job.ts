@@ -37,7 +37,8 @@ const fetchTimeout = setTimeout(() => {
 const fetchCall = async (url: string) => {
   try {
     const res = await new Promise<
-      { ok: boolean; latency: number | undefined } | undefined
+      | { ok: boolean; code: number | undefined; latency: number | undefined }
+      | undefined
     >((resolve, reject) =>
       request(
         {
@@ -51,13 +52,18 @@ const fetchCall = async (url: string) => {
         },
         (err, response) => {
           if (err) {
-            resolve({ ok: false, latency: undefined });
+            resolve({
+              ok: false,
+              code: response.statusCode || undefined,
+              latency: undefined,
+            });
           } else {
             resolve({
               ok: response.statusCode
                 ? (response.statusCode >= 200 && response.statusCode < 300) ||
                   response.statusCode === 429 // Too many requests
                 : false,
+              code: response.statusCode,
               latency: response.timingPhases?.firstByte,
             });
           }
@@ -65,9 +71,9 @@ const fetchCall = async (url: string) => {
       )
     );
 
-    return { response: res?.ok, latency: res?.latency };
+    return { response: res?.ok, statusCode: res?.code, latency: res?.latency };
   } catch (err) {
-    return { response: false, latency: undefined };
+    return { response: false, statusCode: undefined, latency: undefined };
   }
 };
 
@@ -97,7 +103,8 @@ const buildMonitorStatus = (
   ok: boolean,
   latencies: number[],
   monitor_id: string,
-  region: string
+  region: string,
+  responseStatusCode: number
 ): UptimeMonitorStatus => {
   return {
     monitor_id: monitor_id,
@@ -108,6 +115,7 @@ const buildMonitorStatus = (
         ? latencies.reduce((a, b) => a + b) / latencies.length
         : -1,
     region: region,
+    response_status_code: responseStatusCode,
   };
 };
 
@@ -140,7 +148,8 @@ export const runJob = async (job: UptimeMonitorJob) => {
     fetchResult.response !== undefined ? fetchResult.response.valueOf() : false,
     latencies,
     monitor_id,
-    region
+    region,
+    fetchResult.statusCode === undefined ? -1 : fetchResult.statusCode
   );
 
   try {

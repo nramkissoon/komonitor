@@ -34,7 +34,7 @@ export const emailTransporter = nodemailer.createTransport({
   SES: { ses: ses, aws: { SendRawEmailCommand } },
 });
 
-export const regionToLocationStringMap = {
+export const regionToLocationStringMap: { [key: string]: string } = {
   "us-east-1": "Virginia, USA",
   "us-east-2": "Ohio, USA",
   "us-west-1": "Northern California, USA",

@@ -32,6 +32,7 @@ export interface UptimeMonitorStatus {
   status: "up" | "down";
   latency: number;
   region: string;
+  response_status_code: number;
 }
 
 export interface UptimeMonitorWebhookNotification {
