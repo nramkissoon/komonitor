@@ -128,25 +128,13 @@ const buildWebhook = (
 };
 
 export const runJob = async (job: UptimeMonitorJob) => {
-  const { name, url, retries, region, webhook_url, monitor_id, owner_id } = job;
+  const { name, url, region, webhook_url, monitor_id, owner_id } = job;
 
   const latencies: number[] = [];
 
   let fetchResult = await fetchCall(url);
   if (fetchResult.response?.valueOf() && fetchResult.latency !== undefined) {
     latencies.push(fetchResult.latency);
-  }
-
-  if (!fetchResult.response?.valueOf()) {
-    // enter retry mode
-    let retriesRemaining = retries;
-    while (retriesRemaining > 0 && !fetchResult.response?.valueOf()) {
-      fetchResult = await fetchCall(url);
-      if (fetchResult.latency !== undefined) {
-        latencies.push(fetchResult.latency);
-      }
-      retriesRemaining -= 1;
-    }
   }
 
   const status = buildMonitorStatus(

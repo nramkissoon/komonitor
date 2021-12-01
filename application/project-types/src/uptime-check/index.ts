@@ -8,7 +8,6 @@ export interface CoreUptimeMonitor {
   name: string;
   region: SupportedRegion;
   frequency: UptimeCheckSupportedFrequenciesInMinutes;
-  retries: number;
   failures_before_alert?: number;
   webhook_url?: string;
   alert_id?: string;
@@ -27,7 +26,6 @@ export interface UptimeMonitorJob {
   url: string;
   name: string;
   region: SupportedRegion;
-  retries: number;
   webhook_url?: string;
 }
 

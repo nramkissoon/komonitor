@@ -84,9 +84,9 @@ Uptime HTTP:
     ☐  design new creation and edit form
     ☐  implement HTTP headers in model
     ☐  add HTTP headers to check in lambda
-    ☐  remove retries param from model
-    ☐  remove retries from lambda
-    ☐  remove retries from verification and create and edit forms
+    ✔  remove retries param from model @done(21-12-01 13:06)
+    ✔  remove retries from lambda @done(21-12-01 13:01)
+    ✔  remove retries from verification and create and edit forms @done(21-12-01 13:06)
     ☐  add HTTP headers to forms
     ☐  design dashboard to show HTTP headers
 

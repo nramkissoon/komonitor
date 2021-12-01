@@ -8,6 +8,7 @@ import {
   LAMBDA_CODE_DEV_BUCKET,
   prodLambdaCodeBucketName,
   prodLambdaName,
+  prodStageName,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
 } from "../../common/names";
 import {
@@ -81,7 +82,7 @@ export function createProdCommonStage(
 
   const prodUsWest1StackStage = new ProdCommonStackStage(
     scope,
-    "ProdUsWest1StackStage",
+    prodStageName(region),
     prodUsWest1StackStageProps
   );
 
@@ -94,7 +95,7 @@ export function createProdCommonStage(
     })
   );
 
-  pipeline.stage("ProdUsWest1StackStage").addAction(
+  pipeline.stage(prodStageName(region)).addAction(
     getNewProdLambdaCodeDeployAction({
       name: "LambdaDeploy",
       sourceArtifact: artifact,

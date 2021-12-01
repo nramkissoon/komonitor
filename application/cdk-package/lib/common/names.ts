@@ -24,6 +24,10 @@ export function prodLambdaName(
   }
 }
 
+export function prodStageName(region: string) {
+  return "Prod" + _.capitalize(_.camelCase(region)) + "StackStage";
+}
+
 export function prodLambdaCodeBucketName(region: string) {
   return region + "-prod-lambda-code-bucket-komonitor";
 }

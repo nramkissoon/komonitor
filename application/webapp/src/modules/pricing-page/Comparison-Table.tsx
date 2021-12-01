@@ -64,9 +64,9 @@ function CheckIcon(color: string) {
 
 const monitorSectionData = [
   ["Uptime", "20 Monitors", "80 Monitors", "500 Monitors"],
-  ["Browser", "5 Monitors", "20 Monitors", "100 Monitors"],
   ["Lighthouse", "1 Monitor", "10 Monitors", "30 Monitors"],
-  ["Check Frequency", "5 minutes", "1 minute", "1 minute"],
+  ["Uptime Check Frequency", "5 minutes", "1 minute", "1 minute"],
+  ["Lighthouse Check Frequency", "7 days", "1 day", "1 day"],
   ["Webhook updates", "-", CheckIcon, CheckIcon],
 ];
 

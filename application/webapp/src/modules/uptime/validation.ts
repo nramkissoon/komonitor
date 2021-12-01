@@ -1,4 +1,5 @@
 import { CoreUptimeMonitor, UptimeMonitor } from "project-types";
+import { REGIONS } from "../../common/server-utils";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
 export function isValidCoreUptimeMonitor(
@@ -10,12 +11,10 @@ export function isValidCoreUptimeMonitor(
     typeof obj.name === "string" &&
     typeof obj.region === "string" &&
     typeof obj.frequency === "number" &&
-    typeof obj.retries === "number" &&
     isValidFrequency(obj.frequency, product_id) &&
     isValidName(obj.name) &&
     isValidUrl(obj.url) &&
     isValidRegion(obj.region) &&
-    isValidRetries(obj.retries, product_id) &&
     isValidWebhookUrl(product_id, obj.webhook_url) &&
     isValidFailuresBeforeAlert(obj.failures_before_alert)
   );
@@ -34,7 +33,7 @@ export function isValidUptimeMonitor(
 }
 
 export function isValidRegion(region: string) {
-  return ["us-east-1"].includes(region);
+  return REGIONS.includes(region);
 }
 
 export function isValidFrequency(freq: number, product_id: string) {
@@ -60,10 +59,4 @@ export function isValidWebhookUrl(product_id: string, url?: string) {
 export function isValidFailuresBeforeAlert(failures?: number) {
   if (!failures && failures !== 0) return true;
   return failures >= 1 && failures <= 5;
-}
-
-export function isValidRetries(retries: number, product_id: string) {
-  if (product_id === PLAN_PRODUCT_IDS.FREE)
-    return retries === 1 || retries === 0;
-  return retries >= 0 && retries <= 5;
 }

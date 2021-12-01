@@ -27,6 +27,7 @@ import {
 import { LambdaCodeS3 } from "./lambda-code-s3";
 import { DevStackStage } from "./stages/dev-stack-stage";
 import {
+  createProdCommonStage,
   ProdCommonStackStage,
   ProdCommonStackStageProps,
   ProdUsEast1StackStage,
@@ -215,5 +216,15 @@ export class CdkPipelineStack extends cdk.Stack {
     );
 
     //-------------------------------------------------------------------
+    // ----------------------------- us-east-2 --------------------------
+
+    createProdCommonStage(
+      "us-east-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodUsEast2,
+      this
+    );
   }
 }

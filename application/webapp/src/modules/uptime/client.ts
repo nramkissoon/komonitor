@@ -139,7 +139,6 @@ function createCoreMonitorFromFormData(formData: any) {
     frequency: Number.parseInt(
       formData.frequency
     ) as UptimeCheckSupportedFrequenciesInMinutes,
-    retries: Number.parseInt(formData.retries),
     webhook_url: formData.webhook ? "https://" + formData.webhook : "",
     failures_before_alert: formData.alert
       ? Number.parseInt(formData.failures_before_alert)

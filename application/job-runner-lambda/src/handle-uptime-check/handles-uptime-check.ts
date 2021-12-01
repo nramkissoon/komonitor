@@ -35,13 +35,7 @@ const asyncInvokeLambda = async (
 const checkUnmarshalledItemIsMonitorJob = (item: {
   [key: string]: AttributeValue;
 }) => {
-  return (
-    item.monitor_id &&
-    item.url &&
-    item.name &&
-    item.region &&
-    item.retries !== undefined
-  );
+  return item.monitor_id && item.url && item.name && item.region;
 };
 
 const convertDdbItemsToUptimeMonitorJobs = (
@@ -59,7 +53,6 @@ const convertDdbItemsToUptimeMonitorJobs = (
         url: unmarshalled.url,
         name: unmarshalled.name,
         region: unmarshalled.region,
-        retries: unmarshalled.retries,
       };
       jobs.push(job);
     }

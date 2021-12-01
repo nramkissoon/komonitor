@@ -40,7 +40,6 @@ type FormikFormProps = FormikProps<{
   name: string;
   region: string;
   frequency: number;
-  retries: number;
   failures_before_alert?: number;
   webhook_url?: string;
   alert_id?: string;
@@ -74,13 +73,11 @@ function createFrequencySelectOptionsReactSelect(productId: string) {
 }
 
 function createRegionSelectOptions() {
-  return [
-    {
-      value: "us-east-1",
-      label: regionToLocationStringMap["us-east-1"],
-      isDisabled: false,
-    },
-  ];
+  return Object.keys(regionToLocationStringMap).map((region) => ({
+    value: region,
+    label: regionToLocationStringMap[region],
+    isDisabled: false,
+  }));
 }
 
 function validateName(name: string) {
@@ -109,14 +106,6 @@ function validateRegion(region: string) {
 function validateFrequency(freq: string) {
   let error;
   if (!freq) error = "Frequency is required.";
-  return error;
-}
-function validateRetries(retries: string) {
-  let error;
-  const retriesAsNum = Number.parseInt(retries);
-  if (!retries) error = "Retry amount is required.";
-  else if (!(retriesAsNum >= 0 && retriesAsNum <= 5))
-    error = "Retry amount must be between 0 and 5 inclusive.";
   return error;
 }
 function validateFailuresBeforeAlert(failures: string) {
@@ -172,9 +161,6 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
     frequency: currentMonitorAttributes?.frequency
       ? currentMonitorAttributes.frequency.toString()
       : "5",
-    retries: currentMonitorAttributes?.retries
-      ? currentMonitorAttributes.retries.toString()
-      : "0",
     failures_before_alert: currentMonitorAttributes?.failures_before_alert
       ? currentMonitorAttributes.failures_before_alert.toString()
       : "",
@@ -353,47 +339,6 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                       form={form}
                     />
                     <FormErrorMessage>{form.errors.frequency}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
-              <Field name="retries" validate={validateRetries}>
-                {({
-                  field,
-                  form,
-                }: {
-                  field: FieldInputProps<string>;
-                  form: FormikFormProps;
-                }) => (
-                  <FormControl
-                    isInvalid={
-                      form.errors.retries ? form.touched.retries : false
-                    }
-                    isRequired
-                    mb="1.5em"
-                  >
-                    <FormLabel htmlFor="retries">
-                      <Tooltip
-                        placement="right-end"
-                        label="Number of retries before an uptime check is considered a failure."
-                        openDelay={500}
-                      >
-                        Retry Checks
-                      </Tooltip>
-                    </FormLabel>
-                    <NumberInput
-                      min={0}
-                      step={1}
-                      max={product_id === PLAN_PRODUCT_IDS.FREE ? 1 : 5}
-                      clampValueOnBlur={false}
-                      value={field.value}
-                    >
-                      <NumberInputField
-                        {...field}
-                        placeholder="Retry amount"
-                        value={field.value}
-                      />
-                    </NumberInput>
-                    <FormErrorMessage>{form.errors.retries}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>

@@ -27,7 +27,6 @@ export function createNewMonitorFromCore(
     name: core.name,
     region: core.region,
     frequency: core.frequency,
-    retries: core.retries,
     failures_before_alert: core.failures_before_alert,
     webhook_url: !core.webhook_url ? undefined : core.webhook_url,
     alert_id: !core.alert_id ? undefined : core.alert_id,
