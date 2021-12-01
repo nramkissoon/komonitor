@@ -1,12 +1,9 @@
-import {
-  SupportedRegion,
-  UptimeCheckSupportedFrequenciesInMinutes,
-} from "../config/index";
+import { UptimeCheckSupportedFrequenciesInMinutes } from "../config/index";
 
 export interface CoreUptimeMonitor {
   url: string;
   name: string;
-  region: SupportedRegion;
+  region: string;
   frequency: UptimeCheckSupportedFrequenciesInMinutes;
   failures_before_alert?: number;
   webhook_url?: string;
@@ -25,7 +22,7 @@ export interface UptimeMonitorJob {
   owner_id: string;
   url: string;
   name: string;
-  region: SupportedRegion;
+  region: string;
   webhook_url?: string;
 }
 
@@ -34,14 +31,14 @@ export interface UptimeMonitorStatus {
   timestamp: number;
   status: "up" | "down";
   latency: number;
-  region: SupportedRegion;
+  region: string;
 }
 
 export interface UptimeMonitorWebhookNotification {
   url: string;
   name: string;
   trigger: "up" | "down";
-  region: SupportedRegion;
+  region: string;
   monitor_type: "uptime";
   latency: number;
 }

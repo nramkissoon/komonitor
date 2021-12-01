@@ -1,5 +1,3 @@
-export type SupportedRegion = "us-east-1";
-
 export type UptimeCheckSupportedFrequenciesInMinutes =
   | 1
   | 5

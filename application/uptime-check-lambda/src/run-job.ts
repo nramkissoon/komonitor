@@ -6,7 +6,6 @@ import {
 import AbortController from "abort-controller";
 import {
   MonitorTypes,
-  SupportedRegion,
   UptimeMonitorJob,
   UptimeMonitorStatus,
   UptimeMonitorWebhookNotification,
@@ -98,7 +97,7 @@ const buildMonitorStatus = (
   ok: boolean,
   latencies: number[],
   monitor_id: string,
-  region: SupportedRegion
+  region: string
 ): UptimeMonitorStatus => {
   return {
     monitor_id: monitor_id,
