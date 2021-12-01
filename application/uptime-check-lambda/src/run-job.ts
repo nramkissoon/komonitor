@@ -34,7 +34,10 @@ const fetchTimeout = setTimeout(() => {
   controller.abort();
 }, 5000);
 
-const fetchCall = async (url: string) => {
+const fetchCall = async (
+  url: string,
+  httpHeaders?: { [header: string]: string }
+) => {
   try {
     const res = await new Promise<
       | { ok: boolean; code: number | undefined; latency: number | undefined }
@@ -47,7 +50,7 @@ const fetchCall = async (url: string) => {
           time: true,
           timeout: 5000,
           headers: {
-            "User-Agent": "Komonitor",
+            ...httpHeaders,
           },
         },
         (err, response) => {
@@ -135,11 +138,12 @@ const buildWebhook = (
 };
 
 export const runJob = async (job: UptimeMonitorJob) => {
-  const { name, url, region, webhook_url, monitor_id, owner_id } = job;
+  const { name, url, region, webhook_url, monitor_id, owner_id, http_headers } =
+    job;
 
   const latencies: number[] = [];
 
-  let fetchResult = await fetchCall(url);
+  let fetchResult = await fetchCall(url, http_headers ?? {});
   if (fetchResult.response?.valueOf() && fetchResult.latency !== undefined) {
     latencies.push(fetchResult.latency);
   }

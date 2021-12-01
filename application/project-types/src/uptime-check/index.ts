@@ -8,6 +8,7 @@ export interface CoreUptimeMonitor {
   failures_before_alert?: number;
   webhook_url?: string;
   alert_id?: string;
+  http_headers?: { [header: string]: string };
 }
 
 export interface UptimeMonitor extends CoreUptimeMonitor {
@@ -24,6 +25,7 @@ export interface UptimeMonitorJob {
   name: string;
   region: string;
   webhook_url?: string;
+  http_headers?: { [header: string]: string };
 }
 
 export interface UptimeMonitorStatus {

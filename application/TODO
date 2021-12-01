@@ -21,7 +21,7 @@ Webapp:
         ✔  coming soon page redirects to roadmap page @10/29 @done(21-10-26 13:26)
         ✔ create 404 page @10/29 @done(21-10-25 14:03)
         ✘ check aws region to locations in webapp client @10/29 @started(21-10-26 13:30) @cancelled(21-10-26 13:32) @wasted(2m48s)
-        ☐  timezones based on user pref 
+        ✔  timezones based on user pref @done(21-12-01 13:57)
         ☐  convert service SLA's to monitor resolutions SRE p62\
         ☐  download data as csv or json
         ✔  Add alts to all images @done(21-11-03 15:52)
@@ -79,11 +79,12 @@ User pref dates:
     ✔ create toast that is called on successfule user info update @done(21-11-22 11:37)
     ✔ create user post api -> verify nonchangeable fields cannot be changed -> only timezone @done(21-11-22 11:09)
     ✔ use new hook wherever applicable -> find all date strings and mass replace @done(21-11-22 13:41)
+    ☐ user preferred dates in alerts yikes
 
 Uptime HTTP:
     ☐  design new creation and edit form
-    ☐  implement HTTP headers in model
-    ☐  add HTTP headers to check in lambda
+    ✔ implement HTTP headers in model @done(21-12-01 14:21)
+    ✔  add HTTP headers to check in lambda @done(21-12-01 14:33)
     ✔  remove retries param from model @done(21-12-01 13:06)
     ✔  remove retries from lambda @done(21-12-01 13:01)
     ✔  remove retries from verification and create and edit forms @done(21-12-01 13:06)
@@ -98,9 +99,10 @@ Blog:
 
 Uptime Lambda:
     ✔ invoke alert lambda on monitor failure with monitor id and owner id @done(21-10-17 22:14)
-    ☐ add status codes to status updates
+    ✔ add status codes to status updates @done(21-12-01 13:29)
     ✔ use user agent Komonitor @10/22 @done(21-10-18 14:31)
     ✔ investigate response times @done(21-10-19 19:54)
+    ☐ add response data to status req
 
 Alert Lambda:
 
