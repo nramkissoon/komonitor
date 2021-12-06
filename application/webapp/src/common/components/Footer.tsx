@@ -94,7 +94,6 @@ export function Footer() {
               key="docs"
             />,
 
-            <HeaderLink text="Roadmap" href="/roadmap" key="roadmap" />,
             <HeaderLink text="Blog" href="/blog" key="blog" />,
           ]}
         />

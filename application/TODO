@@ -61,7 +61,7 @@ Webapp:
         ☐ fill content
     SEO:
     SSL checks: 
-        ☐ scope
+        ✘ scope @cancelled(21-12-06 11:50)
     Delete by user id:
         ✔  uptime monitors @done(21-11-14 20:54)
         ✔  alerts @done(21-11-14 20:54)
@@ -82,14 +82,16 @@ User pref dates:
     ☐ user preferred dates in alerts yikes
 
 Uptime HTTP:
-    ☐  design new creation and edit form
+    ✔  design new creation and edit form @done(21-12-06 11:49)
     ✔ implement HTTP headers in model @done(21-12-01 14:21)
     ✔  add HTTP headers to check in lambda @done(21-12-01 14:33)
     ✔  remove retries param from model @done(21-12-01 13:06)
     ✔  remove retries from lambda @done(21-12-01 13:01)
     ✔  remove retries from verification and create and edit forms @done(21-12-01 13:06)
-    ☐  add HTTP headers to forms
+    ✔  add HTTP headers to forms @done(21-12-06 11:49)
     ☐  design dashboard to show HTTP headers
+    ☐  add HTTP methods
+    ☐  add HTTP body
 
 Blog: 
     ☐ Ecommerce use case - high latency -> lost revenue

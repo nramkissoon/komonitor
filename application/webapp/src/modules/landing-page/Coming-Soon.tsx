@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { AiOutlineAlert, AiOutlineApi } from "react-icons/ai";
-import { GoBrowser } from "react-icons/go";
 import { IoLogoGoogle } from "react-icons/io";
 import { Copy } from "./constants";
 
@@ -88,23 +87,11 @@ export function ComingSoon() {
         <chakra.span fontWeight="normal">🚀</chakra.span>
       </chakra.h1>
       <SimpleGrid
-        columns={{ base: 1, sm: 2, md: 2, lg: 4 }}
+        columns={{ base: 1, sm: 2, md: 2, lg: 3 }}
         spacingX={{ base: 16, lg: 24 }}
         spacingY={20}
         mb="3em"
       >
-        <Feature
-          {...features.browser}
-          color="green"
-          icon={
-            <Icon
-              boxSize={10}
-              as={GoBrowser}
-              fill="currentColor"
-              aria-hidden={true}
-            />
-          }
-        />
         <Feature
           {...features.lighthouse}
           color="orange"
@@ -149,9 +136,7 @@ export function ComingSoon() {
         color={useColorModeValue("gray.800", "gray.100")}
         lineHeight="shorter"
         mb="1.6em"
-      >
-        Check out our <RoadmapLink /> to learn more about new upcoming features!
-      </chakra.h2>
+      ></chakra.h2>
     </Flex>
   );
 }

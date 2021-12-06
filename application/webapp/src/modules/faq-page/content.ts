@@ -24,7 +24,7 @@ export const FaqPageContent: Faq[] = [
     question:
       "Do you offer an API so that I do not need to manually manage my monitors?",
     answer:
-      "Komonitor was built as a no-code monitoring tool. However, we are developing an API for our power-users to consume. We'll keep you updated on our roadmap page.",
+      "Komonitor was built as a no-code monitoring tool. However, we are developing an API for our power-users to consume. We'll keep you updated.",
   },
   {
     question: "What is the 'complimentary setup' offered for paid plans?",

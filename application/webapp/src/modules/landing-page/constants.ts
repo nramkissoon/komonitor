@@ -58,10 +58,6 @@ export const Copy = {
   ComingSoon: {
     Header: "Features That Are On The Way",
     List: {
-      browser: {
-        title: "Browser Monitors",
-        desc: "Monitor browser content and behavior shown to users.",
-      },
       lighthouse: {
         title: "Lighthouse Monitors",
         desc: "Run Google Lighthouse jobs and define alerts on any page metric.",
