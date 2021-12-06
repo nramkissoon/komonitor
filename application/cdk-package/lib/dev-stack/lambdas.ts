@@ -70,6 +70,8 @@ class JobRunnerLambda extends cdk.Construct {
       region: string;
       uptimeCheckMonitorTable: dynamodb.Table;
       uptimeCheckMonitorTableFrequencyGsiName: string;
+      lighthouseJobTable: dynamodb.Table;
+      lighthouseJobTableFrequencyGsiName: string;
     }
   ) {
     super(scope, id);
@@ -86,6 +88,9 @@ class JobRunnerLambda extends cdk.Construct {
         UPTIME_CHECK_MONITOR_TABLE_FREQUENCY_GSI_NAME:
           props.uptimeCheckMonitorTableFrequencyGsiName,
         UPTIME_CHECK_LAMBDA_NAME: props.uptimeCheckLambda.lambda.functionName,
+        LIGHTHOUSE_JOB_TABLE_NAME: props.lighthouseJobTable.tableName,
+        LIGHTHOUSE_JOB_TABLE_FREQUENCY_GSI_NAME:
+          props.lighthouseJobTableFrequencyGsiName,
       },
       timeout: cdk.Duration.minutes(1),
     });
@@ -94,6 +99,8 @@ class JobRunnerLambda extends cdk.Construct {
     props.uptimeCheckLambda.lambda.grantInvoke(this.lambda);
     // allow job runner to be able to read monitors
     props.uptimeCheckMonitorTable.grantReadData(this.lambda);
+
+    props.lighthouseJobTable.grantReadData(this.lambda);
   }
 }
 
@@ -176,6 +183,8 @@ export class DevStackLambdas extends cdk.Construct {
       jobRunnerLambdaBucketKey: string;
       alertLambdaBucketKey: string;
       alertInvocationTableTimeStampLsiName: string;
+      lighthouseJobTable: dynamodb.Table;
+      lighthouseJobTableFrequencyGsiName: string;
     }
   ) {
     super(scope, id);
@@ -218,6 +227,9 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeCheckMonitorTableFrequencyGsiName:
         props.uptimeCheckMonitorTableFrequencyGsiName,
       region: props.region,
+      lighthouseJobTable: props.lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName:
+        props.lighthouseJobTableFrequencyGsiName,
     });
   }
 }

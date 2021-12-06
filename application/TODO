@@ -4,7 +4,7 @@ General:
 
 Webapp: 
     Pricing page:
-        ☐  move loading spinner to CTA buttons
+        ✔  move loading spinner to CTA buttons @done(21-12-06 16:10)
     Alert:
         ☐ email alert only to account owner
     Settings:

@@ -3,6 +3,8 @@ import * as cdk from "@aws-cdk/core";
 
 export class DevStackDdbTables extends cdk.Construct {
   public readonly uptimeMonitorTable: dynamodb.Table;
+  public readonly lighthouseJobTable: dynamodb.Table;
+  public readonly lighthouseJobTableFrequencyGsiName: string;
   public readonly uptimeMonitorStatusTable: dynamodb.Table;
   public readonly uptimeCheckMonitorTableFrequencyGsiName: string;
   public readonly userTable: dynamodb.Table;
@@ -40,6 +42,23 @@ export class DevStackDdbTables extends cdk.Construct {
     this.uptimeCheckMonitorTableFrequencyGsiName = "frequencyGSI";
 
     this.uptimeMonitorTable.addGlobalSecondaryIndex({
+      indexName: this.uptimeCheckMonitorTableFrequencyGsiName,
+      partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    this.lighthouseJobTable = new dynamodb.Table(this, "dev_lighthouse_job", {
+      partitionKey: { name: "owner_id", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "job_id", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "komonitor-dev-lighthouse-job",
+    });
+
+    this.lighthouseJobTableFrequencyGsiName = "frequencyGSI";
+
+    this.lighthouseJobTable.addGlobalSecondaryIndex({
       indexName: this.uptimeCheckMonitorTableFrequencyGsiName,
       partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
       sortKey: { name: "region", type: dynamodb.AttributeType.STRING },

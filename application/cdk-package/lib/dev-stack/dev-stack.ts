@@ -37,6 +37,9 @@ export class DevStack extends cdk.Stack {
       userTable: this.tables.userTable,
       alertInvocationTableTimeStampLsiName:
         this.tables.alertInvocationTableTimestampLsiName,
+      lighthouseJobTable: this.tables.lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName:
+        this.tables.lighthouseJobTableFrequencyGsiName,
     });
 
     this.events = new ScheduleRules(this, "Events", {
