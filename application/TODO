@@ -110,6 +110,18 @@ Alert Lambda:
 
     ☐ Promise.all the data dependancies
 
+Lighthouse:
+    ✔ get hello world app running and push to ECR working @done(21-12-06 13:05)
+    ☐ cdk setup DDB table in dev and prod
+    ☐ cdk Faargate task role https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/modules/taskdefinition.html#taskrolearn
+    ☐ create execution role arn https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/modules/taskdefinition.html#executionrolearn
+    Job runner: 
+        ☐ read job from db
+        ☐ create and register task def from db
+        ☐ startTask
+        ☐ dereg task def -> check if can dereg during run
+    ☐ cdk setup S3 bucket
+
 CDK:
     ✔ create the prod ddb tables in us-east-1 @started(21-11-15 11:33) @done(21-11-30 13:14) @lasted(2w1d1h41m11s)
     ✔ create us-east-1 prod stack @started(21-11-15 11:34) @done(21-11-30 13:14) @lasted(2w1d1h40m12s)
