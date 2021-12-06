@@ -16,7 +16,8 @@ export function isValidCoreUptimeMonitor(
     isValidUrl(obj.url) &&
     isValidRegion(obj.region) &&
     isValidWebhookUrl(product_id, obj.webhook_url) &&
-    isValidFailuresBeforeAlert(obj.failures_before_alert)
+    isValidFailuresBeforeAlert(obj.failures_before_alert) &&
+    isValidHttpHeaders(obj.http_headers)
   );
 }
 
@@ -59,4 +60,13 @@ export function isValidWebhookUrl(product_id: string, url?: string) {
 export function isValidFailuresBeforeAlert(failures?: number) {
   if (!failures && failures !== 0) return true;
   return failures >= 1 && failures <= 5;
+}
+
+export function isValidHttpHeaders(headers: { [key: string]: string }) {
+  if (!headers) return true;
+  let invalid =
+    Object.keys(headers).find((val) => val.length > 100) ||
+    Object.values(headers).find((val) => val.length > 200);
+
+  return !invalid && Object.keys(headers).length <= 10;
 }

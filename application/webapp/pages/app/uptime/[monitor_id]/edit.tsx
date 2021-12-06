@@ -7,6 +7,7 @@ import { PageLayout } from "../../../../src/common/components/Page-Layout";
 import { useAlerts } from "../../../../src/modules/alerts/client";
 import { useUptimeMonitors } from "../../../../src/modules/uptime/client";
 import { CreateUpdateForm } from "../../../../src/modules/uptime/components/Create-Update-Form";
+import { CreateUpdateFormRewrite } from "../../../../src/modules/uptime/components/Create-Update-Form-Rewrite";
 import { useUserServicePlanProductId } from "../../../../src/modules/user/client";
 import { ExtendedNextPage } from "../../../_app";
 
@@ -45,6 +46,11 @@ const UptimeEdit: ExtendedNextPage = () => {
             product_id={data.productId as string}
             currentMonitorAttributes={monitor}
             userAlerts={alerts}
+          />
+          <CreateUpdateFormRewrite
+            product_id={data.productId as string}
+            userAlerts={alerts}
+            currentMonitorAttributes={monitor}
           />
         </Fade>
       ) : (

@@ -115,11 +115,13 @@ export async function putMonitor(
   isUpdate: boolean
 ) {
   try {
+    console.log(monitor);
     const putItemCommandInput: PutItemCommandInput = {
       TableName: tableName,
       Item: marshall(monitor, {
         removeUndefinedValues: true,
         convertEmptyValues: true,
+        convertClassInstanceToMap: true,
       }),
       ConditionExpression: isUpdate
         ? "attribute_exists(monitor_id)" // ensure a monitor exists that can be updated

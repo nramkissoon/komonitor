@@ -25,7 +25,8 @@ export function prodLambdaName(
 }
 
 export function prodStageName(region: string) {
-  return "Prod" + _.capitalize(_.camelCase(region)) + "StackStage";
+  const cc = _.camelCase(region);
+  return "Prod" + cc.charAt(0).toUpperCase() + cc.slice(1) + "StackStage";
 }
 
 export function prodLambdaCodeBucketName(region: string) {

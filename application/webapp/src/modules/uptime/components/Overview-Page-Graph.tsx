@@ -217,7 +217,7 @@ function LineGraph(props: LineGraphProps) {
                 .map((d) => {
                   return d.x;
                 }),
-        format: (v) => (v as string).slice(14),
+        format: (v) => (v as string).slice((v as string).length - 11),
       }}
       enableGridX={false}
       enablePoints={true}

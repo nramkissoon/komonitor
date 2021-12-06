@@ -132,6 +132,14 @@ export async function deleteMonitor(
 }
 
 function createCoreMonitorFromFormData(formData: any) {
+  const form_http_headers: { header: string; value: string }[] =
+    formData.http_headers ?? [];
+
+  let headers: { [header: string]: string } = {};
+  form_http_headers.forEach(
+    (header) => (headers[header.header] = header.value)
+  );
+
   const monitor: CoreUptimeMonitor = {
     url: "https://" + formData.url,
     name: formData.name,
@@ -144,6 +152,7 @@ function createCoreMonitorFromFormData(formData: any) {
       ? Number.parseInt(formData.failures_before_alert)
       : undefined,
     alert_id: formData.alert,
+    http_headers: form_http_headers.length > 0 ? headers : undefined,
   };
 
   return monitor;
@@ -155,6 +164,7 @@ export async function createMonitor(
   onError?: (message: string) => void
 ) {
   const monitor = createCoreMonitorFromFormData(formData);
+
   const response = await fetch(monitorApiUrl, {
     method: "POST",
     headers: {
