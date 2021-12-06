@@ -179,7 +179,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     <>
       <Heading
         textAlign="center"
-        mt="2em"
+        mt="1em"
         mb="1em"
         size="lg"
         fontWeight="medium"
