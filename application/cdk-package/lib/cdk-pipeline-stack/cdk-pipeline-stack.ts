@@ -183,6 +183,9 @@ export class CdkPipelineStack extends cdk.Stack {
       alertInvocationTable: prodTables.alertInvocationTable,
       alertInvocationTableTimestampLsiName:
         prodTables.alertInvocationTableTimestampLsiName,
+      lighthouseJobTable: prodTables.lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName:
+        prodTables.lighthouseJobTableFrequencyGsiName,
     };
 
     const prodUsWest1StackStage = new ProdCommonStackStage(

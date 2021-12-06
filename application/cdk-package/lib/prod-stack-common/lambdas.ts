@@ -68,6 +68,8 @@ class JobRunnerLambda extends cdk.Construct {
       region: string;
       uptimeMonitorTable: dynamodb.Table;
       uptimeMonitorTableFrequencyGsiName: string;
+      lighthouseJobTable: dynamodb.Table;
+      lighthouseJobTableFrequencyGsiName: string;
     }
   ) {
     super(scope, id);
@@ -77,6 +79,8 @@ class JobRunnerLambda extends cdk.Construct {
       region,
       uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName,
+      lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName,
     } = props;
 
     this.lambda = new lambda.Function(this, region + "_prod_job_runner", {
@@ -90,6 +94,9 @@ class JobRunnerLambda extends cdk.Construct {
         UPTIME_CHECK_MONITOR_TABLE_FREQUENCY_GSI_NAME:
           uptimeMonitorTableFrequencyGsiName,
         UPTIME_CHECK_LAMBDA_NAME: uptimeMonitorLambda.lambda.functionName,
+        LIGHTHOUSE_JOB_TABLE_NAME: lighthouseJobTable.tableName,
+        LIGHTHOUSE_JOB_TABLE_FREQUENCY_GSI_NAME:
+          lighthouseJobTableFrequencyGsiName,
       },
       timeout: cdk.Duration.minutes(1),
     });
@@ -98,6 +105,8 @@ class JobRunnerLambda extends cdk.Construct {
     uptimeMonitorLambda.lambda.grantInvoke(this.lambda);
     // allow job runner to be able to read monitors
     uptimeMonitorTable.grantReadData(this.lambda);
+
+    lighthouseJobTable.grantReadData(this.lambda);
   }
 }
 
@@ -189,6 +198,8 @@ export class Lambdas extends cdk.Construct {
       region: string;
       lambdaCodeBucketName: string;
       alertInvocationTableTimeStampLsiName: string;
+      lighthouseJobTable: dynamodb.Table;
+      lighthouseJobTableFrequencyGsiName: string;
     }
   ) {
     super(scope, id);
@@ -203,6 +214,8 @@ export class Lambdas extends cdk.Construct {
       alertTable,
       region,
       userTable,
+      lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName,
     } = props;
 
     this.lambdaCodeIBucket = s3.Bucket.fromBucketAttributes(
@@ -237,6 +250,8 @@ export class Lambdas extends cdk.Construct {
       uptimeMonitorTable: uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName: uptimeMonitorTableFrequencyGsiName,
       region: region,
+      lighthouseJobTable: lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName: lighthouseJobTableFrequencyGsiName,
     });
   }
 }

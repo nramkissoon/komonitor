@@ -37,6 +37,9 @@ export class ProdUsEast1Stack extends cdk.Stack {
       alertInvocationTable: this.tables.alertInvocationTable,
       alertInvocationTableTimestampLsiName:
         this.tables.alertInvocationTableTimestampLsiName,
+      lighthouseJobTable: this.tables.lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName:
+        this.tables.lighthouseJobTableFrequencyGsiName,
     });
   }
 }

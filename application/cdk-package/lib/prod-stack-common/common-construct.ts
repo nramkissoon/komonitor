@@ -19,6 +19,8 @@ export interface CommonConstructProps {
   userTable: dynamodb.Table;
   alertInvocationTable: dynamodb.Table;
   alertInvocationTableTimestampLsiName: string;
+  lighthouseJobTable: dynamodb.Table;
+  lighthouseJobTableFrequencyGsiName: string;
 }
 
 export class CommonConstruct extends cdk.Construct {
@@ -48,6 +50,9 @@ export class CommonConstruct extends cdk.Construct {
       userTable: props.userTable,
       alertInvocationTableTimeStampLsiName:
         props.alertInvocationTableTimestampLsiName,
+      lighthouseJobTable: props.lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName:
+        props.lighthouseJobTableFrequencyGsiName,
     });
 
     this.events = new ScheduleRules(this, "Events", {

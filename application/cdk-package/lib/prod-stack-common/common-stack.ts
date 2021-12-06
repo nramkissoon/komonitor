@@ -27,6 +27,9 @@ export class CommonStack extends cdk.Stack {
         props.uptimeMonitorTableFrequencyGsiName,
       userTable: props.userTable,
       jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
+      lighthouseJobTable: props.lighthouseJobTable,
+      lighthouseJobTableFrequencyGsiName:
+        props.lighthouseJobTableFrequencyGsiName,
     });
   }
 }

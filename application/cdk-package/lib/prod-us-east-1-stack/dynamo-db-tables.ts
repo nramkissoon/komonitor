@@ -10,6 +10,8 @@ export class ProdDdbTables extends cdk.Construct {
   public readonly alertInvocationTable: dynamodb.Table;
   public readonly alertInvocationTableTimestampLsiName: string;
   public readonly stripeWebhooksTable: dynamodb.Table;
+  public readonly lighthouseJobTable: dynamodb.Table;
+  public readonly lighthouseJobTableFrequencyGsiName: string;
 
   constructor(scope: cdk.Construct, id: string, props: {}) {
     super(scope, id);
@@ -43,6 +45,24 @@ export class ProdDdbTables extends cdk.Construct {
 
     this.uptimeMonitorTable.addGlobalSecondaryIndex({
       indexName: this.uptimeMonitorTableFrequencyGsiName,
+      partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
+      sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    this.lighthouseJobTable = new dynamodb.Table(this, "dev_lighthouse_job", {
+      partitionKey: { name: "owner_id", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "job_id", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      pointInTimeRecovery: true,
+      tableName: "komonitor-dev-lighthouse-job",
+    });
+
+    this.lighthouseJobTableFrequencyGsiName = "frequencyGSI";
+
+    this.lighthouseJobTable.addGlobalSecondaryIndex({
+      indexName: this.lighthouseJobTableFrequencyGsiName,
       partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
       sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,

@@ -62,7 +62,7 @@ export function createProdCommonStage(
   env: Environment,
   scope: Construct
 ) {
-  const prodUsWest1StackStageProps: ProdCommonStackStageProps = {
+  const prodStackStageProps: ProdCommonStackStageProps = {
     env: env,
     lambdaCodeBucketName: LAMBDA_CODE_DEV_BUCKET,
     uptimeLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
@@ -78,15 +78,18 @@ export function createProdCommonStage(
     alertInvocationTable: prodTables.alertInvocationTable,
     alertInvocationTableTimestampLsiName:
       prodTables.alertInvocationTableTimestampLsiName,
+    lighthouseJobTable: prodTables.lighthouseJobTable,
+    lighthouseJobTableFrequencyGsiName:
+      prodTables.lighthouseJobTableFrequencyGsiName,
   };
 
-  const prodUsWest1StackStage = new ProdCommonStackStage(
+  const prodStackStage = new ProdCommonStackStage(
     scope,
     prodStageName(region),
-    prodUsWest1StackStageProps
+    prodStackStageProps
   );
 
-  pipeline.addApplicationStage(prodUsWest1StackStage).addActions(
+  pipeline.addApplicationStage(prodStackStage).addActions(
     getNewCopyLambdaCodeToRegionAction({
       name: "CopyLambdaCode",
       region: region,

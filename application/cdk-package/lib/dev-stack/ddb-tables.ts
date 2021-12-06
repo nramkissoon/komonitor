@@ -59,7 +59,7 @@ export class DevStackDdbTables extends cdk.Construct {
     this.lighthouseJobTableFrequencyGsiName = "frequencyGSI";
 
     this.lighthouseJobTable.addGlobalSecondaryIndex({
-      indexName: this.uptimeCheckMonitorTableFrequencyGsiName,
+      indexName: this.lighthouseJobTableFrequencyGsiName,
       partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
       sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
