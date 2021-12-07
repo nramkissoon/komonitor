@@ -112,7 +112,7 @@ Alert Lambda:
 
 Lighthouse:
     ✔ get hello world app running and push to ECR working @done(21-12-06 13:05)
-    ☐ cdk setup DDB table in dev and prod
+    ✔ cdk setup DDB table in dev and prod @done(21-12-06 16:50)
     ☐ cdk Faargate task role https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/modules/taskdefinition.html#taskrolearn
     ☐ create execution role arn https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/modules/taskdefinition.html#executionrolearn
     Job runner: 

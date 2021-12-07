@@ -5,7 +5,13 @@ export default class Document extends NextDocument {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <script
+            defer
+            data-domain="komonitor.com"
+            src="https://plausible.io/js/plausible.js"
+          ></script>
+        </Head>
         <body>
           <ColorModeScript />
           <Main />
