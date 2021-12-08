@@ -1,6 +1,8 @@
 General:
     ☐ Google sign in api switch to prod
     ☐ Stripe switch to prod
+    ☐ AWS ses switch to prod
+    ☐ add stripe prod keys to vercel
 
 Webapp: 
     Pricing page:

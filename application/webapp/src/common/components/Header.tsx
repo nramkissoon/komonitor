@@ -60,6 +60,7 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
   return (
     <Link href={authed ? "/app" : "/auth/signin"} passHref>
       <Button
+        as="a"
         size="md"
         colorScheme="blue"
         bgColor="blue.300"

@@ -61,6 +61,7 @@ function NewHeaderButton(
     <Button
       colorScheme="gray"
       color="white"
+      bg="gray.400"
       fontWeight="medium"
       _hover={{ bg: "blue.600" }}
       isDisabled={disabled}
@@ -155,6 +156,7 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
                 <Button
                   colorScheme="gray"
                   color="white"
+                  bg="gray.400"
                   fontWeight="medium"
                   minW="75px"
                   _hover={{ bg: "red.600" }}

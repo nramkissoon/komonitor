@@ -1,0 +1,45 @@
+---
+title: What is an Uptime Monitor
+description: Uptime monitors regularly check URL's and determines if websites are down.
+---
+
+Komonitor's uptime monitors are a piece of software that regularly checks a given website and
+determines whether or not that website is down. Specifically, uptime monitors send
+HTTP requests to a website URL and records the response. Currently, Komonitor uptime monitors
+consider a website to be **down** if the monitor **does not receive a 200 OK response status code from the assigned website**.
+
+Uptime monitors record website HTTP responses in the form of **uptime monitor statuses** and
+can trigger **alerts** if configured by the user.
+
+## Uptime Monitor Properties
+
+All uptime monitors share a set of properties that you can edit. As a user, when creating
+or editing an uptime monitor, you define these properties to adjust the monitor's behavior to fit your needs.
+
+### General Properties
+
+- `Monitor Name` - the name of the monitor as it will appear in the app dashboard
+- `URL` - the URL of the website to be monitored
+- `Region` - the location from which the uptime monitor will check the website
+- `Check Frequency` - the time interval between monitor checks--if set to 30 minutes, the monitor will run every 30 minutes
+
+### Alert Properties
+
+- `Alert` - the alert the monitor will trigger in the event of a failure
+- `Failures Before Alert` - the number of failures that are tolerated before an alert is triggered
+
+### Advanced Settings
+
+- `Webhook URL` - a URL the monitor should push uptime statuses to, this feature is available for paid-plan users
+- `HTTP Headers` - custom HTTP headers that should be sent as a part of the HTTP request uptime check
+
+### Uptime Monitor Status Properties
+
+Uptime monitor status are a record of a _specific_ uptime check at a particular point in time.
+
+- `monitor_id` - the ID of the monitor that created the status
+- `timestamp` - the timestamp of the status in milliseconds
+- `status` - the status of the website--either 'down' or 'up'
+- `latency` - the latency of the HTTP response in milliseconds
+- `region` - the region of the uptime check was performed in
+- `response_status_code` - the response code of the HTTP response from the website (e.g. 404)

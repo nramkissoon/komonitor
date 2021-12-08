@@ -1,6 +1,7 @@
 import {
   Button,
   ButtonProps,
+  chakra,
   Flex,
   FlexProps,
   Heading,
@@ -105,7 +106,10 @@ export function Footer() {
           ]}
         />
       </SimpleGrid>
-      © {year} Nicholas Ramkissoon. All rights reserved.
+      <chakra.p mb=".3em">
+        <b>100% self-funded and independent</b>. Built with ❤️ in NYC.
+      </chakra.p>
+      <p>© {year} Nicholas Ramkissoon. All rights reserved.</p>
     </Flex>
   );
 }
