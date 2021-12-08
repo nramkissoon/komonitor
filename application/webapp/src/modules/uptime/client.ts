@@ -148,13 +148,12 @@ function createCoreMonitorFromFormData(formData: any) {
       formData.frequency
     ) as UptimeCheckSupportedFrequenciesInMinutes,
     webhook_url: formData.webhook ? "https://" + formData.webhook : "",
-    failures_before_alert: formData.alert
-      ? Number.parseInt(formData.failures_before_alert)
+    failures_before_alert: formData.alert_id
+      ? formData.failures_before_alert
       : undefined,
-    alert_id: formData.alert,
+    alert_id: formData.alert_id,
     http_headers: form_http_headers.length > 0 ? headers : undefined,
   };
-
   return monitor;
 }
 
