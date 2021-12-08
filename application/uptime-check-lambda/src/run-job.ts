@@ -57,12 +57,12 @@ const fetchCall = async (
           if (err) {
             resolve({
               ok: false,
-              code: response.statusCode || undefined,
+              code: response ? response.statusCode : undefined,
               latency: undefined,
             });
           } else {
             resolve({
-              ok: response.statusCode
+              ok: response?.statusCode
                 ? (response.statusCode >= 200 && response.statusCode < 300) ||
                   response.statusCode === 429 // Too many requests
                 : false,
