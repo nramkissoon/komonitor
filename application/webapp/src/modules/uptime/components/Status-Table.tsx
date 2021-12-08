@@ -102,7 +102,7 @@ function GlobalFilter(props: {
   );
 }
 
-export function StatusTable(props: TableProps) {
+export default function StatusTable(props: TableProps) {
   const { monitorId, statuses, offset } = props;
 
   const data = React.useMemo(() => {

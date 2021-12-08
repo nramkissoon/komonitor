@@ -19,7 +19,7 @@ import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import theme from "../../../common/components/theme";
 import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "../utils";
 
-interface OverviewPageGraphProps {
+export interface OverviewPageGraphProps {
   monitorId: string;
   statuses: UptimeMonitorStatus[] | undefined;
   since: number;

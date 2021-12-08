@@ -25,7 +25,9 @@ interface MonitorAlertsOverviewProps {
   tzOffset: number;
 }
 
-export function MonitorAlertsOverview(props: MonitorAlertsOverviewProps) {
+export default function MonitorAlertsOverview(
+  props: MonitorAlertsOverviewProps
+) {
   const { alerts, alertInvocations, tzOffset } = props;
 
   return alerts === undefined || alerts.length === 0 ? (

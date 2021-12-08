@@ -7,12 +7,13 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
 import router from "next/router";
 import { Alert, AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
 import { regionToLocationStringMap } from "../../../common/client-utils";
 import {
-  DeleteDialog,
+  DeleteDialogProps,
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
 import { useAlertInvocationsAllTime, useAlerts } from "../../alerts/client";
@@ -23,12 +24,22 @@ import {
 } from "../../user/client";
 import { deleteMonitor, useMonitorStatusHistory } from "../client";
 import { yesterday } from "../utils";
-import { MonitorAlertsOverview } from "./Monitor-Alerts-Overview";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
-import { OverviewPageGraph } from "./Overview-Page-Graph";
+import { OverviewPageGraphProps } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
 import { SelectStatusHistoryRadioButtons } from "./SelectStatusHistoryRadioButtons";
-import { StatusTable } from "./Status-Table";
+const DeleteDialog = dynamic<DeleteDialogProps>(() =>
+  import("../../../common/components/Delete-Dialog").then(
+    (module) => module.DeleteDialog
+  )
+);
+const OverviewPageGraph = dynamic<OverviewPageGraphProps>(() =>
+  import("./Overview-Page-Graph").then((module) => module.OverviewPageGraph)
+);
+const StatusTable = dynamic(() => import("./Status-Table"));
+const MonitorAlertsOverview = dynamic(
+  () => import("./Monitor-Alerts-Overview")
+);
 
 interface OverviewPageProps {
   monitor: UptimeMonitor;
@@ -112,18 +123,18 @@ export function OverviewPage(props: OverviewPageProps) {
 
   return (
     <Box>
-      {DeleteDialog({
-        isOpen: deleteItem.id !== undefined,
-        itemName: deleteItem.name,
-        itemId: deleteItem.id,
-        onClose: onCloseDeleteDialog,
-        leastDestructiveRef: cancelRef,
-        mutate: mutate,
-        mutateApiUrl: "/api/uptime/monitors",
-        deleteApiFunc: deleteMonitor,
-        itemType: "monitor",
-        onSuccess: () => router.push("/app/uptime"),
-      })}
+      <DeleteDialog
+        isOpen={deleteItem.id !== undefined}
+        itemName={deleteItem.name}
+        itemId={deleteItem.id}
+        onClose={onCloseDeleteDialog}
+        leastDestructiveRef={cancelRef}
+        mutate={mutate}
+        mutateApiUrl="/api/uptime/monitors"
+        deleteApiFunc={deleteMonitor}
+        itemType="monitor"
+        onSuccess={() => router.push("/app/uptime")}
+      />
       <OverviewPageHeader
         monitorName={name}
         monitorUrl={url}

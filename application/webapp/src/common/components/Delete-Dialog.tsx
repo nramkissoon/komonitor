@@ -30,7 +30,7 @@ export function useDeleteDialog() {
   };
 }
 
-interface DeleteDialogProps {
+export interface DeleteDialogProps {
   isOpen: boolean;
   itemName: string;
   itemId: string;
