@@ -1,10 +1,8 @@
-import { UptimeCheckSupportedFrequenciesInMinutes } from "../config/index";
-
 export interface CoreUptimeMonitor {
   url: string;
   name: string;
   region: string;
-  frequency: UptimeCheckSupportedFrequenciesInMinutes;
+  frequency: number;
   failures_before_alert?: number;
   webhook_url?: string;
   alert_id?: string;
