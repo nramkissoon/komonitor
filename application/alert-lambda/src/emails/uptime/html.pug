@@ -2,26 +2,36 @@
 head
     link(rel="stylesheet", href="/css/uptime.css", data-inline)
 
-div.severity-display.spaced(class=[severity.toLowerCase()]) #{severity}
+body
+    table.title-table
+        tr 
+            td.title Komonitor Alert
 
-div.bold.spaced.lg #{alert.name}
-
-div.spaced.lg
-    span.bold #{monitor.name} 
-    span!= ` monitor in <span class="bold">${monitor.region}</span> has been <span class="red-500 bold">down</span> for <span class="bold">${monitor.failures_before_alert}</span> consecutive uptime checks.`
-
-div.spaced.lg
-    span.bold Alert Description: 
-    span #{" " + alert.description}
-
-p.bold Monitor statuses that triggered this alert:
-ol.spaced
-    each status in statuses 
-        li.spaced-more
-            div
-                p!= `<span class="bold">Timestamp (UTC):</span> ${new Date(status.timestamp).toUTCString()}`
-                p!= `<span class="bold">Status:</span> <span class="red-500 bold">Down</span>`
-                p!= `<span class="bold">Status Code:</span> <span class="red-500 bold">${new Date(status.response_status_code).toUTCString()}</span>`
-
-p.spaced!= `<span class="bold">Need to disable or edit this alert?</span> You can do so in the <a href="komonitor.com/app/alerts/${alert.alert_id}">Komonitor console</a>.`
-p!= `This is a no-reply email. For support, please contact us here: <a href="komonitor.com/contact">komonitor.com/contact</a>.`
+     table.main-table 
+        tr 
+            td.severity-display(class=[severity.toLowerCase()]) #{severity}   
+        tr 
+            td.lg.bold.centered-text #{alert.name}
+        tr 
+            td.lg.centered-text 
+                span.bold #{monitor.name}
+                span!= ` monitor in <span class="bold">${region}</span> has been <span class="down">DOWN</span> for <span class="bold">${monitor.failures_before_alert}</span> consecutive uptime checks.`
+        tr 
+            td.lg.centered-text
+                span.bold Alert Description: 
+                span #{" " + alert.description}
+        tr
+            td.lg.centered-text Monitor statuses that triggered this alert:
+        tr
+            td 
+                ol.spaced 
+                    each status in statuses 
+                        li.spaced-more 
+                            div 
+                                p!= `<span class="bold">Timestamp (UTC):</span> ${new Date(status.timestamp).toUTCString()}`
+                                p!= `<span class="bold">Status:</span> <span class="red-500 bold">Down</span>`
+                                p!= `<span class="bold">Status Code:</span> <span class="red-500 bold">${(status.response_status_code) ? status.response_status_code : 'N/A'}</span>`
+        tr
+            td 
+                p.spaced!= `<span class="bold">Need to disable or edit this alert?</span> You can do so in the <a href="komonitor.com/app/alerts/${alert.alert_id}">Komonitor console</a>.`
+                p!= `This is a no-reply email. For support, please contact us at <b>support@komonitor.com</b>.`

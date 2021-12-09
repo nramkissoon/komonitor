@@ -2,12 +2,43 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+body {
+  background-color: #171923;
+  padding: 20px;
+  border-radius: 20px;
+}
+
 a {
   color: #3182ce;
 }
 
 a:hover {
   color: #2c5282;
+}
+
+.title-table {
+  width: 100%;
+  border: 0;
+  border-spacing: 0;
+  padding: 0;
+}
+
+.title {
+  padding: 10px 0px 20px 0px;
+  font-size: 22px;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #ffffff;
+}
+
+.main-table {
+  width: 100%;
+  border: 0;
+  border-spacing: 20px;
+  padding: 0;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;
+  background: white;
 }
 
 .severity-display {
@@ -17,8 +48,9 @@ a:hover {
   padding-top: 5px;
   padding-bottom: 5px;
   border-radius: 5px;
-  font-weight: 700;
+  font-weight: 600;
   width: fit-content;
+  text-align: center;
 }
 
 .lg {
@@ -27,17 +59,17 @@ a:hover {
 
 .warning {
   background-color: #ecc94b;
-  color: #5f370e;
+  color: #ffffff;
 }
 
 .severe {
   background-color: #ed8936;
-  color: #652b19;
+  color: #ffffff;
 }
 
 .critical {
   background-color: #e53e3e;
-  color: #63171b;
+  color: #ffffff;
 }
 
 .red-500 {
@@ -54,4 +86,16 @@ a:hover {
 
 .spaced-more {
   margin-bottom: 1.5em;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.down {
+  background-color: #e53e3e;
+  padding: 2px;
+  border-radius: 5px;
+  font-weight: 600;
+  color: #ffffff;
 }

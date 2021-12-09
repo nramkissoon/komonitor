@@ -13,6 +13,7 @@ export async function sendUptimeMonitorAlertEmail(
       severity: alert.severity.toUpperCase(),
       monitor: monitor,
       alert: alert,
+      region: regionToLocationStringMap[monitor.region],
       failures: monitor.failures_before_alert,
       statuses: statuses,
     });
