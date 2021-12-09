@@ -115,7 +115,6 @@ export async function putMonitor(
   isUpdate: boolean
 ) {
   try {
-    console.log(monitor);
     const putItemCommandInput: PutItemCommandInput = {
       TableName: tableName,
       Item: marshall(monitor, {
