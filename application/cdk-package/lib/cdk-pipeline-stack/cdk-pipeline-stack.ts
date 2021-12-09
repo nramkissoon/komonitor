@@ -52,7 +52,7 @@ export class CdkPipelineStack extends cdk.Stack {
         actionName: "GitHubSourceActions",
         output: sourceArtifact,
         owner: "nramkissoon",
-        branch: "main",
+        branch: "preview",
         repo: "ono",
         trigger: codepipelineActions.GitHubTrigger.WEBHOOK,
         oauthToken: gitHubAccessToken,

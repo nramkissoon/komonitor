@@ -28,6 +28,8 @@ a:hover {
   font-size: 22px;
   font-family: Helvetica, Arial, sans-serif;
   color: #ffffff;
+  font-weight: 600;
+  text-align: center;
 }
 
 .main-table {
@@ -93,9 +95,6 @@ a:hover {
 }
 
 .down {
-  background-color: #e53e3e;
-  padding: 2px;
-  border-radius: 5px;
   font-weight: 600;
-  color: #ffffff;
+  color: #e53e3e;
 }

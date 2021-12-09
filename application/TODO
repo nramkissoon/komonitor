@@ -1,8 +1,9 @@
 General:
-    ☐ Google sign in api switch to prod
-    ☐ Stripe switch to prod
+    ✔ Google sign in api switch to prod @done(21-12-09 12:09)
+    ☐ wait for google verif
+    ✔ Stripe switch to prod @done(21-12-09 12:09)
     ☐ AWS ses switch to prod
-    ☐ add stripe prod keys to vercel
+    ✔ add stripe prod keys to vercel @done(21-12-09 12:13)
 
 Webapp: 
     Pricing page:
@@ -25,7 +26,7 @@ Webapp:
         ✘ check aws region to locations in webapp client @10/29 @started(21-10-26 13:30) @cancelled(21-10-26 13:32) @wasted(2m48s)
         ✔  timezones based on user pref @done(21-12-01 13:57)
         ☐  convert service SLA's to monitor resolutions SRE p62\
-        ☐  download data as csv or json
+        ✔  download data as csv or json @done(21-12-09 12:13)
         ✔  Add alts to all images @done(21-11-03 15:52)
         ☐  disable alert from dashboard
         ✔  convert regions to place names @started(21-11-15 11:34) @done(21-11-15 11:56) @lasted(22m24s)
