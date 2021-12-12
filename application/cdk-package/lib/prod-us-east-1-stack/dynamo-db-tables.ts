@@ -56,7 +56,7 @@ export class ProdDdbTables extends cdk.Construct {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
       pointInTimeRecovery: true,
-      tableName: "komonitor-dev-lighthouse-job",
+      tableName: "komonitor-prod-lighthouse-job",
     });
 
     this.lighthouseJobTableFrequencyGsiName = "frequencyGSI";

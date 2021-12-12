@@ -8,7 +8,6 @@ export const environments = {
   prodApSouth1: { account: "126258523001", region: "ap-south-1" },
   prodApNortheast1: { account: "126258523001", region: "ap-northeast-1" },
   prodApNortheast2: { account: "126258523001", region: "ap-northeast-2" },
-  prodApNortheast3: { account: "126258523001", region: "ap-northeast-3" },
   prodApSoutheast1: { account: "126258523001", region: "ap-southeast-1" },
   prodApSoutheast2: { account: "126258523001", region: "ap-southeast-2" },
   prodCaCentral1: { account: "126258523001", region: "ca-central-1" },

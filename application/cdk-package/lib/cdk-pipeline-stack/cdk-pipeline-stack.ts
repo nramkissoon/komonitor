@@ -229,5 +229,53 @@ export class CdkPipelineStack extends cdk.Stack {
       environments.prodUsEast2,
       this
     );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- us-west-2 --------------------------
+
+    createProdCommonStage(
+      "us-west-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodUsWest2,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-south-1 -------------------------
+
+    createProdCommonStage(
+      "ap-south-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApSouth1,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-northeast-1 -------------------------
+
+    createProdCommonStage(
+      "ap-northeast-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApNortheast1,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-northeast-2 -------------------------
+
+    createProdCommonStage(
+      "ap-northeast-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApNortheast2,
+      this
+    );
   }
 }
