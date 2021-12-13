@@ -277,5 +277,113 @@ export class CdkPipelineStack extends cdk.Stack {
       environments.prodApNortheast2,
       this
     );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-northeast-3 -------------------------
+
+    createProdCommonStage(
+      "ap-northeast-3",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApNortheast3,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-southeast-1 -------------------------
+
+    createProdCommonStage(
+      "ap-southeast-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApSoutheast1,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-southeast-2 -------------------------
+
+    createProdCommonStage(
+      "ap-southeast-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApSoutheast2,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ca-central-1 -------------------------
+
+    createProdCommonStage(
+      "ca-central-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodCaCentral1,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-central-1 -------------------------
+
+    createProdCommonStage(
+      "eu-central-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuCentral1,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-west-1 -------------------------
+
+    createProdCommonStage(
+      "eu-west-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest1,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-west-2 -------------------------
+
+    createProdCommonStage(
+      "eu-west-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest2,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-west-3 -------------------------
+
+    createProdCommonStage(
+      "eu-west-3",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest3,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- sa-east-1 -------------------------
+
+    createProdCommonStage(
+      "sa-east-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodSaEast1,
+      this
+    );
   }
 }
