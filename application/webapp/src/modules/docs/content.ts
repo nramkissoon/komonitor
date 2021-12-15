@@ -45,10 +45,6 @@ export const SidebarRoutes: SidebarRouteSection[] = [
         title: "Supported Regions",
         path: "/docs/uptime-monitor/supported-regions",
       },
-      {
-        title: "Quick Reference",
-        path: "/docs/uptime-monitor/reference",
-      },
     ],
   },
   {
@@ -61,13 +57,8 @@ export const SidebarRoutes: SidebarRouteSection[] = [
         path: "/docs/alerts/what-is-it",
       },
       {
-        title: "Working with Uptime Alerts",
+        title: "Working with Alerts",
         path: "/docs/alerts/working-with-alerts",
-      },
-
-      {
-        title: "Quick Reference",
-        path: "/docs/alert/reference",
       },
     ],
   },

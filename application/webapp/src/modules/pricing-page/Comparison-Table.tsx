@@ -1,5 +1,6 @@
 import {
   Box,
+  chakra,
   Fade,
   Flex,
   Heading,
@@ -64,9 +65,9 @@ function CheckIcon(color: string) {
 
 const monitorSectionData = [
   ["Uptime", "20 Monitors", "80 Monitors", "500 Monitors"],
-  ["Lighthouse", "1 Monitor", "10 Monitors", "30 Monitors"],
+  ["Lighthouse*", "1 Monitor", "10 Monitors", "30 Monitors"],
   ["Uptime Check Frequency", "5 minutes", "1 minute", "1 minute"],
-  ["Lighthouse Check Frequency", "7 days", "1 day", "1 day"],
+  ["Lighthouse Check Frequency*", "7 days", "1 day", "1 day"],
   ["Webhook updates", "-", CheckIcon, CheckIcon],
 ];
 
@@ -105,7 +106,7 @@ export function ComparisonTable() {
         bg={useColorModeValue("white", "#0f131a")}
         borderRadius="lg"
         p="1.5em"
-        mb="3em"
+        mb="10px"
       >
         <Heading textAlign="center" fontSize="xl" fontWeight="normal" mb=".7em">
           Plan Comparison
@@ -170,6 +171,9 @@ export function ComparisonTable() {
           </Table>
         </Box>
       </Box>
+      <chakra.p color="gray.500" fontSize="sm" mb="3em">
+        * feature coming soon
+      </chakra.p>
     </Fade>
   );
 }

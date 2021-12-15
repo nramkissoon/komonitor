@@ -90,7 +90,9 @@ export function AppIndexPage() {
       <SimpleGrid columns={[1, 1, 2]} spacingX={[6, 10]} spacingY={[10]}>
         <Panel
           type={"✅ Uptime Monitors"}
-          description={"Create and manage uptime monitors for you websites."}
+          description={
+            "Create, manage and inspect uptime monitors for your websites."
+          }
           href={"/app/uptime"}
           buttonText={"Go to Monitors"}
         />

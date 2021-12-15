@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { Alert, chakra, useColorModeValue } from "@chakra-ui/react";
+import { Alert, Center, chakra, useColorModeValue } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 export const MDXComponents = {
@@ -46,15 +46,25 @@ export const MDXComponents = {
   li: (props: any) => <chakra.li fontSize="xl" mt=".2em" ml="1em" {...props} />,
   blockquote: (props: any) => (
     <Alert
-      mt="4"
-      role="none"
+      role="warning"
       colorScheme="red"
       variant="left-accent"
       as="blockquote"
       rounded="4px"
-      my="1.5rem"
       shadow="md"
       {...props}
     />
+  ),
+
+  docImg: (props: any) => (
+    <Center w={"100%"} m={0} p={5} my={3} rounded="xl" bg="gray.600">
+      <img
+        {...props}
+        style={{
+          imageRendering: "-webkit-optimize-contrast",
+          borderRadius: "10px",
+        }}
+      />
+    </Center>
   ),
 };

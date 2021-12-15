@@ -1,4 +1,4 @@
-import { Badge, Box, chakra, Flex } from "@chakra-ui/react";
+import { Badge, Box, chakra, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { Footer } from "../../../common/components/Footer";
@@ -76,8 +76,12 @@ function PageContainer(props: PageContainerProps) {
                 <Box
                   minW="0"
                   flex="auto"
-                  px={{ base: "4", sm: "6", xl: "8" }}
-                  pt="10"
+                  px={{ base: "4", sm: "8", xl: "10" }}
+                  mt="10"
+                  py="1.5em"
+                  bg={useColorModeValue("white", "#0f131a")}
+                  shadow="sm"
+                  rounded="xl"
                 >
                   <chakra.h1
                     tabIndex={-1}

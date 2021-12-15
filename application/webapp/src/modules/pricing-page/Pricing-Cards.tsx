@@ -179,7 +179,7 @@ function ctaButtonCharacteristics(
           const stripeUrl = (await res.json()).url;
           router.push(stripeUrl);
         }
-      : () => router.push("/app/settings?tab=billing")
+      : () => router.push("/app/settings?tab=1")
     : () => router.push("/auth/signin");
   return {
     text: text,

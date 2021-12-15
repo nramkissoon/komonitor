@@ -1,16 +1,13 @@
 import { useToast } from "@chakra-ui/react";
 import { Alert } from "project-types";
 import { Column } from "react-table";
-import {
-  DeleteDialog,
-  useDeleteDialog,
-} from "../../../common/components/Delete-Dialog";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import {
   ActionsCell,
   AlertSeverityCell,
 } from "../../../common/components/Table-Cell";
-import { alertApiUrl, deleteAlert } from "../client";
+import { useUptimeMonitors } from "../../uptime/client";
+import { AlertDeleteDialog, useDeleteDialog } from "./Alert-Delete-Dialog";
 import { AlertNameAndTypeCell, AlertStateCell } from "./Table-Cell";
 
 interface RowProps {
@@ -61,6 +58,11 @@ interface OverviewTableProps {
 export function OverviewTable(props: OverviewTableProps) {
   const { alerts, isLoading } = props;
   const errorToast = useToast();
+  const {
+    monitors: uptimeMonitors,
+    isError: monitorsIsError,
+    isLoading: monitorsIsLoading,
+  } = useUptimeMonitors();
   const postErrorToast = (message: string) =>
     errorToast({
       title: "Unable to perform action",
@@ -113,16 +115,18 @@ export function OverviewTable(props: OverviewTableProps) {
 
   return (
     <>
-      {DeleteDialog({
+      {AlertDeleteDialog({
         isOpen: deleteItem.id !== undefined,
         itemName: deleteItem.name as string,
         itemId: deleteItem.id as string,
         onClose: onCloseDeleteDialog,
         leastDestructiveRef: cancelRef,
         mutate: mutate,
-        mutateApiUrl: alertApiUrl,
-        deleteApiFunc: deleteAlert,
-        itemType: "alert",
+        attachedMonitors: uptimeMonitors
+          ? uptimeMonitors.filter(
+              (monitor) => deleteItem.id === monitor.alert_id
+            )
+          : [],
         onError: postErrorToast,
       })}
       {CommonOverviewTable<RowProps>({

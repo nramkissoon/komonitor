@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
+import { UptimeMonitor } from "project-types";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
   deleteAlert,
@@ -17,7 +18,10 @@ import {
   isValidEditableAlertAttributesWithType,
 } from "../../../src/modules/alerts/validation";
 import { getAlertAllowanceFromProductId } from "../../../src/modules/billing/plans";
-import { getMonitorsForUser } from "../../../src/modules/uptime/monitor-db";
+import {
+  getMonitorsForUser,
+  putMonitor,
+} from "../../../src/modules/uptime/monitor-db";
 import {
   getServicePlanProductIdForUser,
   getUserSubscriptionIsValid,
@@ -116,16 +120,30 @@ async function deleteHandler(
       env.UPTIME_MONITOR_TABLE_NAME,
       userId
     );
-    const attachedMonitors: string[] = [];
+    const attachedMonitors: UptimeMonitor[] = [];
     for (let monitor of monitors) {
       if (monitor.alert_id === (alertId as string)) {
-        attachedMonitors.push(monitor.name);
+        attachedMonitors.push(monitor);
       }
     }
 
-    if (attachedMonitors.length > 0) {
+    const detachPromises: Promise<boolean>[] = [];
+    // detach
+    for (let monitor of attachedMonitors) {
+      monitor.alert_id = undefined;
+      monitor.failures_before_alert = undefined;
+      detachPromises.push(
+        putMonitor(ddbClient, env.UPTIME_MONITOR_TABLE_NAME, monitor, true)
+      );
+    }
+
+    // check if all monitors are detached
+    const detached = (await Promise.all(detachPromises)).reduce(
+      (prev, next) => prev && next
+    );
+
+    if (!detached) {
       res.status(403);
-      res.json(attachedMonitors);
       return;
     }
 

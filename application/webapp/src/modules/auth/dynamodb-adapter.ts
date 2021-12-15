@@ -46,7 +46,6 @@ export const DynamoDBAdapter: Adapter<
             refresh_token_expires_in:
               profile.refresh_token_expires_in ?? undefined,
           };
-          console.log(item);
 
           if (profile.email) {
             item.GSI1SK = `USER#${profile.email}`;
