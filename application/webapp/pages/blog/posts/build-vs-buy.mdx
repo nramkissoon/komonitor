@@ -1,30 +1,53 @@
 ---
 title: Build vs. Buy - Monitoring Infrastructure
-description: An effective alert follows best-practices that ensure that they provide value into the systems they alert for. Effective alerts should not create unnecessary work and toil for product owners.
+description: The current explosion of developer and SaaS tooling has created a debate centered around building vs. buying software solutions for your product. Komonitor, as a website monitoring and alerting software service, can be implemented by any developer, but is it worth it?
 ---
 
-## What is Komonitor?
+When building a modern software product, several features and functionalities must be included depending on the product.
+If the product needs to take customer payments, a payments processor service is needed. Likewise, if a
+product requires monitoring and alerting systems to know when the service is down, then engineers building the product need to implement a service that does that.
 
-Komonitor is a **website monitoring and alerting service**. You can use the service to create and manage monitors and alerts for your websites.
-Komonitor can regularly monitor your websites for:
+Now, in the world of modern SaaS offerings, **developers do not need to build every component of their product from scratch**. They can simply pay a software service provider that fits their
+use case. In the case of payments processing, this has become the norm for new and small companies. Implementing and maintaining a payments processing service requires
+expertise, time, and massive risk tolerance. Luckily, we have services like Stripe and Paddle that handle most, if not all, of the risk and expert domain knowledge required to
+process online payments. The smart move with regards to payments is to buy.
 
-- uptime status
-- rendered content in the browser
-- website vitals such as time to first paint
+What about monitoring and alerting infrastructure? The risks aren't as severe as handling your customers credit card info, so the case for buying is not as strong. However,
+let's explore the costs and benefits in more detail.
 
-A core component of the service is **alerting**. You can define alerts ant its delivery method and attach them to your monitors. Komonitor will alert you when your
-monitor detects a failure.
+## Why Build?
 
-## Where Should I Start?
+A website monitoring and alerting service is not _that_ challenging to build on paper. Put together a Lambda function that checks your website, a UI, and a email service and
+you've got the most basic implementation of one.
 
-You must create an account and sign in to the web app in order to use Komonitor. Creating a new account will immediately give you access to our **free-tier**.
-You can learn more about the free-tier service on the [pricing page](/pricing).
+By building your own solution, you have full control of what dependencies you have, what features are implemented,
+where your data is stored and accessed, etc. You do not have to go to a 3rd party for feature requests and bug fixes. If you already have a skilled engineer ot engineering team, the
+initial costs to build the solution are probably not as prohibitive and building may be a worthwhile investment. Building a solution in an unfamiliar domain can generate expertise
+in that problem domain and create new business opportunities.
 
-For a simple tutorial on how to set up an uptime monitor and attach an alert to it, go to the [Quick Start Guide](/docs/getting-started/quick-start). You will
-learn how to create a basic monitor and become familiar with the Komonitor user interface.
+Also, if you trust yourself or your engineers to build a superior product that best fits your needs, go for it!
 
-For detailed documentation on a specific feature, use the menu on the left.
+## Why Buy?
 
-## More About Komonitor
+Unless you are a large company or require a very specific set of features that are not offered on the market, building monitoring and alerting infrastructure is
+prohibitively expensive and time-consuming. If you are a founder or a small startup, **you should be focusing on building your product and marketing**, not worrying
+about something as mundane as monitoring infrastructure (although, Komonitor is built on fairly complex, global cloud infra). Also, forget it if you're not even a software company. Building out an entire engineering team is not worth it.
 
-Komonitor is a 100% self-funded and independent service built by [@nickramki](https://twitter.com/nickramki). ❤️
+Let's run some numbers to see the costs of building a similar solution versus buying. Assume the hourly rate of an engineer is around $60/hour. A product like Komonitor
+takes about 2 weeks to build out for an experienced engineer. $60 \* 80 hours = **$4,800**! The only entities that have that kind of money and manpower are large businesses.
+On top of the initial development costs, you now have to maintain the infra you've built, further increasing costs in the long run. Now, suppose there was a service out there that
+covered your use case and eliminated all the maintenance hassle for $30/month. To break even with building, you will need to be paying the service provider for 160 months, or <b>over 13 years</b>!
+There is a reason there has been an explosion of SaaS products, and this pricing structure is a main driving force.
+You'll have to be the judge of whether or not you'll even need to pay for 13 years.
+
+Monetary costs aside, there are more benefits to buying a solution. A trusted service provider would be an expert in their product domain whereas you or you're team might not be and would need
+to spend time researching the domain. Ideally, the service provider is focused on providing the best solution for you while you and your team focus on building you revenue-generation products.
+Essentially, you can maintain development velocity while adding the benefits of the software you are buying.
+
+## Conclusion
+
+So, should you build or buy monitoring and alerting software? It depends on your specific needs, and only you can decide on what's the better decision. That said, if you are a founder or part of a small
+organization, you're resources and time is already stretched thin. Adding a the development of a separate product to your workload is not optimal or wise. There are prebuilt solutions out there that others
+like yourself use and enjoy.
+
+<BlogCta ctaMessage="Need a Website Monitoring and Alerting Solution?" />
