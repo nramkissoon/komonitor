@@ -65,7 +65,7 @@ function PageContainer(props: PageContainerProps) {
         as="main"
         className="main-content"
         w="full"
-        maxW="5xl"
+        maxW="6xl"
         mx="auto"
         mb="4em"
       >
@@ -76,7 +76,7 @@ function PageContainer(props: PageContainerProps) {
                 <Box
                   minW="0"
                   flex="auto"
-                  px={{ base: "4", sm: "8", xl: "10" }}
+                  px="4em"
                   mt="10"
                   py="1.5em"
                   bg={useColorModeValue("white", "#0f131a")}
