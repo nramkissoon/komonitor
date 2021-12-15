@@ -382,57 +382,57 @@ export class CdkPipelineStack extends cdk.Stack {
     //-------------------------------------------------------------------
     // ----------------------------- eu-west-1 -------------------------
 
-    createProdCommonStage(
-      "eu-west-1",
-      this.pipeline,
-      prodTables,
-      sourceArtifact,
-      environments.prodEuWest1,
-      this.lambdaCopyPolicy,
-      this.lambdaDeployPolicy,
-      this
-    );
+    // createProdCommonStage(
+    //   "eu-west-1",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodEuWest1,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
 
-    //-------------------------------------------------------------------
-    // ----------------------------- eu-west-2 -------------------------
+    // //-------------------------------------------------------------------
+    // // ----------------------------- eu-west-2 -------------------------
 
-    createProdCommonStage(
-      "eu-west-2",
-      this.pipeline,
-      prodTables,
-      sourceArtifact,
-      environments.prodEuWest2,
-      this.lambdaCopyPolicy,
-      this.lambdaDeployPolicy,
-      this
-    );
+    // createProdCommonStage(
+    //   "eu-west-2",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodEuWest2,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
 
-    //-------------------------------------------------------------------
-    // ----------------------------- eu-west-3 -------------------------
+    // //-------------------------------------------------------------------
+    // // ----------------------------- eu-west-3 -------------------------
 
-    createProdCommonStage(
-      "eu-west-3",
-      this.pipeline,
-      prodTables,
-      sourceArtifact,
-      environments.prodEuWest3,
-      this.lambdaCopyPolicy,
-      this.lambdaDeployPolicy,
-      this
-    );
+    // createProdCommonStage(
+    //   "eu-west-3",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodEuWest3,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
 
-    //-------------------------------------------------------------------
-    // ----------------------------- sa-east-1 -------------------------
+    // //-------------------------------------------------------------------
+    // // ----------------------------- sa-east-1 -------------------------
 
-    createProdCommonStage(
-      "sa-east-1",
-      this.pipeline,
-      prodTables,
-      sourceArtifact,
-      environments.prodSaEast1,
-      this.lambdaCopyPolicy,
-      this.lambdaDeployPolicy,
-      this
-    );
+    // createProdCommonStage(
+    //   "sa-east-1",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodSaEast1,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
   }
 }
