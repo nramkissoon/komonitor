@@ -351,33 +351,33 @@ export class CdkPipelineStack extends cdk.Stack {
       this
     );
 
-    //-------------------------------------------------------------------
-    // ----------------------------- ca-central-1 -------------------------
+    // //-------------------------------------------------------------------
+    // // ----------------------------- ca-central-1 -------------------------
 
-    createProdCommonStage(
-      "ca-central-1",
-      this.pipeline,
-      prodTables,
-      sourceArtifact,
-      environments.prodCaCentral1,
-      this.lambdaCopyPolicy,
-      this.lambdaDeployPolicy,
-      this
-    );
+    // createProdCommonStage(
+    //   "ca-central-1",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodCaCentral1,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
 
-    //-------------------------------------------------------------------
-    //----------------------------- eu-central-1 -------------------------
+    // //-------------------------------------------------------------------
+    // //----------------------------- eu-central-1 -------------------------
 
-    createProdCommonStage(
-      "eu-central-1",
-      this.pipeline,
-      prodTables,
-      sourceArtifact,
-      environments.prodEuCentral1,
-      this.lambdaCopyPolicy,
-      this.lambdaDeployPolicy,
-      this
-    );
+    // createProdCommonStage(
+    //   "eu-central-1",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodEuCentral1,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
 
     //-------------------------------------------------------------------
     // ----------------------------- eu-west-1 -------------------------
