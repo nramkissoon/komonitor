@@ -1,6 +1,6 @@
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
-import { S3Trigger } from "@aws-cdk/aws-codepipeline-actions";
+import { S3SourceAction, S3Trigger } from "@aws-cdk/aws-codepipeline-actions";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Bucket } from "@aws-cdk/aws-s3";
 import * as cdk from "@aws-cdk/core";
@@ -26,18 +26,19 @@ export class CdkPipelineStackSecondary extends cdk.Stack {
     const sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
 
+    const gitHubAccessToken =
+      cdk.SecretValue.secretsManager("GitHubAccessToken");
+
     this.pipeline = new CdkPipeline(this, "cdk-pipeline", {
       cloudAssemblyArtifact: cloudAssemblyArtifact,
-      sourceAction: new codepipelineActions.S3SourceAction({
-        actionName: "S3-Source",
+      sourceAction: new codepipelineActions.GitHubSourceAction({
+        actionName: "GitHubSourceActions",
         output: sourceArtifact,
-        bucket: Bucket.fromBucketName(
-          this,
-          "secondary-lambda-code-bucket",
-          LAMBDA_CODE_DEV_BUCKET
-        ),
-        bucketKey: ALERT_LAMBDA_CODE_KEY,
-        trigger: S3Trigger.EVENTS,
+        owner: "nramkissoon",
+        branch: "preview",
+        repo: "ono",
+        trigger: codepipelineActions.GitHubTrigger.WEBHOOK,
+        oauthToken: gitHubAccessToken,
       }),
 
       synthAction: SimpleSynthAction.standardNpmSynth({
@@ -48,6 +49,22 @@ export class CdkPipelineStackSecondary extends cdk.Stack {
         buildCommand: "npm run build",
       }),
     });
+
+    this.pipeline
+      .addStage("S3Source")
+      .addActions(
+        new S3SourceAction({
+          actionName: "S3-Source",
+          output: sourceArtifact,
+          bucket: Bucket.fromBucketName(
+            this,
+            "secondary-lambda-code-bucket",
+            LAMBDA_CODE_DEV_BUCKET
+          ),
+          bucketKey: ALERT_LAMBDA_CODE_KEY,
+          trigger: S3Trigger.EVENTS,
+        })
+      );
 
     // ------------------------------------------------------------------
     // Lambda deploy and copy statements since they were getting copied for each region and meeting pipeline role policy size limit
