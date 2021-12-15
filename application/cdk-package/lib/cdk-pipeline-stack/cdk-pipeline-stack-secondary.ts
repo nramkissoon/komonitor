@@ -24,6 +24,7 @@ export class CdkPipelineStackSecondary extends cdk.Stack {
 
     // Artifacts
     const sourceArtifact = new codepipeline.Artifact();
+    const S3sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
 
     const gitHubAccessToken =
@@ -50,21 +51,19 @@ export class CdkPipelineStackSecondary extends cdk.Stack {
       }),
     });
 
-    this.pipeline
-      .addStage("S3Source")
-      .addActions(
-        new S3SourceAction({
-          actionName: "S3-Source",
-          output: sourceArtifact,
-          bucket: Bucket.fromBucketName(
-            this,
-            "secondary-lambda-code-bucket",
-            LAMBDA_CODE_DEV_BUCKET
-          ),
-          bucketKey: ALERT_LAMBDA_CODE_KEY,
-          trigger: S3Trigger.EVENTS,
-        })
-      );
+    this.pipeline.stage("Source").addAction(
+      new S3SourceAction({
+        actionName: "S3-Source",
+        output: S3sourceArtifact,
+        bucket: Bucket.fromBucketName(
+          this,
+          "secondary-lambda-code-bucket",
+          LAMBDA_CODE_DEV_BUCKET
+        ),
+        bucketKey: ALERT_LAMBDA_CODE_KEY, // BECAUSE IT IS THE LAST LAMBDA BUILT
+        trigger: S3Trigger.EVENTS,
+      })
+    );
 
     // ------------------------------------------------------------------
     // Lambda deploy and copy statements since they were getting copied for each region and meeting pipeline role policy size limit
