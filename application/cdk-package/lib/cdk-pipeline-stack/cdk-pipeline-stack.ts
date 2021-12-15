@@ -309,19 +309,21 @@ export class CdkPipelineStack extends cdk.Stack {
       this
     );
 
-    //-------------------------------------------------------------------
-    // ----------------------------- ap-northeast-3 -------------------------
+    // OSAKA DONT WORK SADGE
 
-    createProdCommonStage(
-      "ap-northeast-3",
-      this.pipeline,
-      prodTables,
-      sourceArtifact,
-      environments.prodApNortheast3,
-      this.lambdaCopyPolicy,
-      this.lambdaDeployPolicy,
-      this
-    );
+    // //-------------------------------------------------------------------
+    // // ----------------------------- ap-northeast-3 -------------------------
+
+    // createProdCommonStage(
+    //   "ap-northeast-3",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodApNortheast3,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
 
     //-------------------------------------------------------------------
     // ----------------------------- ap-southeast-1 -------------------------
@@ -351,19 +353,19 @@ export class CdkPipelineStack extends cdk.Stack {
       this
     );
 
-    // //-------------------------------------------------------------------
-    // // ----------------------------- ca-central-1 -------------------------
+    //-------------------------------------------------------------------
+    // ----------------------------- ca-central-1 -------------------------
 
-    // createProdCommonStage(
-    //   "ca-central-1",
-    //   this.pipeline,
-    //   prodTables,
-    //   sourceArtifact,
-    //   environments.prodCaCentral1,
-    //   this.lambdaCopyPolicy,
-    //   this.lambdaDeployPolicy,
-    //   this
-    // );
+    createProdCommonStage(
+      "ca-central-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodCaCentral1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
 
     // //-------------------------------------------------------------------
     // //----------------------------- eu-central-1 -------------------------
