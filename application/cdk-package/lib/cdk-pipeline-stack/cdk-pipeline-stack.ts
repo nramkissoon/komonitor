@@ -35,6 +35,8 @@ import {
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
+  public readonly lambdaCopyPolicy: PolicyStatement;
+  public readonly lambdaDeployPolicy: PolicyStatement;
 
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -139,13 +141,13 @@ export class CdkPipelineStack extends cdk.Stack {
 
     // ------------------------------------------------------------------
     // Lambda deploy and copy statements since they were getting copied for each region and meeting pipeline role policy size limit
-    const lambdaCopyPolicy = new PolicyStatement({
+    this.lambdaCopyPolicy = new PolicyStatement({
       actions: ["s3:*"],
       effect: Effect.ALLOW,
       resources: ["*"],
     });
 
-    const lambdaDeployPolicy = new PolicyStatement({
+    this.lambdaDeployPolicy = new PolicyStatement({
       actions: ["lambda:UpdateFunctionCode", "s3:GetObject"],
       effect: Effect.ALLOW,
       resources: ["*"],
@@ -158,7 +160,7 @@ export class CdkPipelineStack extends cdk.Stack {
         region: "us-east-1",
         sourceBucket: LAMBDA_CODE_DEV_BUCKET,
         sourceArtifact: sourceArtifact,
-        policy: lambdaCopyPolicy,
+        policy: this.lambdaCopyPolicy,
       })
     );
 
@@ -174,7 +176,7 @@ export class CdkPipelineStack extends cdk.Stack {
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
         region: "us-east-1",
-        policy: lambdaDeployPolicy,
+        policy: this.lambdaDeployPolicy,
       })
     );
 
@@ -217,7 +219,7 @@ export class CdkPipelineStack extends cdk.Stack {
         region: "us-west-1",
         sourceBucket: LAMBDA_CODE_DEV_BUCKET,
         sourceArtifact: sourceArtifact,
-        policy: lambdaCopyPolicy,
+        policy: this.lambdaCopyPolicy,
       })
     );
 
@@ -233,7 +235,7 @@ export class CdkPipelineStack extends cdk.Stack {
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
         region: "us-west-1",
-        policy: lambdaDeployPolicy,
+        policy: this.lambdaDeployPolicy,
       })
     );
 
@@ -246,8 +248,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodUsEast2,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -260,8 +262,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodUsWest2,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -274,8 +276,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodApSouth1,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -288,8 +290,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodApNortheast1,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -302,8 +304,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodApNortheast2,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -316,8 +318,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodApNortheast3,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -330,8 +332,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodApSoutheast1,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -344,8 +346,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodApSoutheast2,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -358,13 +360,13 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodCaCentral1,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
     //-------------------------------------------------------------------
-    // ----------------------------- eu-central-1 -------------------------
+    //----------------------------- eu-central-1 -------------------------
 
     createProdCommonStage(
       "eu-central-1",
@@ -372,8 +374,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodEuCentral1,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -386,8 +388,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodEuWest1,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -400,8 +402,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodEuWest2,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -414,8 +416,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodEuWest3,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
 
@@ -428,8 +430,8 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodSaEast1,
-      lambdaCopyPolicy,
-      lambdaDeployPolicy,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
     );
   }
