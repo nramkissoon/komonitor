@@ -81,23 +81,23 @@ export const MDXComponents = {
       mt="5em"
       bg={useColorModeValue("gray.700", "gray.800")}
       borderRadius="2xl"
-      px={["1em", null, "1.5em"]}
-      py={["1em", null, "1.5em"]}
+      p={["1em", null, "1.5em"]}
       shadow="lg"
       mb="1.5em"
+      maxW="3xl"
+      mx="auto"
     >
       <Flex
         flexDir="column"
         alignItems="center"
         bg={useColorModeValue("white", "gray.800")}
         borderRadius="xl"
-        py="2.5em"
-        px="2em"
+        p="1.5em"
       >
         <Box>
           <chakra.h1
             textAlign="center"
-            fontSize="5xl"
+            fontSize="4xl"
             fontWeight="extrabold"
             color={useColorModeValue("gray.800", "gray.100")}
             lineHeight="shorter"
@@ -107,7 +107,7 @@ export const MDXComponents = {
           </chakra.h1>
 
           <chakra.h2
-            fontSize="3xl"
+            fontSize="2xl"
             fontWeight="bold"
             textAlign="center"
             lineHeight="shorter"
@@ -116,7 +116,7 @@ export const MDXComponents = {
             color={useColorModeValue("gray.600", "gray.400")}
             mb="1.2em"
           >
-            Sign up to access our free tier.
+            Sign up to access Komonitor's free tier.
           </chakra.h2>
         </Box>
 
