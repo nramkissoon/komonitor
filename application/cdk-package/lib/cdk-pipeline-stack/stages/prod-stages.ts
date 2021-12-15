@@ -1,4 +1,5 @@
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
+import { PolicyStatement } from "@aws-cdk/aws-iam";
 import { Construct, Environment, Stage } from "@aws-cdk/core";
 import { CdkPipeline } from "@aws-cdk/pipelines";
 import { environments } from "../../common/environments";
@@ -60,6 +61,8 @@ export function createProdCommonStage(
   prodTables: ProdDdbTables,
   artifact: codepipeline.Artifact,
   env: Environment,
+  lambdaCopyPolicy: PolicyStatement,
+  lambdaDeployPolicy: PolicyStatement,
   scope: Construct
 ) {
   const prodStackStageProps: ProdCommonStackStageProps = {
@@ -95,6 +98,7 @@ export function createProdCommonStage(
       region: region,
       sourceBucket: LAMBDA_CODE_DEV_BUCKET,
       sourceArtifact: artifact,
+      policy: lambdaCopyPolicy,
     })
   );
 
@@ -109,6 +113,7 @@ export function createProdCommonStage(
       uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
       jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
       alertCodeKey: ALERT_LAMBDA_CODE_KEY,
+      policy: lambdaDeployPolicy,
       region: region,
     })
   );
