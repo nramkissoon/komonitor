@@ -1,0 +1,142 @@
+import * as codepipeline from "@aws-cdk/aws-codepipeline";
+import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
+import { S3Trigger } from "@aws-cdk/aws-codepipeline-actions";
+import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import { Bucket } from "@aws-cdk/aws-s3";
+import * as cdk from "@aws-cdk/core";
+import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
+import { environments } from "../common/environments";
+import { ALERT_LAMBDA_CODE_KEY, LAMBDA_CODE_DEV_BUCKET } from "../common/names";
+import { ProdDdbTables } from "../prod-us-east-1-stack/dynamo-db-tables";
+import { createProdCommonStage } from "./stages/prod-stages";
+
+export class CdkPipelineStackSecondary extends cdk.Stack {
+  public readonly pipeline: CdkPipeline;
+  public readonly lambdaCopyPolicy: PolicyStatement;
+  public readonly lambdaDeployPolicy: PolicyStatement;
+
+  constructor(
+    scope: cdk.Construct,
+    id: string,
+    props: { tables: ProdDdbTables } & cdk.StackProps
+  ) {
+    super(scope, id, props);
+
+    // Artifacts
+    const sourceArtifact = new codepipeline.Artifact();
+    const cloudAssemblyArtifact = new codepipeline.Artifact();
+
+    this.pipeline = new CdkPipeline(this, "cdk-pipeline", {
+      cloudAssemblyArtifact: cloudAssemblyArtifact,
+      sourceAction: new codepipelineActions.S3SourceAction({
+        actionName: "S3-Source",
+        output: sourceArtifact,
+        bucket: Bucket.fromBucketName(
+          this,
+          "secondary-lambda-code-bucket",
+          LAMBDA_CODE_DEV_BUCKET
+        ),
+        bucketKey: ALERT_LAMBDA_CODE_KEY,
+        trigger: S3Trigger.EVENTS,
+      }),
+
+      synthAction: SimpleSynthAction.standardNpmSynth({
+        sourceArtifact: sourceArtifact,
+        cloudAssemblyArtifact,
+        subdirectory: "application/cdk-package",
+        installCommand: "npm install",
+        buildCommand: "npm run build",
+      }),
+    });
+
+    // ------------------------------------------------------------------
+    // Lambda deploy and copy statements since they were getting copied for each region and meeting pipeline role policy size limit
+    this.lambdaCopyPolicy = new PolicyStatement({
+      actions: ["s3:*"],
+      effect: Effect.ALLOW,
+      resources: ["*"],
+    });
+
+    this.lambdaDeployPolicy = new PolicyStatement({
+      actions: ["lambda:UpdateFunctionCode", "s3:GetObject"],
+      effect: Effect.ALLOW,
+      resources: ["*"],
+    });
+
+    // IMPORTANT!!!! BOOTSTRAP NEW ENVIRONMENT USING `export CDK_NEW_BOOTSTRAP=1` FOR EACH NEW REGION https://docs.aws.amazon.com/cdk/latest/guide/cdk_pipeline.html
+
+    //-----------------PROD us-west-1 -----------------------------------
+
+    const prodTables = props.tables;
+
+    //-------------------------------------------------------------------
+    //----------------------------- eu-central-1 -------------------------
+
+    createProdCommonStage(
+      "eu-central-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuCentral1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    // -------------------------------------------------------------------
+    // ----------------------------- eu-west-1 -------------------------
+
+    createProdCommonStage(
+      "eu-west-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-west-2 -------------------------
+
+    createProdCommonStage(
+      "eu-west-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest2,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-west-3 -------------------------
+
+    createProdCommonStage(
+      "eu-west-3",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest3,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- sa-east-1 -------------------------
+
+    createProdCommonStage(
+      "sa-east-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodSaEast1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+  }
+}

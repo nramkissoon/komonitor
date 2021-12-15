@@ -27,7 +27,7 @@ import {
 } from "../lambda-code-deploy-action";
 
 export class ProdUsEast1StackStage extends Stage {
-  public readonly stack: ProdUsEast1Stack;
+  public stack: ProdUsEast1Stack;
 
   constructor(scope: Construct, id: string, props: ProdUsEast1StackProps) {
     super(scope, id, props);
