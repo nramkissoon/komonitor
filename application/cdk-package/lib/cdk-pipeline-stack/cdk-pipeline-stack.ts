@@ -1,7 +1,13 @@
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
 import { ManualApprovalAction } from "@aws-cdk/aws-codepipeline-actions";
-import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import {
+  Effect,
+  Policy,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from "@aws-cdk/aws-iam";
 import * as cdk from "@aws-cdk/core";
 import {
   CdkPipeline,
@@ -48,6 +54,45 @@ export class CdkPipelineStack extends cdk.Stack {
     const sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
 
+    const pipelineRole = new Role(this, "pipline-role", {
+      assumedBy: new ServicePrincipal("codepipeline.amazonaws.com"),
+    });
+
+    pipelineRole.attachInlinePolicy(
+      new Policy(this, "codepipeline-policy", {
+        statements: [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "s3:GetObject*",
+              "s3:GetBucket*",
+              "s3:List*",
+              "s3:DeleteObject*",
+              "s3:PutObject",
+              "s3:Abort*",
+            ],
+            resources: ["*"],
+          }),
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              "kms:Decrypt",
+              "kms:DescribeKey",
+              "kms:Encrypt",
+              "kms:ReEncrypt*",
+              "kms:GenerateDataKey*",
+            ],
+            resources: ["*"],
+          }),
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ["sts:AssumeRole"],
+            resources: ["*"],
+          }),
+        ],
+      })
+    );
+
     this.pipeline = new CdkPipeline(this, "cdk-pipeline", {
       cloudAssemblyArtifact: cloudAssemblyArtifact,
       sourceAction: new codepipelineActions.GitHubSourceAction({
@@ -66,6 +111,10 @@ export class CdkPipelineStack extends cdk.Stack {
         subdirectory: "application/cdk-package",
         installCommand: "npm install",
         buildCommand: "npm run build",
+      }),
+      codePipeline: new codepipeline.Pipeline(this, "codepipeline", {
+        restartExecutionOnUpdate: true,
+        role: pipelineRole,
       }),
     });
 
@@ -367,74 +416,74 @@ export class CdkPipelineStack extends cdk.Stack {
       this
     );
 
-    // //-------------------------------------------------------------------
-    // //----------------------------- eu-central-1 -------------------------
-
-    // createProdCommonStage(
-    //   "eu-central-1",
-    //   this.pipeline,
-    //   prodTables,
-    //   sourceArtifact,
-    //   environments.prodEuCentral1,
-    //   this.lambdaCopyPolicy,
-    //   this.lambdaDeployPolicy,
-    //   this
-    // );
-
     //-------------------------------------------------------------------
+    //----------------------------- eu-central-1 -------------------------
+
+    createProdCommonStage(
+      "eu-central-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuCentral1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    // -------------------------------------------------------------------
     // ----------------------------- eu-west-1 -------------------------
 
-    // createProdCommonStage(
-    //   "eu-west-1",
-    //   this.pipeline,
-    //   prodTables,
-    //   sourceArtifact,
-    //   environments.prodEuWest1,
-    //   this.lambdaCopyPolicy,
-    //   this.lambdaDeployPolicy,
-    //   this
-    // );
+    createProdCommonStage(
+      "eu-west-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
 
-    // //-------------------------------------------------------------------
-    // // ----------------------------- eu-west-2 -------------------------
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-west-2 -------------------------
 
-    // createProdCommonStage(
-    //   "eu-west-2",
-    //   this.pipeline,
-    //   prodTables,
-    //   sourceArtifact,
-    //   environments.prodEuWest2,
-    //   this.lambdaCopyPolicy,
-    //   this.lambdaDeployPolicy,
-    //   this
-    // );
+    createProdCommonStage(
+      "eu-west-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest2,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
 
-    // //-------------------------------------------------------------------
-    // // ----------------------------- eu-west-3 -------------------------
+    //-------------------------------------------------------------------
+    // ----------------------------- eu-west-3 -------------------------
 
-    // createProdCommonStage(
-    //   "eu-west-3",
-    //   this.pipeline,
-    //   prodTables,
-    //   sourceArtifact,
-    //   environments.prodEuWest3,
-    //   this.lambdaCopyPolicy,
-    //   this.lambdaDeployPolicy,
-    //   this
-    // );
+    createProdCommonStage(
+      "eu-west-3",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuWest3,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
 
-    // //-------------------------------------------------------------------
-    // // ----------------------------- sa-east-1 -------------------------
+    //-------------------------------------------------------------------
+    // ----------------------------- sa-east-1 -------------------------
 
-    // createProdCommonStage(
-    //   "sa-east-1",
-    //   this.pipeline,
-    //   prodTables,
-    //   sourceArtifact,
-    //   environments.prodSaEast1,
-    //   this.lambdaCopyPolicy,
-    //   this.lambdaDeployPolicy,
-    //   this
-    // );
+    createProdCommonStage(
+      "sa-east-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodSaEast1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
   }
 }
