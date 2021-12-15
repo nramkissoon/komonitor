@@ -43,14 +43,14 @@ export default function App({
           site_name: "Komonitor",
           images: [
             {
-              url: "/https://komonitor.com/og-image-1.png",
+              url: "https://komonitor.com/og-image-1.png",
               width: 800,
               height: 600,
               alt: "Open Graph Komonitor Logo",
               type: "image/png",
             },
             {
-              url: "/https://komonitor.com/og-image-2.png",
+              url: "https://komonitor.com/og-image-2.png",
               width: 900,
               height: 800,
               alt: "Open Graph Komonitor Logo",
