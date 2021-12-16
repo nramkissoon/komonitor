@@ -58,11 +58,6 @@ export default function App({
             },
           ],
         }}
-        twitter={{
-          handle: "@komonitor",
-          site: "@komonitor",
-          cardType: "summary_large_image",
-        }}
       />
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
