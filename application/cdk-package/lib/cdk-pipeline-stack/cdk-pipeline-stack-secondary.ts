@@ -1,6 +1,10 @@
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipelineActions from "@aws-cdk/aws-codepipeline-actions";
-import { S3SourceAction, S3Trigger } from "@aws-cdk/aws-codepipeline-actions";
+import {
+  ManualApprovalAction,
+  S3SourceAction,
+  S3Trigger,
+} from "@aws-cdk/aws-codepipeline-actions";
 import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Bucket } from "@aws-cdk/aws-s3";
 import * as cdk from "@aws-cdk/core";
@@ -84,6 +88,13 @@ export class CdkPipelineStackSecondary extends cdk.Stack {
     //-----------------PROD us-west-1 -----------------------------------
 
     const prodTables = props.tables;
+
+    this.pipeline.addStage("PromoteToProduction").addActions(
+      new ManualApprovalAction({
+        actionName: "Promote-To-Prod-Manual-Approval",
+        runOrder: 1,
+      })
+    );
 
     //-------------------------------------------------------------------
     //----------------------------- eu-central-1 -------------------------

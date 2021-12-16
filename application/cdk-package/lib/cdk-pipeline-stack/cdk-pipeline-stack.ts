@@ -369,5 +369,12 @@ export class CdkPipelineStack extends cdk.Stack {
       this.lambdaDeployPolicy,
       this
     );
+
+    this.pipeline.addStage("PromoteToSecondaryProd").addActions(
+      new ManualApprovalAction({
+        actionName: "Promoting-in-Secondary-Prod-Confirmation",
+        runOrder: 1,
+      })
+    );
   }
 }
