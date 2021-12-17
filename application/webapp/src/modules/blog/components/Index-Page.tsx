@@ -23,14 +23,17 @@ function BlogPostPanel(props: { frontMatter: FrontMatter }) {
       <chakra.h2 fontSize="3xl" fontWeight="bold">
         {frontMatter.title}
       </chakra.h2>
-      <Badge colorScheme="green" w="fit-content" mb="1.5em">
+      <chakra.h3 fontSize="ls" fontWeight="bold">
+        {frontMatter.lastEdited?.date}
+      </chakra.h3>
+      <Badge colorScheme="green" w="fit-content" mt="3px" mb="1.5em">
         {frontMatter.readTimeMinutes} minute read
       </Badge>
       <chakra.p mb="1em" fontSize="lg">
         {frontMatter.description}
       </chakra.p>
       <NextLink href={frontMatter.slug as string} passHref>
-        <Button size="md" maxW="8em">
+        <Button size="md" maxW="8em" _hover={{ bg: "gray.300" }} shadow="sm">
           Read More
         </Button>
       </NextLink>
