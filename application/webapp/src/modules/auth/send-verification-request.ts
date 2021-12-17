@@ -14,7 +14,7 @@ export async function sendVerificationRequest({
   await transport.sendMail({
     to: email,
     from,
-    subject: `Sign in to ${host}`,
+    subject: `Sign in to Komonitor`,
     text: text(),
     html: html({ url, host, email }),
   });
