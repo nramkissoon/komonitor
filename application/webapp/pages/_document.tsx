@@ -11,7 +11,7 @@ export default class Document extends NextDocument {
           <meta name="twitter:title" content="Komonitor" />
           <meta
             name="twitter:description"
-            content="Simple website monitoring and alerting."
+            content="Simple website monitoring and alerting for everybody."
           />
           <meta
             name="twitter:image"

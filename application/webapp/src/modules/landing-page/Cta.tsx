@@ -38,6 +38,8 @@ export function CTA() {
       pt="2.5em"
       pb="1em"
       px="2em"
+      maxW="5xl"
+      mx="auto"
     >
       <Box>
         <chakra.h1
