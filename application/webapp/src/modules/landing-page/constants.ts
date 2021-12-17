@@ -53,7 +53,7 @@ export const Copy = {
     },
     Dashboard: "Elegant Dashboards",
     SectionBottom:
-      "Komonitor makes modern alerting and monitoring tools accessible for everyone. 🙌",
+      "Komonitor makes modern alerting and monitoring tools accessible for everyone!",
   },
   ComingSoon: {
     Header: "Features That Are On The Way",
