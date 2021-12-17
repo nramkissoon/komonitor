@@ -12,6 +12,7 @@ interface PageLayoutProps {
   isAppPage: boolean;
   seoProps: Pick<NextSeoProps, "title" | "description">;
   maxW?: string[];
+  alert?: React.ReactElement;
 }
 
 export function PageLayout(props: PageLayoutProps & any) {
@@ -24,6 +25,7 @@ export function PageLayout(props: PageLayoutProps & any) {
       <Seo {...seoProps} />
       <Box display="flex" flexDir="column" minH="95vh" p={0} m={0}>
         {header}
+        {props.alert ?? <></>}
         <PageContainer maxW={maxW}>{props.children}</PageContainer>
         {footer}
       </Box>
