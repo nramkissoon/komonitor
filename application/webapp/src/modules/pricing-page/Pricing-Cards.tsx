@@ -128,7 +128,8 @@ function PricingCard(props: PricingCardProps) {
             px={4}
             py={3}
             border="solid transparent"
-            fontWeight="normal"
+            fontWeight="bold"
+            letterSpacing="wide"
             fontSize="xl"
             rounded="md"
             shadow="md"
@@ -161,7 +162,7 @@ function ctaButtonCharacteristics(
   const isCurrentPlan = userProductId === productId;
   const isSignedIn = user !== undefined && user !== null;
   let text = isCurrentPlan
-    ? "Go to App"
+    ? "Go to Dashboard"
     : isSignedIn
     ? userProductId === PLAN_PRODUCT_IDS.FREE
       ? "Upgrade Subscription"

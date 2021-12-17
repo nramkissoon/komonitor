@@ -73,8 +73,8 @@ const monitorSectionData = [
 
 const alertSectionData = [
   ["Email Alerts", CheckIcon, CheckIcon, CheckIcon],
-  ["Slack Alerts", CheckIcon, CheckIcon, CheckIcon],
-  ["Recipients per Alert", "1", "5", "10"],
+  ["Slack Alerts*", CheckIcon, CheckIcon, CheckIcon],
+  ["Email Recipients per Alert", "1", "5", "10"],
   ["Alerts per Account", "3", "20", "50"],
 ];
 
@@ -108,7 +108,7 @@ export function ComparisonTable() {
         p="1.5em"
         mb="10px"
       >
-        <Heading textAlign="center" fontSize="xl" fontWeight="normal" mb=".7em">
+        <Heading textAlign="center" fontSize="2xl" fontWeight="bold" mb=".7em">
           Plan Comparison
         </Heading>
         <Box
