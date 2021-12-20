@@ -178,7 +178,7 @@ export function NoCode() {
           {CircleIcon("green.400")} {CircleIcon("gray.300")}{" "}
           {CircleIcon("cyan.400")}
         </HStack>
-        <video width="960px" height="640" loop autoPlay controls>
+        <video width="960px" height="640" controls autoPlay loop muted>
           <source src="/dashboard-ui.mp4" type="video/mp4"></source>
         </video>
       </Box>
