@@ -3,12 +3,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const withMDX = require('@next/mdx')()
-
 const withTM = require("next-transpile-modules")(["react-timezone-select"])
 
 const withImages = require('next-images')
-module.exports = (withMDX(withTM(withImages(
+module.exports = withTM(withImages(
   withBundleAnalyzer(
     {
       reactStrictMode: true,
@@ -17,4 +15,4 @@ module.exports = (withMDX(withTM(withImages(
     }
     )
   )
-  )))
+  )

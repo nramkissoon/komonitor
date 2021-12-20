@@ -6,6 +6,18 @@ export default class Document extends NextDocument {
     return (
       <Html lang="en">
         <Head>
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@komonitor" />
+          <meta name="twitter:title" content="Komonitor" />
+          <meta
+            name="twitter:description"
+            content="Simple website monitoring and alerting for everybody."
+          />
+          <meta
+            name="twitter:image"
+            content="https://komonitor.com/twitter-large-summary.jpg"
+          />
+          <meta name="twitter:image:alt" content="Komonitor banner" />
           <script
             defer
             data-domain="komonitor.com"

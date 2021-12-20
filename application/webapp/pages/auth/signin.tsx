@@ -17,7 +17,7 @@ import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { signIn, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import React from "react";
-import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import { getErrorStringFromErrorCode } from "../../src/modules/auth/errors";
 import { ExtendedNextPage } from "../_app";
@@ -59,7 +59,8 @@ const Signin: ExtendedNextPage = () => {
   const emailOnSubmit = ({ email }: { email: string }) => {
     signIn("email", { email, callbackUrl: "/app" });
   };
-  const googleOnSubmit = () => signIn("google", { callbackUrl: "/app" });
+  //const googleOnSubmit = () => signIn("google", { callbackUrl: "/app" });
+  const githubOnSubmit = () => signIn("github", { callbackUrl: "/app" });
 
   return (
     <PageLayout>
@@ -160,7 +161,7 @@ const Signin: ExtendedNextPage = () => {
             )}
           </Formik>
           <Divider borderColor="gray.300" mb="2em" />
-          <Button
+          {/* <Button
             leftIcon={<FcGoogle />}
             onClick={googleOnSubmit}
             size="lg"
@@ -170,6 +171,17 @@ const Signin: ExtendedNextPage = () => {
             mb="1.5em"
           >
             Sign in with Google
+          </Button> */}
+          <Button
+            leftIcon={<FaGithub />}
+            onClick={githubOnSubmit}
+            size="lg"
+            variant="outline"
+            colorScheme="black"
+            shadow="sm"
+            mb="1.5em"
+          >
+            Sign in with GitHub
           </Button>
         </Flex>
       </Container>

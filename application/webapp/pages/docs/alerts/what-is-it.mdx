@@ -1,0 +1,31 @@
+---
+title: What is an Alert
+description: Alerts notify you whenever a monitor detects a specific condition on your websites.
+---
+
+Komonitor alerts you when you monitors detect trouble on your websites. Just like uptime monitors, alerts
+are highly customizable so that you can adapt them to you use case.
+
+## Alert Properties
+
+All alerts share a set of properties that define their behavior. As a user, when creating or editing an alert, you
+define these properties to fit your needs.
+
+- `Alert Name` - the name of the alert as it will appear in the app dashboard
+- `Alert Type` - the channel through which the alert will send messages (e.g. Email, Slack, etc)
+- `Severity` - a user defined severity for the alert to help with incident response
+- `Description` - a user defined description to assist with incident response
+- `Recipients` - to whom the alert will be sent to, depends on Alert Type (e.g. email addresses, slack channels)
+- `State` - either `Disabled` or `Enabled`, used to stop alerts from being sent out if required
+
+## Alert Invocation Properties
+
+An **alert invocation** is a record of an alert that was sent to the user. Alert invocations store data about the alert and monitor that triggered the alert.
+This information is useful for diagnosing problems and incident analysis, and invocations can be viewed in the web app.
+
+Alert invocation properties include, but is not limited to:
+
+- `alert` - the alert associated with the invocation
+- `monitor` - the monitor that triggered the alert
+- `statuses` - the monitor statuses (typically down statuses) that are involved in triggering the alert
+- `timestamp` - when the alert was triggered

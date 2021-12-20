@@ -18,6 +18,7 @@ import {
   prodLambdaName,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
 } from "../common/names";
+import { ProdDdbTables } from "../prod-us-east-1-stack/dynamo-db-tables";
 import { BuildProjects } from "./build-projects";
 import { LambdaCodeBuildActions } from "./lambda-code-build-actions";
 import {
@@ -35,6 +36,9 @@ import {
 
 export class CdkPipelineStack extends cdk.Stack {
   public readonly pipeline: CdkPipeline;
+  public readonly lambdaCopyPolicy: PolicyStatement;
+  public readonly lambdaDeployPolicy: PolicyStatement;
+  public prodTables: ProdDdbTables;
 
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -52,7 +56,7 @@ export class CdkPipelineStack extends cdk.Stack {
         actionName: "GitHubSourceActions",
         output: sourceArtifact,
         owner: "nramkissoon",
-        branch: "main",
+        branch: "preview",
         repo: "ono",
         trigger: codepipelineActions.GitHubTrigger.WEBHOOK,
         oauthToken: gitHubAccessToken,
@@ -137,12 +141,28 @@ export class CdkPipelineStack extends cdk.Stack {
       }
     );
 
+    // ------------------------------------------------------------------
+    // Lambda deploy and copy statements since they were getting copied for each region and meeting pipeline role policy size limit
+    this.lambdaCopyPolicy = new PolicyStatement({
+      actions: ["s3:*"],
+      effect: Effect.ALLOW,
+      resources: ["*"],
+    });
+
+    this.lambdaDeployPolicy = new PolicyStatement({
+      actions: ["lambda:UpdateFunctionCode", "s3:GetObject"],
+      effect: Effect.ALLOW,
+      resources: ["*"],
+    });
+    // ------------------------------------------------------------------
+
     this.pipeline.addApplicationStage(prodUsEast1StackStage).addActions(
       getNewCopyLambdaCodeToRegionAction({
         name: "CopyLambdaCode",
         region: "us-east-1",
         sourceBucket: LAMBDA_CODE_DEV_BUCKET,
         sourceArtifact: sourceArtifact,
+        policy: this.lambdaCopyPolicy,
       })
     );
 
@@ -158,6 +178,7 @@ export class CdkPipelineStack extends cdk.Stack {
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
         region: "us-east-1",
+        policy: this.lambdaDeployPolicy,
       })
     );
 
@@ -165,6 +186,7 @@ export class CdkPipelineStack extends cdk.Stack {
 
     //-----------------PROD us-west-1 -----------------------------------
 
+    this.prodTables = prodUsEast1StackStage.stack.tables;
     const prodTables = prodUsEast1StackStage.stack.tables;
 
     const prodUsWest1StackStageProps: ProdCommonStackStageProps = {
@@ -200,6 +222,7 @@ export class CdkPipelineStack extends cdk.Stack {
         region: "us-west-1",
         sourceBucket: LAMBDA_CODE_DEV_BUCKET,
         sourceArtifact: sourceArtifact,
+        policy: this.lambdaCopyPolicy,
       })
     );
 
@@ -215,6 +238,7 @@ export class CdkPipelineStack extends cdk.Stack {
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
         region: "us-west-1",
+        policy: this.lambdaDeployPolicy,
       })
     );
 
@@ -227,7 +251,130 @@ export class CdkPipelineStack extends cdk.Stack {
       prodTables,
       sourceArtifact,
       environments.prodUsEast2,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
       this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- us-west-2 --------------------------
+
+    createProdCommonStage(
+      "us-west-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodUsWest2,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-south-1 -------------------------
+
+    createProdCommonStage(
+      "ap-south-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApSouth1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-northeast-1 -------------------------
+
+    createProdCommonStage(
+      "ap-northeast-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApNortheast1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-northeast-2 -------------------------
+
+    createProdCommonStage(
+      "ap-northeast-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApNortheast2,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    // OSAKA DONT WORK SADGE
+
+    // //-------------------------------------------------------------------
+    // // ----------------------------- ap-northeast-3 -------------------------
+
+    // createProdCommonStage(
+    //   "ap-northeast-3",
+    //   this.pipeline,
+    //   prodTables,
+    //   sourceArtifact,
+    //   environments.prodApNortheast3,
+    //   this.lambdaCopyPolicy,
+    //   this.lambdaDeployPolicy,
+    //   this
+    // );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-southeast-1 -------------------------
+
+    createProdCommonStage(
+      "ap-southeast-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApSoutheast1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ap-southeast-2 -------------------------
+
+    createProdCommonStage(
+      "ap-southeast-2",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodApSoutheast2,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
+    // ----------------------------- ca-central-1 -------------------------
+
+    createProdCommonStage(
+      "ca-central-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodCaCentral1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    this.pipeline.addStage("PromoteToSecondaryProd").addActions(
+      new ManualApprovalAction({
+        actionName: "Promoting-in-Secondary-Prod-Confirmation",
+        runOrder: 1,
+      })
     );
   }
 }

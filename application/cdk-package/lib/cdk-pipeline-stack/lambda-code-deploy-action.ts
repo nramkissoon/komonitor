@@ -1,6 +1,6 @@
 import { LinuxBuildImage } from "@aws-cdk/aws-codebuild";
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
-import { Effect, PolicyStatement } from "@aws-cdk/aws-iam";
+import { PolicyStatement } from "@aws-cdk/aws-iam";
 import { ShellScriptAction } from "@aws-cdk/pipelines";
 import { prodLambdaCodeBucketName } from "../common/names";
 
@@ -9,6 +9,7 @@ export function getNewCopyLambdaCodeToRegionAction(args: {
   region: string;
   sourceBucket: string;
   sourceArtifact: codepipeline.Artifact;
+  policy: PolicyStatement;
 }) {
   return new ShellScriptAction({
     runOrder: 10,
@@ -19,13 +20,7 @@ export function getNewCopyLambdaCodeToRegionAction(args: {
         args.region
       )} --recursive --source-region us-east-1 --region ${args.region}`,
     ],
-    rolePolicyStatements: [
-      new PolicyStatement({
-        actions: ["s3:*"],
-        effect: Effect.ALLOW,
-        resources: ["*"],
-      }),
-    ],
+    rolePolicyStatements: [args.policy],
   });
 }
 
@@ -39,6 +34,7 @@ export function getNewProdLambdaCodeDeployAction(args: {
   uptimeCodeKey: string;
   jobRunnerCodeKey: string;
   alertCodeKey: string;
+  policy: PolicyStatement;
   region: string;
 }) {
   return new ShellScriptAction({
@@ -61,12 +57,6 @@ export function getNewProdLambdaCodeDeployAction(args: {
       `aws lambda update-function-code --function-name ${args.alertLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.alertCodeKey}`,
     ],
     additionalArtifacts: [args.sourceArtifact],
-    rolePolicyStatements: [
-      new PolicyStatement({
-        actions: ["lambda:UpdateFunctionCode", "s3:GetObject"],
-        effect: Effect.ALLOW,
-        resources: ["*"],
-      }),
-    ],
+    rolePolicyStatements: [args.policy],
   });
 }

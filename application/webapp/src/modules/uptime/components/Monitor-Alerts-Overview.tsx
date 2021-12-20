@@ -44,15 +44,17 @@ export default function MonitorAlertsOverview(
       borderRadius="xl"
       p="1.5em"
       mb="3em"
-      shadow="lg"
+      shadow="md"
     >
-      <Tabs orientation="vertical" size="lg">
+      <Tabs orientation="horizontal" size="lg">
         <TabList>
           {alerts.map((alert) => (
-            <Tab key={alert.alert_id}>{alert.name}</Tab>
+            <Tab key={alert.alert_id} fontSize="md" minW="150px" pl="5px">
+              {alert.name}
+            </Tab>
           ))}
         </TabList>
-        <TabPanels>
+        <TabPanels mt="2em">
           {alerts.map((alert) => {
             const ViewAlertButton = (
               <Button

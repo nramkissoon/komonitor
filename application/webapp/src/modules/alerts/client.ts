@@ -65,9 +65,7 @@ export async function deleteAlert(
     let errorMessage;
     switch (response.status) {
       case 403:
-        errorMessage = `Unable to delete alert while it is attached to monitors. \n Alert attached to the following monitors:\n ${(
-          (await response.json()) as any[]
-        ).join(", ")}`;
+        errorMessage = `Unable to detach monitors, please try again later or manually detach monitors.`;
         break;
       case 400:
         errorMessage = "Invalid request sent to server.";

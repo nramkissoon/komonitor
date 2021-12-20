@@ -12,7 +12,7 @@ import { AccountTab } from "./AccountTab";
 import { BillingTab } from "./BillingTab";
 
 interface SettingsTabsProps {
-  initialTab: string;
+  initialTab: number;
 }
 
 export function SettingsTabs(props: SettingsTabsProps) {
@@ -27,7 +27,7 @@ export function SettingsTabs(props: SettingsTabsProps) {
       p="1.5em"
       mb="1.5em"
     >
-      <Tabs defaultIndex={initialTab === "billing" ? 1 : 0}>
+      <Tabs defaultIndex={initialTab === 1 ? 1 : 0}>
         <TabList mb="1em">
           <Tab>Account</Tab>
           <Tab>Billing</Tab>

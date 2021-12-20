@@ -39,6 +39,33 @@ const HeaderLink = (props: {
   );
 };
 
+const StripeClimateLink = (props: {
+  text: string;
+  href: string;
+  buttonProps?: ButtonProps;
+}) => {
+  const { text, href, buttonProps } = props;
+
+  const defaultButtonLinkStyles: ButtonProps = {
+    color: useColorModeValue("gray.900", "gray.400"),
+    display: "inline-flex",
+    alignItems: "center",
+    variant: "ghost",
+    fontWeight: "medium",
+    fontSize: "lg",
+    _focus: { boxShadow: "none" },
+    _hover: { color: useColorModeValue("gray.500", "white") },
+    as: "div",
+  };
+  return (
+    <a href={href} target="_blank">
+      <Button {...defaultButtonLinkStyles} {...buttonProps}>
+        {text}
+      </Button>
+    </a>
+  );
+};
+
 const LinkColumn = (props: { header: string; links: React.ReactElement[] }) => {
   const { links, header } = props;
   return (
@@ -77,13 +104,18 @@ export function Footer() {
         <LinkColumn
           header="Komonitor"
           links={[
-            <HeaderLink text="FAQ" href="/faq" key="faq" />,
+            //<HeaderLink text="FAQ" href="/faq" key="faq" />,
             <HeaderLink
               text="Contact"
-              href="mailto:nick@komonitor.com"
+              href="mailto:support@komonitor.com"
               key="contact"
             />,
             <HeaderLink text="Pricing" href="/pricing" key="pricing" />,
+            <StripeClimateLink
+              text="Stripe Climate"
+              href="https://climate.stripe.com/HorubT"
+              key="climate"
+            />,
           ]}
         />
         <LinkColumn

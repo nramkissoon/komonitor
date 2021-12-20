@@ -84,7 +84,7 @@ export function Banner() {
       </SlideFade>
       <SlideFade in offsetY="40px" delay={0.5}>
         <Box
-          bg={useColorModeValue("gray.700", "white")}
+          bg={useColorModeValue("gray.700", "gray.600")}
           borderRadius="2xl"
           shadow={useColorModeValue(["dark-lg"], ["dark-lg"])}
           px={["1em", null, "1.5em"]}

@@ -29,7 +29,7 @@ export const DynamoDBAdapter: Adapter<
       return {
         displayName: "DYNAMODB",
         async createUser(profile) {
-          const userId = randomBytes(16).toString("hex");
+          let userId = profile.id ?? randomBytes(16).toString("hex");
           const now = new Date();
           const item: any = {
             pk: `USER#${userId}`,
@@ -43,6 +43,8 @@ export const DynamoDBAdapter: Adapter<
             emailVerified: profile.emailVerified?.toISOString() ?? null,
             createdAt: now.toISOString(),
             updatedAt: now.toISOString(),
+            refresh_token_expires_in:
+              profile.refresh_token_expires_in ?? undefined,
           };
 
           if (profile.email) {

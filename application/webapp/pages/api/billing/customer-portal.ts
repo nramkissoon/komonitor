@@ -40,7 +40,7 @@ async function postHandler(
 
     const portSession = await stripeClient.billingPortal.sessions.create({
       customer: stripeCustomerId,
-      return_url: env.BASE_URL + "app/settings?tab=billing",
+      return_url: env.BASE_URL + "app/settings?tab=1",
     });
 
     res.json({ url: portSession.url as string });

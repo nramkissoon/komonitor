@@ -10,6 +10,7 @@ export class LambdaCodeS3 extends Construct {
     this.s3 = new Bucket(this, "LambdaCodeS3Bucket", {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       bucketName: LAMBDA_CODE_DEV_BUCKET,
+      versioned: true,
     });
   }
 }

@@ -12,16 +12,9 @@ import {
 import router from "next/router";
 import { Alert, UptimeMonitor } from "project-types";
 import React from "react";
-import {
-  DeleteDialog,
-  useDeleteDialog,
-} from "../../../common/components/Delete-Dialog";
 import { useUptimeMonitors } from "../../uptime/client";
-import {
-  alertApiUrl,
-  deleteAlert,
-  useAlertInvocationsAllTime,
-} from "../client";
+import { useAlertInvocationsAllTime } from "../client";
+import { AlertDeleteDialog, useDeleteDialog } from "./Alert-Delete-Dialog";
 import { AttachedMonitorsTable } from "./Attached-Monitors-Table";
 import { InvocationTable } from "./Invocation-Table";
 import { OverviewPageBottomLayout } from "./Overview-Page-Bottom-Layout";
@@ -103,16 +96,14 @@ export function OverviewPage(props: OverviewPageProps) {
 
   return (
     <Box>
-      {DeleteDialog({
+      {AlertDeleteDialog({
         isOpen: deleteItem.id !== undefined,
         itemName: deleteItem.name as string,
         itemId: deleteItem.id as string,
         onClose: onCloseDeleteDialog,
         leastDestructiveRef: cancelRef,
         mutate: mutate,
-        mutateApiUrl: alertApiUrl,
-        deleteApiFunc: deleteAlert,
-        itemType: "alert",
+        attachedMonitors: attachedUptimeMonitors,
         onError: postErrorToast,
         onSuccess: () => router.push("/app/alerts"),
       })}

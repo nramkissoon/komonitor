@@ -47,7 +47,7 @@ export function DeleteAccountDialog(props: DeleteAccountDialogProps) {
       return;
     } else if (inputVal === "delete") {
       const deleted = await deleteUser(onError);
-      if (deleted) signOut();
+      if (deleted) signOut({ callbackUrl: "/" });
       onClose();
     }
   };

@@ -13,7 +13,7 @@ const App: ExtendedNextPage = () => {
       <Heading textAlign="center" fontWeight="normal" mb="1em">
         Settings
       </Heading>
-      <SettingsTabs initialTab={tab as string} />
+      <SettingsTabs initialTab={Number.parseInt(tab as string)} />
     </PageLayout>
   );
 };

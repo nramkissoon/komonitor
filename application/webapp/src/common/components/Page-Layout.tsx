@@ -1,4 +1,4 @@
-import { Box, Fade } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { NextSeoProps } from "next-seo";
 import React from "react";
 import { AppFooter } from "./App-Footer";
@@ -12,6 +12,7 @@ interface PageLayoutProps {
   isAppPage: boolean;
   seoProps: Pick<NextSeoProps, "title" | "description">;
   maxW?: string[];
+  alert?: React.ReactElement;
 }
 
 export function PageLayout(props: PageLayoutProps & any) {
@@ -23,7 +24,8 @@ export function PageLayout(props: PageLayoutProps & any) {
     <>
       <Seo {...seoProps} />
       <Box display="flex" flexDir="column" minH="95vh" p={0} m={0}>
-        <Fade in={true}>{header}</Fade>
+        {header}
+        {props.alert ?? <></>}
         <PageContainer maxW={maxW}>{props.children}</PageContainer>
         {footer}
       </Box>

@@ -10,7 +10,6 @@ export default function Page({
   mdxSource,
   frontMatter,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  console.log(mdxSource);
   return (
     <MDXLayout frontmatter={frontMatter}>
       <MDXRemote {...mdxSource} components={MDXComponents} />
@@ -41,12 +40,9 @@ export async function getStaticProps({ params }: any) {
   const slug = params.slug;
   const combinedPageSlug = `/${[CONTENT_PATH, ...slug].join("/")}`;
   const pages = await loadMDXFromPages(CONTENT_PATH);
-  console.log(pages);
   const page = pages.find((page: any) => {
     return combinedPageSlug === page.slug;
   });
-
-  console.log(page);
 
   if (!page) {
     throw new Error(`No content found for slug "${slug.join("/")}"`);

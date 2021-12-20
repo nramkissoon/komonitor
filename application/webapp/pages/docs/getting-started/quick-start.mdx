@@ -4,10 +4,68 @@ description: Komonitor quick-start guide for creating an uptime monitor and emai
 ---
 
 This quick-start guide will teach you how to set up a basic uptime monitor and
-attach an email alert that triggers after one failure.
+attach an email alert that triggers after one failure. The alert will trigger if the
+uptime monitor detects your site has been down for one uptime check.
+
+The only prerequisite for this guide is having and being logged in to a Komonitor account.
 
 ## Creating an Uptime Monitor
 
+Creating an uptime monitor is simple and can be done in a matter of minutes.
+
+First, navigate to the [uptime monitor creation form](/app/uptime/new).
+Next, fill in some values for the `Monitor Name`, `URL`, `Region`, and `Check Frequency` fields.
+
+Here is a sample form that will create a monitor that will check whether or not [google.com](https://google.com) is up:
+
+<docImg
+  src={"/docs/quick-start/qs1.jpg"}
+  width="1214px"
+  height="1080px"
+  alt="Uptime monitor creation form"
+/>
+
+This example has set the `Check Frequency` to every 30 minutes, meaning that the uptime monitor will send a request to google.com every 30 minutes.
+
+Notice the Alert Settings are unchanged for now because we have not created an alert yet. We'll get back to this setting later.
+
+For now, hit the create button and you will be redirected to an overview page where you can view your monitors. Easy!
+
+Next we'll will create an alert.
+
 ## Creating an Alert
 
+Creating an alert is just as simple as a monitor.
+
+Navigate to the [alert creation form](/app/alerts/new), then, fill in some values for the `Alert Name`, `Alert Type`, `Severity`, `Description`, and `Recipients` fields.
+
+Here is a sample form filled out with these values:
+
+<docImg
+  src={"/docs/quick-start/qs2.jpg"}
+  width="1080px"
+  height="960px"
+  alt="Alert creation form"
+/>
+
+Hit the create button and you will be redirected to an overview page where you can view you alerts. Simple!
+
 ## Attaching an Alert to a Monitor
+
+Currently, we have created an uptime monitor and an alert, but they do not know about each other yet. In order to allow the uptime monitor to trigger the alert
+whenever the monitored website is down, the alert must be _attached_ to the monitor.
+
+As mentioned earlier, we can attach the alert to the monitor by editing the monitor.
+
+Go to the [monitor overview page](/app/uptime) and click the edit button for your monitor. You will be directed to an edit form similar to the creation form.
+In the alert settings, the name of alert you created will appear as an option under the `Alert` field. You edit form should look something like this:
+
+<docImg
+  src={"/docs/quick-start/qs3.jpg"}
+  width="1200px"
+  height="1068px"
+  alt="Monitor edit form"
+/>
+
+Hit the update button and that's it! You have now created a monitor and an alert, and you have attached the alert to the monitor in order to trigger alert whenever
+the monitor detects a website is down.
