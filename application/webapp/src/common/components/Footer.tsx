@@ -58,7 +58,7 @@ const StripeClimateLink = (props: {
     as: "div",
   };
   return (
-    <a href={href} target="_blank">
+    <a href={href} target="_blank" rel="noopener">
       <Button {...defaultButtonLinkStyles} {...buttonProps}>
         {text}
       </Button>
