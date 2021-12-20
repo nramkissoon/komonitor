@@ -9,7 +9,7 @@ export const handler = async (event: any) => {
 
   if (event.periodInMinutes) {
     const frequency: number = event.periodInMinutes;
-    const ddb = new DynamoDBClient({ region: config.region });
+    const ddb = new DynamoDBClient({ region: "us-east-1" });
     const uptimeCheckLambda = new LambdaClient({ region: config.region });
 
     await Promise.allSettled([

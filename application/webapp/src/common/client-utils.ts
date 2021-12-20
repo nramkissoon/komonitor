@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 
 export const env = {
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
+  SLACK_REDIRECT: process.env.NEXT_PUBLIC_SLACK_REDIRECT as string,
 };
 
 export const minutesToString: { [key: number]: string } = {
@@ -21,13 +22,12 @@ export const minutesToString: { [key: number]: string } = {
 TimeAgo.addDefaultLocale(en);
 export const timeAgo = new TimeAgo("en-US");
 
-export const regionToLocationStringMap: {[key: string]:string} = {
+export const regionToLocationStringMap: { [key: string]: string } = {
   "us-east-1": "Virginia, USA",
   "us-east-2": "Ohio, USA",
   "us-west-1": "Northern California, USA",
   "us-west-2": "Oregon, USA",
   "ap-south-1": "Mumbai, India",
-  "ap-northeast-3": "Osaka, Japan",
   "ap-northeast-2": "Seoul, South Korea",
   "ap-southeast-1": "Singapore",
   "ap-southeast-2": "Sydney, Australia",
