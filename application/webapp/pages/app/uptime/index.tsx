@@ -46,7 +46,7 @@ const Uptime: ExtendedNextPage = () => {
       ) : (
         <Fade in={!monitorsIsLoading}>
           <OverviewTable
-            monitors={monitors}
+            monitors={monitors ? monitors : []}
             statusesMap={statusesIsLoading ? {} : statuses}
           />
         </Fade>
