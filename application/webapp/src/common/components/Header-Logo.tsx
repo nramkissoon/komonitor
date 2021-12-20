@@ -4,7 +4,7 @@ export function HeaderLogo() {
   const LightModeLogo = (
     <Flex>
       <Box boxSize="35px" mr=".5em">
-        <Image src="/logo.svg" />
+        <Image src="/logo.svg" alt="Komonitor logo" />
       </Box>
       <Box
         my="auto"
@@ -21,7 +21,12 @@ export function HeaderLogo() {
   const DarkModeLogo = (
     <Flex>
       <Box boxSize="35px" mr=".5em">
-        <Image src="/logo.svg" />
+        <Image
+          src="/logo.svg"
+          alt="Komonitor logo"
+          height="35px"
+          width="35px"
+        />
       </Box>
       <Box
         my="auto"

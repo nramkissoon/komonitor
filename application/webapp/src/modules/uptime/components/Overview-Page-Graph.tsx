@@ -170,7 +170,7 @@ function LineGraph(props: LineGraphProps) {
     <ResponsiveLine
       animate={true}
       data={[data]}
-      margin={{ top: 5, right: 60, bottom: 100, left: 60 }}
+      margin={{ top: 5, right: 60, bottom: 100, left: 70 }}
       enableArea
       areaBaselineValue={Math.floor(minLatency as number)}
       colors={blue600}
@@ -195,7 +195,7 @@ function LineGraph(props: LineGraphProps) {
         tickPadding: 5,
         tickRotation: 0,
         legend: "Response Time (ms)",
-        legendOffset: -50,
+        legendOffset: -60,
         legendPosition: "middle",
       }}
       axisBottom={{

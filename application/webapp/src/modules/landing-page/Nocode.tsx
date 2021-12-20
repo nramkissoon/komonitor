@@ -4,7 +4,6 @@ import {
   Flex,
   HStack,
   Icon,
-  Img,
   SimpleGrid,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -179,18 +178,10 @@ export function NoCode() {
           {CircleIcon("green.400")} {CircleIcon("gray.300")}{" "}
           {CircleIcon("cyan.400")}
         </HStack>
-        <Img
-          borderRadius="lg"
-          src={"/dashboard-ui_2.gif"}
-          width="960px"
-          css={{
-            imageRendering: "-webkit-optimize-contrast",
-          }}
-          fallback="no-code-dashboard-1.jpg"
-          alt="Komonitor App dashboard with light and dark mode variants."
-        />
+        <video width="960px" height="640" loop autoPlay controls>
+          <source src="/dashboard-ui.mp4" type="video/mp4"></source>
+        </video>
       </Box>
-
       <chakra.h3
         fontSize="2xl"
         fontWeight="bold"

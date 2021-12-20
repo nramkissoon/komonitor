@@ -39,14 +39,14 @@ function Feature(props: FeatureProps) {
       >
         {icon}
       </Flex>
-      <chakra.h3
+      <chakra.h2
         mb={2}
         fontWeight="semibold"
         lineHeight="shorter"
         fontSize="xl"
       >
         {title}
-      </chakra.h3>
+      </chakra.h2>
       <chakra.p fontSize="md" color={useColorModeValue("gray.500", "gray.400")}>
         {desc}
       </chakra.p>
