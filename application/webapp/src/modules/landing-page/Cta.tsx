@@ -9,8 +9,8 @@ const CtaButton = () => {
         size="lg"
         colorScheme="blue"
         bgColor="blue.300"
-        fontSize="3xl"
-        fontWeight="bold"
+        fontSize="2xl"
+        fontWeight="medium"
         color="white"
         _hover={{
           bg: "blue.600",
