@@ -1,4 +1,4 @@
-import { Fade, Flex, Heading, Spacer } from "@chakra-ui/react";
+import { chakra, Fade, Flex, Heading, Spacer } from "@chakra-ui/react";
 import React from "react";
 import { PageLayout } from "../../../src/common/components/Page-Layout";
 import { useAlerts } from "../../../src/modules/alerts/client";
@@ -16,13 +16,14 @@ const Alert: ExtendedNextPage = () => {
   return (
     <PageLayout isAppPage>
       <Fade in={true}>
-        <Flex mb="1.8em">
+        <Flex mb="1.3em">
           <Heading size="lg" fontWeight="normal" m="auto">
             Alerts
           </Heading>
           <Spacer />
           <CreateButton />
         </Flex>
+        <chakra.hr mb="1em"></chakra.hr>
       </Fade>
       <OverviewTable alerts={alerts} isLoading={alertsIsLoading} />
     </PageLayout>

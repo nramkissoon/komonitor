@@ -1,4 +1,4 @@
-import { Fade, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
+import { chakra, Fade, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
 import React from "react";
 import { LoadingSpinner } from "../../../src/common/components/Loading-Spinner";
 import { PageLayout } from "../../../src/common/components/Page-Layout";
@@ -27,7 +27,7 @@ const Uptime: ExtendedNextPage = () => {
   return (
     <PageLayout isAppPage>
       <Fade in={true}>
-        <Flex mb="1.8em">
+        <Flex mb="1.3em">
           <Heading size="lg" fontWeight="normal">
             Uptime Monitors{" "}
             <Text fontSize="sm" color="gray.500">
@@ -38,7 +38,7 @@ const Uptime: ExtendedNextPage = () => {
           <CreateButton />
         </Flex>
       </Fade>
-
+      <chakra.hr mb="1em"></chakra.hr>
       {monitorsIsLoading ? (
         <Fade in={monitorsIsLoading} delay={0.2}>
           {LoadingSpinner()}
