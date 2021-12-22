@@ -9,6 +9,12 @@ General:
     ✔ at least 1 blog @done(21-12-15 12:27)
     ✔ sitemap @done(21-12-15 12:36)
 
+Don't spam down alerts:
+    ✔  uptime can read and write invocation @done(21-12-22 13:50)
+    ✔  on up -> read last invocation -> if ongoing, set false, if not ongoing or undef, do nothing @done(21-12-22 14:28)
+    alert lambda:
+         ✔  on down -> get last invoke -> if still ongoing, dont alert again, else new invoke with true ongoin @done(21-12-22 14:29)
+
 Webapp: 
     Pricing page:
         ✔  move loading spinner to CTA buttons @done(21-12-06 16:10)
@@ -183,7 +189,8 @@ Bugs:
     ☐  Remove aws-cdk package by rewriting nextauth ddb client
     ☐  upgrade nextauth
     ☐  keyed mutates
-    ☐  make monitor url unchangeable, it messes up stats
+     ☐ make monitor url unchangeable, it messes up stats 
+     ☐  get rid of uptime monitor jobs
 
 ☐ hire in public
 ☐ product gif generation

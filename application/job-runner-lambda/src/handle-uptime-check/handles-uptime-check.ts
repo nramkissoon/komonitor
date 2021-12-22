@@ -53,6 +53,9 @@ const convertDdbItemsToUptimeMonitorJobs = (
         url: unmarshalled.url,
         name: unmarshalled.name,
         region: unmarshalled.region,
+        http_headers: unmarshalled.http_headers,
+        webhook_url: unmarshalled.webhook_url,
+        alert_id: unmarshalled.alert_id,
       };
       jobs.push(job);
     }
