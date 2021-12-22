@@ -191,6 +191,8 @@ export const runJob = async (job: UptimeMonitorJob) => {
         config.alertInvocationTableName,
         lastAlertForMonitor
       );
+
+      // TODO invoke lambda
     }
   }
 
