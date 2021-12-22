@@ -51,7 +51,7 @@ export function AccountTab() {
         shadow="md"
         pt="20px"
         pb="10px"
-        pl="20px"
+        px="20px"
       >
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Appearance:
@@ -73,7 +73,7 @@ export function AccountTab() {
         rounded="md"
         shadow="md"
         pb="20px"
-        pl="20px"
+        px="20px"
         pt="20px"
         mt="1em"
       >

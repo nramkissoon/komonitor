@@ -17,6 +17,7 @@ import {
   Divider,
   Flex,
   Text,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -309,7 +310,14 @@ export function IntegrationsTab() {
   };
 
   return (
-    <>
+    <Box
+      bg={useColorModeValue("white", "#0f131a")}
+      rounded="md"
+      shadow="md"
+      pt="20px"
+      pb="20px"
+      px="20px"
+    >
       {slackInstallation &&
         UninstallSlackInstallationDialog({
           leastDestructiveRef: cancelRef,
@@ -376,6 +384,6 @@ export function IntegrationsTab() {
         <SlackInstallationInfo installation={slackInstallation} />
       )}
       <Divider mb="1em" />
-    </>
+    </Box>
   );
 }
