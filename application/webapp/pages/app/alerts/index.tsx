@@ -1,5 +1,6 @@
 import { chakra, Fade, Flex, Heading, Spacer } from "@chakra-ui/react";
 import React from "react";
+import { BackToDashboardButton } from "../../../src/common/components/Back-To-Dashboard-Link";
 import { PageLayout } from "../../../src/common/components/Page-Layout";
 import { useAlerts } from "../../../src/modules/alerts/client";
 import { CreateButton } from "../../../src/modules/alerts/components/Create-Button";
@@ -16,9 +17,10 @@ const Alert: ExtendedNextPage = () => {
   return (
     <PageLayout isAppPage>
       <Fade in={true}>
-        <Flex mb="1.3em">
+        <BackToDashboardButton />
+        <Flex mb="1.3em" mt="5px">
           <Heading size="lg" fontWeight="normal" m="auto">
-            Alerts
+            My Alerts
           </Heading>
           <Spacer />
           <CreateButton />
