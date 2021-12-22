@@ -2,17 +2,37 @@ General:
     ✔ Google sign in api switch to prod @done(21-12-09 12:09)
     ☐ wait for google verif
     ✔ Stripe switch to prod @done(21-12-09 12:09)
-    ☐ AWS ses switch to prod
+    ✔ AWS ses switch to prod @done(21-12-10 14:58)
+    ✘  switch alert lambda to mailgun @cancelled(21-12-10 14:58)
     ✔ add stripe prod keys to vercel @done(21-12-09 12:13)
+    ✔  add slack env to prod and perview @done(21-12-12 19:49)
+    ✔ at least 1 blog @done(21-12-15 12:27)
+    ✔ sitemap @done(21-12-15 12:36)
 
 Webapp: 
     Pricing page:
         ✔  move loading spinner to CTA buttons @done(21-12-06 16:10)
     Alert:
-        ☐ email alert only to account owner
+        ✘ email alert only to account owner @cancelled(21-12-12 19:32)
     Settings:
         
     Stripe:
+        ☐ add annual plans
+
+    Slack: 
+        ✔ create installation field on user @done(21-12-11 13:45)
+        ✔ null out installation storage on installer @done(21-12-11 13:45)
+        ✔ create api routes for storing fetching installations @done(21-12-16 15:16)
+        ✔ create useInstallation hook that fetches installation on user @done(21-12-11 17:41)
+        ✔ create delete installation api @done(21-12-16 19:56)
+        ✔ uninstall app when deleting integ @done(21-12-16 21:05)
+        ✔ remove slack secrets from fetch @done(21-12-16 16:28)
+        ✔ switch add to slack button to delete integration if installation exists @done(21-12-16 21:05)
+        ✔ save installation to user on callback @done(21-12-13 17:21)
+        ✔ delete modal when delete button pressed then call delete api @done(21-12-20 19:36)
+        ✘  add a change installation option that migrates alerts and deprecates current auth @cancelled(21-12-20 14:26)
+        ✔ test integration API @done(21-12-21 17:29)
+        ✔  test button calls api @done(21-12-21 17:29)
         
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
@@ -33,6 +53,9 @@ Webapp:
         ✔  view uptime statuses up to 30 days ago @done(21-11-15 15:29)
         ✔  fix uptime graph x axis @done(21-11-15 15:29)
         ✔  graph weirdness when switching since @done(21-11-15 15:29)
+        ☐  add warning that uptime monitor has no alert in overview table
+
+        ☐  new user onboarding -> ask what they'll use for
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
@@ -72,6 +95,10 @@ Webapp:
         ☐  verify
     Website View:
         ☐  scope
+    custom status pages: 
+        ☐  scope
+    teams: 
+        ☐  scope
 
 User pref dates:
     ✔ new branch @done(21-11-22 09:51)
@@ -92,9 +119,19 @@ Uptime HTTP:
     ✔  remove retries from lambda @done(21-12-01 13:01)
     ✔  remove retries from verification and create and edit forms @done(21-12-01 13:06)
     ✔  add HTTP headers to forms @done(21-12-06 11:49)
-    ☐  design dashboard to show HTTP headers
-    ☐  add HTTP methods
-    ☐  add HTTP body
+    ☐  design dashboard to show HTTP settings
+    ☐  add HTTP methods to model
+    ☐  add HTTP methods in check lambda
+    ☐  add HTTP methods to forms
+    ☐  add HTTP body to model
+    ☐  add HTTP body to check lambda
+    ☐  add HTTP body to form
+
+Uptime Alerts: 
+    ☐ aattach multiple alerts to monitor
+
+Alerts:
+    ☐  do not resend down alerts -> add ongoing field to invocation
 
 Blog: 
     ☐ Ecommerce use case - high latency -> lost revenue
@@ -124,6 +161,7 @@ Lighthouse:
         ☐ startTask
         ☐ dereg task def -> check if can dereg during run
     ☐ cdk setup S3 bucket
+    ☐ remove lighthouse pricing impl
 
 CDK:
     ✔ create the prod ddb tables in us-east-1 @started(21-11-15 11:33) @done(21-11-30 13:14) @lasted(2w1d1h41m11s)
@@ -142,6 +180,10 @@ Logging and Error Handling:
 Bugs: 
     ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
     ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link
+    ☐  Remove aws-cdk package by rewriting nextauth ddb client
+    ☐  upgrade nextauth
+    ☐  keyed mutates
+    ☐  make monitor url unchangeable, it messes up stats
 
 ☐ hire in public
 ☐ product gif generation

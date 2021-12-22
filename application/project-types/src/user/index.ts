@@ -1,4 +1,7 @@
+import { Installation } from "@slack/oauth";
 // DynamoDB model for a user
+
+export { Installation as SlackInstallation } from "@slack/oauth";
 
 export interface NextAuthUserAttributes {
   pk: string;
@@ -22,6 +25,13 @@ export interface StripeAttributes {
   product_id?: string;
 }
 
-export interface User extends NextAuthUserAttributes, StripeAttributes {
-  tz?: string;
+export interface SlackAttributes {
+  slack_installations?: Installation[];
+}
+
+export interface User
+  extends NextAuthUserAttributes,
+    StripeAttributes,
+    SlackAttributes {
+  tz?: string; // timezone preference
 }

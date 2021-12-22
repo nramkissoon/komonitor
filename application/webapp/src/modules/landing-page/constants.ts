@@ -75,7 +75,7 @@ export const Copy = {
   Cta: {
     Header: "Ready to get started with Komonitor?",
     Subheader: "Sign up to access our free tier.",
-    CtaButtonText: "Get Started",
+    CtaButtonText: "Start monitoring in 60 seconds",
     CtaButtonHelper: "No credit card required, free forever.",
   },
 };

@@ -25,6 +25,7 @@ export function AccountTab() {
     data: tzAndOffset,
     isLoading: tzPrefIsLoading,
     isError: tzPrefIsError,
+    mutate: tzMutate,
   } = useUserTimezoneAndOffset();
 
   const { cancelRef, isOpen, onClose, onOpen } = useDeleteAccountDialog();
@@ -46,7 +47,10 @@ export function AccountTab() {
         Timezone Preference:
       </Text>
       {!tzPrefIsLoading && (
-        <TimezoneSelector initialTz={tzAndOffset?.tz ?? "Etc/GMT"} />
+        <TimezoneSelector
+          initialTz={tzAndOffset?.tz ?? "Etc/GMT"}
+          mutate={tzMutate}
+        />
       )}
       <Divider mb="1em" />
       <Text fontSize="lg" color="gray.500" mb=".7em">

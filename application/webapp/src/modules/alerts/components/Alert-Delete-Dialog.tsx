@@ -63,7 +63,7 @@ export function AlertDeleteDialog(props: DeleteDialogProps) {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <AlertDialogContent>
+      <AlertDialogContent shadow="xl" borderWidth="2px" borderColor="gray.100">
         <AlertDialogHeader fontSize="2xl" fontWeight="normal">
           Delete Alert
         </AlertDialogHeader>

@@ -172,6 +172,5 @@ export const runJob = async (job: UptimeMonitorJob) => {
       ownerId: owner_id,
       monitorType: "uptime-monitor",
     });
-    console.log(`${res.StatusCode} status code: alert lambda invocation`);
   }
 };
