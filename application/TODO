@@ -23,7 +23,7 @@ Webapp:
     Settings:
         
     Stripe:
-        ☐ add annual plans
+        ☐ add annual plans 
 
     Slack: 
         ✔ create installation field on user @done(21-12-11 13:45)
