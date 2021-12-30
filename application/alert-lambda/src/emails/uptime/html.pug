@@ -28,7 +28,7 @@ body
                     each status in statuses 
                         li.spaced-more 
                             div 
-                                p!= `<span class="bold">Timestamp (UTC):</span> ${new Date(status.timestamp).toUTCString()}`
+                                p!= `<span class="bold">Timestamp (UTC):</span> ${status.timestampAsUserTz}`
                                 p!= `<span class="bold">Status:</span> <span class="red-500 bold">Down</span>`
                                 p!= `<span class="bold">Status Code:</span> <span class="red-500 bold">${(status.response_status_code) && status.response_status_code !== -1 ? status.response_status_code : 'URL Unreachable - No Response'}</span>`
         tr

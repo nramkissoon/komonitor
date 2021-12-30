@@ -1,13 +1,21 @@
 import Email from "email-templates";
-import { Alert, UptimeMonitor, UptimeMonitorStatus } from "project-types";
-import { emailTransporter, regionToLocationStringMap } from "./config";
+import { Alert, UptimeMonitor, UptimeMonitorStatus, User } from "project-types";
+import {
+  convertUptimeMonitorStatusesToStatusesWithReadableTimeStamp,
+  emailTransporter,
+  regionToLocationStringMap,
+} from "./config";
 
 export async function sendUptimeMonitorAlertEmail(
   monitor: UptimeMonitor,
   alert: Alert,
-  statuses: UptimeMonitorStatus[]
+  statuses: UptimeMonitorStatus[],
+  user: User
 ): Promise<boolean> {
   try {
+    const tz = user.tz ?? "Etc/GMT";
+    const statusesForTemplate =
+      convertUptimeMonitorStatusesToStatusesWithReadableTimeStamp(tz, statuses);
     const email = new Email();
     const html = await email.render("uptime/html", {
       severity: alert.severity.toUpperCase(),
@@ -15,7 +23,7 @@ export async function sendUptimeMonitorAlertEmail(
       alert: alert,
       region: regionToLocationStringMap[monitor.region],
       failures: monitor.failures_before_alert,
-      statuses: statuses,
+      statuses: statusesForTemplate,
     });
     const subject = await email.render("uptime/subject", {
       severity: alert.severity.toUpperCase(),
@@ -23,7 +31,7 @@ export async function sendUptimeMonitorAlertEmail(
       monitorRegion: regionToLocationStringMap[monitor.region],
       alertName: alert.name,
       failures: monitor.failures_before_alert,
-      statuses: statuses,
+      statuses: statusesForTemplate,
     });
     await emailTransporter.sendMail({
       from: "no-reply@komonitor.com",

@@ -5,6 +5,7 @@ import {
   getPreviousInvocationForAlertForMonitor,
   getStatusesForUptimeMonitor,
   getUptimeMonitorForUserByMonitorId,
+  getUserById,
   writeAlertInvocation,
 } from "./dynamo-db";
 import { sendUptimeMonitorAlertEmail } from "./email-alert-handlers";
@@ -126,12 +127,19 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
     })),
     ongoing: true,
   };
+
+  const user = await getUserById(ddbClient, config.userTableName, userId);
+  if (!user) {
+    return;
+  }
+
   switch (alertType) {
     case "Email":
       alertTriggered = await sendUptimeMonitorAlertEmail(
         monitor,
         alert,
-        triggeringStatuses
+        triggeringStatuses,
+        user
       );
       break;
     default:
