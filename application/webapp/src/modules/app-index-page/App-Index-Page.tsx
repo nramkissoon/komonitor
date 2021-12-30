@@ -146,8 +146,8 @@ const AlertsPanel = () => {
       allInvocationsAsList.push(...invocationsForId);
     });
   const totalAlerts = alerts ? alerts.length : 0;
-  const totalInvocationsInLast24Hr = allInvocationsAsList.filter(
-    (invocation) => invocation.timestamp > Date.now() - 60 * 60 * 24 * 1000
+  const totalOngoingAlerts = allInvocationsAsList.filter(
+    (invocation) => invocation.ongoing
   ).length;
 
   return (
@@ -199,8 +199,7 @@ const AlertsPanel = () => {
       )}
       <Flex flexDir="row" justifyContent="space-between" alignItems="center">
         <chakra.h4 fontSize="lg">
-          Total alert invocations in the past 24 hours:{" "}
-          {totalInvocationsInLast24Hr}
+          Total ongoing alerts: {totalOngoingAlerts}
         </chakra.h4>
       </Flex>
       <Spacer />
