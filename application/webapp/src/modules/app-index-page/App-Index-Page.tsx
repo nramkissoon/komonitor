@@ -1,3 +1,4 @@
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import {
   Button,
   chakra,
@@ -7,7 +8,12 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { AlertInvocation } from "project-types";
+import { useAlertInvocationsAllTime, useAlerts } from "../alerts/client";
+import { PLAN_PRODUCT_IDS } from "../billing/plans";
+import { createAndRedirectToCustomerPortal } from "../settings/client";
 import { use24HourMonitorStatuses, useUptimeMonitors } from "../uptime/client";
+import { useUserServicePlanProductId } from "../user/client";
 
 const Link = (props: { href: string; children: React.ReactNode }) => (
   <NextLink href={props.href} passHref>
@@ -47,8 +53,6 @@ const UptimeMonitorPanel = () => {
         ).reduce((prev, next) => prev + next)
       : 0;
 
-  console.log(downMonitorsTotal);
-
   const totalMonitors = monitors ? monitors.length : 0;
 
   return (
@@ -61,7 +65,7 @@ const UptimeMonitorPanel = () => {
       flexDir="column"
     >
       <chakra.h2
-        fontSize="xl"
+        fontSize="2xl"
         fontWeight="bold"
         textAlign={["center", "center", "left"]}
       >
@@ -106,6 +110,7 @@ const UptimeMonitorPanel = () => {
       <Spacer />
       <NextLink passHref href={"/app/uptime"}>
         <Button
+          mt="1.5em"
           float="left"
           size="lg"
           as="a"
@@ -119,48 +124,94 @@ const UptimeMonitorPanel = () => {
           _hover={{
             bg: "blue.600",
           }}
+          rightIcon={<ArrowForwardIcon />}
         >
-          View Monitors
+          Got to Monitors
         </Button>
       </NextLink>
     </Flex>
   );
 };
 
-const Panel = (props: {
-  type: string;
-  description: string;
-  href: string;
-  buttonText: string;
-}) => {
-  const { type, description, href, buttonText } = props;
+const AlertsPanel = () => {
+  const { alerts, isLoading, isError } = useAlerts();
+  const { invocations } = useAlertInvocationsAllTime(
+    alerts ? alerts.map((alert) => alert.alert_id) : []
+  );
+
+  const allInvocationsAsList: AlertInvocation[] = [];
+  invocations &&
+    Object.keys(invocations).forEach((id) => {
+      let invocationsForId = invocations[id];
+      allInvocationsAsList.push(...invocationsForId);
+    });
+  const totalAlerts = alerts ? alerts.length : 0;
+  const totalInvocationsInLast24Hr = allInvocationsAsList.filter(
+    (invocation) => invocation.timestamp > Date.now() - 60 * 60 * 24 * 1000
+  ).length;
+
   return (
     <Flex
       bg={useColorModeValue("white", "#0f131a")}
       shadow="lg"
-      borderRadius="xl"
+      borderRadius="md"
       py="2em"
       px="1.5em"
       flexDir="column"
     >
-      <chakra.h1 fontSize="4xl" fontWeight="normal" mb=".6em">
-        {type}
-      </chakra.h1>
-      <chakra.h3
-        mb="1em"
+      <chakra.h2
         fontSize="2xl"
-        fontWeight="normal"
+        fontWeight="bold"
         textAlign={["center", "center", "left"]}
       >
-        {description}
+        Alerts
+      </chakra.h2>
+      <chakra.h3 color="gray.600">
+        Create and manage alerts and attach them to your monitors.
       </chakra.h3>
-      <NextLink passHref href={href}>
+      <chakra.hr my="10px" />
+      {alerts && !isLoading && totalAlerts === 0 ? (
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <chakra.h4 fontSize="lg">No alerts have been created.</chakra.h4>
+          <NextLink href="app/alerts/new" passHref>
+            <chakra.a
+              fontWeight="medium"
+              color={useColorModeValue("blue.400", "blue.500")}
+              _hover={{ cursor: "pointer", color: "gray.500" }}
+            >
+              + Create an Alert
+            </chakra.a>
+          </NextLink>
+        </Flex>
+      ) : (
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <chakra.h4 fontSize="lg">Total alerts: {totalAlerts}</chakra.h4>
+          <NextLink href="app/alerts/new" passHref>
+            <chakra.a
+              fontWeight="medium"
+              color={useColorModeValue("blue.400", "blue.500")}
+              _hover={{ cursor: "pointer", color: "gray.500" }}
+            >
+              + Create an Alert
+            </chakra.a>
+          </NextLink>
+        </Flex>
+      )}
+      <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+        <chakra.h4 fontSize="lg">
+          Total alert invocations in the past 24 hours:{" "}
+          {totalInvocationsInLast24Hr}
+        </chakra.h4>
+      </Flex>
+      <Spacer />
+      <NextLink passHref href={"/app/alerts"}>
         <Button
+          mt="1.5em"
           float="left"
           size="lg"
           as="a"
           fontSize="xl"
-          fontWeight="bold"
+          fontWeight="normal"
           px="1em"
           shadow="md"
           colorScheme="blue"
@@ -169,8 +220,87 @@ const Panel = (props: {
           _hover={{
             bg: "blue.600",
           }}
+          rightIcon={<ArrowForwardIcon />}
         >
-          {buttonText}
+          Go to Alerts
+        </Button>
+      </NextLink>
+    </Flex>
+  );
+};
+
+const SettingsPanel = () => {
+  const { data, isLoading, isError } = useUserServicePlanProductId();
+  let productId = data ? data.productId : PLAN_PRODUCT_IDS.FREE;
+  return (
+    <Flex
+      bg={useColorModeValue("white", "#0f131a")}
+      shadow="lg"
+      borderRadius="md"
+      py="2em"
+      px="1.5em"
+      flexDir="column"
+    >
+      <chakra.h2
+        fontSize="2xl"
+        fontWeight="bold"
+        textAlign={["center", "center", "left"]}
+      >
+        Account
+      </chakra.h2>
+      <chakra.h3 color="gray.600">
+        Manage your account settings, subscriptions, and integrations.
+      </chakra.h3>
+      <chakra.hr my="10px" />
+      {productId === PLAN_PRODUCT_IDS.FREE ? (
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <chakra.h4 fontSize="lg">Your account is on free tier.</chakra.h4>
+          <NextLink href="pricing" passHref>
+            <chakra.a
+              fontWeight="medium"
+              color={useColorModeValue("blue.400", "blue.500")}
+              _hover={{ cursor: "pointer", color: "gray.500" }}
+            >
+              Upgrade Account
+            </chakra.a>
+          </NextLink>
+        </Flex>
+      ) : (
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <chakra.h4 fontSize="lg">
+            Your account is on a paid subscription.
+          </chakra.h4>
+          <Button
+            variant="unstyled"
+            onClick={() => createAndRedirectToCustomerPortal()}
+            fontWeight="medium"
+            color={useColorModeValue("blue.400", "blue.500")}
+            _hover={{ cursor: "pointer", color: "gray.500" }}
+          >
+            Manage Subscription
+          </Button>
+        </Flex>
+      )}
+      <Spacer />
+      <NextLink passHref href={"/app/settings"}>
+        <Button
+          mt="1.5em"
+          float="left"
+          size="lg"
+          as="a"
+          fontSize="xl"
+          fontWeight="normal"
+          px="1em"
+          shadow="md"
+          colorScheme="blue"
+          bgColor="blue.400"
+          color="white"
+          _hover={{
+            bg: "blue.600",
+          }}
+          rightIcon={<ArrowForwardIcon />}
+        >
+          Go to Account Settings
         </Button>
       </NextLink>
     </Flex>
@@ -198,22 +328,8 @@ export function AppIndexPage() {
       </Flex>
       <SimpleGrid columns={[1, 1, 2]} spacingX={[6, 10]} spacingY={[10]}>
         <UptimeMonitorPanel />
-        <Panel
-          type={"🚨 Alerts"}
-          description={
-            "Create and manage alerts and attach them to your monitors."
-          }
-          href={"/app/alerts"}
-          buttonText={"Go to Alerts"}
-        />
-        <Panel
-          type={"⚙️ Account Settings"}
-          description={
-            "Manage your account settings, subscriptions, and integrations."
-          }
-          href={"/app/settings"}
-          buttonText={"Go to Account"}
-        />
+        <AlertsPanel />
+        <SettingsPanel />
       </SimpleGrid>
     </Flex>
   );

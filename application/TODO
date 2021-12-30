@@ -152,6 +152,9 @@ Uptime Lambda:
     ✔ investigate response times @done(21-10-19 19:54)
     ☐ add response data to status req
 
+Website change monitoring:
+    ☐ scope
+
 Alert Lambda:
 
     ☐ Promise.all the data dependancies

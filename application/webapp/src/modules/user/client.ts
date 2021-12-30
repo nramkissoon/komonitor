@@ -14,7 +14,7 @@ export function useUserServicePlanProductId() {
     fetch(url, { method: "GET" }).then((r) => r.json());
   const { data, error } = useSWR(userPlanApiUrl, fetcher);
   return {
-    data: data,
+    data: data as { productId: string },
     isLoading: !error && !data,
     isError: error,
   };
