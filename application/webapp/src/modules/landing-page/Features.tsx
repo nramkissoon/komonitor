@@ -106,10 +106,26 @@ export function Features() {
         fontWeight="extrabold"
         color={useColorModeValue("gray.800", "gray.100")}
         lineHeight="shorter"
-        mb=".4em"
+        mb=".1em"
       >
-        Features
+        Modern Features and Tools
       </chakra.h1>
+      <chakra.h2
+        fontSize="2xl"
+        fontWeight="bold"
+        textAlign="center"
+        lineHeight="shorter"
+        w={["70%"]}
+        mx="auto"
+        color={useColorModeValue("gray.600", "gray.400")}
+        mb="2em"
+      >
+        Know when things go wrong,{" "}
+        <chakra.span color="red.500" fontWeight="extrabold">
+          before
+        </chakra.span>{" "}
+        your users do.
+      </chakra.h2>
       {Feature({
         header: Copy.Features.Uptime.Header,
         subheader: Copy.Features.Uptime.Subheader,

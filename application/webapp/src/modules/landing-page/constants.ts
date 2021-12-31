@@ -1,6 +1,6 @@
 export const Copy = {
   MainBanner: {
-    Header: "Simple Website Monitoring.",
+    Header: "Worry-free Website Monitoring.",
     Subheader:
       "Monitoring and alerting for your websites where user experience is nonnegotiable. Set up and deploy in minutes.",
     CtaButtonText: "Get Started For Free",
@@ -28,7 +28,7 @@ export const Copy = {
     },
   },
   NoCode: {
-    Header: "Built With No-Coders In Mind",
+    Header: "Built With No-Code Setup In Mind",
     Subheader:
       "Less code means less barriers to entry. No coding experience required.",
     Intuitive: {

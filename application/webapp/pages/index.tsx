@@ -1,4 +1,3 @@
-import { Box, useColorModeValue } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { Banner } from "../src/modules/landing-page/Banner";
@@ -10,16 +9,6 @@ import { NoCode } from "../src/modules/landing-page/Nocode";
 const Home: NextPage = () => {
   return (
     <PageLayout
-      alert={
-        <Box
-          w="100%"
-          textAlign="center"
-          bg={useColorModeValue("green.100", "green.500")}
-          py="3px"
-        >
-          <b>Big announcement! Komonitor has launched!</b> 🎉🎉🎉
-        </Box>
-      }
       isAppPage={false}
       seoProps={{
         title: "Website Monitoring and Alerting",
@@ -28,8 +17,9 @@ const Home: NextPage = () => {
       }}
     >
       <Banner />
-      <NoCode />
       <Features />
+      <NoCode />
+
       <ComingSoon />
       <CTA />
     </PageLayout>

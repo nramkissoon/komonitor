@@ -1,20 +1,3 @@
-General:
-    ✔ Google sign in api switch to prod @done(21-12-09 12:09)
-    ☐ wait for google verif
-    ✔ Stripe switch to prod @done(21-12-09 12:09)
-    ✔ AWS ses switch to prod @done(21-12-10 14:58)
-    ✘  switch alert lambda to mailgun @cancelled(21-12-10 14:58)
-    ✔ add stripe prod keys to vercel @done(21-12-09 12:13)
-    ✔  add slack env to prod and perview @done(21-12-12 19:49)
-    ✔ at least 1 blog @done(21-12-15 12:27)
-    ✔ sitemap @done(21-12-15 12:36)
-
-Don't spam down alerts:
-    ✔  uptime can read and write invocation @done(21-12-22 13:50)
-    ✔  on up -> read last invocation -> if ongoing, set false, if not ongoing or undef, do nothing @done(21-12-22 14:28)
-    alert lambda:
-         ✔  on down -> get last invoke -> if still ongoing, dont alert again, else new invoke with true ongoin @done(21-12-22 14:29)
-
 Webapp: 
     Pricing page:
         ✔  move loading spinner to CTA buttons @done(21-12-06 16:10)
@@ -39,6 +22,7 @@ Webapp:
         ✘  add a change installation option that migrates alerts and deprecates current auth @cancelled(21-12-20 14:26)
         ✔ test integration API @done(21-12-21 17:29)
         ✔  test button calls api @done(21-12-21 17:29)
+        ☐ check if prod Slack app is ready
         
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
@@ -130,6 +114,8 @@ Uptime Alerts:
 
 Alerts:
     ✔  do not resend down alerts -> add ongoing field to invocation @done(21-12-30 12:34)
+    ☐  switch ongoing alert invoke to false upon alert deletion, monitor detachment
+    ✔  monitor alerts page -> show ongoing @done(21-12-30 13:11)
 
 Blog: 
     ☐ Ecommerce use case - high latency -> lost revenue
