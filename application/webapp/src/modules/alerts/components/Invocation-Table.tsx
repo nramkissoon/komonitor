@@ -11,13 +11,16 @@ import { itemIdToDisplayStringInTableCell } from "../../../common/utils";
 import { useUserTimezoneAndOffset } from "../../user/client";
 
 interface RowProps {
-  timestamp: number;
   severity: string;
   recipients: string[];
   monitorType: string;
   monitor: {
     id: string;
     name: string;
+  };
+  timestampAndOngoing: {
+    timestamp: number;
+    ongoing: boolean;
   };
   filterString: string;
 }
@@ -28,7 +31,10 @@ function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
         const { severity, recipients } = invocation.alert;
         const { monitor_id, name, url } = invocation.monitor;
         return {
-          timestamp: invocation.timestamp,
+          timestampAndOngoing: {
+            timestamp: invocation.timestamp,
+            ongoing: invocation.ongoing,
+          },
           severity: severity,
           recipients: recipients,
           monitorType: itemIdToDisplayStringInTableCell(monitor_id),
@@ -64,10 +70,10 @@ export function InvocationTable(props: InvocationTableProps) {
     { id: "filter-column", filter: "includes", accessor: "filterString" },
     {
       Header: "Timestamp",
-      accessor: "timestamp",
+      accessor: "timestampAndOngoing",
       Cell: (props) =>
         SimpleTimestampCell({
-          timestamp: props.cell.value,
+          timestampAndOngoing: props.cell.value,
           offset: tzAndOffset?.offset ?? 0,
         }),
     },
@@ -77,7 +83,6 @@ export function InvocationTable(props: InvocationTableProps) {
       Cell: (props) => GenericMonitorNameCell(props.cell.value),
       disableSortBy: true,
     },
-    { Header: "Monitor Type", accessor: "monitorType" },
 
     {
       Header: "Severity",
