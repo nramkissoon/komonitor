@@ -1,6 +1,6 @@
 Webapp: 
     Pricing page:
-        ✔  move loading spinner to CTA buttons @done(21-12-06 16:10)
+        ✔  move loading spinner to CTA buttons @done(22-01-01 07:40)
     Alert:
         ✘ email alert only to account owner @cancelled(21-12-12 19:32)
     Settings:
@@ -22,7 +22,7 @@ Webapp:
         ✘  add a change installation option that migrates alerts and deprecates current auth @cancelled(21-12-20 14:26)
         ✔ test integration API @done(21-12-21 17:29)
         ✔  test button calls api @done(21-12-21 17:29)
-        ☐ check if prod Slack app is ready
+        ✔ check if prod Slack app is ready @done(21-12-31 08:35)
         
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
@@ -114,7 +114,7 @@ Uptime Alerts:
 
 Alerts:
     ✔  do not resend down alerts -> add ongoing field to invocation @done(21-12-30 12:34)
-    ☐  switch ongoing alert invoke to false upon alert deletion, monitor detachment
+    ✔  switch ongoing alert invoke to false upon alert deletion, monitor detachment @done(21-12-31 09:46)
     ✔  monitor alerts page -> show ongoing @done(21-12-30 13:11)
 
 Blog: 
@@ -132,10 +132,6 @@ Uptime Lambda:
 
 Website change monitoring:
     ☐ scope
-
-Alert Lambda:
-
-    ☐ Promise.all the data dependancies
 
 Lighthouse:
     ✔ get hello world app running and push to ECR working @done(21-12-06 13:05)

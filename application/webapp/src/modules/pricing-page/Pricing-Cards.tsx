@@ -2,7 +2,6 @@ import {
   Badge,
   Box,
   chakra,
-  Fade,
   Flex,
   Icon,
   SimpleGrid,
@@ -13,7 +12,6 @@ import {
 import { useSession } from "next-auth/client";
 import router from "next/router";
 import React from "react";
-import { LoadingSpinner } from "../../common/components/Loading-Spinner";
 import { PLAN_PRICE_IDS, PLAN_PRODUCT_IDS } from "../billing/plans";
 import { useUserServicePlanProductId } from "../user/client";
 
@@ -203,51 +201,43 @@ export function PricingCards() {
 
   return (
     <>
-      {isLoading ? (
-        <Fade in={isLoading} delay={0.2}>
-          <LoadingSpinner />
-        </Fade>
-      ) : (
-        <Fade in={!isLoading}>
-          <Box mb="1.7em">
-            <SimpleGrid columns={[1, null, null, 3]} gap={[16, 8]}>
-              <PricingCard
-                price={0}
-                planName={"Free"}
-                ctaButtonProps={ctaButtonCharacteristics(
-                  user,
-                  productId,
-                  PLAN_PRODUCT_IDS.FREE,
-                  PLAN_PRICE_IDS.FREE
-                )}
-                featureList={planFeatureList["FREE"]}
-              />
-              <PricingCard
-                price={20}
-                planName={"Freelancer"}
-                ctaButtonProps={ctaButtonCharacteristics(
-                  user,
-                  productId,
-                  PLAN_PRODUCT_IDS.FREELANCER,
-                  PLAN_PRICE_IDS.FREELANCER
-                )}
-                featureList={planFeatureList["FREELANCER"]}
-              />
-              <PricingCard
-                price={80}
-                planName={"Business"}
-                ctaButtonProps={ctaButtonCharacteristics(
-                  user,
-                  productId,
-                  PLAN_PRODUCT_IDS.BUSINESS,
-                  PLAN_PRICE_IDS.BUSINESS
-                )}
-                featureList={planFeatureList["BUSINESS"]}
-              />
-            </SimpleGrid>
-          </Box>
-        </Fade>
-      )}
+      <Box mb="1.7em">
+        <SimpleGrid columns={[1, null, null, 3]} gap={[16, 8]}>
+          <PricingCard
+            price={0}
+            planName={"Free"}
+            ctaButtonProps={ctaButtonCharacteristics(
+              user,
+              productId,
+              PLAN_PRODUCT_IDS.FREE,
+              PLAN_PRICE_IDS.FREE
+            )}
+            featureList={planFeatureList["FREE"]}
+          />
+          <PricingCard
+            price={20}
+            planName={"Freelancer"}
+            ctaButtonProps={ctaButtonCharacteristics(
+              user,
+              productId,
+              PLAN_PRODUCT_IDS.FREELANCER,
+              PLAN_PRICE_IDS.FREELANCER
+            )}
+            featureList={planFeatureList["FREELANCER"]}
+          />
+          <PricingCard
+            price={80}
+            planName={"Business"}
+            ctaButtonProps={ctaButtonCharacteristics(
+              user,
+              productId,
+              PLAN_PRODUCT_IDS.BUSINESS,
+              PLAN_PRICE_IDS.BUSINESS
+            )}
+            featureList={planFeatureList["BUSINESS"]}
+          />
+        </SimpleGrid>
+      </Box>
     </>
   );
 }
