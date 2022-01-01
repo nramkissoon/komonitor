@@ -107,7 +107,8 @@ async function deleteHandler(
           ddbClient,
           env.UPTIME_MONITOR_TABLE_NAME,
           userId,
-          alert.alert_id
+          alert.alert_id,
+          env.ALERT_INVOCATION_TABLE_NAME
         )
       );
       deleteSlackAlertPromises.push(

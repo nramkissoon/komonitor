@@ -115,7 +115,8 @@ async function deleteHandler(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
       userId,
-      alertId as string
+      alertId as string,
+      env.ALERT_INVOCATION_TABLE_NAME
     );
 
     if (!detached) {
