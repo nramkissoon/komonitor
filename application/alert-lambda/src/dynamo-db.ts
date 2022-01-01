@@ -74,19 +74,20 @@ export async function getStatusesForUptimeMonitor(
   }
 }
 
-export async function getPreviousInvocationForAlert(
+export async function getPreviousInvocationForAlertForMonitor(
   ddbClient: DynamoDBClient,
   alertId: string,
-  tableName: string,
-  invocationTableLsiName: string
+  monitorId: string,
+  tableName: string
 ) {
   try {
     const queryCommandInput: QueryCommandInput = {
       TableName: tableName,
-      IndexName: invocationTableLsiName,
-      KeyConditionExpression: "alert_id = :partitionkeyval",
+      KeyConditionExpression:
+        "alert_id = :partitionkeyval and begins_with(monitor_id_timestamp, :monitorId)",
       ExpressionAttributeValues: {
         ":partitionkeyval": { S: alertId },
+        ":monitorId": { S: monitorId },
       },
       ScanIndexForward: false,
       Limit: 1,

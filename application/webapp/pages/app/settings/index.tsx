@@ -1,4 +1,4 @@
-import { Heading } from "@chakra-ui/react";
+import { chakra, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { PageLayout } from "../../../src/common/components/Page-Layout";
@@ -10,9 +10,10 @@ const App: ExtendedNextPage = () => {
   const { tab } = router.query;
   return (
     <PageLayout isAppPage>
-      <Heading textAlign="center" fontWeight="normal" mb="1em">
+      <Heading textAlign="left" fontWeight="medium" mb=".2em" fontSize="3xl">
         Settings
       </Heading>
+      <chakra.hr mb="1em"></chakra.hr>
       <SettingsTabs initialTab={Number.parseInt(tab as string)} />
     </PageLayout>
   );

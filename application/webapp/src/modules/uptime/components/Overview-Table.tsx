@@ -273,9 +273,9 @@ export function OverviewTable(props: TableProps) {
   return (
     <Box
       w="100%"
-      shadow="lg"
+      shadow="md"
       bg={useColorModeValue("white", "#0f131a")}
-      borderRadius="xl"
+      borderRadius="md"
       p="1.5em"
       mb="2em"
     >

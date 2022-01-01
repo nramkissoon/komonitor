@@ -2,9 +2,10 @@ import { AlertInvocation, UptimeMonitorStatus } from "project-types";
 import { config, ddbClient } from "./config";
 import {
   getAlertForUserByAlertId,
-  getPreviousInvocationForAlert,
+  getPreviousInvocationForAlertForMonitor,
   getStatusesForUptimeMonitor,
   getUptimeMonitorForUserByMonitorId,
+  getUserById,
   writeAlertInvocation,
 } from "./dynamo-db";
 import { sendUptimeMonitorAlertEmail } from "./email-alert-handlers";
@@ -80,14 +81,16 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
 
   if (triggeringStatuses.length !== failureCount) alertShouldTrigger = false;
 
-  const previousInvocation = await getPreviousInvocationForAlert(
+  const previousInvocation = await getPreviousInvocationForAlertForMonitor(
     ddbClient,
     alert.alert_id,
-    config.alertInvocationTableName,
-    config.alertInvocationTableTimeStampLsiName
+    monitor.monitor_id,
+    config.alertInvocationTableName
   );
 
-  console.log(previousInvocation);
+  if (previousInvocation?.ongoing) {
+    return; // do nothing because we do not want to spam alerts
+  }
 
   // check if previous invocation was triggered by any of the statuses, don't check if no invocation
   if (previousInvocation) {
@@ -122,13 +125,21 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
       id: status.monitor_id,
       timestamp: status.timestamp,
     })),
+    ongoing: true,
   };
+
+  const user = await getUserById(ddbClient, config.userTableName, userId);
+  if (!user) {
+    return;
+  }
+
   switch (alertType) {
     case "Email":
       alertTriggered = await sendUptimeMonitorAlertEmail(
         monitor,
         alert,
-        triggeringStatuses
+        triggeringStatuses,
+        user
       );
       break;
     default:

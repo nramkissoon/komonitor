@@ -234,9 +234,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
   const { colorMode } = useColorMode();
 
   // Filter out failures where no response
-  const filteredStatuses = statuses
-    ? statuses?.filter((status) => status.latency !== -1)
-    : null;
+  const filteredStatuses = statuses ? statuses : null;
 
   // memos for graph attributes
   const serie = React.useMemo(

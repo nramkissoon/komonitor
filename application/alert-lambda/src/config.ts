@@ -1,6 +1,9 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { SendRawEmailCommand, SES } from "@aws-sdk/client-ses";
+import { DateTime } from "luxon";
 import nodemailer from "nodemailer";
+import { UptimeMonitorStatus } from "project-types";
+import spacetime from "spacetime";
 
 interface Config {
   region: string;
@@ -53,3 +56,29 @@ export const regionToLocationStringMap: { [key: string]: string } = {
   "eu-north-1": "Stockholm, Sweden",
   "sa-east-1": "São Paulo, Brazil",
 };
+
+export function getTimeString(tz: string, timestamp: number) {
+  const now = spacetime.now(tz);
+  const offset = now.timezone().current.offset;
+
+  let offsetString = "";
+  if (offset > 0) {
+    offsetString = "+" + offset;
+  } else if (offset < 0) {
+    offsetString = offset.toString();
+  }
+  return DateTime.fromMillis(timestamp)
+    .setZone("UTC" + offsetString)
+    .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
+}
+
+export function convertUptimeMonitorStatusesToStatusesWithReadableTimeStamp(
+  tz: string,
+  statuses: UptimeMonitorStatus[]
+) {
+  const newStatuses = statuses.map((status) => ({
+    ...status,
+    timestampAsUserTz: getTimeString(tz, status.timestamp),
+  }));
+  return newStatuses;
+}

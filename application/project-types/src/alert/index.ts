@@ -36,4 +36,5 @@ export interface AlertInvocation {
     id: string;
     timestamp: number;
   }[];
+  ongoing: boolean; // indicates if the alert is still ongoing (no up statuses since last invocation)
 }

@@ -24,6 +24,7 @@ export interface UptimeMonitorJob {
   region: string;
   webhook_url?: string;
   http_headers?: { [header: string]: string };
+  alert_id?: string;
 }
 
 export interface UptimeMonitorStatus {

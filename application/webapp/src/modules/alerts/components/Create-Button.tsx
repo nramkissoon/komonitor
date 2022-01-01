@@ -18,7 +18,7 @@ export const CreateButton = () => {
           bg: "blue.600",
         }}
       >
-        Create Alert
+        + Create an Alert
       </Button>
     </Link>
   );

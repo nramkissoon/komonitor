@@ -1,4 +1,11 @@
-import { Badge, Button, Divider, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  Divider,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React from "react";
 import { getDisplayStringFromPlanProductId } from "../../../common/utils";
 import { useUserServicePlanProductId } from "../../user/client";
@@ -8,7 +15,14 @@ export function BillingTab() {
   const { data, isLoading, isError } = useUserServicePlanProductId();
 
   return (
-    <>
+    <Box
+      bg={useColorModeValue("white", "#0f131a")}
+      rounded="md"
+      shadow="md"
+      pt="20px"
+      pb="20px"
+      px="20px"
+    >
       <Text fontSize="lg" color="gray.500" mb=".7em">
         Current subscription plan:
       </Text>
@@ -41,6 +55,6 @@ export function BillingTab() {
       >
         Manage Subscription
       </Button>
-    </>
+    </Box>
   );
 }

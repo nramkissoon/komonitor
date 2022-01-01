@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../../src/common/server-utils";
+import {
+  getPreviousInvocationForAlertForMonitor,
+  setInvocationOngoingToFalse,
+} from "../../../../src/modules/alerts/invocations-db";
 import { getUptimeMonitorAllowanceFromProductId } from "../../../../src/modules/billing/plans";
 import {
   deleteMonitor,
@@ -73,6 +77,27 @@ async function updateHandler(
     ) {
       res.status(403);
       return;
+    }
+
+    // reset any ongoing alert invocations on this monitor
+    if (monitorExistsForUser.alert_id) {
+      const mostRecentAlertInvocation =
+        await getPreviousInvocationForAlertForMonitor(
+          ddbClient,
+          monitorExistsForUser.alert_id,
+          monitorExistsForUser.monitor_id,
+          env.ALERT_INVOCATION_TABLE_NAME
+        );
+
+      if (mostRecentAlertInvocation) {
+        const ongoingReset = await setInvocationOngoingToFalse(
+          ddbClient,
+          mostRecentAlertInvocation,
+          env.ALERT_INVOCATION_TABLE_NAME
+        );
+
+        // TODO determine if we should throw error when cannot reset
+      }
     }
 
     const updatedMonitor = createUpdatedMonitor(monitor);

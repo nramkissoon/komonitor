@@ -18,7 +18,7 @@ export const CreateButton = () => {
           bg: "blue.600",
         }}
       >
-        Create Monitor
+        + Create a Monitor
       </Button>
     </Link>
   );

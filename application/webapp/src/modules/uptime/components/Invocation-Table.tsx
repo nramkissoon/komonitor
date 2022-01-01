@@ -8,20 +8,28 @@ import {
 } from "../../../common/components/Table-Cell";
 
 interface RowProps {
-  timestamp: number;
   type: string;
   severity: string;
   recipients: string[];
   filterString: string;
+  timestampAndOngoing: {
+    timestamp: number;
+    ongoing: boolean;
+  };
 }
 
 function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
   return invocations
     ? invocations.map((invocation) => ({
-        timestamp: invocation.timestamp,
+        timestampAndOngoing: {
+          timestamp: invocation.timestamp,
+          ongoing: invocation.ongoing,
+        },
+
         type: invocation.alert.type,
         severity: invocation.alert.severity,
         recipients: invocation.alert.recipients,
+
         filterString: [
           invocation.alert.severity,
           ...invocation.alert.recipients,
@@ -35,17 +43,21 @@ interface InvocationTableProps {
   invocations: AlertInvocation[] | undefined;
   tzOffset: number;
 }
-
 export function InvocationTable(props: InvocationTableProps) {
   const { invocations, tzOffset } = props;
+
+  invocations?.sort((a, b) => b.timestamp - a.timestamp); // most recent invocation at top
 
   const columns: Column[] = [
     { id: "filter-column", filter: "includes", accessor: "filterString" },
     {
       Header: "Timestamp",
-      accessor: "timestamp",
+      accessor: "timestampAndOngoing",
       Cell: (props) =>
-        SimpleTimestampCell({ timestamp: props.cell.value, offset: tzOffset }),
+        SimpleTimestampCell({
+          timestampAndOngoing: props.cell.value,
+          offset: tzOffset,
+        }),
     },
     { Header: "Type", accessor: "type" },
     {

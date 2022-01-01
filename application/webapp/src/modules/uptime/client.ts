@@ -242,6 +242,8 @@ export async function detachAlertFromUptimeMonitor(
   onSuccess?: Function,
   onError?: (message: string) => void
 ) {
+  // TODO set latest invocation ongoing to false if necessary
+
   // TODO update to multiple alerts when applicable
   if (monitor.alert_id !== alertId) return;
   monitor.alert_id = undefined;

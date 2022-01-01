@@ -1,7 +1,7 @@
 import { IconButton } from "@chakra-ui/button";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, WarningIcon } from "@chakra-ui/icons";
 import { Badge, Box, Flex } from "@chakra-ui/layout";
-import { Text, Tooltip, useColorModeValue } from "@chakra-ui/react";
+import { chakra, Text, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import Link from "next/link";
 import router from "next/router";
 import { AlertSeverities } from "project-types";
@@ -80,12 +80,27 @@ export function ActionsCell(props: ActionsCellProps) {
 }
 
 interface SimpleTimestampCellProps {
-  timestamp: number;
   offset: number;
+  timestampAndOngoing: {
+    timestamp: number;
+    ongoing: boolean;
+  };
 }
 
 export function SimpleTimestampCell(props: SimpleTimestampCellProps) {
-  return <>{getTimeString(props.offset, props.timestamp)}</>;
+  return (
+    <Flex flexDir={["column", null, null, "row"]}>
+      <chakra.p fontWeight="medium" mr=".5em">
+        {getTimeString(props.offset, props.timestampAndOngoing.timestamp)}
+      </chakra.p>
+
+      {props.timestampAndOngoing.ongoing && (
+        <Tooltip label="Alert is ongoing">
+          <WarningIcon color="red.500" />
+        </Tooltip>
+      )}
+    </Flex>
+  );
 }
 
 interface AlertSeverityCellProps {

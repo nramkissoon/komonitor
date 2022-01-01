@@ -15,11 +15,19 @@ class UptimeMonitorLambda extends cdk.Construct {
       monitorStatusTable: dynamodb.Table;
       alertLambda: AlertLambda;
       region: string;
+      alertInvocationTable: dynamodb.Table;
+      alertInvocationTableTimeStampLsiName: string;
     }
   ) {
     super(scope, id);
 
-    const { monitorStatusTable, alertLambda, region } = props;
+    const {
+      monitorStatusTable,
+      alertLambda,
+      region,
+      alertInvocationTable,
+      alertInvocationTableTimeStampLsiName,
+    } = props;
 
     this.lambda = new lambda.Function(this, region + "_prod_uptime_monitor", {
       runtime: lambda.Runtime.NODEJS_14_X,
@@ -30,6 +38,9 @@ class UptimeMonitorLambda extends cdk.Construct {
         REGION: region,
         MONITOR_STATUS_TABLE_NAME: monitorStatusTable.tableName,
         ALERT_LAMBDA_NAME: alertLambda.lambda.functionName,
+        ALERT_INVOCATION_TABLE_TIMESTAMP_LSI_NAME:
+          alertInvocationTableTimeStampLsiName,
+        ALERT_INVOCATION_TABLE_NAME: alertInvocationTable.tableName,
       },
       timeout: cdk.Duration.seconds(60),
       memorySize: 140,
@@ -55,6 +66,7 @@ class UptimeMonitorLambda extends cdk.Construct {
     this.lambda.role?.attachInlinePolicy(monitorStatusDbWritePolicy);
 
     props.alertLambda.lambda.grantInvoke(this.lambda);
+    props.alertInvocationTable.grantReadWriteData(this.lambda);
   }
 }
 
@@ -242,6 +254,9 @@ export class Lambdas extends cdk.Construct {
         monitorStatusTable: uptimeMonitorStatusTable,
         region: region,
         alertLambda: this.alertLambda,
+        alertInvocationTable: alertInvocationTable,
+        alertInvocationTableTimeStampLsiName:
+          alertInvocationTableTimeStampLsiName,
       }
     );
 

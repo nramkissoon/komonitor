@@ -18,6 +18,7 @@ export default class Document extends NextDocument {
             content="https://komonitor.com/twitter-large-summary.jpg"
           />
           <meta name="twitter:image:alt" content="Komonitor banner" />
+          <meta name="slack-app-id" content="A02Q5CBHP0W"></meta>
           <script
             defer
             data-domain="komonitor.com"

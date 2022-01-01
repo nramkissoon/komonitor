@@ -21,6 +21,10 @@ export const env = {
     .AWS_ACCESS_KEY_ID_KOMONITOR as string,
   AWS_SECRET_ACCESS_KEY_KOMONITOR: process.env
     .AWS_SECRET_ACCESS_KEY_KOMONITOR as string,
+  SLACK_STATE_SECRET: process.env.SLACK_STATE_SECRET as string,
+  SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID as string,
+  SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET as string,
+  SLACK_REDIRECT: process.env.NEXT_PUBLIC_SLACK_REDIRECT as string,
 };
 
 export const ddbClient = new DynamoDBClient({

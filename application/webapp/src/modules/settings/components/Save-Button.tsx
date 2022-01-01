@@ -1,6 +1,6 @@
 import { Button, ScaleFade, useToast } from "@chakra-ui/react";
 import React from "react";
-import { useSWRConfig } from "swr";
+import { KeyedMutator } from "swr";
 
 interface SaveButtonProps {
   postFunction: (
@@ -10,13 +10,12 @@ interface SaveButtonProps {
   ) => Promise<void>;
   initialData: any;
   newData: any;
-  mutateApi: string;
+  mutate: KeyedMutator<any>;
 }
 
 export function SaveButton(props: SaveButtonProps) {
-  const { postFunction, newData, initialData, mutateApi } = props;
+  const { postFunction, newData, initialData, mutate } = props;
   const [isLoading, setIsLoading] = React.useState(false);
-  const { mutate } = useSWRConfig();
   const errorToast = useToast();
   const successToast = useToast();
   const postErrorToast = (message: string) =>
@@ -66,7 +65,7 @@ export function SaveButton(props: SaveButtonProps) {
         onClick={async () => {
           setIsLoading(true);
           await postFunction(newData.value, postSuccessToast, postErrorToast);
-          mutate(mutateApi, null, true);
+          await mutate();
           setIsLoading(false);
         }}
       >

@@ -12,7 +12,11 @@ import {
 } from "project-types";
 import request from "request";
 import { config } from "./config";
-import { writeStatusToDB } from "./status-db";
+import {
+  getPreviousInvocationForAlertForMonitor,
+  writeAlertInvocation,
+  writeStatusToDB,
+} from "./db";
 
 const asyncInvokeLambda = async (event: {
   monitorId: string;
@@ -138,8 +142,16 @@ const buildWebhook = (
 };
 
 export const runJob = async (job: UptimeMonitorJob) => {
-  const { name, url, region, webhook_url, monitor_id, owner_id, http_headers } =
-    job;
+  const {
+    name,
+    url,
+    region,
+    webhook_url,
+    monitor_id,
+    owner_id,
+    http_headers,
+    alert_id,
+  } = job;
 
   const latencies: number[] = [];
 
@@ -166,12 +178,29 @@ export const runJob = async (job: UptimeMonitorJob) => {
     await webhookNotifyCall(webhook_url, webhook);
   }
 
-  if (status.status === "down") {
+  if (status.status === "up" && alert_id) {
+    const lastAlertForMonitor = await getPreviousInvocationForAlertForMonitor(
+      alert_id,
+      monitor_id,
+      config.alertInvocationTableName
+    );
+
+    if (lastAlertForMonitor && lastAlertForMonitor.ongoing) {
+      lastAlertForMonitor.ongoing = false; // no longer in alert
+      const res = await writeAlertInvocation(
+        config.alertInvocationTableName,
+        lastAlertForMonitor
+      );
+
+      // TODO invoke lambda
+    }
+  }
+
+  if (status.status === "down" && alert_id) {
     const res = await asyncInvokeLambda({
       monitorId: monitor_id,
       ownerId: owner_id,
       monitorType: "uptime-monitor",
     });
-    console.log(`${res.StatusCode} status code: alert lambda invocation`);
   }
 };

@@ -1,16 +1,18 @@
 import { Flex, useColorModeValue, useToken } from "@chakra-ui/react";
 import React from "react";
 import TimezoneSelect from "react-timezone-select";
+import { KeyedMutator } from "swr";
 import { allTimezones } from "../../../common/utils";
 import { updateTimezonePreference } from "../client";
 import { SaveButton } from "./Save-Button";
 
 interface TimezoneSelectorProps {
   initialTz: string;
+  mutate: KeyedMutator<any>;
 }
 
 export function TimezoneSelector(props: TimezoneSelectorProps) {
-  const { initialTz } = props;
+  const { initialTz, mutate } = props;
   const [
     gray900,
     gray50,
@@ -113,7 +115,7 @@ export function TimezoneSelector(props: TimezoneSelectorProps) {
         postFunction={updateTimezonePreference}
         initialData={initialTz}
         newData={selectedTimezone}
-        mutateApi={"/api/user/tz"}
+        mutate={mutate}
       />
     </Flex>
   );
