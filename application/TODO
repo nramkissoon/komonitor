@@ -112,6 +112,10 @@ Uptime HTTP:
     ☐  add HTTP body to check lambda
     ☐  add HTTP body to form
 
+Alert Lambda: 
+    ✔  add slack alerts @done(22-01-03 13:26)
+     ☐ verify slack alerts
+
 Uptime Alerts: 
     ☐ aattach multiple alerts to monitor
 
@@ -168,6 +172,7 @@ Bugs:
     ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link
     ☐  Remove aws-cdk package by rewriting nextauth ddb client
     ☐  upgrade nextauth
+    ☐  get rid of hypernext
     ☐  keyed mutates
      ☐ make monitor url unchangeable, it messes up stats 
      ☐  get rid of uptime monitor jobs
