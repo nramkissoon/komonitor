@@ -8,7 +8,7 @@ const SEO = ({ title, description }: SEOProps) => (
     title={title}
     description={description}
     openGraph={{ title, description }}
-    titleTemplate={"Komonitor Docs | %s"}
+    titleTemplate={"Komonitor Blog | %s"}
   />
 );
 

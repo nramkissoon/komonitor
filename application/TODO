@@ -93,6 +93,9 @@ Webapp:
 User pref dates:
     ☐ verify alert TZ
 
+Customer Serve:
+    ☐ notification for new users -> email template
+
 Uptime HTTP:
     ✔  design new creation and edit form @done(21-12-06 11:49)
     ✔ implement HTTP headers in model @done(21-12-01 14:21)
