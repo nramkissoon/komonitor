@@ -6,6 +6,7 @@ import { LoadingSpinner } from "../../../../src/common/components/Loading-Spinne
 import { PageLayout } from "../../../../src/common/components/Page-Layout";
 import { useAlerts } from "../../../../src/modules/alerts/client";
 import { CreateUpdateForm } from "../../../../src/modules/alerts/components/Create-Update-Form";
+import { CreateUpdateFormRewrite } from "../../../../src/modules/alerts/components/Create-Update-Form-Rewrite";
 import { useUserServicePlanProductId } from "../../../../src/modules/user/client";
 import { ExtendedNextPage } from "../../../_app";
 
@@ -35,6 +36,10 @@ const AlertEdit: ExtendedNextPage = () => {
       {!isError && !isLoading && alert ? (
         <Fade in={!isLoading}>
           <CreateUpdateForm
+            productId={data.productId as string}
+            currentAlertAttributes={alert}
+          />
+          <CreateUpdateFormRewrite
             productId={data.productId as string}
             currentAlertAttributes={alert}
           />

@@ -17,7 +17,7 @@ const createUptimeMonitorSlackAlertMessage = (
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*${monitor.url}* *DOWN* for ${monitor.failures_before_alert} uptime check(s).\n*${monitor.failures_before_alert} * ${monitor.frequency} of downtime detected.*`,
+              text: `*${monitor.url}* *DOWN* for ${monitor.failures_before_alert} uptime check(s).\n*${monitor.failures_before_alert} * ${monitor.frequency} minutes of downtime detected.*\nAlert description: ${alert.description}`,
             },
           },
           {
@@ -43,7 +43,10 @@ export const sendUptimeMonitorSlackAlert = async (
       throw new Error(`no slack installation for user ${user.id}`);
     }
 
-    const webhook = user.slack_installations[0].incomingWebhook?.url;
+    const webhook = user.slack_installations.filter(
+      (i) => i.incomingWebhook?.channelId === alert.recipients[0]
+    )[0].incomingWebhook?.url;
+
     if (!webhook) {
       throw new Error(`no Slack webhook for user ${user.id}`);
     }

@@ -23,7 +23,7 @@ export default class Document extends NextDocument {
             defer
             data-domain="komonitor.com"
             src="https://plausible.io/js/plausible.exclusions.js"
-            data-exclude="/app/uptime/** /app/alerts/**"
+            data-exclude="/app/uptime/**, /app/alerts/**"
           ></script>
         </Head>
         <body>

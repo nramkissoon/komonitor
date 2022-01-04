@@ -233,7 +233,7 @@ export const CreateUpdateForm = (props: CreateUpdateFormProps) => {
                     <FormLabel htmlFor="type">Alert Type</FormLabel>
                     <ReactSelectFormik
                       options={createAlertTypeSelectOptions(
-                        !createAlert ? initialValues.type : undefined
+                        !createNewAlert ? initialValues.type : undefined
                       )}
                       placeholder="Alert type"
                       field={

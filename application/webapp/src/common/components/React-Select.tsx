@@ -2,7 +2,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { Button, useColorModeValue, useToken } from "@chakra-ui/react";
 import React, { KeyboardEventHandler } from "react";
 import { ControllerRenderProps, UseFormSetValue } from "react-hook-form";
-import Select from "react-select";
+import Select, { ActionMeta, OnChangeValue } from "react-select";
 import CreatableSelect from "react-select/creatable";
 
 interface ReactSelectProps {
@@ -23,6 +23,7 @@ export function ReactSelect(props: ReactSelectProps) {
     gray400,
     gray600,
     blue800,
+    gray500,
     whiteAlpha400,
   ] = useToken("colors", [
     "gray.900",
@@ -157,12 +158,19 @@ interface MultiSelectTextInputFormikProps {
   initialValue: string[];
   selectLimit: number;
   postErrorToast: (message: string) => void;
+  setValue: UseFormSetValue<any>;
 }
 
 // TODO IDK IF THIS WORKS
 export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
-  const { placeholder, field, initialValue, selectLimit, postErrorToast } =
-    props;
+  const {
+    placeholder,
+    field,
+    initialValue,
+    selectLimit,
+    postErrorToast,
+    setValue: formSetValue,
+  } = props;
   const [gray400, whiteAlpha400] = useToken("colors", [
     "gray.400",
     "whiteAlpha.400",
@@ -179,6 +187,13 @@ export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
   const checkValueAlreadyExists = (values: any[], value: any) => {
     return values.filter((val) => val.value === value).length > 0;
   };
+
+  React.useEffect(() => {
+    formSetValue(
+      field.name,
+      value.map((item: any) => item.value)
+    );
+  }, [value]);
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (!inputValue) return;
@@ -245,10 +260,23 @@ export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
       menuIsOpen={false}
       placeholder={placeholder}
       options={value}
+      onChange={(
+        val: OnChangeValue<{ label: string; value: string }, true>,
+        actionMeta: ActionMeta<{ label: string; value: string }>
+      ) => {
+        setValue(val as { label: string; value: string }[]);
+        formSetValue(
+          field.name,
+          (val as { label: string; value: string }[]).map(
+            (val: any) => val.value
+          )
+        );
+      }}
       inputValue={inputValue}
       onInputChange={handleInputChange}
       onKeyDown={handleKeyDown}
-      {...field}
+      name={field.name}
+      value={value}
     />
   );
 }
