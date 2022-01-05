@@ -20,6 +20,7 @@
     "@types/nodemailer": "^6.4.4",
     "@types/pug": "^2.0.5",
     "@types/luxon": "^2.0.8",
+    "@types/isomorphic-fetch": "^0.0.35",
     "typescript": "^4.4.2"
     
   },
@@ -30,6 +31,7 @@
     "email-templates": "^8.0.8",
     "nodemailer": "^6.7.0",
     "project-types": "^1.0.0",
+    "isomorphic-fetch": "^3.0.0",
     "pug": "^3.0.2",
     "luxon": "^2.2.0",
     "spacetime": "^6.16.3"
