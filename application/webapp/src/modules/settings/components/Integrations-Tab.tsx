@@ -1,9 +1,4 @@
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Alert,
   AlertDialog,
   AlertDialogBody,
@@ -189,79 +184,74 @@ export const SlackInstallationInfo = (props: {
     : [];
 
   return (
-    <Accordion allowToggle>
-      <AccordionItem outline="none" border="none">
-        <AccordionButton pl="0">
-          <AccordionIcon />
-          <Box textAlign="left" fontSize="lg">
-            Slack Installation Details
-          </Box>
-        </AccordionButton>
-        <AccordionPanel pb={4} pl="0">
-          <chakra.p>
-            Workspace Name: &nbsp;
-            <chakra.span
-              fontWeight="bold"
-              px="10px"
-              borderRadius="sm"
-              fontSize="lg"
-              py="2px"
-            >
-              {installation.team?.name}
-            </chakra.span>
-          </chakra.p>
-          <chakra.p mt="1em">
-            Channel Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <chakra.span
-              fontWeight="bold"
-              px="10px"
-              borderRadius="sm"
-              fontSize="lg"
-              py="2px"
-            >
-              {installation.incomingWebhook?.channel}
-            </chakra.span>
-          </chakra.p>
-          <Button
-            mt="1em"
-            rounded="4px"
-            fontSize="lg"
-            fontWeight="medium"
-            px="1em"
-            shadow="sm"
-            colorScheme="blue"
-            bgColor="gray.500"
-            color="white"
-            _hover={{
-              bg: "gray.600",
-            }}
-            onClick={async () => {
-              await testSlackInstallation();
-            }}
-          >
-            Test Installation
-          </Button>
-        </AccordionPanel>
-      </AccordionItem>
+    <>
+      <Box textAlign="left" fontSize="lg" mb="10px">
+        Slack Installation Details
+      </Box>
+      <chakra.p>
+        Workspace Name: &nbsp;
+        <chakra.span
+          fontWeight="bold"
+          px="10px"
+          borderRadius="sm"
+          fontSize="lg"
+          py="2px"
+          letterSpacing="wider"
+        >
+          {installation.team?.name}
+        </chakra.span>
+      </chakra.p>
+      <chakra.p mt="1em">
+        Channel Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <chakra.span
+          fontWeight="bold"
+          px="10px"
+          borderRadius="sm"
+          fontSize="lg"
+          py="2px"
+          letterSpacing="wider"
+        >
+          {installation.incomingWebhook?.channel}
+        </chakra.span>
+      </chakra.p>
+      <Button
+        my="1em"
+        rounded="4px"
+        fontSize="lg"
+        fontWeight="medium"
+        px="1em"
+        shadow="sm"
+        colorScheme="blue"
+        bgColor="gray.500"
+        color="white"
+        _hover={{
+          bg: "gray.600",
+        }}
+        onClick={async () => {
+          await testSlackInstallation();
+        }}
+      >
+        Test Installation
+      </Button>
       {!alertsIsLoading && slackAlerts.length > 0 && (
-        <AccordionItem outline="none" border="none">
-          <AccordionButton>
-            <AccordionIcon />
-            <Box textAlign="left" fontSize="lg">
-              Slack Alerts ({slackAlerts.length} total)
-            </Box>
-          </AccordionButton>
-          <AccordionPanel pb={4}>
-            {slackAlerts.map((alert) => (
-              <Flex key={alert.alert_id} flexDir="row">
-                <chakra.p>{alert.name}</chakra.p>
-                <chakra.p ml="2em">Severity Level: {alert.severity}</chakra.p>
-              </Flex>
-            ))}
-          </AccordionPanel>
-        </AccordionItem>
+        <>
+          <Box textAlign="left" fontSize="lg" mb="10px">
+            Slack Alerts ({slackAlerts.length} total)
+          </Box>
+          {slackAlerts.map((alert) => (
+            <Flex key={alert.alert_id} flexDir="row">
+              <chakra.p>Alert name: {alert.name}</chakra.p>
+              <chakra.p ml="2em">Severity Level: {alert.severity}</chakra.p>
+              <NextLink passHref href={`/app/alerts/${alert.alert_id}`}>
+                <chakra.a ml="2em" _hover={{ color: "gray.500" }}>
+                  View Alert
+                </chakra.a>
+              </NextLink>
+            </Flex>
+          ))}
+        </>
       )}
-    </Accordion>
+    </>
   );
 };
 

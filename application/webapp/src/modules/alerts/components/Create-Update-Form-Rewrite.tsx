@@ -147,8 +147,6 @@ const RecipientsController = (props: {
             );
           case "Slack":
             if (installation) {
-              console.log(fieldState.error);
-              console.log(field.value);
               const installationOption = {
                 label: installation.incomingWebhook?.channel as string,
                 value: installation.incomingWebhook?.channelId as string,
@@ -164,7 +162,7 @@ const RecipientsController = (props: {
                     Slack Channel (Workspace: {installation.team?.name})
                   </FormLabel>
                   <ReactSelect
-                    defaultValue={installationOption}
+                    defaultValue={field.value ? installationOption : undefined}
                     options={[installationOption]}
                     placeholder={"Slack Channel"}
                     field={field as any}
