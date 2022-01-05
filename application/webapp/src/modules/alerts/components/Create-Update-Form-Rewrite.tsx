@@ -13,7 +13,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { Alert, AlertSeverities, AlertStates, AlertTypes } from "project-types";
 import React from "react";
 import {
@@ -28,6 +28,8 @@ import {
   ReactSelect,
 } from "../../../common/components/React-Select";
 import { getAlertRecipientLimitFromProductId } from "../../billing/plans";
+import { useUserSlackInstallation } from "../../user/client";
+import { createAlert, updateAlert } from "../client";
 
 interface CreateUpdateFormProps {
   productId: string;
@@ -89,8 +91,6 @@ function createAlertStateOptions() {
 const RecipientsController = (props: {
   control: Control<Inputs, object>;
   selectedType: AlertTypes;
-  errors: any;
-  touchedFields: any;
   productId: string;
   postErrorToast: (message: string) => string | number | undefined;
   currentValue: string[];
@@ -99,83 +99,99 @@ const RecipientsController = (props: {
   const {
     control,
     selectedType,
-    errors,
-    touchedFields,
     productId,
     postErrorToast,
     currentValue,
     setValue,
   } = props;
-  switch (selectedType) {
-    case "Email":
-      return (
-        <Controller
-          name="recipients"
-          defaultValue={[]}
-          control={control}
-          rules={{
-            minLength: {
-              value: 1,
-              message: "At least 1 recipient is required.",
-            },
-          }}
-          render={({ field }) => (
-            <FormControl
-              isInvalid={errors.recipients ? touchedFields.recipients : false}
-              isRequired
-              mb="1.5em"
-            >
-              <FormLabel htmlFor="recipients">Email Recipients</FormLabel>
-              <MultiSelectTextInput
-                placeholder="Recipients"
-                field={field as any}
-                initialValue={currentValue}
-                selectLimit={getAlertRecipientLimitFromProductId(productId)}
-                postErrorToast={postErrorToast}
-                setValue={setValue}
-              />
-              <FormHelperText>
-                Recipients should be {alertTypeToRecipientHelpString("Email")}.
-                Press Enter or Tab after input.
-              </FormHelperText>
-              <FormErrorMessage>{errors.recipients?.message}</FormErrorMessage>
-            </FormControl>
-          )}
-        />
-      );
-    default:
-      return (
-        <Controller
-          name="recipients"
-          defaultValue={[]}
-          control={control}
-          rules={{
-            minLength: {
-              value: 1,
-              message: "At least 1 recipient is required.",
-            },
-          }}
-          render={({ field }) => (
-            <FormControl
-              isInvalid={errors.recipients ? touchedFields.recipients : false}
-              isRequired
-              mb="1.5em"
-            >
-              <FormLabel htmlFor="recipients">Slack Channel</FormLabel>
-              <MultiSelectTextInput
-                placeholder="Recipients"
-                field={field as any}
-                initialValue={currentValue}
-                selectLimit={getAlertRecipientLimitFromProductId(productId)}
-                postErrorToast={postErrorToast}
-                setValue={setValue}
-              />
-              <FormErrorMessage>{errors.recipients?.message}</FormErrorMessage>
-            </FormControl>
-          )}
-        />
-      );
-  }
+
+  const { data: installation, isError, isLoading } = useUserSlackInstallation();
+
+  return (
+    <Controller
+      name="recipients"
+      control={control}
+      rules={{
+        required: "At least 1 recipient is required.",
+      }}
+      render={({ field, fieldState }) => {
+        switch (selectedType) {
+          case "Email":
+            return (
+              <FormControl
+                isInvalid={fieldState.error ? fieldState.isTouched : false}
+                isRequired
+                mb="1.5em"
+              >
+                <FormLabel htmlFor="recipients">Email Recipients</FormLabel>
+                <MultiSelectTextInput
+                  placeholder="Recipients"
+                  field={field as any}
+                  initialValue={currentValue}
+                  selectLimit={getAlertRecipientLimitFromProductId(productId)}
+                  postErrorToast={postErrorToast}
+                  setValue={setValue}
+                />
+                <FormHelperText>
+                  Recipients should be {alertTypeToRecipientHelpString("Email")}
+                  . Press Enter or Tab after input.
+                </FormHelperText>
+
+                <chakra.div
+                  fontSize="sm"
+                  color={useColorModeValue("red.500", "red.300")}
+                >
+                  {fieldState.error?.message}
+                </chakra.div>
+              </FormControl>
+            );
+          case "Slack":
+            if (installation) {
+              console.log(fieldState.error);
+              console.log(field.value);
+              const installationOption = {
+                label: installation.incomingWebhook?.channel as string,
+                value: installation.incomingWebhook?.channelId as string,
+                isDisabled: false,
+              };
+              return (
+                <FormControl
+                  isInvalid={fieldState.error ? fieldState.isTouched : false}
+                  isRequired
+                  mb="1.5em"
+                >
+                  <FormLabel htmlFor="recipients">
+                    Slack Channel (Workspace: {installation.team?.name})
+                  </FormLabel>
+                  <ReactSelect
+                    defaultValue={installationOption}
+                    options={[installationOption]}
+                    placeholder={"Slack Channel"}
+                    field={field as any}
+                    setValue={(fieldName: string, value: string) => {
+                      if (value !== "") setValue(fieldName as any, [value]);
+                      else setValue(fieldName as any, []);
+                    }}
+                  />
+                  <chakra.div
+                    fontSize="sm"
+                    mt="5px"
+                    color={useColorModeValue("red.500", "red.300")}
+                  >
+                    {fieldState.error?.message !== undefined &&
+                      "Please select a Slack Channel to send alerts to."}
+                  </chakra.div>
+                </FormControl>
+              );
+            }
+            return <></>;
+
+          default:
+            return <></>;
+        }
+      }}
+    />
+  );
 };
 
 export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
@@ -204,6 +220,8 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     control,
     setValue,
     getValues,
+    clearErrors,
+    resetField,
   } = useForm<Inputs>({
     defaultValues: createNewAlert
       ? { state: "enabled", type: "Email", severity: "Warning" }
@@ -215,7 +233,32 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   const watchType = watch("type");
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
+    if (createNewAlert) {
+      await createAlert(
+        data,
+        () =>
+          Router.push({
+            pathname: "/app/alerts",
+            query: { newAlertCreated: "true" },
+          }),
+        postErrorToast
+      );
+    } else {
+      const augmentedValues = {
+        ...currentAlertAttributes,
+        ...data,
+      } as Alert;
+      await updateAlert(
+        augmentedValues,
+        () => {
+          Router.push({
+            pathname: "/app/alerts/" + augmentedValues.alert_id,
+            query: { alertUpdated: "true" },
+          });
+        },
+        postErrorToast
+      );
+    }
   };
 
   return (
@@ -284,12 +327,16 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 >
                   <FormLabel htmlFor="type">Alert Type</FormLabel>
                   <ReactSelect
+                    isDisabled={!createNewAlert}
                     options={createAlertTypeSelectOptions(
                       !createNewAlert ? (field.value as AlertTypes) : undefined
                     )}
                     placeholder="Select Alert Type"
                     field={field as any}
-                    setValue={setValue}
+                    setValue={(name: string, value: string) => {
+                      resetField("recipients"); // MUST RESET THE RECIPIENTS AND ERRORS
+                      setValue(name as any, value);
+                    }}
                   />
                   {!createNewAlert && (
                     <FormHelperText>
@@ -305,8 +352,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 control={control}
                 selectedType={getValues("type") as AlertTypes}
                 postErrorToast={postErrorToast}
-                errors={errors}
-                touchedFields={touchedFields}
                 productId={productId}
                 currentValue={getValues("recipients")}
                 setValue={setValue}

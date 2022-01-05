@@ -11,10 +11,12 @@ interface ReactSelectProps {
   isDisabled?: boolean;
   field: ControllerRenderProps;
   setValue: UseFormSetValue<any>;
+  defaultValue?: { value: string; label: string; isDisabled: boolean };
 }
 
 export function ReactSelect(props: ReactSelectProps) {
-  const { options, placeholder, field, isDisabled, setValue } = props;
+  const { options, placeholder, field, isDisabled, setValue, defaultValue } =
+    props;
   const [
     gray900,
     gray50,
@@ -104,6 +106,7 @@ export function ReactSelect(props: ReactSelectProps) {
           },
         }),
       }}
+      defaultValue={defaultValue}
       placeholder={placeholder}
       options={options}
       isClearable
@@ -119,9 +122,13 @@ export function ReactSelect(props: ReactSelectProps) {
       ) => (typeof option === "string" ? false : option.isDisabled)}
       {...field}
       value={
-        options ? options.find((option) => option.value === field.value) : ""
+        options
+          ? options.find((option) => option.value === field.value)
+          : defaultValue ?? ""
       }
-      onChange={(option: any) => setValue(field.name, option?.value ?? "")}
+      onChange={(option: any) =>
+        setValue(field.name, option?.value ?? defaultValue?.value ?? "")
+      }
     />
   );
 }
@@ -159,6 +166,7 @@ interface MultiSelectTextInputFormikProps {
   selectLimit: number;
   postErrorToast: (message: string) => void;
   setValue: UseFormSetValue<any>;
+  isDisabled?: boolean;
 }
 
 // TODO IDK IF THIS WORKS
@@ -169,6 +177,7 @@ export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
     initialValue,
     selectLimit,
     postErrorToast,
+    isDisabled,
     setValue: formSetValue,
   } = props;
   const [gray400, whiteAlpha400] = useToken("colors", [
@@ -226,6 +235,7 @@ export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
 
   return (
     <CreatableSelect
+      isDisabled={isDisabled}
       styles={{
         control: (base, props) => ({
           ...base,

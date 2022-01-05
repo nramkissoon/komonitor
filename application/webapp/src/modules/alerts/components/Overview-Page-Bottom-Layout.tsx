@@ -9,14 +9,17 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
+import { useUserSlackInstallation } from "../../user/client";
 
 interface OverviewPageBottomLayoutProps {
   description: string;
   recipients: string[];
+  type: string;
 }
 
 export function OverviewPageBottomLayout(props: OverviewPageBottomLayoutProps) {
-  const { description, recipients } = props;
+  const { description, recipients, type } = props;
+  const { data: installation, isError, isLoading } = useUserSlackInstallation();
 
   return (
     <ScaleFade in={true} initialScale={0.8}>
@@ -54,12 +57,14 @@ export function OverviewPageBottomLayout(props: OverviewPageBottomLayoutProps) {
           px="1.5em"
         >
           <Heading fontWeight="medium" fontSize="lg" mb=".2em">
-            Recipients:
+            {type === "Slack" ? "Slack Channel:" : "Recipients:"}
           </Heading>
           <UnorderedList spacing={3}>
             {recipients.map((recip) => (
               <ListItem key={recip} letterSpacing="wide">
-                {recip}
+                {type === "Slack" && installation
+                  ? installation.incomingWebhook?.channel
+                  : recip}
               </ListItem>
             ))}
           </UnorderedList>

@@ -46,6 +46,7 @@ Webapp:
         ☐  add warning that uptime monitor has no alert in overview table
 
         ☐  new user onboarding -> ask what they'll use for
+        ☐  add no alert warning to monitor creation form + overview page
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 

@@ -41,6 +41,6 @@ export const SlackTypeBadge = (
     color="gray.500"
     fontWeight="normal"
   >
-    Email
+    Slack
   </Button>
 );
