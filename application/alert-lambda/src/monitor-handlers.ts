@@ -9,6 +9,7 @@ import {
   writeAlertInvocation,
 } from "./dynamo-db";
 import { sendUptimeMonitorAlertEmail } from "./email-alert-handlers";
+import { sendUptimeMonitorSlackAlert } from "./slack-alert-handler";
 
 function wasStatusTriggeredPreviousAlert(
   status: { id: string; timestamp: number },
@@ -141,6 +142,9 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
         triggeringStatuses,
         user
       );
+      break;
+    case "Slack":
+      alertTriggered = await sendUptimeMonitorSlackAlert(monitor, alert, user);
       break;
     default:
       break;

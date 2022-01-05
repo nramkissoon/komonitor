@@ -46,6 +46,7 @@ Webapp:
         ☐  add warning that uptime monitor has no alert in overview table
 
         ☐  new user onboarding -> ask what they'll use for
+        ☐  add no alert warning to monitor creation form + overview page
     API: 
         ☐ check if subscriptions are valid in API's
     Landing: 
@@ -93,6 +94,9 @@ Webapp:
 User pref dates:
     ☐ verify alert TZ
 
+Customer Serve:
+    ☐ notification for new users -> email template
+
 Uptime HTTP:
     ✔  design new creation and edit form @done(21-12-06 11:49)
     ✔ implement HTTP headers in model @done(21-12-01 14:21)
@@ -108,6 +112,10 @@ Uptime HTTP:
     ☐  add HTTP body to model
     ☐  add HTTP body to check lambda
     ☐  add HTTP body to form
+
+Alert Lambda: 
+    ✔  add slack alerts @done(22-01-03 13:26)
+     ✔ verify slack alerts @done(22-01-05 14:28)
 
 Uptime Alerts: 
     ☐ aattach multiple alerts to monitor
@@ -165,6 +173,7 @@ Bugs:
     ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link
     ☐  Remove aws-cdk package by rewriting nextauth ddb client
     ☐  upgrade nextauth
+    ☐  get rid of hypernext
     ☐  keyed mutates
      ☐ make monitor url unchangeable, it messes up stats 
      ☐  get rid of uptime monitor jobs

@@ -21,7 +21,7 @@ export const Copy = {
       Subheader:
         "We let you know something's wrong so you have better peace of mind.",
       List: [
-        "Receive alerts via email or webhooks.",
+        "Receive alerts via email or Slack.",
         "Alerts are actionable and let you know exactly what went wrong.",
         "Enable and disable alerts for any monitor you wish.",
       ],
@@ -68,7 +68,7 @@ export const Copy = {
       },
       alert: {
         title: "More Alert Integrations",
-        desc: "Receive alerts through Slack, Discord, and more.",
+        desc: "Receive alerts through Discord, Zapier, and more.",
       },
     },
   },

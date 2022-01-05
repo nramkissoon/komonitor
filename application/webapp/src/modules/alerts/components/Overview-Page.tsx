@@ -130,6 +130,7 @@ export function OverviewPage(props: OverviewPageProps) {
             <OverviewPageBottomLayout
               description={description}
               recipients={recipients}
+              type={type}
             />
             <AttachedMonitorsTable
               alertId={alert_id}
