@@ -115,7 +115,7 @@ Uptime HTTP:
 
 Alert Lambda: 
     ✔  add slack alerts @done(22-01-03 13:26)
-     ☐ verify slack alerts
+     ✔ verify slack alerts @done(22-01-05 14:28)
 
 Uptime Alerts: 
     ☐ aattach multiple alerts to monitor

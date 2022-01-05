@@ -18,12 +18,11 @@ export function alertTypeToBadge(type: AlertTypes) {
 export const EmailTypeBadge = (
   <Button
     leftIcon={<EmailIcon />}
-    colorScheme="gray"
+    colorScheme="blue"
     variant="outline"
     as="div"
     _hover={{}}
     size="xs"
-    color="gray.500"
     fontWeight="normal"
   >
     Email
@@ -33,12 +32,11 @@ export const EmailTypeBadge = (
 export const SlackTypeBadge = (
   <Button
     leftIcon={<AiOutlineSlack />}
-    colorScheme="gray"
+    colorScheme="purple"
     variant="outline"
     as="div"
     _hover={{}}
     size="xs"
-    color="gray.500"
     fontWeight="normal"
   >
     Slack

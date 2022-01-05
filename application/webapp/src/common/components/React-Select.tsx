@@ -43,6 +43,7 @@ export function ReactSelect(props: ReactSelectProps) {
   const menuListBackground = useColorModeValue("#E2E8F0", "#1A202C");
   const optionDisabledColor = useColorModeValue(gray400, gray600);
   const optionFocusedBackground = useColorModeValue(blue100, blue800);
+  const disabledSingleValueColor = useColorModeValue(gray400, whiteAlpha400);
 
   return (
     <Select
@@ -55,7 +56,7 @@ export function ReactSelect(props: ReactSelectProps) {
         }),
         singleValue: (base, props) => ({
           ...base,
-          color: props.isDisabled ? whiteAlpha400 : "inherit",
+          color: props.isDisabled ? disabledSingleValueColor : "inherit",
         }),
         menu: (base, props) => ({
           ...base,

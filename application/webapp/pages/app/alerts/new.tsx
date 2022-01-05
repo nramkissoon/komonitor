@@ -2,7 +2,6 @@ import { Fade } from "@chakra-ui/react";
 import React from "react";
 import { LoadingSpinner } from "../../../src/common/components/Loading-Spinner";
 import { PageLayout } from "../../../src/common/components/Page-Layout";
-import { CreateUpdateForm } from "../../../src/modules/alerts/components/Create-Update-Form";
 import { CreateUpdateFormRewrite } from "../../../src/modules/alerts/components/Create-Update-Form-Rewrite";
 import { useUserServicePlanProductId } from "../../../src/modules/user/client";
 import { ExtendedNextPage } from "../../_app";
@@ -18,7 +17,6 @@ const New: ExtendedNextPage = () => {
     <PageLayout isAppPage>
       {!userIsLoading ? (
         <Fade in={!userIsLoading}>
-          <CreateUpdateForm productId={data.productId as string} />
           <CreateUpdateFormRewrite productId={data.productId as string} />
         </Fade>
       ) : (

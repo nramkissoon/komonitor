@@ -49,7 +49,7 @@ export function AlertNameAndTypeCell(props: AlertNameAndTypeCellProps) {
 
   return (
     <Box>
-      <Tooltip label="Details">
+      <Tooltip label="Details" placement="bottom-start">
         <Box w="fit-content">
           <Link passHref href={`/app/alerts/${id}`}>
             <Flex

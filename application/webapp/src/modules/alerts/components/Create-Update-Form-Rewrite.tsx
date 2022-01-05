@@ -70,13 +70,23 @@ function createSeveritySelectOptions() {
   }));
 }
 
-function createAlertTypeSelectOptions(origType?: AlertTypes) {
-  const types: AlertTypes[] = ["Email", "Slack"];
-  return types.map((type) => ({
-    value: type,
-    label: type,
-    isDisabled: origType ? origType !== type : false,
-  }));
+function createAlertTypeSelectOptions(
+  slackInstalled: boolean,
+  origType?: AlertTypes
+) {
+  const options = [
+    {
+      value: "Email",
+      label: "Email",
+      isDisabled: origType ? origType !== "Email" : false,
+    },
+    {
+      value: "Slack",
+      label: !slackInstalled ? "Slack (Integrate with Slack to use)" : "Slack",
+      isDisabled: origType ? origType !== "Slack" : !slackInstalled,
+    },
+  ];
+  return options;
 }
 
 function createAlertStateOptions() {
@@ -206,6 +216,8 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       position: "top",
     });
 
+  const { data: installation, isError, isLoading } = useUserSlackInstallation();
+
   let { productId, currentAlertAttributes } = props;
 
   const createNewAlert = currentAlertAttributes === undefined;
@@ -261,16 +273,10 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
 
   return (
     <>
-      <Heading
-        textAlign="center"
-        mt="1em"
-        mb="1em"
-        size="lg"
-        fontWeight="medium"
-      >
+      <Heading textAlign="center" mb="1em" size="lg" fontWeight="medium">
         {createNewAlert ? "Create Alert" : "Edit Alert"}
       </Heading>
-      <Container borderRadius="xl" mb="3em" p="0" maxW="6xl">
+      <Container borderRadius="xl" mb="3em" p="0" maxW="4xl">
         <chakra.form onSubmit={handleSubmit(onSubmit)}>
           <Box
             p="2em"
@@ -327,6 +333,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                   <ReactSelect
                     isDisabled={!createNewAlert}
                     options={createAlertTypeSelectOptions(
+                      installation !== undefined && !isLoading,
                       !createNewAlert ? (field.value as AlertTypes) : undefined
                     )}
                     placeholder="Select Alert Type"
