@@ -32,7 +32,7 @@ async function getHandler(
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "*<https://example.com|https://example.com>* is *DOWN*\nResponse code: *404*",
+                  text: "*<https://example.com|https://example.com>* is *DOWN*\n",
                 },
               },
             ],

@@ -7,12 +7,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React from "react";
-import { useUserTimezoneAndOffset } from "../../user/client";
+import { useUser, useUserTimezoneAndOffset } from "../../user/client";
 import { ColorModeToggle } from "./ColorModeToggle";
 import {
   DeleteAccountDialog,
   useDeleteAccountDialog,
 } from "./Delete-User-Dialog";
+import { EmailOptInSelector } from "./EmailOptInSelector";
 import { TimezoneSelector } from "./Timezone-Selector";
 
 export function AccountTab() {
@@ -34,6 +35,8 @@ export function AccountTab() {
     isError: tzPrefIsError,
     mutate: tzMutate,
   } = useUserTimezoneAndOffset();
+
+  const { user, userIsError, userIsLoading, userMutate } = useUser();
 
   const { cancelRef, isOpen, onClose, onOpen } = useDeleteAccountDialog();
 
@@ -61,10 +64,22 @@ export function AccountTab() {
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Timezone Preference:
         </Text>
-        {!tzPrefIsLoading && (
+        {!tzPrefIsLoading && tzAndOffset && (
           <TimezoneSelector
             initialTz={tzAndOffset?.tz ?? "Etc/GMT"}
             mutate={tzMutate}
+          />
+        )}
+        <Divider mb="1em" />
+        <Text fontSize="lg" color="gray.500" mb=".7em">
+          Email Preferences:
+        </Text>
+        {!userIsLoading && user && (
+          <EmailOptInSelector
+            initialValue={
+              user.emailOptIn !== undefined ? user.emailOptIn : false
+            }
+            mutate={userMutate}
           />
         )}
       </Box>

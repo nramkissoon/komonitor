@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         <Alert variant="subtle" status="success" fontWeight="medium">
           <Flex width="100%" alignItems="center" justifyContent="center">
             <p>
-              Whats New: We just launched Slack Alerts! Get alert messages
+              What's New: We just launched Slack Alerts! Get alert messages
               delivered directly to your workspace!
             </p>
           </Flex>

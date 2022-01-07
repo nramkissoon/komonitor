@@ -8,7 +8,35 @@ import { deleteAllMonitorsForUser } from "../../../src/modules/uptime/monitor-db
 import {
   deleteUserById,
   getServicePlanProductIdForUser,
+  getUserById,
 } from "../../../src/modules/user/user-db";
+
+async function getHandler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session: Session
+) {
+  try {
+    const userId = session.uid as string;
+    const user = await getUserById(ddbClient, env.USER_TABLE_NAME, userId);
+    if (user) {
+      if (user.slack_installations) {
+        user.slack_installations.forEach((installation) => {
+          if (installation.incomingWebhook)
+            installation.incomingWebhook.url = "--redacted--";
+          if (installation.bot) installation.bot.token = "--redacted--";
+        });
+      }
+      res.status(200);
+      res.json(user);
+      return;
+    }
+    throw new Error(`no user with id: ${userId}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+  }
+}
 
 async function deleteHandler(
   req: NextApiRequest,
@@ -64,6 +92,9 @@ export default async function handler(
   const session = await getSession({ req });
   if (session) {
     switch (req.method) {
+      case "GET":
+        await getHandler(req, res, session);
+        break;
       case "DELETE":
         await deleteHandler(req, res, session);
         break;

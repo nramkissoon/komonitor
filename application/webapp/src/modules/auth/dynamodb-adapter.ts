@@ -41,6 +41,7 @@ export const DynamoDBAdapter: Adapter<
             image: profile.image,
             username: profile.username,
             emailVerified: profile.emailVerified?.toISOString() ?? null,
+            emailOptIn: profile.email ? true : false,
             createdAt: now.toISOString(),
             updatedAt: now.toISOString(),
             refresh_token_expires_in:

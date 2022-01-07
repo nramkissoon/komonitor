@@ -7,7 +7,7 @@ const createUptimeMonitorSlackAlertMessage = (
   monitor: UptimeMonitor
 ) => {
   return {
-    text: `${alert.severity} ALERT - ${monitor.name} Uptime Monitor  in ${
+    text: `${alert.severity} ALERT - ${monitor.name} Uptime Monitor in ${
       regionToLocationStringMap[monitor.region]
     }`,
     attachments: [
