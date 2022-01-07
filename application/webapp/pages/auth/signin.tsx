@@ -3,6 +3,7 @@ import {
   AlertIcon,
   Box,
   Button,
+  chakra,
   Container,
   Divider,
   Flex,
@@ -13,30 +14,14 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { signIn, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import React from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import { getErrorStringFromErrorCode } from "../../src/modules/auth/errors";
 import { ExtendedNextPage } from "../_app";
-
-const validateEmailSubmission = (
-  email: string,
-  emailRequiredMessage?: string,
-  invalidMessage?: string
-): string | undefined => {
-  let error;
-
-  if (!email) {
-    error = emailRequiredMessage ? emailRequiredMessage : "Email is required.";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-    error = invalidMessage ? invalidMessage : "Invalid email address.";
-  }
-
-  return error;
-};
 
 const Signin: ExtendedNextPage = () => {
   const router = useRouter();
@@ -55,12 +40,20 @@ const Signin: ExtendedNextPage = () => {
   if (session?.user) {
     router.push("/app");
   }
-
-  const emailOnSubmit = ({ email }: { email: string }) => {
-    signIn("email", { email, callbackUrl: "/app" });
-  };
   //const googleOnSubmit = () => signIn("google", { callbackUrl: "/app" });
   const githubOnSubmit = () => signIn("github", { callbackUrl: "/app" });
+
+  const {
+    handleSubmit,
+    formState: { errors, isSubmitting, touchedFields },
+    control,
+  } = useForm<{ email: string }>({
+    defaultValues: { email: "" },
+  });
+
+  const onSubmit: SubmitHandler<{ email: string }> = async ({ email }) => {
+    signIn("email", { email, callbackUrl: "/app" });
+  };
 
   return (
     <PageLayout>
@@ -111,55 +104,52 @@ const Signin: ExtendedNextPage = () => {
           ) : (
             <></>
           )}
-          <Formik initialValues={{ email: "" }} onSubmit={emailOnSubmit}>
-            {(props) => (
-              <Form>
-                <Flex flexDirection="column">
-                  <Field name="email" validate={validateEmailSubmission}>
-                    {({
-                      field,
-                      form,
-                    }: {
-                      field: FieldInputProps<string>;
-                      form: FormikProps<{ email: string }>;
-                    }) => (
-                      <FormControl
-                        isInvalid={
-                          form.errors.email ? form.touched.email : false
-                        }
-                      >
-                        <Text fontWeight="medium">Email Address:</Text>
-                        <Input
-                          {...field}
-                          id="email"
-                          placeholder="you@example.com"
-                          shadow="sm"
-                          size="lg"
-                          mb="1.3em"
-                        />
-
-                        <FormErrorMessage mt="-1.5em" mb="1.1em">
-                          {form.errors.email}
-                        </FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Button
-                    isLoading={props.isSubmitting}
-                    type="submit"
-                    size="lg"
-                    colorScheme="blue"
-                    color="white"
-                    bgGradient="linear(to-r, blue.300, blue.400)"
-                    shadow="sm"
-                    mb="2em"
+          <chakra.form onSubmit={handleSubmit(onSubmit)}>
+            <Flex flexDirection="column">
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: "Email is required.",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: "Invalid email address.",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={errors.email ? touchedFields.email : false}
                   >
-                    Sign in with Email
-                  </Button>
-                </Flex>
-              </Form>
-            )}
-          </Formik>
+                    <Text fontWeight="medium">Email Address:</Text>
+                    <Input
+                      {...field}
+                      id="email"
+                      placeholder="you@example.com"
+                      shadow="sm"
+                      size="lg"
+                      mb="1.3em"
+                    />
+
+                    <FormErrorMessage mt="-1.5em" mb="1.1em">
+                      {errors.email?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+              <Button
+                isLoading={isSubmitting}
+                type="submit"
+                size="lg"
+                colorScheme="blue"
+                color="white"
+                bgGradient="linear(to-r, blue.300, blue.400)"
+                shadow="sm"
+                mb="2em"
+              >
+                Sign in with Email
+              </Button>
+            </Flex>
+          </chakra.form>
           <Divider borderColor="gray.300" mb="2em" />
           {/* <Button
             leftIcon={<FcGoogle />}

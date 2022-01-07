@@ -160,7 +160,7 @@ function MultiButton(props: MultiButtonProps) {
   );
 }
 
-interface MultiSelectTextInputFormikProps {
+interface MultiSelectTextInputProps {
   placeholder: string;
   field: ControllerRenderProps;
   initialValue: string[];
@@ -171,7 +171,7 @@ interface MultiSelectTextInputFormikProps {
 }
 
 // TODO IDK IF THIS WORKS
-export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
+export function MultiSelectTextInput(props: MultiSelectTextInputProps) {
   const {
     placeholder,
     field,

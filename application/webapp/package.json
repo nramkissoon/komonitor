@@ -34,7 +34,6 @@
     "gray-matter": "^4.0.3",
     "aws-sdk": "^2.983.0",
     "@slack/web-api": "^6.5.1",
-    "formik": "^2.2.9",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "framer-motion": "^4.1.17",
