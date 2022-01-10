@@ -9,10 +9,6 @@ body
 
     table.main-table 
         tr 
-            td.severity-display(class=[severity.toLowerCase()]) #{severity}   
-        tr 
-            td.lg.bold.centered-text #{alert.name}
-        tr 
             td.lg.centered-text 
                 span.bold #{monitor.name}
                 span!= ` monitor in <span class="bold">${region}</span> has been <span class="down">DOWN</span> for <span class="bold">${monitor.failures_before_alert}</span> consecutive uptime check(s).`
@@ -33,5 +29,5 @@ body
                                 p!= `<span class="bold">Status Code:</span> <span class="red-500 bold">${(status.response_status_code) && status.response_status_code !== -1 ? status.response_status_code : 'URL Unreachable - No Response'}</span>`
         tr
             td 
-                p.spaced!= `<span class="bold">Need to disable or edit this alert?</span> You can do so in the <a href="komonitor.com/app/alerts/${alert.alert_id}">Komonitor console</a>.`
+                p.spaced!= `<span class="bold">Need to disable or edit this alert?</span> You can do so in the <a href="komonitor.com/app/uptime/${monitor.monitor_id}">Komonitor console</a>.`
                 p!= `This is a no-reply email. For support, please contact us at <b>support@komonitor.com</b>.`

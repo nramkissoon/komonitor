@@ -1,37 +1,21 @@
-import { MonitorTypes } from "./../config";
-
-export type AlertTypes = "Email" | "Slack";
+export type ChannelType = "Email" | "Slack";
 
 export type AlertSeverities = "Warning" | "Severe" | "Critical";
 
 export type AlertStates = "enabled" | "disabled";
 
-export interface EditableAlertAttributes {
-  name: string;
+export interface Alert {
   description: string;
-  severity: AlertSeverities;
   recipients: string[];
+  channels: ChannelType[];
   state: AlertStates;
 }
 
-export type NewAlertAttributes = EditableAlertAttributes & { type: AlertTypes };
-
-export interface NonEditableAlertAttributes {
-  owner_id: string;
-  alert_id: string;
-  created_at: number;
-  last_updated: number;
-}
-
-export type Alert = NewAlertAttributes & NonEditableAlertAttributes;
-
 export interface AlertInvocation {
-  alert_id: string;
+  monitor_id: string;
   alert: Alert; // Alert state at invocation
   timestamp: number;
-  monitor_id_timestamp: string; // adding timestamp ensures unique sort key
-  monitor_type: MonitorTypes; // used to determine how to read the monitor field
-  monitor: any;
+  monitor: any; // state of the monitor at invocation
   statuses: {
     id: string;
     timestamp: number;

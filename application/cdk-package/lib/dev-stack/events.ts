@@ -6,6 +6,7 @@ import { Duration } from "@aws-cdk/core";
 
 export class ScheduleRules extends cdk.Construct {
   public readonly thirtyMinuteRule: events.Rule;
+  public readonly weekRule: events.Rule;
   constructor(
     scope: cdk.Construct,
     id: string,
@@ -20,6 +21,10 @@ export class ScheduleRules extends cdk.Construct {
         schedule: events.Schedule.rate(Duration.minutes(30)),
       }
     );
+
+    this.weekRule = new events.Rule(this, "week_rule", {
+      schedule: events.Schedule.rate(Duration.days(1)),
+    });
 
     this.thirtyMinuteRule.addTarget(
       new targets.LambdaFunction(props.jobRunnerLambda, {

@@ -1,3 +1,5 @@
+import { Alert } from "../alert/index";
+
 export interface CoreUptimeMonitor {
   url: string;
   name: string;
@@ -5,8 +7,8 @@ export interface CoreUptimeMonitor {
   frequency: number;
   failures_before_alert?: number;
   webhook_url?: string;
-  alert_id?: string;
   http_headers?: { [header: string]: string };
+  alert?: Alert;
 }
 
 export interface UptimeMonitor extends CoreUptimeMonitor {
@@ -14,17 +16,6 @@ export interface UptimeMonitor extends CoreUptimeMonitor {
   monitor_id: string;
   created_at: number;
   last_updated: number;
-}
-
-export interface UptimeMonitorJob {
-  monitor_id: string;
-  owner_id: string;
-  url: string;
-  name: string;
-  region: string;
-  webhook_url?: string;
-  http_headers?: { [header: string]: string };
-  alert_id?: string;
 }
 
 export interface UptimeMonitorStatus {

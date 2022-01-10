@@ -8,8 +8,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { AlertInvocation } from "project-types";
-import { useAlertInvocationsAllTime, useAlerts } from "../alerts/client";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 import { createAndRedirectToCustomerPortal } from "../settings/client";
 import { use24HourMonitorStatuses, useUptimeMonitors } from "../uptime/client";
@@ -126,102 +124,7 @@ const UptimeMonitorPanel = () => {
           }}
           rightIcon={<ArrowForwardIcon />}
         >
-          Got to Monitors
-        </Button>
-      </NextLink>
-    </Flex>
-  );
-};
-
-const AlertsPanel = () => {
-  const { alerts, isLoading, isError } = useAlerts();
-  const { invocations } = useAlertInvocationsAllTime(
-    alerts ? alerts.map((alert) => alert.alert_id) : []
-  );
-
-  const allInvocationsAsList: AlertInvocation[] = [];
-  invocations &&
-    Object.keys(invocations).forEach((id) => {
-      let invocationsForId = invocations[id];
-      allInvocationsAsList.push(...invocationsForId);
-    });
-  const totalAlerts = alerts ? alerts.length : 0;
-  const totalOngoingAlerts = allInvocationsAsList.filter(
-    (invocation) => invocation.ongoing
-  ).length;
-
-  return (
-    <Flex
-      bg={useColorModeValue("white", "#0f131a")}
-      shadow="lg"
-      borderRadius="md"
-      py="2em"
-      px="1.5em"
-      flexDir="column"
-    >
-      <chakra.h2
-        fontSize="2xl"
-        fontWeight="bold"
-        textAlign={["center", "center", "left"]}
-      >
-        Alerts
-      </chakra.h2>
-      <chakra.h3 color="gray.600">
-        Create and manage alerts and attach them to your monitors.
-      </chakra.h3>
-      <chakra.hr my="10px" />
-      {alerts && !isLoading && totalAlerts === 0 ? (
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <chakra.h4 fontSize="lg">No alerts have been created.</chakra.h4>
-          <NextLink href="app/alerts/new" passHref>
-            <chakra.a
-              fontWeight="medium"
-              color={useColorModeValue("blue.400", "blue.500")}
-              _hover={{ cursor: "pointer", color: "gray.500" }}
-            >
-              + Create an Alert
-            </chakra.a>
-          </NextLink>
-        </Flex>
-      ) : (
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <chakra.h4 fontSize="lg">Total alerts: {totalAlerts}</chakra.h4>
-          <NextLink href="app/alerts/new" passHref>
-            <chakra.a
-              fontWeight="medium"
-              color={useColorModeValue("blue.400", "blue.500")}
-              _hover={{ cursor: "pointer", color: "gray.500" }}
-            >
-              + Create an Alert
-            </chakra.a>
-          </NextLink>
-        </Flex>
-      )}
-      <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-        <chakra.h4 fontSize="lg">
-          Total ongoing alerts: {totalOngoingAlerts}
-        </chakra.h4>
-      </Flex>
-      <Spacer />
-      <NextLink passHref href={"/app/alerts"}>
-        <Button
-          mt="1.5em"
-          float="left"
-          size="lg"
-          as="a"
-          fontSize="xl"
-          fontWeight="normal"
-          px="1em"
-          shadow="md"
-          colorScheme="blue"
-          bgColor="blue.400"
-          color="white"
-          _hover={{
-            bg: "blue.600",
-          }}
-          rightIcon={<ArrowForwardIcon />}
-        >
-          Go to Alerts
+          Go to Monitors
         </Button>
       </NextLink>
     </Flex>
@@ -310,7 +213,7 @@ export function AppIndexPage() {
   return (
     <Flex flexDir="column">
       <Flex
-        mb="1em"
+        mb="2rem"
         justifyContent="space-between"
         flexDir={["column", "column", "row"]}
       >
@@ -327,7 +230,6 @@ export function AppIndexPage() {
       </Flex>
       <SimpleGrid columns={[1, 1, 2]} spacingX={[6, 10]} spacingY={[10]}>
         <UptimeMonitorPanel />
-        <AlertsPanel />
         <SettingsPanel />
       </SimpleGrid>
     </Flex>

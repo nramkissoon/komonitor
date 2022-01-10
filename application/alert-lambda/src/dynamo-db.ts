@@ -8,7 +8,6 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import {
-  Alert,
   AlertInvocation,
   UptimeMonitor,
   UptimeMonitorStatus,
@@ -74,20 +73,17 @@ export async function getStatusesForUptimeMonitor(
   }
 }
 
-export async function getPreviousInvocationForAlertForMonitor(
+export async function getPreviousAlertInvocationForMonitor(
   ddbClient: DynamoDBClient,
-  alertId: string,
   monitorId: string,
   tableName: string
 ) {
   try {
     const queryCommandInput: QueryCommandInput = {
       TableName: tableName,
-      KeyConditionExpression:
-        "alert_id = :partitionkeyval and begins_with(monitor_id_timestamp, :monitorId)",
+      KeyConditionExpression: "monitor_id = :partitionkeyval and timestamp > 0",
       ExpressionAttributeValues: {
-        ":partitionkeyval": { S: alertId },
-        ":monitorId": { S: monitorId },
+        ":partitionkeyval": { S: monitorId },
       },
       ScanIndexForward: false,
       Limit: 1,
@@ -125,31 +121,6 @@ export async function getUserById(
     }
   } catch (err) {
     return;
-  }
-}
-
-export async function getAlertForUserByAlertId(
-  ddbClient: DynamoDBClient,
-  tableName: string,
-  userId: string,
-  alertId: string
-) {
-  try {
-    const queryCommandInput: QueryCommandInput = {
-      TableName: tableName,
-      KeyConditionExpression:
-        "owner_id = :partitionkeyval AND alert_id = :sortkeyval",
-      ExpressionAttributeValues: {
-        ":partitionkeyval": { S: userId },
-        ":sortkeyval": { S: alertId },
-      },
-    };
-    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
-    if (response?.Count === 1 && response.Items) {
-      return unmarshall(response.Items[0]) as Alert;
-    }
-  } catch (err) {
-    return null;
   }
 }
 

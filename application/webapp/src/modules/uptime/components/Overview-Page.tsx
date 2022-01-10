@@ -9,14 +9,14 @@ import {
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import router from "next/router";
-import { Alert, AlertInvocation, UptimeMonitor } from "project-types";
+import { AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
 import { regionToLocationStringMap } from "../../../common/client-utils";
 import {
   DeleteDialogProps,
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
-import { useAlertInvocationsAllTime, useAlerts } from "../../alerts/client";
+import { useAlertInvocationsAllTime } from "../../alerts/client";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import {
   useUserServicePlanProductId,
@@ -74,11 +74,6 @@ export function OverviewPage(props: OverviewPageProps) {
     monitor_id as string,
     Number.parseInt(monitorStatusSince)
   );
-  const {
-    alerts,
-    isError: alertsIsError,
-    isLoading: alertsIsLoading,
-  } = useAlerts();
 
   const mostRecentStatus = React.useMemo(() => {
     return statuses && statuses[monitor_id].length > 0
@@ -88,19 +83,12 @@ export function OverviewPage(props: OverviewPageProps) {
       : null;
   }, [statuses]);
 
-  // this will be a list because monitors will eventually have multiple alerts
-  const alertsForMonitor: Alert[] = React.useMemo(() => {
-    return alerts ? alerts.filter((alert) => alert_id === alert.alert_id) : [];
-  }, [alert_id, alerts]);
-
   // get the invocations for the relevant alerts
   const {
     invocations,
     isError: invocationsIsError,
     isLoading: invocationsIsLoading,
-  } = useAlertInvocationsAllTime(
-    alertsForMonitor.map((alert) => alert.alert_id)
-  );
+  } = useAlertInvocationsAllTime([monitor_id]);
 
   // filter out the invocations not related to this specific monitor
   let invocationsForMonitor: { [alertId: string]: AlertInvocation[] } = {};
@@ -181,13 +169,7 @@ export function OverviewPage(props: OverviewPageProps) {
               offset={tzAndOffset?.offset ?? 0}
             />
           </TabPanel>
-          <TabPanel p="0">
-            <MonitorAlertsOverview
-              alerts={alertsForMonitor}
-              alertInvocations={invocationsForMonitor}
-              tzOffset={tzAndOffset?.offset ?? 0}
-            />
-          </TabPanel>
+          <TabPanel p="0"></TabPanel>
         </TabPanels>
       </Tabs>
     </Box>

@@ -162,6 +162,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       augmentedValues.owner_id = currentMonitorAttributes?.owner_id;
       augmentedValues.created_at = currentMonitorAttributes?.created_at;
       augmentedValues.last_updated = currentMonitorAttributes?.last_updated;
+      augmentedValues.url = currentMonitorAttributes?.url;
       await updateMonitor(
         augmentedValues,
         () => {
@@ -242,8 +243,11 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                   isInvalid={errors.url ? touchedFields.url : false}
                   isRequired
                   mb="1.5em"
+                  isDisabled={!createNewMonitor}
                 >
-                  <FormLabel htmlFor="url">URL</FormLabel>
+                  <FormLabel htmlFor="url">
+                    URL {!createNewMonitor && "(URL not editable.)"}
+                  </FormLabel>
                   <InputGroup id="url">
                     <InputLeftAddon children="https://" />
                     <Input {...field} placeholder="your-website.com" />
