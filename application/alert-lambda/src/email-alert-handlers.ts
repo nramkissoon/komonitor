@@ -32,7 +32,7 @@ export async function sendUptimeMonitorAlertEmail(
     });
     await emailTransporter.sendMail({
       from: "no-reply@komonitor.com",
-      to: alert.recipients,
+      to: alert.recipients.Email,
       html: html,
       subject: subject,
     });

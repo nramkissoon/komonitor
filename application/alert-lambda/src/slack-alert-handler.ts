@@ -45,7 +45,7 @@ export const sendUptimeMonitorSlackAlert = async (
     }
 
     const webhook = user.slack_installations.filter(
-      (i) => i.incomingWebhook?.channelId === alert.recipients[0]
+      (i) => i.incomingWebhook?.channelId === alert.recipients.Slack[0]
     )[0].incomingWebhook?.url;
 
     if (!webhook) {
