@@ -12,8 +12,8 @@ Big Alert Refactor:
         ☐ new invocation db, pk = monitor_id, sk = timestamp
     Lambda:
         Alert Lambda:
-            ☐  new invocation ID = monitor_id, remove monitor_id-timestmp
-            ☐  remove alert fields that no longer exists from alert template
+            ✔  new invocation ID = monitor_id, remove monitor_id-timestmp @done(22-01-10 10:22)
+            ✔  remove alert fields that no longer exists from alert template @done(22-01-10 10:22)
     Webapp:
         ☐ remove alert tab
         ☐ update docs
