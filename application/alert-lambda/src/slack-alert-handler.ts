@@ -44,8 +44,18 @@ export const sendUptimeMonitorSlackAlert = async (
       throw new Error(`no slack installation for user ${user.id}`);
     }
 
+    if (
+      !alert.recipients ||
+      !alert.recipients.Slack ||
+      alert.recipients.Slack.length === 0
+    ) {
+      throw new Error(`no slack alert for user ${user.id}`);
+    }
+
+    const slackChannelId = alert.recipients.Slack[0];
+
     const webhook = user.slack_installations.filter(
-      (i) => i.incomingWebhook?.channelId === alert.recipients.Slack[0]
+      (i) => i.incomingWebhook?.channelId === slackChannelId
     )[0].incomingWebhook?.url;
 
     if (!webhook) {
