@@ -9,7 +9,6 @@ interface Config {
   region: string;
   uptimeMonitorTableName: string;
   uptimeMonitorStatusTableName: string;
-  alertTableName: string;
   alertInvocationTableName: string;
   userTableName: string;
 }
@@ -19,7 +18,6 @@ export const config: Config = {
   uptimeMonitorTableName: process.env.UPTIME_MONITOR_TABLE_NAME as string,
   uptimeMonitorStatusTableName: process.env
     .UPTIME_MONITOR_STATUS_TABLE_NAME as string,
-  alertTableName: process.env.ALERT_TABLE_NAME as string,
   alertInvocationTableName: process.env.ALERT_INVOCATION_TABLE_NAME as string,
   userTableName: process.env.USER_TABLE_NAME as string,
 };

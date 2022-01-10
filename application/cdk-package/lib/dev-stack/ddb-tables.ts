@@ -8,7 +8,6 @@ export class DevStackDdbTables extends cdk.Construct {
   public readonly uptimeMonitorStatusTable: dynamodb.Table;
   public readonly uptimeCheckMonitorTableFrequencyGsiName: string;
   public readonly userTable: dynamodb.Table;
-  public readonly alertTable: dynamodb.Table;
   public readonly alertInvocationTable: dynamodb.Table;
   public readonly stripeWebhooksTable: dynamodb.Table;
 
@@ -78,14 +77,6 @@ export class DevStackDdbTables extends cdk.Construct {
         tableName: "komonitor-dev-uptime-monitor-status",
       }
     );
-
-    this.alertTable = new dynamodb.Table(this, "alert", {
-      partitionKey: { name: "owner_id", type: dynamodb.AttributeType.STRING },
-      sortKey: { name: "alert_id", type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-      tableName: "komonitor-dev-alert",
-    });
 
     this.alertInvocationTable = new dynamodb.Table(this, "alert_invocation", {
       partitionKey: {

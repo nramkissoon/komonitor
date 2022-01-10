@@ -117,7 +117,6 @@ class AlertLambda extends cdk.Construct {
       lambdaCodeIBucket: s3.IBucket;
       uptimeMonitorTable: dynamodb.Table;
       uptimeMonitorStatusTable: dynamodb.Table;
-      alertTable: dynamodb.Table;
       alertInvocationTable: dynamodb.Table;
       userTable: dynamodb.Table;
     }
@@ -134,7 +133,6 @@ class AlertLambda extends cdk.Construct {
         UPTIME_MONITOR_TABLE_NAME: props.uptimeMonitorTable.tableName,
         UPTIME_MONITOR_STATUS_TABLE_NAME:
           props.uptimeMonitorStatusTable.tableName,
-        ALERT_TABLE_NAME: props.alertTable.tableName,
         ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
         USER_TABLE_NAME: props.userTable.tableName,
       },
@@ -143,7 +141,6 @@ class AlertLambda extends cdk.Construct {
 
     props.uptimeMonitorTable.grantReadData(this.lambda);
     props.uptimeMonitorStatusTable.grantReadData(this.lambda);
-    props.alertTable.grantReadData(this.lambda);
     props.alertInvocationTable.grantReadWriteData(this.lambda);
     props.userTable.grantReadData(this.lambda);
 
@@ -174,7 +171,6 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeCheckMonitorStatusTable: dynamodb.Table;
       uptimeCheckMonitorTableFrequencyGsiName: string;
       uptimeCheckMonitorTable: dynamodb.Table;
-      alertTable: dynamodb.Table;
       userTable: dynamodb.Table;
       alertInvocationTable: dynamodb.Table;
       region: string;
@@ -197,7 +193,6 @@ export class DevStackLambdas extends cdk.Construct {
     this.alertLambda = new AlertLambda(this, "alert_lambda", {
       lambdaCodeIBucket: this.lambdaCodeIBucket,
       key: props.alertLambdaBucketKey,
-      alertTable: props.alertTable,
       alertInvocationTable: props.alertInvocationTable,
       uptimeMonitorStatusTable: props.uptimeCheckMonitorStatusTable,
       uptimeMonitorTable: props.uptimeCheckMonitorTable,

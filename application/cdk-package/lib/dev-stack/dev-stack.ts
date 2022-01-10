@@ -27,7 +27,6 @@ export class DevStack extends cdk.Stack {
       uptimeCheckMonitorTable: this.tables.uptimeMonitorTable,
       uptimeCheckMonitorTableFrequencyGsiName:
         this.tables.uptimeCheckMonitorTableFrequencyGsiName,
-      alertTable: this.tables.alertTable,
       alertInvocationTable: this.tables.alertInvocationTable,
       region: props.env?.region || "us-east-1", // dev is always us-east-1 anyways
       lambdaCodeBucketName: props.lambdaCodeBucketName,
