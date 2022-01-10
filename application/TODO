@@ -1,3 +1,31 @@
+Big Alert Refactor:
+    ✘ app index redirects to monitors @cancelled(22-01-10 08:56)
+    ✔ new user page @done(22-01-10 09:29)
+    Models:
+        ✔ add alert model to monitor, remove alert_id @done(22-01-10 09:03)
+        ✔ remove name and single type and severity from alert model @done(22-01-10 09:02)
+        ✔ remove alert_id @done(22-01-10 08:57)
+        ✔ make monitor URL uneditable @done(22-01-10 09:08)
+    CDK:
+        ☐ remove alert DB
+        ☐ remove all mentions of alert db
+        ☐ new invocation db, pk = monitor_id, sk = timestamp
+    Lambda:
+        Alert Lambda:
+            ☐  new invocation ID = monitor_id, remove monitor_id-timestmp
+            ☐  remove alert fields that no longer exists from alert template
+    Webapp:
+        ☐ remove alert tab
+        ☐ update docs
+        ☐ update landing and pricing
+        ☐ move alert creation logic to second page in monitor creation form
+        ☐ update slack logic when counting slack alerts
+        ☐ when detaching all slack alerts, if no other alert channel exists, update monitor with no alert, else, remove Slack from channels
+        ☐ move alert views to monitor view -> in alert = last invocation
+    ☐ all fetch invocation db calls -> switch to pk/sk
+    ☐  update dev and prod web app envs with new invocation table in vercel
+
+
 Webapp: 
     Pricing page:
         ✔  move loading spinner to CTA buttons @done(22-01-01 07:40)
@@ -82,7 +110,7 @@ Customer Serve:
     ☐ notification for new users -> email template
 
 Sign in:
-    ☐  migrate to formik and delete formik dep
+    ✔  migrate to formik and delete formik dep @done(22-01-07 12:04)
 
 Weekly emails: 
     Email Template: 
