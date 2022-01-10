@@ -10,7 +10,6 @@ export class DevStackDdbTables extends cdk.Construct {
   public readonly userTable: dynamodb.Table;
   public readonly alertTable: dynamodb.Table;
   public readonly alertInvocationTable: dynamodb.Table;
-  public readonly alertInvocationTableTimestampLsiName: string;
   public readonly stripeWebhooksTable: dynamodb.Table;
 
   constructor(scope: cdk.Construct, id: string, props: {}) {
@@ -90,24 +89,16 @@ export class DevStackDdbTables extends cdk.Construct {
 
     this.alertInvocationTable = new dynamodb.Table(this, "alert_invocation", {
       partitionKey: {
-        name: "alert_id",
+        name: "monitor_id",
         type: dynamodb.AttributeType.STRING,
       },
       sortKey: {
-        name: "monitor_id_timestamp",
-        type: dynamodb.AttributeType.STRING,
+        name: "timestamp",
+        type: dynamodb.AttributeType.NUMBER,
       },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
-      tableName: "komonitor-dev-alert-invocation2",
-    });
-
-    this.alertInvocationTableTimestampLsiName = "timestampLSI";
-
-    this.alertInvocationTable.addLocalSecondaryIndex({
-      indexName: this.alertInvocationTableTimestampLsiName,
-      sortKey: { name: "timestamp", type: dynamodb.AttributeType.NUMBER },
-      projectionType: dynamodb.ProjectionType.ALL,
+      tableName: "komonitor-dev-alert-invocation-3",
     });
 
     this.stripeWebhooksTable = new dynamodb.Table(this, "stripe_webhooks", {

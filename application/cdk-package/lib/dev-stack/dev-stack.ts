@@ -35,8 +35,6 @@ export class DevStack extends cdk.Stack {
       jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
       alertLambdaBucketKey: props.alertLambdaBucketKey,
       userTable: this.tables.userTable,
-      alertInvocationTableTimeStampLsiName:
-        this.tables.alertInvocationTableTimestampLsiName,
       lighthouseJobTable: this.tables.lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName:
         this.tables.lighthouseJobTableFrequencyGsiName,

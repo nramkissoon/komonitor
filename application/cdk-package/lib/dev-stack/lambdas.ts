@@ -18,7 +18,6 @@ class UptimeCheckLambda extends cdk.Construct {
       alertLambda: AlertLambda;
       region: string;
       alertInvocationTable: dynamodb.Table;
-      alertInvocationTableTimeStampLsiName: string;
     }
   ) {
     super(scope, id);
@@ -32,8 +31,6 @@ class UptimeCheckLambda extends cdk.Construct {
         REGION: props.region,
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
         ALERT_LAMBDA_NAME: props.alertLambda.lambda.functionName,
-        ALERT_INVOCATION_TABLE_TIMESTAMP_LSI_NAME:
-          props.alertInvocationTableTimeStampLsiName,
         ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
       },
       timeout: cdk.Duration.seconds(60),
@@ -123,7 +120,6 @@ class AlertLambda extends cdk.Construct {
       alertTable: dynamodb.Table;
       alertInvocationTable: dynamodb.Table;
       userTable: dynamodb.Table;
-      alertInvocationTableTimeStampLsiName: string;
     }
   ) {
     super(scope, id);
@@ -141,8 +137,6 @@ class AlertLambda extends cdk.Construct {
         ALERT_TABLE_NAME: props.alertTable.tableName,
         ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
         USER_TABLE_NAME: props.userTable.tableName,
-        ALERT_INVOCATION_TABLE_TIMESTAMP_LSI_NAME:
-          props.alertInvocationTableTimeStampLsiName,
       },
       timeout: cdk.Duration.minutes(2),
     });
@@ -188,7 +182,6 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeCheckLambdaBucketKey: string;
       jobRunnerLambdaBucketKey: string;
       alertLambdaBucketKey: string;
-      alertInvocationTableTimeStampLsiName: string;
       lighthouseJobTable: dynamodb.Table;
       lighthouseJobTableFrequencyGsiName: string;
     }
@@ -209,8 +202,6 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeMonitorStatusTable: props.uptimeCheckMonitorStatusTable,
       uptimeMonitorTable: props.uptimeCheckMonitorTable,
       userTable: props.userTable,
-      alertInvocationTableTimeStampLsiName:
-        props.alertInvocationTableTimeStampLsiName,
     });
 
     this.uptimeCheckLambda = new UptimeCheckLambda(
@@ -223,8 +214,6 @@ export class DevStackLambdas extends cdk.Construct {
         region: props.region,
         alertLambda: this.alertLambda,
         alertInvocationTable: props.alertInvocationTable,
-        alertInvocationTableTimeStampLsiName:
-          props.alertInvocationTableTimeStampLsiName,
       }
     );
 
