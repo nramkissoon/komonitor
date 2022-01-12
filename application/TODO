@@ -35,7 +35,9 @@ Webapp:
     Settings:
         
     Stripe:
-        ☐ add annual plans 
+        ✔ add annual plans @done(22-01-12 15:03)
+        ✔ add monthly and annual pids to dev vercel @done(22-01-12 15:03)
+        ✔ add monthly and annual pids to prod vercel @done(22-01-12 15:03)
         
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)

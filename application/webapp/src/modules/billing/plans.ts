@@ -5,9 +5,16 @@ export const PLAN_PRODUCT_IDS = {
 };
 
 export const PLAN_PRICE_IDS = {
-  FREE: "FREE",
-  FREELANCER: process.env.NEXT_PUBLIC_FREELANCE_PRICE_ID as string,
-  BUSINESS: process.env.NEXT_PUBLIC_BUSINESS_PRICE_ID as string,
+  MONTHLY: {
+    FREE: "FREE",
+    FREELANCER: process.env.NEXT_PUBLIC_FREELANCE_PRICE_ID_MONTHLY as string,
+    BUSINESS: process.env.NEXT_PUBLIC_BUSINESS_PRICE_ID_MONTHLY as string,
+  },
+  ANNUAL: {
+    FREE: "FREE",
+    FREELANCER: process.env.NEXT_PUBLIC_FREELANCE_PRICE_ID_ANNUAL as string,
+    BUSINESS: process.env.NEXT_PUBLIC_BUSINESS_PRICE_ID_ANNUAL as string,
+  },
 };
 
 export function getUptimeMonitorAllowanceFromProductId(id: string | undefined) {

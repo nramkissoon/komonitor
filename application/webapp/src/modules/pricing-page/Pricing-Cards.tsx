@@ -6,6 +6,7 @@ import {
   Icon,
   SimpleGrid,
   Stack,
+  Switch,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -23,6 +24,7 @@ interface PricingCardProps {
     onClickFunc: Function;
   };
   featureList: string[];
+  showAnnual: boolean;
 }
 
 const planFeatureList: { [productId: string]: string[] } = {
@@ -77,7 +79,13 @@ function Feature(feature: string, key: string) {
 }
 
 function PricingCard(props: PricingCardProps) {
-  const { price, planName, ctaButtonProps, featureList } = props;
+  const { price, planName, ctaButtonProps, featureList, showAnnual } = props;
+
+  let perString = "/month";
+  if (planName === "Free") {
+    perString = " Forever";
+  }
+
   return (
     <Box
       rounded="lg"
@@ -106,14 +114,13 @@ function PricingCard(props: PricingCardProps) {
             color={useColorModeValue("gray.900", "gray.50")}
             lineHeight="tight"
           >
-            ${price}
+            ${showAnnual ? price - price * 0.3 : price}
             <chakra.span
               fontSize="2xl"
               fontWeight="medium"
               color={useColorModeValue("gray.600", "gray.400")}
             >
-              {" "}
-              /month
+              {perString}
             </chakra.span>
           </Text>
           <Box
@@ -194,6 +201,8 @@ export function PricingCards() {
     isError,
   } = useUserServicePlanProductId();
 
+  const [showAnnualPricing, setShowAnnualPricing] = React.useState(false);
+
   const user = session && session?.user;
   const productId = data ? data.productId : undefined;
 
@@ -201,7 +210,37 @@ export function PricingCards() {
 
   return (
     <>
-      <Box mb="1.7em">
+      <Flex
+        mb="1.7em"
+        justifyContent="center"
+        alignItems="center"
+        flexDir="column"
+      >
+        <Flex mb="2em" maxW="4xl">
+          <chakra.p fontSize={["lg", "2xl"]} mr="1em" fontWeight="medium">
+            Monthly Billing
+          </chakra.p>
+          <Switch
+            defaultChecked={showAnnualPricing}
+            isChecked={showAnnualPricing}
+            size="lg"
+            mt="1"
+            onChange={(e) => setShowAnnualPricing(e.target.checked)}
+          />
+          <Box ml="1em">
+            <chakra.p fontSize={["lg", "2xl"]} fontWeight="medium">
+              Annual Billing
+            </chakra.p>
+            <chakra.p
+              textAlign="center"
+              fontSize={["lg", "2xl"]}
+              color="blue.500"
+              fontWeight="bold"
+            >
+              (Save 30%)
+            </chakra.p>
+          </Box>
+        </Flex>
         <SimpleGrid columns={[1, null, null, 3]} gap={[16, 8]}>
           <PricingCard
             price={0}
@@ -210,20 +249,26 @@ export function PricingCards() {
               user,
               productId,
               PLAN_PRODUCT_IDS.FREE,
-              PLAN_PRICE_IDS.FREE
+              showAnnualPricing
+                ? PLAN_PRICE_IDS.ANNUAL.FREE
+                : PLAN_PRICE_IDS.MONTHLY.FREE
             )}
             featureList={planFeatureList["FREE"]}
+            showAnnual={showAnnualPricing}
           />
           <PricingCard
-            price={20}
+            price={25}
             planName={"Freelancer"}
             ctaButtonProps={ctaButtonCharacteristics(
               user,
               productId,
               PLAN_PRODUCT_IDS.FREELANCER,
-              PLAN_PRICE_IDS.FREELANCER
+              showAnnualPricing
+                ? PLAN_PRICE_IDS.ANNUAL.FREELANCER
+                : PLAN_PRICE_IDS.MONTHLY.FREELANCER
             )}
             featureList={planFeatureList["FREELANCER"]}
+            showAnnual={showAnnualPricing}
           />
           <PricingCard
             price={80}
@@ -232,12 +277,15 @@ export function PricingCards() {
               user,
               productId,
               PLAN_PRODUCT_IDS.BUSINESS,
-              PLAN_PRICE_IDS.BUSINESS
+              showAnnualPricing
+                ? PLAN_PRICE_IDS.ANNUAL.BUSINESS
+                : PLAN_PRICE_IDS.MONTHLY.BUSINESS
             )}
             featureList={planFeatureList["BUSINESS"]}
+            showAnnual={showAnnualPricing}
           />
         </SimpleGrid>
-      </Box>
+      </Flex>
     </>
   );
 }
