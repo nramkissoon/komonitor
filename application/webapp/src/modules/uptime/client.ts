@@ -6,6 +6,7 @@ import {
 } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
+import { Inputs } from "./components/Create-Update-Form-Rewrite";
 import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "./utils";
 
 export const monitorApiUrl = env.BASE_URL + "api/uptime/monitors";
@@ -131,7 +132,7 @@ export async function deleteMonitor(
   }
 }
 
-function createCoreMonitorFromFormData(formData: any) {
+function createCoreMonitorFromFormData(formData: Inputs) {
   const form_http_headers: { header: string; value: string }[] =
     formData.http_headers ?? [];
 
@@ -147,11 +148,20 @@ function createCoreMonitorFromFormData(formData: any) {
     frequency: Number.parseInt(
       formData.frequency
     ) as UptimeCheckSupportedFrequenciesInMinutes,
-    webhook_url: formData.webhook ? "https://" + formData.webhook : "",
-    failures_before_alert: formData.alert_id
+    webhook_url: formData.webhook_url ? "https://" + formData.webhook_url : "",
+    failures_before_alert: formData.alert
       ? formData.failures_before_alert
       : undefined,
-    alert_id: formData.alert_id,
+    alert: formData.alert
+      ? {
+          channels: formData.alert?.channels ?? [],
+          recipients: {
+            Email: formData.alert?.recipients.Email ?? undefined,
+            Slack: formData.alert?.recipients.Slack ?? undefined,
+          },
+          description: formData.alert?.description ?? "",
+        }
+      : undefined,
     http_headers: form_http_headers.length > 0 ? headers : undefined,
   };
   return monitor;
@@ -233,32 +243,6 @@ export async function updateMonitor(
         errorMessage = "An unknown error occurred. Please try again later.";
     }
     onError ? onError(errorMessage) : null;
-  }
-}
-
-export async function detachAlertFromUptimeMonitor(
-  monitor: UptimeMonitor,
-  alertId: string,
-  onSuccess?: Function,
-  onError?: (message: string) => void
-) {
-  // TODO set latest invocation ongoing to false if necessary
-
-  // TODO update to multiple alerts when applicable
-  if (monitor.alert_id !== alertId) return;
-  monitor.alert_id = undefined;
-  monitor.failures_before_alert = undefined;
-  const response = await fetch(monitorApiUrl, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(monitor),
-  });
-  if (response.ok) {
-    onSuccess ? onSuccess() : null;
-  } else {
-    onError ? onError("An error occurred. Please try again later.") : null;
   }
 }
 

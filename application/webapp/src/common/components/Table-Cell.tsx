@@ -1,10 +1,9 @@
 import { IconButton } from "@chakra-ui/button";
 import { DeleteIcon, EditIcon, WarningIcon } from "@chakra-ui/icons";
-import { Badge, Box, Flex } from "@chakra-ui/layout";
+import { Box, Flex } from "@chakra-ui/layout";
 import { chakra, Text, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import Link from "next/link";
 import router from "next/router";
-import { AlertSeverities } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { getTimeString } from "../client-utils";
@@ -100,61 +99,6 @@ export function SimpleTimestampCell(props: SimpleTimestampCellProps) {
         </Tooltip>
       )}
     </Flex>
-  );
-}
-
-interface AlertSeverityCellProps {
-  severity: AlertSeverities;
-}
-
-export function AlertSeverityCell(props: AlertSeverityCellProps) {
-  const { severity } = props;
-
-  let colorScheme = "gray";
-  switch (severity) {
-    case "Critical":
-      colorScheme = "red";
-      break;
-    case "Severe":
-      colorScheme = "orange";
-      break;
-    case "Warning":
-      colorScheme = "yellow";
-      break;
-    default:
-      break;
-  }
-
-  return (
-    <Badge
-      variant="subtle"
-      colorScheme={colorScheme}
-      fontSize="md"
-      fontWeight="normal"
-      py=".5em"
-      px=".8em"
-      borderRadius="md"
-      letterSpacing="wider"
-      size="md"
-    >
-      {severity}
-    </Badge>
-  );
-}
-
-interface AlertRecipientsCellProps {
-  recipients: string[];
-}
-
-export function AlertRecipientsCell(props: AlertRecipientsCellProps) {
-  const { recipients } = props;
-
-  return (
-    <Box>
-      {recipients.map((recip) => (
-        <Text key={recip}>{recip}</Text>
-      ))}
-    </Box>
   );
 }
 

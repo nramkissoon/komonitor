@@ -1,11 +1,4 @@
-import {
-  Alert,
-  AlertInvocation,
-  AlertSeverities,
-  AlertStates,
-  AlertTypes,
-  EditableAlertAttributes,
-} from "project-types";
+import { Alert, AlertInvocation } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
@@ -24,7 +17,7 @@ export function useAlerts() {
   };
 }
 
-export function useAlertInvocationsAllTime(alertIds: string[]) {
+export function useAlertInvocationsAllTime(monitorIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {
     const allTime = Date.now();
     const urlWithParams =
@@ -33,8 +26,8 @@ export function useAlertInvocationsAllTime(alertIds: string[]) {
   };
 
   const { data, error } = useSWR(
-    alertIds.length > 0 // determines if we should call the API
-      ? [invocationApiUrl, ...alertIds]
+    monitorIds.length > 0 // determines if we should call the API
+      ? [invocationApiUrl, ...monitorIds]
       : null,
     fetcher,
     {
@@ -69,96 +62,6 @@ export async function deleteAlert(
         break;
       case 400:
         errorMessage = "Invalid request sent to server.";
-      case 500:
-        errorMessage = "Internal server error. Please try again later.";
-      default:
-        errorMessage = "An unknown error occurred. Please try again later.";
-    }
-    onError ? onError(errorMessage) : null;
-  }
-}
-
-function createAlertEditableAttributesFromFormData(formData: any) {
-  const alertEditableAttributesWithType: EditableAlertAttributes & {
-    type: string;
-  } = {
-    name: formData.name,
-    description: formData.description,
-    severity: formData.severity as AlertSeverities,
-    recipients: formData.recipients,
-    state: formData.state as AlertStates,
-    type: formData.type as AlertTypes,
-  };
-  return alertEditableAttributesWithType;
-}
-
-export async function createAlert(
-  formData: any,
-  onSuccess?: () => void,
-  onError?: (message: string) => void
-) {
-  const alert = createAlertEditableAttributesFromFormData(formData);
-  const response = await fetch(alertApiUrl, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(alert),
-  });
-  if (response.ok) {
-    onSuccess ? onSuccess() : null;
-  } else {
-    let errorMessage;
-    switch (response.status) {
-      case 403:
-        errorMessage =
-          "Alert limit reached. Please consider deleting an existing alert or upgrading your account.";
-        break;
-      case 400:
-        errorMessage = "Invalid alert attributes sent to server.";
-      case 500:
-        errorMessage = "Internal server error. Please try again later.";
-      default:
-        errorMessage = "An unknown error occurred. Please try again later.";
-    }
-    onError ? onError(errorMessage) : null;
-  }
-}
-
-function createUpdatedAlertFromFormData(formData: any) {
-  const alert = {
-    ...createAlertEditableAttributesFromFormData(formData),
-    owner_id: formData.owner_id,
-    alert_id: formData.alert_id,
-    last_updated: Number.parseInt(formData.last_updated),
-    created_at: Number.parseInt(formData.created_at),
-  } as Alert;
-  return alert;
-}
-
-export async function updateAlert(
-  formData: any,
-  onSuccess?: () => void,
-  onError?: (message: string) => void
-) {
-  const alert = createUpdatedAlertFromFormData(formData);
-  const response = await fetch(alertApiUrl, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(alert),
-  });
-  if (response.ok) {
-    onSuccess ? onSuccess() : null;
-  } else {
-    let errorMessage;
-    switch (response.status) {
-      case 403:
-        errorMessage = "Alert does not belong to requester.";
-        break;
-      case 400:
-        errorMessage = "Invalid alert attributes sent to server.";
       case 500:
         errorMessage = "Internal server error. Please try again later.";
       default:

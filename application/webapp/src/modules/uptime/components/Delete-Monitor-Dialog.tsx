@@ -55,7 +55,7 @@ export function MonitorDeleteDialog(props: DeleteMonitorDialogProps) {
             fontWeight="normal"
             onClick={async () => {
               const deleted = await deleteMonitor(monitorId);
-              if (deleted) mutate(monitorApiUrl);
+              if (deleted) await mutate(monitorApiUrl);
               onClose();
             }}
           >

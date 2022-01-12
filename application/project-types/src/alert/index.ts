@@ -1,7 +1,5 @@
 export type ChannelType = "Email" | "Slack";
 
-export type AlertStates = "enabled" | "disabled";
-
 export interface Alert {
   description: string;
   recipients: {
@@ -9,7 +7,6 @@ export interface Alert {
     Email?: string[];
   };
   channels: ChannelType[];
-  state: AlertStates;
 }
 
 export interface AlertInvocation {

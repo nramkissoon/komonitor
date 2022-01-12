@@ -4,7 +4,6 @@ import { UptimeMonitor } from "project-types";
 import React from "react";
 import { LoadingSpinner } from "../../../../src/common/components/Loading-Spinner";
 import { PageLayout } from "../../../../src/common/components/Page-Layout";
-import { useAlerts } from "../../../../src/modules/alerts/client";
 import { useUptimeMonitors } from "../../../../src/modules/uptime/client";
 import { CreateUpdateFormRewrite } from "../../../../src/modules/uptime/components/Create-Update-Form-Rewrite";
 import { useUserServicePlanProductId } from "../../../../src/modules/user/client";
@@ -21,13 +20,8 @@ const UptimeEdit: ExtendedNextPage = () => {
     isError: productIdIsError,
     isLoading: productIdIsLoading,
   } = useUserServicePlanProductId();
-  const {
-    alerts,
-    isLoading: alertsIsLoading,
-    isError: alertsIsError,
-  } = useAlerts();
 
-  const isLoading = monitorsIsLoading || productIdIsLoading || alertsIsLoading;
+  const isLoading = monitorsIsLoading || productIdIsLoading;
   const isError = monitorsIsError || productIdIsError;
 
   const router = useRouter();
@@ -43,7 +37,6 @@ const UptimeEdit: ExtendedNextPage = () => {
         <Fade in={!isLoading}>
           <CreateUpdateFormRewrite
             product_id={data.productId as string}
-            userAlerts={alerts}
             currentMonitorAttributes={monitor}
           />
         </Fade>

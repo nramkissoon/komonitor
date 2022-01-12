@@ -81,7 +81,7 @@ export async function getPreviousAlertInvocationForMonitor(
   try {
     const queryCommandInput: QueryCommandInput = {
       TableName: tableName,
-      KeyConditionExpression: "monitor_id = :partitionkeyval and timestamp > 0",
+      KeyConditionExpression: "monitor_id = :partitionkeyval",
       ExpressionAttributeValues: {
         ":partitionkeyval": { S: monitorId },
       },

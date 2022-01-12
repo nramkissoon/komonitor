@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
-import { getInvocationsForMultipleAlerts } from "../../../src/modules/alerts/invocations-db";
+import { getInvocationsForMultipleMonitors } from "../../../src/modules/alerts/invocations-db";
 import { getServicePlanProductIdForUser } from "../../../src/modules/user/user-db";
 
 async function getHandler(
@@ -35,11 +35,10 @@ async function getHandler(
       return;
     }
 
-    const invocations = await getInvocationsForMultipleAlerts(
+    const invocations = await getInvocationsForMultipleMonitors(
       ddbClient,
       idsAsList,
       env.ALERT_INVOCATION_TABLE_NAME,
-      env.ALERT_INVOCATION_TABLE_LSI_NAME,
       sinceAsNumber
     );
     res.status(200);

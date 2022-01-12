@@ -78,10 +78,11 @@ interface OverviewTableProps {
   columns: Column[];
   itemType: string;
   containerBoxProps?: BoxProps;
+  jsonDownLoad?: React.ReactElement;
 }
 
 export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
-  const { data, columns, itemType, containerBoxProps } = props;
+  const { data, columns, itemType, containerBoxProps, jsonDownLoad } = props;
   const rows: RowProps[] = React.useMemo(
     () => data.rowPropsGeneratorFunction(...data.dependencies),
     [...data.dependencies]
@@ -126,7 +127,10 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
       mb="2em"
       {...containerBoxProps}
     >
-      {GlobalFilter({ globalFilter, setGlobalFilter, itemType })}
+      <Flex flexDir="row" justifyContent="space-between">
+        {GlobalFilter({ globalFilter, setGlobalFilter, itemType })}
+        {jsonDownLoad}
+      </Flex>
       {!data.dependenciesIsLoading ? (
         <Fade in={!data.dependenciesIsLoading}>
           <Box

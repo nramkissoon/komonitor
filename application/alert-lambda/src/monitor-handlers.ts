@@ -57,7 +57,7 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
 
   const alert = monitor.alert;
 
-  if (alert === undefined || alert.state === "disabled") {
+  if (alert === undefined) {
     throw new Error(`Alert is ${alert}`);
   }
 

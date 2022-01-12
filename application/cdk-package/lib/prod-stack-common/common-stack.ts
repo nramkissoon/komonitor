@@ -17,9 +17,6 @@ export class CommonStack extends cdk.Stack {
       lambdaCodeBucketName: props.lambdaCodeBucketName,
       alertLambdaBucketKey: props.alertLambdaBucketKey,
       alertInvocationTable: props.alertInvocationTable,
-      alertInvocationTableTimestampLsiName:
-        props.alertInvocationTableTimestampLsiName,
-      alertTable: props.alertTable,
       uptimeLambdaBucketKey: props.uptimeLambdaBucketKey,
       uptimeMonitorStatusTable: props.uptimeMonitorStatusTable,
       uptimeMonitorTable: props.uptimeMonitorTable,

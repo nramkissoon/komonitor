@@ -74,11 +74,12 @@ function Feature(props: FeatureProps) {
         {listElements}
       </Box>
       <Box
-        bg={useColorModeValue("gray.700", "white")}
+        bg={useColorModeValue("gray.600", "gray.600")}
         borderRadius="2xl"
         shadow={"xl"}
         mr={["inherit", null, null, reverse ? "2em" : ""]}
         ml={["inherit", null, null, reverse ? "" : "2em"]}
+        p="3"
       >
         <Image
           display={["none", null, "inherit"]}
@@ -137,7 +138,7 @@ export function Features() {
         header: Copy.Features.Alert.Header,
         subheader: Copy.Features.Alert.Subheader,
         list: Copy.Features.Alert.List,
-        image: "/alert-dashboard.jpg",
+        image: "/alert-dashboard.png",
         reverse: true,
       })}
     </Flex>

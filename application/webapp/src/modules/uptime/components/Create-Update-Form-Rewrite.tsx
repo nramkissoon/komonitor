@@ -8,8 +8,10 @@ import {
   Button,
   chakra,
   Container,
+  Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -17,12 +19,14 @@ import {
   InputLeftAddon,
   NumberInput,
   NumberInputField,
+  Switch,
+  Textarea,
   Tooltip,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import Router, { useRouter } from "next/router";
-import { Alert, UptimeMonitor } from "project-types";
+import { Alert, ChannelType, UptimeMonitor } from "project-types";
 import React from "react";
 import {
   Controller,
@@ -39,11 +43,11 @@ import { ReactSelect } from "../../../common/components/React-Select";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import { createMonitor, updateMonitor } from "../client";
 import { HttpHeaderFormField } from "./Http-Header-Form-Field";
+import { RecipientFormController } from "./Recipient-Form-Controller";
 
 interface CreateUpdateFormProps {
   product_id: string;
   currentMonitorAttributes?: UptimeMonitor;
-  userAlerts?: Alert[];
 }
 
 export type Inputs = {
@@ -53,7 +57,7 @@ export type Inputs = {
   frequency: string;
   failures_before_alert: number;
   webhook_url: string;
-  alert_id: string;
+  alert?: Alert;
   http_headers: {
     header: string;
     value: string;
@@ -70,22 +74,15 @@ function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
       value: monitor.http_headers ? monitor.http_headers[header] : "",
     }));
   }
-  const placeholders: any = { ...monitor };
+  const placeholders: any = {
+    ...monitor,
+  };
   if (placeholders.webhook_url)
     placeholders.webhook_url = placeholders.webhook_url.replace("https://", "");
   placeholders.url = placeholders.url.replace("https://", "");
   placeholders.frequency = placeholders.frequency.toString();
   placeholders.http_headers = http_headers;
-  return placeholders;
-}
-
-function createAlertSelectOptionsReactSelect(alerts: Alert[]) {
-  if (!alerts || alerts.length === 0) return [];
-  return alerts.map((alert) => ({
-    value: alert.alert_id,
-    label: alert.name,
-    isDisabled: false,
-  }));
+  return placeholders as Inputs;
 }
 
 function createFrequencySelectOptionsReactSelect(productId: string) {
@@ -105,7 +102,7 @@ function createRegionSelectOptions() {
 }
 
 export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
-  let { product_id, currentMonitorAttributes, userAlerts } = props;
+  let { product_id, currentMonitorAttributes } = props;
 
   const createNewMonitor = currentMonitorAttributes === undefined;
   const { mutate } = useSWRConfig();
@@ -118,6 +115,11 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     formState: { errors, isSubmitting, touchedFields },
     control,
     setValue,
+    resetField,
+    reset,
+    getValues,
+    clearErrors,
+    setError,
   } = useForm<Inputs>({
     defaultValues: createNewMonitor
       ? undefined
@@ -129,6 +131,10 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     control,
     name: "http_headers",
   });
+
+  const [hasAlert, setHasAlert] = React.useState<boolean>(
+    currentMonitorAttributes?.alert !== undefined
+  );
 
   const postErrorToast = (message: string) =>
     errorToast({
@@ -143,9 +149,50 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
 
   const freqSelectFieldOptions =
     createFrequencySelectOptionsReactSelect(product_id);
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    if (createNewMonitor) {
+    if (hasAlert) {
+      if (data.alert && data.alert.recipients === undefined) {
+        setError("alert.recipients", {
+          type: "required",
+          message: "An alert channel is required.",
+        });
+        return;
+      } else {
+        // check if at least one recipient exists across all channels and set channels accordingly
+        let hasARecipient = false;
+        if (data.alert?.recipients) {
+          for (let key of Object.keys(data.alert?.recipients)) {
+            const recipientList = (
+              data.alert?.recipients as { [key: string]: string[] | undefined }
+            )[key];
+            if (recipientList && recipientList.length > 0) {
+              hasARecipient = true;
+              if (!data.alert.channels) data.alert.channels = [];
+              data.alert.channels.push(key as ChannelType);
+              data.alert.channels = Array.from(new Set(data.alert.channels));
+            } else {
+              if (data.alert.channels) {
+                const s = new Set(data.alert.channels);
+                s.delete(key as ChannelType);
+                data.alert.channels = Array.from(s);
+              }
+            }
+          }
+        }
+
+        if (!hasARecipient) {
+          setError("alert.recipients", {
+            type: "required",
+            message: "At least one recipient in any alert channel is required.",
+          });
+          return;
+        }
+      }
+    } else {
+      data.alert = undefined;
+    }
+
+    if (createNewMonitor && Object.keys(errors).length === 0) {
       await createMonitor(
         data,
         () =>
@@ -162,7 +209,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       augmentedValues.owner_id = currentMonitorAttributes?.owner_id;
       augmentedValues.created_at = currentMonitorAttributes?.created_at;
       augmentedValues.last_updated = currentMonitorAttributes?.last_updated;
-      augmentedValues.url = currentMonitorAttributes?.url;
       await updateMonitor(
         augmentedValues,
         () => {
@@ -187,11 +233,11 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       >
         {createNewMonitor ? "Create Uptime Monitor" : "Edit Monitor"}
       </Heading>
-      <Container borderRadius="xl" mb="3em" p="0" maxW="6xl">
+      <Container mb="3em" p="0" maxW="6xl">
         <chakra.form onSubmit={handleSubmit(onSubmit)}>
           <Box
             p="2em"
-            borderRadius="xl"
+            borderRadius="lg"
             shadow="lg"
             bg={useColorModeValue("white", "#0f131a")}
             mb="1.5em"
@@ -325,54 +371,52 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
           </Box>
           <Box
             p="2em"
-            borderRadius="xl"
+            borderRadius="lg"
             shadow="lg"
             mb="1.5em"
             bg={useColorModeValue("white", "#0f131a")}
           >
-            <Heading size="md" mb="15px">
-              Alert Settings
-            </Heading>
-            <Controller
-              name="alert_id"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <FormControl
-                  isInvalid={errors.alert_id ? touchedFields.alert_id : false}
-                  mb="1.5em"
-                >
-                  <FormLabel htmlFor="alert">Alert</FormLabel>
-                  <ReactSelect
-                    options={createAlertSelectOptionsReactSelect(
-                      userAlerts ?? []
-                    )}
-                    placeholder="Select Alert"
-                    field={field as any}
-                    setValue={setValue}
-                  />
-                  <FormErrorMessage>
-                    {errors.alert_id?.message}
-                  </FormErrorMessage>
-                </FormControl>
-              )}
-            />
+            <Flex justifyContent="space-between">
+              <Heading size="md">Alert Settings</Heading>
+              <Box>
+                <chakra.span mr="1rem" fontSize="lg" fontWeight="medium">
+                  Add an alert?
+                </chakra.span>
+                <Switch
+                  size="lg"
+                  isChecked={hasAlert}
+                  onChange={(e) => {
+                    if (!e.target.checked) {
+                      clearErrors("alert.recipients");
+                      resetField("alert");
+                    }
+                    setHasAlert(e.target.checked);
+                  }}
+                />
+              </Box>
+            </Flex>
+
             <Controller
               name="failures_before_alert"
               control={control}
               defaultValue={1}
-              rules={{
-                max: {
-                  value: 5,
-                  message:
-                    "Number of failures must be between 1 and 5 inclusive.",
-                },
-                min: {
-                  value: 1,
-                  message:
-                    "Number of failures must be between 1 and 5 inclusive.",
-                },
-              }}
+              rules={
+                hasAlert
+                  ? {
+                      required: "Required.",
+                      max: {
+                        value: 5,
+                        message:
+                          "Number of failures must be between 1 and 5 inclusive.",
+                      },
+                      min: {
+                        value: 1,
+                        message:
+                          "Number of failures must be between 1 and 5 inclusive.",
+                      },
+                    }
+                  : undefined
+              }
               render={({ field }) => (
                 <FormControl
                   isInvalid={
@@ -381,7 +425,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       : false
                   }
                   isRequired
-                  isDisabled={!watch("alert_id")}
+                  isDisabled={!hasAlert}
                   mb=".5em"
                 >
                   <FormLabel htmlFor="failuresBeforeRetry">
@@ -390,9 +434,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       label="Number of failed uptime checks before an alert is sent."
                       openDelay={500}
                     >
-                      {!watch("alert_id")
-                        ? "Failures Before Alert (Select an Alert to edit)"
-                        : "Failures Before Alert"}
+                      Failures Before Alert
                     </Tooltip>
                   </FormLabel>
                   <NumberInput
@@ -400,12 +442,12 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                     step={1}
                     max={5}
                     clampValueOnBlur={false}
-                    value={watch("alert_id") ? field.value : ""}
+                    value={hasAlert ? field.value : ""}
                   >
                     <NumberInputField
                       {...field}
                       placeholder="Failure amount"
-                      value={watch("alert_id") ? field.value : ""}
+                      value={hasAlert ? field.value : ""}
                     />
                   </NumberInput>
                   <FormErrorMessage>
@@ -414,10 +456,69 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 </FormControl>
               )}
             />
+            <Controller
+              name="alert.description"
+              defaultValue=""
+              control={control}
+              rules={
+                hasAlert
+                  ? {
+                      required: "Alert description is required.",
+                      maxLength: {
+                        value: 300,
+                        message: "Description must be 300 characters or less.",
+                      },
+                    }
+                  : undefined
+              }
+              render={({ field }) => (
+                <FormControl
+                  isInvalid={
+                    errors.alert?.description
+                      ? touchedFields.alert?.description
+                      : false
+                  }
+                  isRequired
+                  mb="1.5em"
+                  isDisabled={!hasAlert}
+                >
+                  <FormLabel htmlFor="description">Alert Description</FormLabel>
+                  <Textarea
+                    {...field}
+                    id="description"
+                    placeholder="Alert Description"
+                    isDisabled={!hasAlert}
+                    value={hasAlert ? field.value : ""}
+                  />
+                  <FormHelperText>
+                    Descriptions appear in the alert when they are sent. You
+                    should put useful information about the alert and/or
+                    incident action items here.
+                  </FormHelperText>
+                  <FormErrorMessage>
+                    {errors.alert?.description?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              )}
+            />
+            {errors.alert?.recipients && (
+              <chakra.span color="red.400" fontSize="md">
+                {(errors.alert.recipients as any).message}
+              </chakra.span>
+            )}
+            <RecipientFormController
+              control={control}
+              productId={product_id}
+              postErrorToast={postErrorToast}
+              setValue={setValue}
+              hasAlert={hasAlert}
+              currentValues={getValues("alert.recipients")}
+              clearErrors={clearErrors}
+            />
           </Box>
           <Box
             p="2em"
-            borderRadius="xl"
+            borderRadius="lg"
             shadow="lg"
             mb="1.5em"
             bg={useColorModeValue("white", "#0f131a")}

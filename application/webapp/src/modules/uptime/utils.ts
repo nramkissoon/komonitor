@@ -29,7 +29,7 @@ export function createNewMonitorFromCore(
     frequency: core.frequency,
     failures_before_alert: core.failures_before_alert,
     webhook_url: !core.webhook_url ? undefined : core.webhook_url,
-    alert_id: !core.alert_id ? undefined : core.alert_id,
+    alert: core.alert ?? undefined,
   };
   return monitor;
 }
@@ -38,7 +38,7 @@ export function createUpdatedMonitor(monitor: UptimeMonitor) {
   const updatedMonitor: UptimeMonitor = { ...monitor };
   updatedMonitor.last_updated = new Date().getTime();
   if (!monitor.webhook_url) updatedMonitor.webhook_url = undefined;
-  if (!monitor.alert_id) updatedMonitor.alert_id = undefined;
+  if (!monitor.alert) updatedMonitor.alert = undefined;
   return updatedMonitor;
 }
 

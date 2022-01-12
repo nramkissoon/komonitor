@@ -10,10 +10,6 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { UptimeMonitor } from "project-types";
-import {
-  getPreviousInvocationForAlertForMonitor,
-  setInvocationOngoingToFalse,
-} from "../alerts/invocations-db";
 
 export async function getMonitorsForUser(
   ddbClient: DynamoDBClient,
@@ -119,6 +115,11 @@ export async function putMonitor(
   isUpdate: boolean
 ) {
   try {
+    // check if monitor has no alert channels -> set alert to undefined
+    if (monitor.alert && monitor.alert.channels.length === 0) {
+      monitor.alert = undefined;
+    }
+
     const putItemCommandInput: PutItemCommandInput = {
       TableName: tableName,
       Item: marshall(monitor, {
@@ -136,79 +137,6 @@ export async function putMonitor(
     const statusCode = response.$metadata.httpStatusCode as number;
     if (statusCode >= 200 && statusCode < 300) return true;
     return false;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
-
-export async function detachAlertFromMonitors(
-  ddbClient: DynamoDBClient,
-  monitorTableName: string,
-  userId: string,
-  alertId: string,
-  alertInvocationTableName: string
-) {
-  try {
-    const monitors = await getMonitorsForUser(
-      ddbClient,
-      monitorTableName,
-      userId
-    );
-    const attachedMonitors: UptimeMonitor[] = [];
-    for (let monitor of monitors) {
-      if (monitor.alert_id === (alertId as string)) {
-        attachedMonitors.push(monitor);
-      }
-    }
-
-    // set all recent invocations to ongoing false
-    const resetOngoingInvocationsPromises: Promise<boolean>[] = [];
-    for (let monitor of attachedMonitors) {
-      const mostRecentAlertInvocation =
-        await getPreviousInvocationForAlertForMonitor(
-          ddbClient,
-          alertId,
-          monitor.monitor_id,
-          alertInvocationTableName
-        );
-      if (mostRecentAlertInvocation) {
-        resetOngoingInvocationsPromises.push(
-          setInvocationOngoingToFalse(
-            ddbClient,
-            mostRecentAlertInvocation,
-            alertInvocationTableName
-          )
-        );
-      }
-    }
-    let ongoingReset = true;
-    if (resetOngoingInvocationsPromises.length > 0) {
-      // check if all monitors are detached
-      ongoingReset = (
-        await Promise.all(resetOngoingInvocationsPromises)
-      ).reduce((prev, next) => prev && next);
-    }
-    // TODO determine if we should throw error if ongoingReset is false
-
-    const detachPromises: Promise<boolean>[] = [];
-    // detach
-    for (let monitor of attachedMonitors) {
-      monitor.alert_id = undefined;
-      monitor.failures_before_alert = undefined;
-      detachPromises.push(
-        putMonitor(ddbClient, monitorTableName, monitor, true)
-      );
-    }
-    let detached = true;
-    if (detachPromises.length > 0) {
-      // check if all monitors are detached
-      detached = (await Promise.all(detachPromises)).reduce(
-        (prev, next) => prev && next
-      );
-    }
-
-    return detached;
   } catch (err) {
     console.log(err);
     return false;

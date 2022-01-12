@@ -6,11 +6,8 @@ export const env = {
   USER_TABLE_NAME: process.env.USER_TABLE_NAME as string,
   UPTIME_MONITOR_STATUS_TABLE_NAME: process.env
     .UPTIME_MONITOR_STATUS_TABLE_NAME as string,
-  ALERT_TABLE_NAME: process.env.ALERT_TABLE_NAME as string,
   ALERT_INVOCATION_TABLE_NAME: process.env
     .ALERT_INVOCATION_TABLE_NAME as string,
-  ALERT_INVOCATION_TABLE_LSI_NAME: process.env
-    .ALERT_INVOCATION_TABLE_LSI_NAME as string,
   SERVER_HOSTNAME: process.env.SERVER_HOSTNAME as string,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
   STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY as string,

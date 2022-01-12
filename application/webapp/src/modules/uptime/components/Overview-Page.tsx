@@ -13,10 +13,11 @@ import { AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
 import { regionToLocationStringMap } from "../../../common/client-utils";
 import {
-  DeleteDialogProps,
+  DeleteDialog,
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
 import { useAlertInvocationsAllTime } from "../../alerts/client";
+import { InvocationTable } from "../../alerts/components/Invocation-Table";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import {
   useUserServicePlanProductId,
@@ -28,11 +29,6 @@ import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraphProps } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
 import { SelectStatusHistoryRadioButtons } from "./SelectStatusHistoryRadioButtons";
-const DeleteDialog = dynamic<DeleteDialogProps>(() =>
-  import("../../../common/components/Delete-Dialog").then(
-    (module) => module.DeleteDialog
-  )
-);
 const OverviewPageGraph = dynamic<OverviewPageGraphProps>(() =>
   import("./Overview-Page-Graph").then((module) => module.OverviewPageGraph)
 );
@@ -64,7 +60,7 @@ export function OverviewPage(props: OverviewPageProps) {
   } = useUserTimezoneAndOffset();
 
   const { monitor } = props;
-  const { name, url, monitor_id, region, alert_id } = monitor;
+  const { name, url, monitor_id, region, alert } = monitor;
 
   const {
     statuses,
@@ -94,7 +90,7 @@ export function OverviewPage(props: OverviewPageProps) {
   let invocationsForMonitor: { [alertId: string]: AlertInvocation[] } = {};
   for (let id of Object.keys(invocations ?? {})) {
     let filteredInvocations: AlertInvocation[] = invocations[id].filter(
-      (invocation) => invocation.monitor_id_timestamp.startsWith(monitor_id)
+      (invocation) => invocation.monitor_id === monitor_id
     );
     invocationsForMonitor[id] = filteredInvocations;
   }
@@ -169,7 +165,11 @@ export function OverviewPage(props: OverviewPageProps) {
               offset={tzAndOffset?.offset ?? 0}
             />
           </TabPanel>
-          <TabPanel p="0"></TabPanel>
+          <TabPanel p="0">
+            <InvocationTable
+              invocations={invocations ? invocations[monitor_id] : []}
+            />
+          </TabPanel>
         </TabPanels>
       </Tabs>
     </Box>
