@@ -1,19 +1,13 @@
-import { AlertInvocation } from "project-types";
+import { Box, Flex } from "@chakra-ui/react";
+import { Alert, AlertInvocation } from "project-types";
 import { Column } from "react-table";
+import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
-import {
-  AlertRecipientsCell,
-  AlertSeverityCell,
-  GenericMonitorNameCell,
-  SimpleTimestampCell,
-} from "../../../common/components/Table-Cell";
-import { itemIdToDisplayStringInTableCell } from "../../../common/utils";
+import { SimpleTimestampCell } from "../../../common/components/Table-Cell";
 import { useUserTimezoneAndOffset } from "../../user/client";
+import { alertTypeToBadge } from "./Alert-Type-Badges";
 
 interface RowProps {
-  severity: string;
-  recipients: string[];
-  monitorType: string;
   monitor: {
     id: string;
     name: string;
@@ -22,31 +16,26 @@ interface RowProps {
     timestamp: number;
     ongoing: boolean;
   };
+  alert: Alert;
   filterString: string;
 }
 
 function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
   return invocations
     ? invocations.map((invocation) => {
-        const { severity, recipients } = invocation.alert;
         const { monitor_id, name, url } = invocation.monitor;
         return {
           timestampAndOngoing: {
             timestamp: invocation.timestamp,
             ongoing: invocation.ongoing,
           },
-          severity: severity,
-          recipients: recipients,
-          monitorType: itemIdToDisplayStringInTableCell(monitor_id),
           monitor: {
             id: monitor_id,
             name: name,
           },
+          alert: invocation.alert,
           filterString: [
-            ...recipients,
             name,
-            severity,
-            url,
             new Date(invocation.timestamp).toUTCString(),
           ].join(" "),
         };
@@ -54,12 +43,23 @@ function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
     : [];
 }
 
+const AlertChannelCell = (alert: Alert) => (
+  <Flex>
+    {alert.channels.map((channel) => (
+      <Box key={channel} mr="1em">
+        {alertTypeToBadge(channel)}
+      </Box>
+    ))}
+  </Flex>
+);
+
 interface InvocationTableProps {
   invocations: AlertInvocation[] | undefined;
 }
 
 export function InvocationTable(props: InvocationTableProps) {
   const { invocations } = props;
+
   const {
     data: tzAndOffset,
     isLoading: tzPrefIsLoading,
@@ -78,22 +78,10 @@ export function InvocationTable(props: InvocationTableProps) {
         }),
     },
     {
-      Header: "Monitor",
-      accessor: "monitor",
-      Cell: (props) => GenericMonitorNameCell(props.cell.value),
+      Header: "Alert Channels",
+      accessor: "alert",
       disableSortBy: true,
-    },
-
-    {
-      Header: "Severity",
-      accessor: "severity",
-      Cell: (props) => AlertSeverityCell({ severity: props.cell.value }),
-    },
-    {
-      Header: "Recipients",
-      disableSortBy: true,
-      accessor: "recipients",
-      Cell: (props) => AlertRecipientsCell({ recipients: props.cell.value }),
+      Cell: (props) => AlertChannelCell(props.cell.value as Alert),
     },
   ];
 
@@ -101,12 +89,19 @@ export function InvocationTable(props: InvocationTableProps) {
     <>
       {CommonOverviewTable<RowProps>({
         data: {
-          dependencies: [invocations],
+          dependencies: [
+            invocations
+              ? invocations.sort((a, b) => b.timestamp - a.timestamp)
+              : [],
+          ],
           dependenciesIsLoading: invocations === undefined,
           rowPropsGeneratorFunction: rowPropsGeneratorFunction,
         },
         columns: columns,
         itemType: "Alert Invocations",
+        jsonDownLoad: (
+          <JSONDownloadButton data={invocations} filename={"alerts.json"} />
+        ),
       })}
     </>
   );

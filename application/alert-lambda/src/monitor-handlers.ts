@@ -1,8 +1,7 @@
 import { AlertInvocation, UptimeMonitorStatus } from "project-types";
 import { config, ddbClient } from "./config";
 import {
-  getAlertForUserByAlertId,
-  getPreviousInvocationForAlertForMonitor,
+  getPreviousAlertInvocationForMonitor,
   getStatusesForUptimeMonitor,
   getUptimeMonitorForUserByMonitorId,
   getUserById,
@@ -40,7 +39,6 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
   if (
     monitor === null ||
     monitor === undefined ||
-    monitor.alert_id === undefined ||
     monitor.failures_before_alert === undefined
   ) {
     throw new Error(
@@ -57,14 +55,9 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
     (monitor.failures_before_alert as number) + 2 // +2 buffer
   );
 
-  const alert = await getAlertForUserByAlertId(
-    ddbClient,
-    config.alertTableName,
-    userId,
-    monitor.alert_id
-  );
+  const alert = monitor.alert;
 
-  if (alert === null || alert === undefined || alert.state === "disabled") {
+  if (alert === undefined) {
     throw new Error(`Alert is ${alert}`);
   }
 
@@ -82,9 +75,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
 
   if (triggeringStatuses.length !== failureCount) alertShouldTrigger = false;
 
-  const previousInvocation = await getPreviousInvocationForAlertForMonitor(
+  const previousInvocation = await getPreviousAlertInvocationForMonitor(
     ddbClient,
-    alert.alert_id,
     monitor.monitor_id,
     config.alertInvocationTableName
   );
@@ -96,12 +88,15 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
   // check if previous invocation was triggered by any of the statuses, don't check if no invocation
   if (previousInvocation) {
     for (let status of triggeringStatuses) {
-      const statusIdT = {
+      const statusIdTimestamp = {
         id: status.monitor_id,
         timestamp: status.timestamp,
       };
       if (
-        wasStatusTriggeredPreviousAlert(statusIdT, previousInvocation.statuses)
+        wasStatusTriggeredPreviousAlert(
+          statusIdTimestamp,
+          previousInvocation.statuses
+        )
       ) {
         alertShouldTrigger = false;
       }
@@ -112,15 +107,11 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
     return;
   }
 
-  const alertType = alert.type;
-  let alertTriggered = false;
   const now = Date.now();
   const invocation: AlertInvocation = {
-    alert_id: alert.alert_id,
+    monitor_id: monitorId,
     alert: alert,
     timestamp: now,
-    monitor_id_timestamp: monitorId + "#" + now.toString(),
-    monitor_type: "uptime-monitor",
     monitor: monitor,
     statuses: triggeringStatuses.map((status) => ({
       id: status.monitor_id,
@@ -134,20 +125,23 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
     return;
   }
 
-  switch (alertType) {
-    case "Email":
+  const channels = alert.channels;
+  let alertTriggered = false;
+
+  for (let channelType of channels) {
+    if (channelType === "Email") {
       alertTriggered = await sendUptimeMonitorAlertEmail(
         monitor,
         alert,
         triggeringStatuses,
         user
       );
-      break;
-    case "Slack":
-      alertTriggered = await sendUptimeMonitorSlackAlert(monitor, alert, user);
-      break;
-    default:
-      break;
+    }
+    if (channelType === "Slack") {
+      alertTriggered =
+        alertTriggered &&
+        (await sendUptimeMonitorSlackAlert(monitor, alert, user));
+    }
   }
 
   if (alertTriggered) {

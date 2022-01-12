@@ -46,7 +46,8 @@ export function SaveButton(props: SaveButtonProps) {
     >
       <Button
         isLoading={isLoading}
-        loadingText="Saving"
+        loadingText="Saving..."
+        spinner={<></>}
         size="md"
         fontSize="md"
         fontWeight="medium"
@@ -60,11 +61,15 @@ export function SaveButton(props: SaveButtonProps) {
         display={
           newData === initialData || newData.value === initialData
             ? "hidden"
-            : "block"
+            : "inherit"
         }
         onClick={async () => {
           setIsLoading(true);
-          await postFunction(newData.value, postSuccessToast, postErrorToast);
+          await postFunction(
+            newData.value ?? newData,
+            postSuccessToast,
+            postErrorToast
+          );
           await mutate();
           setIsLoading(false);
         }}

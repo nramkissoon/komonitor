@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../../src/common/server-utils";
 import {
-  getPreviousInvocationForAlertForMonitor,
+  getPreviousAlertInvocationForMonitor,
   setInvocationOngoingToFalse,
 } from "../../../../src/modules/alerts/invocations-db";
 import { getUptimeMonitorAllowanceFromProductId } from "../../../../src/modules/billing/plans";
@@ -80,11 +80,10 @@ async function updateHandler(
     }
 
     // reset any ongoing alert invocations on this monitor
-    if (monitorExistsForUser.alert_id) {
+    if (monitorExistsForUser.alert) {
       const mostRecentAlertInvocation =
-        await getPreviousInvocationForAlertForMonitor(
+        await getPreviousAlertInvocationForMonitor(
           ddbClient,
-          monitorExistsForUser.alert_id,
           monitorExistsForUser.monitor_id,
           env.ALERT_INVOCATION_TABLE_NAME
         );

@@ -64,7 +64,7 @@ function CheckIcon(color: string) {
 }
 
 const monitorSectionData = [
-  ["Uptime", "20 Monitors", "80 Monitors", "500 Monitors"],
+  ["Uptime", "5 Monitors", "50 Monitors", "500 Monitors"],
   ["Lighthouse*", "1 Monitor", "10 Monitors", "30 Monitors"],
   ["Uptime Check Frequency", "5 minutes", "1 minute", "1 minute"],
   ["Lighthouse Check Frequency*", "7 days", "1 day", "1 day"],
@@ -73,9 +73,8 @@ const monitorSectionData = [
 
 const alertSectionData = [
   ["Email Alerts", CheckIcon, CheckIcon, CheckIcon],
-  ["Slack Alerts*", CheckIcon, CheckIcon, CheckIcon],
+  ["Slack Alerts", CheckIcon, CheckIcon, CheckIcon],
   ["Email Recipients per Alert", "1", "5", "10"],
-  ["Alerts per Account", "3", "20", "50"],
 ];
 
 const dataSectionData = [["Data Retention", "7 days", "30 days", "365 days"]];

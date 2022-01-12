@@ -32,11 +32,8 @@ export class ProdUsEast1Stack extends cdk.Stack {
       uptimeMonitorTableFrequencyGsiName:
         this.tables.uptimeMonitorTableFrequencyGsiName,
       uptimeMonitorTable: this.tables.uptimeMonitorTable,
-      alertTable: this.tables.alertTable,
       userTable: this.tables.userTable,
       alertInvocationTable: this.tables.alertInvocationTable,
-      alertInvocationTableTimestampLsiName:
-        this.tables.alertInvocationTableTimestampLsiName,
       lighthouseJobTable: this.tables.lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName:
         this.tables.lighthouseJobTableFrequencyGsiName,

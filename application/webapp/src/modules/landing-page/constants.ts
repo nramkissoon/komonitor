@@ -23,7 +23,7 @@ export const Copy = {
       List: [
         "Receive alerts via email or Slack.",
         "Alerts are actionable and let you know exactly what went wrong.",
-        "Enable and disable alerts for any monitor you wish.",
+        "Customize alerts for each of your monitors.",
       ],
     },
   },

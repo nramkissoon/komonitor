@@ -9,6 +9,7 @@ interface ReactSelectProps {
   options: { value: string; label: string; isDisabled: boolean }[];
   placeholder: string;
   isDisabled?: boolean;
+  isDisabledValue?: { value: string; label: string; isDisabled: boolean };
   field: ControllerRenderProps;
   setValue: UseFormSetValue<any>;
   defaultValue?: { value: string; label: string; isDisabled: boolean };
@@ -27,6 +28,7 @@ export function ReactSelect(props: ReactSelectProps) {
     blue800,
     gray500,
     whiteAlpha400,
+    gray200,
   ] = useToken("colors", [
     "gray.900",
     "gray.50",
@@ -37,17 +39,22 @@ export function ReactSelect(props: ReactSelectProps) {
     "blue.800",
     "gray.500",
     "whiteAlpha.400",
+    "gray.300",
   ]);
 
   const menuBackground = useColorModeValue(gray50, gray900);
   const menuListBackground = useColorModeValue("#E2E8F0", "#1A202C");
   const optionDisabledColor = useColorModeValue(gray400, gray600);
   const optionFocusedBackground = useColorModeValue(blue100, blue800);
-  const disabledSingleValueColor = useColorModeValue(gray400, whiteAlpha400);
+  const disabledSingleValueColor = useColorModeValue(gray200, whiteAlpha400);
 
   return (
     <Select
       styles={{
+        placeholder: (base, props) => ({
+          ...base,
+          color: props.isDisabled ? disabledSingleValueColor : "inherit",
+        }),
         control: (base, props) => ({
           ...base,
           background: "inherit",
@@ -123,13 +130,13 @@ export function ReactSelect(props: ReactSelectProps) {
       ) => (typeof option === "string" ? false : option.isDisabled)}
       {...field}
       value={
-        options
+        isDisabled
+          ? props.isDisabledValue
+          : options
           ? options.find((option) => option.value === field.value)
-          : defaultValue ?? ""
+          : undefined
       }
-      onChange={(option: any) =>
-        setValue(field.name, option?.value ?? defaultValue?.value ?? "")
-      }
+      onChange={(option: any) => setValue(field.name, option?.value ?? "")}
     />
   );
 }
@@ -160,7 +167,7 @@ function MultiButton(props: MultiButtonProps) {
   );
 }
 
-interface MultiSelectTextInputFormikProps {
+interface MultiSelectTextInputProps {
   placeholder: string;
   field: ControllerRenderProps;
   initialValue: string[];
@@ -171,7 +178,7 @@ interface MultiSelectTextInputFormikProps {
 }
 
 // TODO IDK IF THIS WORKS
-export function MultiSelectTextInput(props: MultiSelectTextInputFormikProps) {
+export function MultiSelectTextInput(props: MultiSelectTextInputProps) {
   const {
     placeholder,
     field,

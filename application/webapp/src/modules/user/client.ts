@@ -1,11 +1,11 @@
 import router from "next/router";
-import { SlackInstallation } from "project-types";
+import { SlackInstallation, User } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
 const userPlanApiUrl = env.BASE_URL + "api/user/plan";
 export const userTzApiUrl = env.BASE_URL + "api/user/tz";
-const userApiUrl = env.BASE_URL + "api/user";
+export const userApiUrl = env.BASE_URL + "api/user";
 export const userSlackInstallationApiUrl =
   env.BASE_URL + "api/user/slack-installations";
 
@@ -30,6 +30,20 @@ export function useUserTimezoneAndOffset() {
     isLoading: !error && !data,
     isError: error,
     mutate: mutate,
+  };
+}
+
+export function useUser() {
+  const fetcher = (url: string) =>
+    fetch(url, { method: "GET" }).then((r) => r.json());
+
+  const { data, error, mutate } = useSWR(userApiUrl, fetcher);
+
+  return {
+    user: data as User,
+    userIsLoading: !error && !data,
+    userIsError: error,
+    userMutate: mutate,
   };
 }
 

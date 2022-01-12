@@ -16,18 +16,12 @@ class UptimeMonitorLambda extends cdk.Construct {
       alertLambda: AlertLambda;
       region: string;
       alertInvocationTable: dynamodb.Table;
-      alertInvocationTableTimeStampLsiName: string;
     }
   ) {
     super(scope, id);
 
-    const {
-      monitorStatusTable,
-      alertLambda,
-      region,
-      alertInvocationTable,
-      alertInvocationTableTimeStampLsiName,
-    } = props;
+    const { monitorStatusTable, alertLambda, region, alertInvocationTable } =
+      props;
 
     this.lambda = new lambda.Function(this, region + "_prod_uptime_monitor", {
       runtime: lambda.Runtime.NODEJS_14_X,
@@ -38,8 +32,6 @@ class UptimeMonitorLambda extends cdk.Construct {
         REGION: region,
         MONITOR_STATUS_TABLE_NAME: monitorStatusTable.tableName,
         ALERT_LAMBDA_NAME: alertLambda.lambda.functionName,
-        ALERT_INVOCATION_TABLE_TIMESTAMP_LSI_NAME:
-          alertInvocationTableTimeStampLsiName,
         ALERT_INVOCATION_TABLE_NAME: alertInvocationTable.tableName,
       },
       timeout: cdk.Duration.seconds(60),
@@ -130,10 +122,10 @@ class AlertLambda extends cdk.Construct {
     props: {
       uptimeMonitorTable: dynamodb.Table;
       uptimeMonitorStatusTable: dynamodb.Table;
-      alertTable: dynamodb.Table;
+
       alertInvocationTable: dynamodb.Table;
       userTable: dynamodb.Table;
-      alertInvocationTableTimeStampLsiName: string;
+
       region: string;
     }
   ) {
@@ -143,8 +135,6 @@ class AlertLambda extends cdk.Construct {
       uptimeMonitorStatusTable,
       uptimeMonitorTable,
       alertInvocationTable,
-      alertInvocationTableTimeStampLsiName,
-      alertTable,
       region,
       userTable,
     } = props;
@@ -158,18 +148,14 @@ class AlertLambda extends cdk.Construct {
         REGION: region,
         UPTIME_MONITOR_TABLE_NAME: uptimeMonitorTable.tableName,
         UPTIME_MONITOR_STATUS_TABLE_NAME: uptimeMonitorStatusTable.tableName,
-        ALERT_TABLE_NAME: alertTable.tableName,
         ALERT_INVOCATION_TABLE_NAME: alertInvocationTable.tableName,
         USER_TABLE_NAME: userTable.tableName,
-        ALERT_INVOCATION_TABLE_TIMESTAMP_LSI_NAME:
-          alertInvocationTableTimeStampLsiName,
       },
       timeout: cdk.Duration.minutes(2),
     });
 
     uptimeMonitorTable.grantReadData(this.lambda);
     uptimeMonitorStatusTable.grantReadData(this.lambda);
-    alertTable.grantReadData(this.lambda);
     alertInvocationTable.grantReadWriteData(this.lambda);
     userTable.grantReadData(this.lambda);
 
@@ -204,12 +190,12 @@ export class Lambdas extends cdk.Construct {
       uptimeMonitorStatusTable: dynamodb.Table;
       uptimeMonitorTableFrequencyGsiName: string;
       uptimeMonitorTable: dynamodb.Table;
-      alertTable: dynamodb.Table;
+
       userTable: dynamodb.Table;
       alertInvocationTable: dynamodb.Table;
       region: string;
       lambdaCodeBucketName: string;
-      alertInvocationTableTimeStampLsiName: string;
+
       lighthouseJobTable: dynamodb.Table;
       lighthouseJobTableFrequencyGsiName: string;
     }
@@ -222,8 +208,7 @@ export class Lambdas extends cdk.Construct {
       uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName,
       alertInvocationTable,
-      alertInvocationTableTimeStampLsiName,
-      alertTable,
+
       region,
       userTable,
       lighthouseJobTable,
@@ -238,9 +223,7 @@ export class Lambdas extends cdk.Construct {
 
     this.alertLambda = new AlertLambda(this, "prodAlertLambda", {
       alertInvocationTable: alertInvocationTable,
-      alertTable: alertTable,
-      alertInvocationTableTimeStampLsiName:
-        alertInvocationTableTimeStampLsiName,
+
       uptimeMonitorStatusTable: uptimeMonitorStatusTable,
       uptimeMonitorTable: uptimeMonitorTable,
       userTable: userTable,
@@ -255,8 +238,6 @@ export class Lambdas extends cdk.Construct {
         region: region,
         alertLambda: this.alertLambda,
         alertInvocationTable: alertInvocationTable,
-        alertInvocationTableTimeStampLsiName:
-          alertInvocationTableTimeStampLsiName,
       }
     );
 

@@ -10,12 +10,12 @@ import {
   LambdaClient,
 } from "@aws-sdk/client-lambda";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { UptimeMonitorJob } from "project-types";
+import { UptimeMonitor } from "project-types";
 import { Config } from "src/config";
 
 const asyncInvokeLambda = async (
   lambdaClient: LambdaClient,
-  jobs: UptimeMonitorJob[],
+  jobs: UptimeMonitor[],
   config: Config
 ) => {
   const event = {
@@ -38,24 +38,17 @@ const checkUnmarshalledItemIsMonitorJob = (item: {
   return item.monitor_id && item.url && item.name && item.region;
 };
 
-const convertDdbItemsToUptimeMonitorJobs = (
+const convertDdbItemsToUptimeMonitors = (
   items: {
     [key: string]: AttributeValue;
   }[]
-): UptimeMonitorJob[] => {
-  const jobs: UptimeMonitorJob[] = [];
+): UptimeMonitor[] => {
+  const jobs: UptimeMonitor[] = [];
   items.forEach((item) => {
     const unmarshalled = unmarshall(item);
     if (checkUnmarshalledItemIsMonitorJob(unmarshalled)) {
-      const job: UptimeMonitorJob = {
-        monitor_id: unmarshalled.monitor_id,
-        owner_id: unmarshalled.owner_id,
-        url: unmarshalled.url,
-        name: unmarshalled.name,
-        region: unmarshalled.region,
-        http_headers: unmarshalled.http_headers,
-        webhook_url: unmarshalled.webhook_url,
-        alert_id: unmarshalled.alert_id,
+      const job: UptimeMonitor = {
+        ...(unmarshalled as UptimeMonitor),
       };
       jobs.push(job);
     }
@@ -113,11 +106,11 @@ export const handleUptimeCheck = async (
           offset + config.uptimeCheckLambdaJobLimit >=
           response.Items.length
         ) {
-          jobs = convertDdbItemsToUptimeMonitorJobs(
+          jobs = convertDdbItemsToUptimeMonitors(
             response.Items.slice(offset, undefined)
           );
         } else {
-          jobs = convertDdbItemsToUptimeMonitorJobs(
+          jobs = convertDdbItemsToUptimeMonitors(
             response.Items.slice(
               offset,
               offset + config.uptimeCheckLambdaJobLimit

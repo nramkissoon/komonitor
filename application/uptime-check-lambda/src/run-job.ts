@@ -6,14 +6,14 @@ import {
 import AbortController from "abort-controller";
 import {
   MonitorTypes,
-  UptimeMonitorJob,
+  UptimeMonitor,
   UptimeMonitorStatus,
   UptimeMonitorWebhookNotification,
 } from "project-types";
 import request from "request";
 import { config } from "./config";
 import {
-  getPreviousInvocationForAlertForMonitor,
+  getPreviousAlertInvocationForMonitor,
   writeAlertInvocation,
   writeStatusToDB,
 } from "./db";
@@ -141,7 +141,7 @@ const buildWebhook = (
   };
 };
 
-export const runJob = async (job: UptimeMonitorJob) => {
+export const runJob = async (job: UptimeMonitor) => {
   const {
     name,
     url,
@@ -150,7 +150,7 @@ export const runJob = async (job: UptimeMonitorJob) => {
     monitor_id,
     owner_id,
     http_headers,
-    alert_id,
+    alert,
   } = job;
 
   const latencies: number[] = [];
@@ -178,9 +178,8 @@ export const runJob = async (job: UptimeMonitorJob) => {
     await webhookNotifyCall(webhook_url, webhook);
   }
 
-  if (status.status === "up" && alert_id) {
-    const lastAlertForMonitor = await getPreviousInvocationForAlertForMonitor(
-      alert_id,
+  if (status.status === "up" && alert) {
+    const lastAlertForMonitor = await getPreviousAlertInvocationForMonitor(
       monitor_id,
       config.alertInvocationTableName
     );
@@ -196,7 +195,7 @@ export const runJob = async (job: UptimeMonitorJob) => {
     }
   }
 
-  if (status.status === "down" && alert_id) {
+  if (status.status === "down" && alert) {
     const res = await asyncInvokeLambda({
       monitorId: monitor_id,
       ownerId: owner_id,

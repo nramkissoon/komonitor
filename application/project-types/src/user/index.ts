@@ -10,6 +10,7 @@ export interface NextAuthUserAttributes {
   type: "USER";
   name: string | undefined;
   email: string | undefined;
+
   image: string | undefined;
   username: unknown;
   emailVerified: string | null;
@@ -34,4 +35,5 @@ export interface User
     StripeAttributes,
     SlackAttributes {
   tz?: string; // timezone preference
+  emailOptIn: boolean;
 }

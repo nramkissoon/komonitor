@@ -1,3 +1,32 @@
+Big Alert Refactor:
+    ✘ app index redirects to monitors @cancelled(22-01-10 08:56)
+    ✔ new user page @done(22-01-10 09:29)
+    Models:
+        ✔ add alert model to monitor, remove alert_id @done(22-01-10 09:03)
+        ✔ remove name and single type and severity from alert model @done(22-01-10 09:02)
+        ✔ remove alert_id @done(22-01-10 08:57)
+        ✔ make monitor URL uneditable @done(22-01-10 09:08)
+    CDK:
+        ✔ remove alert DB @done(22-01-12 11:24)
+        ✔ remove all mentions of alert db @done(22-01-12 11:24)
+        ✔ new invocation db, pk = monitor_id, sk = timestamp @done(22-01-12 11:24)
+    Lambda:
+        Alert Lambda:
+            ✔  new invocation ID = monitor_id, remove monitor_id-timestmp @done(22-01-10 10:22)
+            ✔  remove alert fields that no longer exists from alert template @done(22-01-10 10:22)
+    Webapp:
+        ✔ remove alert tab @done(22-01-12 10:58)
+        ✔ update docs @done(22-01-12 10:58)
+        ✔ update landing and pricing @done(22-01-12 11:24)
+        ✔ move alert creation logic to second page in monitor creation form @done(22-01-10 15:57)
+        ✔ update slack logic when counting slack alerts @done(22-01-10 17:26)
+        ✔ test when detaching all slack alerts, if no other alert channel exists, update monitor with no alert, else, remove Slack from channels @done(22-01-12 11:05)
+        ✔ move alert views to monitor view -> in alert = last invocation @done(22-01-12 11:02)
+    ✔ all fetch invocation db calls -> switch to pk/sk @done(22-01-10 17:27)
+    ✔  update dev web app envs with new invocation table in vercel @done(22-01-12 11:11)
+    ✔  update prod web app envs @done(22-01-12 11:11)
+
+
 Webapp: 
     Pricing page:
         ✔  move loading spinner to CTA buttons @done(22-01-01 07:40)
@@ -7,22 +36,6 @@ Webapp:
         
     Stripe:
         ☐ add annual plans 
-
-    Slack: 
-        ✔ create installation field on user @done(21-12-11 13:45)
-        ✔ null out installation storage on installer @done(21-12-11 13:45)
-        ✔ create api routes for storing fetching installations @done(21-12-16 15:16)
-        ✔ create useInstallation hook that fetches installation on user @done(21-12-11 17:41)
-        ✔ create delete installation api @done(21-12-16 19:56)
-        ✔ uninstall app when deleting integ @done(21-12-16 21:05)
-        ✔ remove slack secrets from fetch @done(21-12-16 16:28)
-        ✔ switch add to slack button to delete integration if installation exists @done(21-12-16 21:05)
-        ✔ save installation to user on callback @done(21-12-13 17:21)
-        ✔ delete modal when delete button pressed then call delete api @done(21-12-20 19:36)
-        ✘  add a change installation option that migrates alerts and deprecates current auth @cancelled(21-12-20 14:26)
-        ✔ test integration API @done(21-12-21 17:29)
-        ✔  test button calls api @done(21-12-21 17:29)
-        ✔ check if prod Slack app is ready @done(21-12-31 08:35)
         
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
@@ -62,10 +75,10 @@ Webapp:
         ☐ store value in db
         ☐ add toggle for emails in settings
     Slack Alerts:
-        ☐ Form changes when slack type is selected
-        ☐ form has connect to slack button
-        ☐ verify we can redirect with the form after user has added bot to workspace
-        ☐ research slack auth flows
+        ✔ Form changes when slack type is selected @done(22-01-05 15:34)
+        ✔ form has connect to slack button @done(22-01-05 15:34)
+        ✔ verify we can redirect with the form after user has added bot to workspace @done(22-01-05 15:34)
+        ✔ research slack auth flows @done(22-01-05 15:34)
     Webhook Alerts: 
         ☐ initial design
     SNS Topic Alerts:
@@ -96,6 +109,26 @@ User pref dates:
 
 Customer Serve:
     ☐ notification for new users -> email template
+
+Sign in:
+    ✔  migrate to formik and delete formik dep @done(22-01-07 12:04)
+
+Weekly emails: 
+    Email Template: 
+        ☐  include unsub button
+    Lambda: 
+        ☐  set up lambda
+        ☐  add lambda and weekly rule to us-east-1 stack
+        ☐  lambda can read user table
+        ☐  lambda can read user monitors and user monitor statuses for the week
+        ☐  lambda has ses access
+        ☐  promise all nodemailer sends
+    Settings:
+        ✔  add toggle to account settings @done(22-01-07 11:32)
+    DB: 
+        ✔ add field to user model @done(22-01-07 09:52)
+    Sign up: 
+        ✔ set weekly email to true @done(22-01-07 09:51)
 
 Uptime HTTP:
     ✔  design new creation and edit form @done(21-12-06 11:49)
@@ -177,6 +210,8 @@ Bugs:
     ☐  keyed mutates
      ☐ make monitor url unchangeable, it messes up stats 
      ☐  get rid of uptime monitor jobs
+     ☐ add sweden to cdk
+    ☐  consolidate useUser hooks to one api call
 
-☐ hire in public
+✔ hire in public @done(22-01-07 09:23)
 ☐ product gif generation

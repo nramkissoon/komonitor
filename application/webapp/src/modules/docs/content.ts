@@ -47,19 +47,4 @@ export const SidebarRoutes: SidebarRouteSection[] = [
       },
     ],
   },
-  {
-    title: "🚨 Alerts",
-    path: "/docs/alerts",
-    heading: true,
-    routes: [
-      {
-        title: "What is an Alert?",
-        path: "/docs/alerts/what-is-it",
-      },
-      {
-        title: "Working with Alerts",
-        path: "/docs/alerts/working-with-alerts",
-      },
-    ],
-  },
 ];

@@ -9,14 +9,15 @@ import {
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import router from "next/router";
-import { Alert, AlertInvocation, UptimeMonitor } from "project-types";
+import { AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
 import { regionToLocationStringMap } from "../../../common/client-utils";
 import {
-  DeleteDialogProps,
+  DeleteDialog,
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
-import { useAlertInvocationsAllTime, useAlerts } from "../../alerts/client";
+import { useAlertInvocationsAllTime } from "../../alerts/client";
+import { InvocationTable } from "../../alerts/components/Invocation-Table";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import {
   useUserServicePlanProductId,
@@ -28,11 +29,6 @@ import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraphProps } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
 import { SelectStatusHistoryRadioButtons } from "./SelectStatusHistoryRadioButtons";
-const DeleteDialog = dynamic<DeleteDialogProps>(() =>
-  import("../../../common/components/Delete-Dialog").then(
-    (module) => module.DeleteDialog
-  )
-);
 const OverviewPageGraph = dynamic<OverviewPageGraphProps>(() =>
   import("./Overview-Page-Graph").then((module) => module.OverviewPageGraph)
 );
@@ -64,7 +60,7 @@ export function OverviewPage(props: OverviewPageProps) {
   } = useUserTimezoneAndOffset();
 
   const { monitor } = props;
-  const { name, url, monitor_id, region, alert_id } = monitor;
+  const { name, url, monitor_id, region, alert } = monitor;
 
   const {
     statuses,
@@ -74,11 +70,6 @@ export function OverviewPage(props: OverviewPageProps) {
     monitor_id as string,
     Number.parseInt(monitorStatusSince)
   );
-  const {
-    alerts,
-    isError: alertsIsError,
-    isLoading: alertsIsLoading,
-  } = useAlerts();
 
   const mostRecentStatus = React.useMemo(() => {
     return statuses && statuses[monitor_id].length > 0
@@ -88,25 +79,18 @@ export function OverviewPage(props: OverviewPageProps) {
       : null;
   }, [statuses]);
 
-  // this will be a list because monitors will eventually have multiple alerts
-  const alertsForMonitor: Alert[] = React.useMemo(() => {
-    return alerts ? alerts.filter((alert) => alert_id === alert.alert_id) : [];
-  }, [alert_id, alerts]);
-
   // get the invocations for the relevant alerts
   const {
     invocations,
     isError: invocationsIsError,
     isLoading: invocationsIsLoading,
-  } = useAlertInvocationsAllTime(
-    alertsForMonitor.map((alert) => alert.alert_id)
-  );
+  } = useAlertInvocationsAllTime([monitor_id]);
 
   // filter out the invocations not related to this specific monitor
   let invocationsForMonitor: { [alertId: string]: AlertInvocation[] } = {};
   for (let id of Object.keys(invocations ?? {})) {
     let filteredInvocations: AlertInvocation[] = invocations[id].filter(
-      (invocation) => invocation.monitor_id_timestamp.startsWith(monitor_id)
+      (invocation) => invocation.monitor_id === monitor_id
     );
     invocationsForMonitor[id] = filteredInvocations;
   }
@@ -182,10 +166,8 @@ export function OverviewPage(props: OverviewPageProps) {
             />
           </TabPanel>
           <TabPanel p="0">
-            <MonitorAlertsOverview
-              alerts={alertsForMonitor}
-              alertInvocations={invocationsForMonitor}
-              tzOffset={tzAndOffset?.offset ?? 0}
+            <InvocationTable
+              invocations={invocations ? invocations[monitor_id] : []}
             />
           </TabPanel>
         </TabPanels>

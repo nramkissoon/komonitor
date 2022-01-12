@@ -15,10 +15,8 @@ export interface CommonConstructProps {
   uptimeMonitorStatusTable: dynamodb.Table;
   uptimeMonitorTableFrequencyGsiName: string;
   uptimeMonitorTable: dynamodb.Table;
-  alertTable: dynamodb.Table;
   userTable: dynamodb.Table;
   alertInvocationTable: dynamodb.Table;
-  alertInvocationTableTimestampLsiName: string;
   lighthouseJobTable: dynamodb.Table;
   lighthouseJobTableFrequencyGsiName: string;
 }
@@ -43,13 +41,10 @@ export class CommonConstruct extends cdk.Construct {
       uptimeMonitorTable: props.uptimeMonitorTable,
       uptimeMonitorTableFrequencyGsiName:
         props.uptimeMonitorTableFrequencyGsiName,
-      alertTable: props.alertTable,
       alertInvocationTable: props.alertInvocationTable,
       region: props.region,
       lambdaCodeBucketName: props.lambdaCodeBucketName,
       userTable: props.userTable,
-      alertInvocationTableTimeStampLsiName:
-        props.alertInvocationTableTimestampLsiName,
       lighthouseJobTable: props.lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName:
         props.lighthouseJobTableFrequencyGsiName,

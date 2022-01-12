@@ -153,6 +153,20 @@ export class CdkPipelineStackSecondary extends cdk.Stack {
     );
 
     //-------------------------------------------------------------------
+    // ----------------------------- eu-west-3 -------------------------
+
+    createProdCommonStage(
+      "eu-north-1",
+      this.pipeline,
+      prodTables,
+      sourceArtifact,
+      environments.prodEuNorth1,
+      this.lambdaCopyPolicy,
+      this.lambdaDeployPolicy,
+      this
+    );
+
+    //-------------------------------------------------------------------
     // ----------------------------- sa-east-1 -------------------------
 
     createProdCommonStage(

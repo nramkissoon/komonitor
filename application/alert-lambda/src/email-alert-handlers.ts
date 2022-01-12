@@ -18,7 +18,6 @@ export async function sendUptimeMonitorAlertEmail(
       convertUptimeMonitorStatusesToStatusesWithReadableTimeStamp(tz, statuses);
     const email = new Email();
     const html = await email.render("uptime/html", {
-      severity: alert.severity.toUpperCase(),
       monitor: monitor,
       alert: alert,
       region: regionToLocationStringMap[monitor.region],
@@ -26,16 +25,14 @@ export async function sendUptimeMonitorAlertEmail(
       statuses: statusesForTemplate,
     });
     const subject = await email.render("uptime/subject", {
-      severity: alert.severity.toUpperCase(),
       monitorName: monitor.name,
       monitorRegion: regionToLocationStringMap[monitor.region],
-      alertName: alert.name,
       failures: monitor.failures_before_alert,
       statuses: statusesForTemplate,
     });
     await emailTransporter.sendMail({
       from: "no-reply@komonitor.com",
-      to: alert.recipients,
+      to: alert.recipients.Email,
       html: html,
       subject: subject,
     });

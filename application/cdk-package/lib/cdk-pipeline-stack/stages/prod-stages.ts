@@ -76,11 +76,8 @@ export function createProdCommonStage(
     uptimeMonitorTableFrequencyGsiName:
       prodTables.uptimeMonitorTableFrequencyGsiName,
     uptimeMonitorTable: prodTables.uptimeMonitorTable,
-    alertTable: prodTables.alertTable,
     userTable: prodTables.userTable,
     alertInvocationTable: prodTables.alertInvocationTable,
-    alertInvocationTableTimestampLsiName:
-      prodTables.alertInvocationTableTimestampLsiName,
     lighthouseJobTable: prodTables.lighthouseJobTable,
     lighthouseJobTableFrequencyGsiName:
       prodTables.lighthouseJobTableFrequencyGsiName,

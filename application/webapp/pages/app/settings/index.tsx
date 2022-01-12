@@ -11,7 +11,7 @@ const App: ExtendedNextPage = () => {
   return (
     <PageLayout isAppPage>
       <Heading textAlign="left" fontWeight="medium" mb=".2em" fontSize="3xl">
-        Settings
+        Settings and Account Information
       </Heading>
       <chakra.hr mb="1em"></chakra.hr>
       <SettingsTabs initialTab={Number.parseInt(tab as string)} />

@@ -4,10 +4,9 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
-  deleteAlert,
-  getAlertsForUser,
-} from "../../../src/modules/alerts/alert-db";
-import { detachAlertFromMonitors } from "../../../src/modules/uptime/monitor-db";
+  getMonitorsForUser,
+  putMonitor,
+} from "../../../src/modules/uptime/monitor-db";
 import {
   deleteUserSlackInstallation,
   getUserSlackInstallation,
@@ -89,49 +88,45 @@ async function deleteHandler(
 
     if (!slackInstallation) throw new Error("no slack installation to delete");
 
-    const alerts = await getAlertsForUser(
+    const uptimeMonitors = await getMonitorsForUser(
       ddbClient,
-      env.ALERT_TABLE_NAME,
+      env.UPTIME_MONITOR_TABLE_NAME,
       userId
     );
-    const slackAlerts = alerts
-      ? alerts.filter((alert) => alert.type === "Slack")
+    const monitorsWithSlackAlerts = uptimeMonitors
+      ? uptimeMonitors.filter((monitor) => {
+          if (monitor.alert) {
+            for (let channel of monitor.alert.channels) {
+              if (channel === "Slack") return true;
+            }
+          }
+          return false;
+        })
       : [];
 
-    const deleteSlackAlertPromises: Promise<boolean>[] = [];
-    const detachMonitorsFromAlertPromises: Promise<boolean>[] = [];
+    const detachSlackAlertFromMonitorPromises: Promise<boolean>[] = [];
 
-    for (let alert of slackAlerts) {
-      detachMonitorsFromAlertPromises.push(
-        detachAlertFromMonitors(
-          ddbClient,
-          env.UPTIME_MONITOR_TABLE_NAME,
-          userId,
-          alert.alert_id,
-          env.ALERT_INVOCATION_TABLE_NAME
-        )
-      );
-      deleteSlackAlertPromises.push(
-        deleteAlert(ddbClient, env.ALERT_TABLE_NAME, alert.alert_id, userId)
-      );
+    for (let monitor of monitorsWithSlackAlerts) {
+      if (monitor.alert) {
+        monitor.alert.channels = monitor.alert.channels.filter(
+          (channel) => channel !== "Slack"
+        );
+        monitor.alert.recipients.Slack = undefined;
+        detachSlackAlertFromMonitorPromises.push(
+          putMonitor(ddbClient, env.UPTIME_MONITOR_TABLE_NAME, monitor, true)
+        );
+      }
     }
 
-    let alertsDeleted = true;
     let monitorsDetached = true;
 
-    if (deleteSlackAlertPromises.length > 0) {
-      alertsDeleted = (await Promise.all(deleteSlackAlertPromises)).reduce(
-        (prev, next) => prev && next
-      );
-    }
-
-    if (detachMonitorsFromAlertPromises.length > 0) {
+    if (detachSlackAlertFromMonitorPromises.length > 0) {
       monitorsDetached = (
-        await Promise.all(detachMonitorsFromAlertPromises)
+        await Promise.all(detachSlackAlertFromMonitorPromises)
       ).reduce((prev, next) => prev && next);
     }
 
-    if (!alertsDeleted || !monitorsDetached) {
+    if (!monitorsDetached) {
       res.status(403);
       return;
     }

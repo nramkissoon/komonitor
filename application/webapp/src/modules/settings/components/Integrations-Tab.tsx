@@ -20,11 +20,11 @@ import { useRouter } from "next/router";
 import { SlackInstallation } from "project-types";
 import React, { RefObject } from "react";
 import { useSWRConfig } from "swr";
-import { useAlerts } from "../../alerts/client";
 import {
   testSlackInstallation,
   useSlackInstallUrl,
 } from "../../integrations/slack/client";
+import { useUptimeMonitors } from "../../uptime/client";
 import {
   deleteUserSlackInstallation,
   userSlackInstallationApiUrl,
@@ -84,9 +84,10 @@ const UninstallSlackInstallationDialog = (props: {
           <chakra.hr my="1em" />
           Uninstalling Slack will{" "}
           <b>
-            delete any Slack Alerts and detach these alerts from their monitors
+            delete any Slack Alerts from all monitors. If Slack is the only
+            alert channel for a monitor, the monitor will have no alerts.
           </b>
-          . You will have to attach a new alert to the monitors.
+          . You will have to create a new alert for the monitor.
         </AlertDialogBody>
         <AlertDialogFooter>
           <Button
@@ -177,10 +178,17 @@ export const SlackInstallationInfo = (props: {
   installation: SlackInstallation;
 }) => {
   const { installation } = props;
-  const { alerts, isLoading: alertsIsLoading, isError } = useAlerts();
+  const { monitors, isLoading: alertsIsLoading, isError } = useUptimeMonitors();
 
-  const slackAlerts = alerts
-    ? alerts.filter((alert) => alert.type === "Slack")
+  const monitorsWithSlackAlerts = monitors
+    ? monitors.filter((monitor) => {
+        if (monitor.alert) {
+          for (let channel of monitor.alert.channels) {
+            if (channel === "Slack") return true;
+          }
+        }
+        return false;
+      })
     : [];
 
   return (
@@ -233,18 +241,19 @@ export const SlackInstallationInfo = (props: {
       >
         Test Installation
       </Button>
-      {!alertsIsLoading && slackAlerts.length > 0 && (
+      {!alertsIsLoading && monitorsWithSlackAlerts.length > 0 && (
         <>
           <Box textAlign="left" fontSize="lg" mb="10px">
-            Slack Alerts ({slackAlerts.length} total)
+            Uptime Monitors with Slack alerts: ({monitorsWithSlackAlerts.length}{" "}
+            total)
           </Box>
-          {slackAlerts.map((alert) => (
-            <Flex key={alert.alert_id} flexDir="row">
-              <chakra.p>Alert name: {alert.name}</chakra.p>
-              <chakra.p ml="2em">Severity Level: {alert.severity}</chakra.p>
-              <NextLink passHref href={`/app/alerts/${alert.alert_id}`}>
+          {monitorsWithSlackAlerts.map((monitor) => (
+            <Flex key={monitor.monitor_id} flexDir="row">
+              <chakra.p>Monitor name: {monitor.name}</chakra.p>
+              <chakra.p ml="2em">URL: {monitor.url}</chakra.p>
+              <NextLink passHref href={`/app/alerts/${monitor.monitor_id}`}>
                 <chakra.a ml="2em" _hover={{ color: "gray.500" }}>
-                  View Alert
+                  View Monitor
                 </chakra.a>
               </NextLink>
             </Flex>

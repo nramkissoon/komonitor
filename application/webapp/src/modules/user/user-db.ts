@@ -132,6 +132,40 @@ export async function setTimezonePreferenceForUser(
   }
 }
 
+export async function setEmailOptInForUser(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string,
+  optIn: boolean
+) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: userTableName,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      ExpressionAttributeValues: {
+        ":p": { BOOL: optIn },
+      },
+      UpdateExpression: "SET emailOptIn = :p",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 export async function getServicePlanProductIdForUser(
   ddbClient: DynamoDBClient,
   userTableName: string,

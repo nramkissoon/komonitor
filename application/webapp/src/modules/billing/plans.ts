@@ -17,7 +17,7 @@ export function getUptimeMonitorAllowanceFromProductId(id: string | undefined) {
     case PLAN_PRODUCT_IDS.BUSINESS:
       return 500;
     default:
-      return 20;
+      return 5;
   }
 }
 
