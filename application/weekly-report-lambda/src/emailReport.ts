@@ -6,6 +6,7 @@ import {
   emailTransporter,
   getMonthName,
   oneWeekAndOneDayAgo,
+  regionToLocationStringMap,
   yesterday,
 } from "./config";
 import {
@@ -55,7 +56,7 @@ const sendEmail = async (
       toDate: to.getDate(),
     });
     await emailTransporter.sendMail({
-      from: "no-reply@komonitor.com",
+      from: "weekly-report@komonitor.com",
       to: user.email,
       html: html,
       subject: subject,
@@ -106,13 +107,13 @@ export const sendEmailReportToUser = async (user: User): Promise<boolean> => {
     const emailProps: EmailProps = {
       overEmailLimit: overEmailLimit,
       monitorData: includedUptimeMonitors.map((monitor) => ({
-        uptime: calculateUptime
-          ? calculateUptime + "%"
-          : "Unable to calculate uptime.",
-        alerts: uptimeAlerts,
+        uptime: calculateUptime(uptimeStatuses[monitor.id])
+          ? calculateUptime(uptimeStatuses[monitor.id]) + "%"
+          : "No data.",
+        alerts: uptimeAlerts[monitor.id],
         name: monitor.name,
         url: monitor.url,
-        region: monitor.region,
+        region: regionToLocationStringMap[monitor.region],
       })),
     };
 

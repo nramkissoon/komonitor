@@ -92,7 +92,7 @@ export const getMonthName = (index: number) => {
     "October",
     "November",
     "December",
-  ];
+  ][index];
 };
 
 export const yesterday = () => {

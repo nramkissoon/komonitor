@@ -28,6 +28,10 @@ td:first-child {
 th,
 td {
   padding-right: 20px;
+  overflow-wrap: break-word;
+}
+.name-td {
+  word-break: break-all;
 }
 .main-table {
   width: 600px;
@@ -50,25 +54,6 @@ tr.space > th {
 }
 .lg {
   font-size: large;
-}
-
-.warning {
-  background-color: #ecc94b;
-  color: #ffffff;
-}
-
-.severe {
-  background-color: #ed8936;
-  color: #ffffff;
-}
-
-.critical {
-  background-color: #e53e3e;
-  color: #ffffff;
-}
-
-.red-500 {
-  color: #e53e3e;
 }
 
 .bold {

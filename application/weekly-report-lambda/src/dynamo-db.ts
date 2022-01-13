@@ -86,7 +86,7 @@ async function getStatusesForMonitor1Week(
       TableName: tableName,
       ExpressionAttributeNames: { "#t": "timestamp" },
       KeyConditionExpression:
-        "monitor_id = :partitionkeyval AND #t >= :from AND #t <= :to ",
+        "monitor_id = :partitionkeyval AND #t BETWEEN :from AND :to",
       ExpressionAttributeValues: {
         ":partitionkeyval": { S: monitorId },
         ":from": { N: from.toString() },
@@ -162,7 +162,7 @@ export async function getTotalAlertsForMonitor1Week(
       TableName: tableName,
       ExpressionAttributeNames: { "#t": "timestamp" },
       KeyConditionExpression:
-        "monitor_id = :partitionkeyval AND #t >= :from AND #t <= :to ",
+        "monitor_id = :partitionkeyval AND #t BETWEEN :from AND :to",
       ExpressionAttributeValues: {
         ":partitionkeyval": { S: monitorId },
         ":from": { N: from.toString() },
@@ -180,7 +180,7 @@ export async function getTotalAlertsForMonitor1Week(
         alerts.push(unmarshall(item) as AlertInvocation)
       );
     }
-    return alerts.length;
+    return { id: monitorId, total: alerts.length };
   } catch (err) {
     throw err as Error;
   }
@@ -192,18 +192,23 @@ export async function getTotalAlertsForMultipleMonitors1Week(
   tableName: string
 ) {
   try {
-    let total = 0;
     const promises = [];
+    const map: { [key: string]: number } = {};
+    for (let id of monitorIds) {
+      if (!map[id]) {
+        map[id] = 0;
+      }
+    }
     for (let id of monitorIds) {
       promises.push(getTotalAlertsForMonitor1Week(ddbClient, id, tableName));
     }
     const results = await Promise.allSettled(promises);
     for (let result of results) {
       if (result.status === "fulfilled") {
-        total = total + result.value;
+        map[result.value.id] = result.value.total;
       }
     }
-    return total;
+    return map;
   } catch (err) {
     throw err as Error;
   }
