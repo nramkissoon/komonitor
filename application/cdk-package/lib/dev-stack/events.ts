@@ -30,7 +30,7 @@ export class ScheduleRules extends cdk.Construct {
         // 9AM every Monday
         minute: "0",
         hour: "9",
-        day: "*",
+        day: "?",
         month: "*",
         year: "*",
         weekDay: "MON",
