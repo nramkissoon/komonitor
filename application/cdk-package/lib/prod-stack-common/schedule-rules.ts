@@ -108,7 +108,15 @@ export class ScheduleRules extends cdk.Construct {
     );
 
     this.oneWeekRule = new events.Rule(this, "_komonitor_prod_one_week_rule", {
-      schedule: events.Schedule.rate(Duration.days(7)),
+      schedule: events.Schedule.cron({
+        // 9AM every Monday
+        minute: "0",
+        hour: "9",
+        day: "*",
+        month: "*",
+        year: "*",
+        weekDay: "MON",
+      }),
     });
 
     this.oneMinuteRule.addTarget(
