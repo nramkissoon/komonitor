@@ -37,6 +37,7 @@ export class ProdUsEast1Stack extends cdk.Stack {
       lighthouseJobTable: this.tables.lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName:
         this.tables.lighthouseJobTableFrequencyGsiName,
+      createWeeklyReportLambda: true,
     });
   }
 }

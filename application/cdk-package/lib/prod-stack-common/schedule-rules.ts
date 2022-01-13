@@ -21,14 +21,19 @@ export class ScheduleRules extends cdk.Construct {
   public readonly sixHourRule: events.Rule;
   public readonly twelveHourRule: events.Rule;
   public readonly twentyFourHourRule: events.Rule;
+  public readonly oneWeekRule: events.Rule;
   constructor(
     scope: cdk.Construct,
     id: string,
-    props: { jobRunnerLambda: lambda.Function; region: string }
+    props: {
+      jobRunnerLambda: lambda.Function;
+      weeklyReportLambda?: lambda.Function;
+      region: string;
+    }
   ) {
     super(scope, id);
 
-    const { region, jobRunnerLambda } = props;
+    const { region, jobRunnerLambda, weeklyReportLambda } = props;
 
     this.oneMinuteRule = new events.Rule(
       this,
@@ -102,6 +107,17 @@ export class ScheduleRules extends cdk.Construct {
       }
     );
 
+    this.oneWeekRule = new events.Rule(this, "_komonitor_prod_one_week_rule", {
+      schedule: events.Schedule.cron({
+        // 9AM every Monday
+        minute: "0",
+        hour: "9",
+        month: "*",
+        year: "*",
+        weekDay: "MON",
+      }),
+    });
+
     this.oneMinuteRule.addTarget(
       createLambdaFunctionTarget(jobRunnerLambda, 1)
     );
@@ -127,6 +143,15 @@ export class ScheduleRules extends cdk.Construct {
     this.twentyFourHourRule.addTarget(
       createLambdaFunctionTarget(jobRunnerLambda, 1440)
     );
+
+    if (weeklyReportLambda) {
+      this.oneWeekRule.addTarget(
+        new targets.LambdaFunction(weeklyReportLambda, {
+          event: events.RuleTargetInput.fromObject({}),
+        })
+      );
+      targets.addLambdaPermission(this.oneWeekRule, weeklyReportLambda);
+    }
 
     targets.addLambdaPermission(this.oneMinuteRule, jobRunnerLambda);
     targets.addLambdaPermission(this.fiveMinuteRule, jobRunnerLambda);

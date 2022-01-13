@@ -34,9 +34,22 @@ export function getNewProdLambdaCodeDeployAction(args: {
   uptimeCodeKey: string;
   jobRunnerCodeKey: string;
   alertCodeKey: string;
+  weeklyReportLambdaName?: string;
+  weeklyReportCodeKey?: string;
   policy: PolicyStatement;
   region: string;
 }) {
+  const commands = [
+    `aws lambda update-function-code --function-name ${args.uptimeLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.uptimeCodeKey}`,
+    `aws lambda update-function-code --function-name ${args.jobRunnerLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.jobRunnerCodeKey}`,
+    `aws lambda update-function-code --function-name ${args.alertLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.alertCodeKey}`,
+  ];
+
+  if (args.weeklyReportCodeKey && args.weeklyReportLambdaName) {
+    commands.push(
+      `aws lambda update-function-code --function-name ${args.weeklyReportLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.weeklyReportCodeKey}`
+    );
+  }
   return new ShellScriptAction({
     environment: {
       buildImage: LinuxBuildImage.STANDARD_5_0,
@@ -51,11 +64,7 @@ export function getNewProdLambdaCodeDeployAction(args: {
     },
     runOrder: 11,
     actionName: args.name,
-    commands: [
-      `aws lambda update-function-code --function-name ${args.uptimeLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.uptimeCodeKey}`,
-      `aws lambda update-function-code --function-name ${args.jobRunnerLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.jobRunnerCodeKey}`,
-      `aws lambda update-function-code --function-name ${args.alertLambdaName} --s3-bucket ${args.codeBucketName} --s3-key ${args.alertCodeKey}`,
-    ],
+    commands: commands,
     additionalArtifacts: [args.sourceArtifact],
     rolePolicyStatements: [args.policy],
   });

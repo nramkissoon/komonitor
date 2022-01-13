@@ -3,4 +3,5 @@ export interface LambdaCodeBucketProps {
   uptimeCheckLambdaCodeObjectKey: string;
   jobRunnerLambdaCodeObjectKey: string;
   alertLambdaCodeObjectKey: string;
+  weeklyReportLambdaCodeObjectKey: string;
 }

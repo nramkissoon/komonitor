@@ -19,6 +19,7 @@ export interface CommonConstructProps {
   alertInvocationTable: dynamodb.Table;
   lighthouseJobTable: dynamodb.Table;
   lighthouseJobTableFrequencyGsiName: string;
+  createWeeklyReportLambda?: boolean;
 }
 
 export class CommonConstruct extends cdk.Construct {
@@ -48,11 +49,15 @@ export class CommonConstruct extends cdk.Construct {
       lighthouseJobTable: props.lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName:
         props.lighthouseJobTableFrequencyGsiName,
+      createWeeklyReportLambda: props.createWeeklyReportLambda,
     });
 
     this.events = new ScheduleRules(this, "Events", {
       jobRunnerLambda: this.lambdas.jobRunnerLambda.lambda,
       region: props.region,
+      weeklyReportLambda: this.lambdas.weeklyReportLambda
+        ? this.lambdas.weeklyReportLambda.lambda
+        : undefined,
     });
   }
 }

@@ -1,8 +1,6 @@
 import {
-  Box,
   chakra,
   Flex,
-  HStack,
   Icon,
   SimpleGrid,
   useColorModeValue,
@@ -70,7 +68,7 @@ function Feature(props: FeatureProps) {
 
 export function NoCode() {
   return (
-    <Flex mb="4em" flexDir="column" alignItems="center">
+    <Flex mb="3em" flexDir="column" alignItems="center">
       <chakra.h1
         textAlign="center"
         fontSize="5xl"
@@ -98,7 +96,7 @@ export function NoCode() {
         columns={{ base: 1, sm: 1, md: 2 }}
         spacingX={{ base: 16, lg: 24 }}
         spacingY={{ base: 10, md: 20 }}
-        mb="4em"
+        mb="2em"
       >
         <Feature
           title={Copy.NoCode.Intuitive.header}
@@ -153,35 +151,6 @@ export function NoCode() {
           }
         />
       </SimpleGrid>
-
-      <chakra.h2
-        fontSize="4xl"
-        fontWeight="bold"
-        textAlign="center"
-        lineHeight="shorter"
-        mx="auto"
-        color={useColorModeValue("gray.800", "gray.100")}
-        mb=".8em"
-      >
-        {Copy.NoCode.Dashboard}
-      </chakra.h2>
-      <Box
-        bg={useColorModeValue("gray.700", "gray.600")}
-        borderRadius="2xl"
-        shadow={useColorModeValue(["dark-lg"], ["dark-lg"])}
-        px={["1em", null, "1.5em"]}
-        pt="5px"
-        pb={["1em", null, "1.5em"]}
-        mb="2em"
-      >
-        <HStack mb="5px">
-          {CircleIcon("green.400")} {CircleIcon("gray.300")}{" "}
-          {CircleIcon("cyan.400")}
-        </HStack>
-        <video width="960px" height="640" controls autoPlay loop muted>
-          <source src="/dashboard-ui.mp4" type="video/mp4"></source>
-        </video>
-      </Box>
       <chakra.h3
         fontSize="2xl"
         fontWeight="bold"
@@ -189,9 +158,21 @@ export function NoCode() {
         lineHeight="shorter"
         mx="auto"
         color={useColorModeValue("gray.800", "gray.100")}
-        mb=".8em"
+        mb=".3em"
+        fontStyle="italic"
       >
         {Copy.NoCode.SectionBottom}
+      </chakra.h3>
+      <chakra.h3
+        fontSize="xl"
+        fontWeight="bold"
+        textAlign="center"
+        lineHeight="shorter"
+        mx="auto"
+        color={useColorModeValue("gray.800", "gray.100")}
+        mb=".8em"
+      >
+        - e-commerce site owner (doesn't code)
       </chakra.h3>
     </Flex>
   );

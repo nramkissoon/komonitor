@@ -12,7 +12,8 @@ export class LambdaCodeBuildActions extends Construct {
   public manualApprovalAction: ManualApprovalAction;
   public uptimeCheckCodeBuildAction: CodeBuildAction;
   public jobRunnerCodeBuildAction: CodeBuildAction;
-  public lambdaCodeBuildAction: CodeBuildAction;
+  public weeklyReportCodeBuildAction: CodeBuildAction;
+  public alertCodeBuildAction: CodeBuildAction;
   constructor(
     scope: Construct,
     id: string,
@@ -67,8 +68,26 @@ export class LambdaCodeBuildActions extends Construct {
       },
     });
 
-    this.lambdaCodeBuildAction = new CodeBuildAction({
+    this.weeklyReportCodeBuildAction = new CodeBuildAction({
       runOrder: 4,
+      actionName: "Weekly-Report-Lambda-Build",
+      input: sourceArtifact,
+      project: buildProjects.weeklyReportLambdaBuild,
+      variablesNamespace: "weekly-report-build",
+      environmentVariables: {
+        S3_BUCKET: {
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+          value: s3Props.bucketName,
+        },
+        S3_KEY: {
+          type: BuildEnvironmentVariableType.PLAINTEXT,
+          value: s3Props.weeklyReportLambdaCodeObjectKey,
+        },
+      },
+    });
+
+    this.alertCodeBuildAction = new CodeBuildAction({
+      runOrder: 5,
       actionName: "Alert-Lambda-Build",
       input: sourceArtifact,
       project: buildProjects.alertLambdaBuild,

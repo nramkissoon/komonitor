@@ -177,11 +177,75 @@ class AlertLambda extends cdk.Construct {
   }
 }
 
+class WeeklyReportLambda extends cdk.Construct {
+  public readonly lambda: lambda.Function;
+  constructor(
+    scope: cdk.Construct,
+    id: string,
+    props: {
+      uptimeMonitorTable: dynamodb.Table;
+      uptimeMonitorStatusTable: dynamodb.Table;
+
+      alertInvocationTable: dynamodb.Table;
+      userTable: dynamodb.Table;
+
+      region: string;
+    }
+  ) {
+    super(scope, id);
+
+    const {
+      uptimeMonitorStatusTable,
+      uptimeMonitorTable,
+      alertInvocationTable,
+      region,
+      userTable,
+    } = props;
+
+    this.lambda = new lambda.Function(this, region + "_prod_weekly_report", {
+      runtime: lambda.Runtime.NODEJS_14_X,
+      handler: "index.handler",
+      code: lambda.Code.fromInline("export handler = () => {}"),
+      functionName: prodLambdaName(region, "weeklyReport"),
+      environment: {
+        REGION: region,
+        UPTIME_MONITOR_TABLE_NAME: uptimeMonitorTable.tableName,
+        UPTIME_MONITOR_STATUS_TABLE_NAME: uptimeMonitorStatusTable.tableName,
+        ALERT_INVOCATION_TABLE_NAME: alertInvocationTable.tableName,
+        USER_TABLE_NAME: userTable.tableName,
+      },
+      timeout: cdk.Duration.minutes(15),
+    });
+
+    uptimeMonitorTable.grantReadData(this.lambda);
+    uptimeMonitorStatusTable.grantReadData(this.lambda);
+    alertInvocationTable.grantReadData(this.lambda);
+    userTable.grantReadData(this.lambda);
+
+    const sesSendPolicyStatement = new iam.PolicyStatement({
+      resources: ["*"],
+      effect: iam.Effect.ALLOW,
+      actions: ["ses:SendEmail", "ses:SendRawEmail"],
+    });
+
+    const sesSendPolicy = new iam.Policy(
+      this,
+      region + "_prod_ses_send_policy",
+      {
+        statements: [sesSendPolicyStatement],
+      }
+    );
+
+    this.lambda.role?.attachInlinePolicy(sesSendPolicy);
+  }
+}
+
 export class Lambdas extends cdk.Construct {
   public readonly uptimeLambda: UptimeMonitorLambda;
   public readonly alertLambda: AlertLambda;
   public readonly jobRunnerLambda: JobRunnerLambda;
   public readonly lambdaCodeIBucket: s3.IBucket;
+  public readonly weeklyReportLambda?: WeeklyReportLambda;
 
   constructor(
     scope: cdk.Construct,
@@ -198,6 +262,8 @@ export class Lambdas extends cdk.Construct {
 
       lighthouseJobTable: dynamodb.Table;
       lighthouseJobTableFrequencyGsiName: string;
+
+      createWeeklyReportLambda?: boolean; // optional because we only need it in us-east-1
     }
   ) {
     super(scope, id);
@@ -213,6 +279,8 @@ export class Lambdas extends cdk.Construct {
       userTable,
       lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName,
+
+      createWeeklyReportLambda,
     } = props;
 
     this.lambdaCodeIBucket = s3.Bucket.fromBucketAttributes(
@@ -249,5 +317,20 @@ export class Lambdas extends cdk.Construct {
       lighthouseJobTable: lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName: lighthouseJobTableFrequencyGsiName,
     });
+
+    if (createWeeklyReportLambda) {
+      this.weeklyReportLambda = new WeeklyReportLambda(
+        this,
+        "prodWeeklyReportLambda",
+        {
+          alertInvocationTable: alertInvocationTable,
+
+          uptimeMonitorStatusTable: uptimeMonitorStatusTable,
+          uptimeMonitorTable: uptimeMonitorTable,
+          userTable: userTable,
+          region: region,
+        }
+      );
+    }
   }
 }
