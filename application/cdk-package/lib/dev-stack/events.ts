@@ -10,7 +10,10 @@ export class ScheduleRules extends cdk.Construct {
   constructor(
     scope: cdk.Construct,
     id: string,
-    props: { jobRunnerLambda: lambda.Function }
+    props: {
+      jobRunnerLambda: lambda.Function;
+      weeklyReportLambda: lambda.Function;
+    }
   ) {
     super(scope, id);
 
@@ -23,7 +26,7 @@ export class ScheduleRules extends cdk.Construct {
     );
 
     this.weekRule = new events.Rule(this, "week_rule", {
-      schedule: events.Schedule.rate(Duration.days(1)),
+      schedule: events.Schedule.rate(Duration.days(7)),
     });
 
     this.thirtyMinuteRule.addTarget(
@@ -32,6 +35,14 @@ export class ScheduleRules extends cdk.Construct {
       })
     );
 
+    this.weekRule.addTarget(
+      new targets.LambdaFunction(props.weeklyReportLambda, {
+        event: events.RuleTargetInput.fromObject({}),
+      })
+    );
+
     targets.addLambdaPermission(this.thirtyMinuteRule, props.jobRunnerLambda);
+
+    targets.addLambdaPermission(this.weekRule, props.weeklyReportLambda);
   }
 }

@@ -158,11 +158,61 @@ class AlertLambda extends cdk.Construct {
   }
 }
 
+class WeeklyReportLambda extends cdk.Construct {
+  public readonly lambda: lambda.Function;
+  constructor(
+    scope: cdk.Construct,
+    id: string,
+    props: {
+      key: string;
+      lambdaCodeIBucket: s3.IBucket;
+      uptimeMonitorTable: dynamodb.Table;
+      uptimeMonitorStatusTable: dynamodb.Table;
+      alertInvocationTable: dynamodb.Table;
+      userTable: dynamodb.Table;
+    }
+  ) {
+    super(scope, id);
+    this.lambda = new lambda.Function(this, "weeklyReport", {
+      runtime: lambda.Runtime.NODEJS_14_X,
+      handler: "index.handler",
+      code: lambda.Code.fromBucket(props.lambdaCodeIBucket, props.key),
+      functionName: DEV_STACK.WEEKLY_REPORT_LAMBDA,
+      environment: {
+        REGION: "us-east-1",
+        UPTIME_MONITOR_TABLE_NAME: props.uptimeMonitorTable.tableName,
+        UPTIME_MONITOR_STATUS_TABLE_NAME:
+          props.uptimeMonitorStatusTable.tableName,
+        ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
+        USER_TABLE_NAME: props.userTable.tableName,
+      },
+      timeout: cdk.Duration.minutes(10),
+    });
+    props.uptimeMonitorTable.grantReadData(this.lambda);
+    props.uptimeMonitorStatusTable.grantReadData(this.lambda);
+    props.alertInvocationTable.grantReadData(this.lambda);
+    props.userTable.grantReadData(this.lambda);
+
+    const sesSendPolicyStatement = new iam.PolicyStatement({
+      resources: ["*"],
+      effect: iam.Effect.ALLOW,
+      actions: ["ses:SendEmail", "ses:SendRawEmail"],
+    });
+
+    const sesSendPolicy = new iam.Policy(this, "ses_send_policy", {
+      statements: [sesSendPolicyStatement],
+    });
+
+    this.lambda.role?.attachInlinePolicy(sesSendPolicy);
+  }
+}
+
 export class DevStackLambdas extends cdk.Construct {
   public readonly uptimeCheckLambda: UptimeCheckLambda;
   public readonly alertLambda: AlertLambda;
   public readonly jobRunnerLambda: JobRunnerLambda;
   public readonly lambdaCodeIBucket: s3.IBucket;
+  public readonly weeklyReportLambda: WeeklyReportLambda;
 
   constructor(
     scope: cdk.Construct,
@@ -178,6 +228,7 @@ export class DevStackLambdas extends cdk.Construct {
       uptimeCheckLambdaBucketKey: string;
       jobRunnerLambdaBucketKey: string;
       alertLambdaBucketKey: string;
+      weeklyReportLambdaBucketKey: string;
       lighthouseJobTable: dynamodb.Table;
       lighthouseJobTableFrequencyGsiName: string;
     }
@@ -224,5 +275,18 @@ export class DevStackLambdas extends cdk.Construct {
       lighthouseJobTableFrequencyGsiName:
         props.lighthouseJobTableFrequencyGsiName,
     });
+
+    this.weeklyReportLambda = new WeeklyReportLambda(
+      this,
+      "weeklyReportLambda",
+      {
+        lambdaCodeIBucket: this.lambdaCodeIBucket,
+        key: props.weeklyReportLambdaBucketKey,
+        alertInvocationTable: props.alertInvocationTable,
+        uptimeMonitorStatusTable: props.uptimeCheckMonitorStatusTable,
+        uptimeMonitorTable: props.uptimeCheckMonitorTable,
+        userTable: props.userTable,
+      }
+    );
   }
 }

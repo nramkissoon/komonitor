@@ -17,6 +17,7 @@ import {
   prodLambdaCodeBucketName,
   prodLambdaName,
   UPTIME_CHECK_LAMBDA_CODE_KEY,
+  WEEKLY_REPORT_LAMBDA_CODE_KEY,
 } from "../common/names";
 import { ProdDdbTables } from "../prod-us-east-1-stack/dynamo-db-tables";
 import { BuildProjects } from "./build-projects";
@@ -86,6 +87,7 @@ export class CdkPipelineStack extends cdk.Stack {
           uptimeCheckLambdaCodeObjectKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
           jobRunnerLambdaCodeObjectKey: JOB_RUNNER_LAMBDA_CODE_KEY,
           alertLambdaCodeObjectKey: ALERT_LAMBDA_CODE_KEY,
+          weeklyReportLambdaCodeObjectKey: WEEKLY_REPORT_LAMBDA_CODE_KEY,
         },
         buildProjects: buildProjects,
       }
@@ -94,7 +96,7 @@ export class CdkPipelineStack extends cdk.Stack {
       lambdaCodeBuildActions.manualApprovalAction,
       lambdaCodeBuildActions.uptimeCheckCodeBuildAction,
       lambdaCodeBuildActions.jobRunnerCodeBuildAction,
-      lambdaCodeBuildActions.lambdaCodeBuildAction
+      lambdaCodeBuildActions.alertCodeBuildAction
     );
 
     const devStackStage = new DevStackStage(this, "DevStackStage", {
@@ -102,6 +104,7 @@ export class CdkPipelineStack extends cdk.Stack {
       uptimeCheckLambdaBucketKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
       jobRunnerLambdaBucketKey: JOB_RUNNER_LAMBDA_CODE_KEY,
       alertLambdaBucketKey: ALERT_LAMBDA_CODE_KEY,
+      weeklyReportLambdaBucketKey: WEEKLY_REPORT_LAMBDA_CODE_KEY,
     });
 
     this.pipeline.addApplicationStage(devStackStage).addActions(
@@ -173,10 +176,12 @@ export class CdkPipelineStack extends cdk.Stack {
         uptimeLambdaName: prodLambdaName("us-east-1", "uptime"),
         jobRunnerLambdaName: prodLambdaName("us-east-1", "jobrunner"),
         alertLambdaName: prodLambdaName("us-east-1", "alert"),
+        weeklyReportLambdaName: prodLambdaName("us-east-1", "weeklyReport"),
         codeBucketName: prodLambdaCodeBucketName("us-east-1"),
         uptimeCodeKey: UPTIME_CHECK_LAMBDA_CODE_KEY,
         jobRunnerCodeKey: JOB_RUNNER_LAMBDA_CODE_KEY,
         alertCodeKey: ALERT_LAMBDA_CODE_KEY,
+        weeklyReportCodeKey: WEEKLY_REPORT_LAMBDA_CODE_KEY,
         region: "us-east-1",
         policy: this.lambdaDeployPolicy,
       })

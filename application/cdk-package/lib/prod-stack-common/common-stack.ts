@@ -27,6 +27,7 @@ export class CommonStack extends cdk.Stack {
       lighthouseJobTable: props.lighthouseJobTable,
       lighthouseJobTableFrequencyGsiName:
         props.lighthouseJobTableFrequencyGsiName,
+      createWeeklyReportLambda: props.createWeeklyReportLambda,
     });
   }
 }

@@ -9,6 +9,7 @@ export interface DevStackProps extends StackProps {
   uptimeCheckLambdaBucketKey: string;
   jobRunnerLambdaBucketKey: string;
   alertLambdaBucketKey: string;
+  weeklyReportLambdaBucketKey: string;
 }
 
 export class DevStack extends cdk.Stack {
@@ -31,6 +32,7 @@ export class DevStack extends cdk.Stack {
       region: props.env?.region || "us-east-1", // dev is always us-east-1 anyways
       lambdaCodeBucketName: props.lambdaCodeBucketName,
       uptimeCheckLambdaBucketKey: props.uptimeCheckLambdaBucketKey,
+      weeklyReportLambdaBucketKey: props.weeklyReportLambdaBucketKey,
       jobRunnerLambdaBucketKey: props.jobRunnerLambdaBucketKey,
       alertLambdaBucketKey: props.alertLambdaBucketKey,
       userTable: this.tables.userTable,
@@ -41,6 +43,7 @@ export class DevStack extends cdk.Stack {
 
     this.events = new ScheduleRules(this, "Events", {
       jobRunnerLambda: this.lambdas.jobRunnerLambda.lambda,
+      weeklyReportLambda: this.lambdas.weeklyReportLambda.lambda,
     });
   }
 }

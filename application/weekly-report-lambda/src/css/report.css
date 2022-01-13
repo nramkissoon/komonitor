@@ -1,61 +1,53 @@
 * {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Roboto, Helvetica, sans-serif;
 }
-
 body {
-  background-color: #171923;
+  background-color: #f5f8fc;
   padding: 20px;
-  border-radius: 20px;
 }
-
 a {
   color: #3182ce;
 }
-
 a:hover {
   color: #2c5282;
   cursor: pointer;
 }
-
-.title-table {
-  width: 100%;
-  border: 0;
-  border-spacing: 0;
-  padding: 0;
-}
-
 .title {
-  padding: 10px 0px 20px 0px;
+  padding: 20px 0px 0px 0px;
   font-size: 22px;
   font-family: Helvetica, Arial, sans-serif;
-  color: #ffffff;
+  color: black;
   font-weight: 600;
   text-align: center;
 }
-
+th:first-child,
+td:first-child {
+  padding-left: 20px;
+  padding-right: 0;
+}
+th,
+td {
+  padding-right: 20px;
+}
 .main-table {
-  width: 100%;
+  width: 600px;
   border: 0;
   border-spacing: 20px;
-  padding: 0;
+  padding: 10px 10px 10px 10px;
   max-width: 600px;
   margin: auto;
-  border-radius: 10px;
   background: white;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
-
-.severity-display {
-  font-size: large;
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 5px;
-  font-weight: 600;
-  width: fit-content;
-  text-align: center;
+tr.space > td {
+  padding-bottom: 1em;
+  padding-top: 1em;
 }
-
+tr.space > th {
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
 .lg {
   font-size: large;
 }
@@ -95,7 +87,15 @@ a:hover {
   text-align: center;
 }
 
-.down {
-  font-weight: 600;
-  color: #e53e3e;
+.bottom-border {
+  border-bottom: 1pt solid #cbd5e0;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+.left {
+  text-align: left;
 }
