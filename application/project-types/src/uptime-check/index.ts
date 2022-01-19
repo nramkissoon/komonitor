@@ -15,6 +15,8 @@ export type TimingPhaseProperties =
   | "total"
   | "wait"
   | "dns"
+  | "tls"
+  | "request"
   | "tcp";
 
 export type NumericalOperators =
