@@ -1,7 +1,6 @@
 import {
   Button,
   ButtonProps,
-  chakra,
   Flex,
   FlexProps,
   Heading,
@@ -102,25 +101,22 @@ export function Footer() {
         mb="2em"
       >
         <LinkColumn
-          header="Komonitor"
+          header="Product"
           links={[
-            //<HeaderLink text="FAQ" href="/faq" key="faq" />,
+            <HeaderLink text="Uptime Monitoring" href="/uptime" key="uptime" />,
+
             <HeaderLink
-              text="Contact"
-              href="mailto:support@komonitor.com"
-              key="contact"
-            />,
-            <HeaderLink text="Pricing" href="/pricing" key="pricing" />,
-            <StripeClimateLink
-              text="Stripe Climate"
-              href="https://climate.stripe.com/HorubT"
-              key="climate"
+              text="Integrations"
+              href="/integrations"
+              key="integrations"
             />,
           ]}
         />
+
         <LinkColumn
           header="Resources"
           links={[
+            <HeaderLink text="Pricing" href="/pricing" key="pricing" />,
             <HeaderLink
               text="Documentation"
               href="/docs/getting-started/introduction"
@@ -131,16 +127,18 @@ export function Footer() {
           ]}
         />
         <LinkColumn
-          header="Legal"
+          header="Socials"
           links={[
+            <HeaderLink
+              text="Contact"
+              href="mailto:support@komonitor.com"
+              key="contact"
+            />,
             <HeaderLink text="Privacy" href="/privacy" key="privacy" />,
             <HeaderLink text="Terms of Service" href="/tos" key="tos" />,
           ]}
         />
       </SimpleGrid>
-      <chakra.p mb=".3em">
-        <b>100% self-funded and independent</b>. Built with ❤️ in NYC.
-      </chakra.p>
       <p>© {year} Nicholas Ramkissoon. All rights reserved.</p>
     </Flex>
   );

@@ -39,7 +39,7 @@ const UptimeMonitorPanel = () => {
       ? (
           monitors.map((monitor) => {
             const mostRecentStatus = statuses[monitor.monitor_id].sort(
-              (prev, next) => prev.timestamp - next.timestamp
+              (prev, next) => next.timestamp - prev.timestamp
             )[0];
 
             const isDown = mostRecentStatus

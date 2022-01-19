@@ -83,7 +83,7 @@ const responseSectionData = [
 export const Advanced = () => {
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
   return (
-    <Flex mb="3em" flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center">
       <chakra.h1
         textAlign="center"
         fontSize="5xl"
@@ -150,7 +150,6 @@ export const Advanced = () => {
         lineHeight="shorter"
         mx="auto"
         color={useColorModeValue("gray.800", "gray.100")}
-        mb=".3em"
         maxW="3xl"
       >
         Komonitor allows for advanced uptime monitoring by providing as much

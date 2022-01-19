@@ -2,6 +2,7 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
+  Button,
   Flex,
   IconButton,
   Text,
@@ -10,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import router from "next/router";
+import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { getTimeString } from "../../../common/client-utils";
@@ -93,6 +95,48 @@ interface TimestampCellProps {
 export function TimestampCell(props: TimestampCellProps) {
   const { timestamp, offset } = props;
   return <>{getTimeString(offset, timestamp)}</>;
+}
+
+interface ResponseCellProps {
+  code: number;
+  message?: string;
+}
+
+export function ResponseCell({ code, message }: ResponseCellProps) {
+  return (
+    <>
+      {code}
+      {message ? " " + message : null}
+    </>
+  );
+}
+
+export function StatusObjectCell({
+  status,
+  setStatusToView,
+  onOpen,
+}: {
+  status: UptimeMonitorStatus;
+  setStatusToView: React.Dispatch<
+    React.SetStateAction<UptimeMonitorStatus | undefined>
+  >;
+  onOpen: () => void;
+}) {
+  return (
+    <Button
+      aria-label="view monitor status JSON object"
+      icon={<AiOutlineInfoCircle />}
+      variant="ghost"
+      colorScheme="blue"
+      onClick={() => {
+        setStatusToView(status);
+        onOpen();
+      }}
+      fontWeight="normal"
+    >
+      View Full JSON
+    </Button>
+  );
 }
 
 interface ActionsCellProps {

@@ -20,7 +20,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { signOut, useSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -77,30 +77,6 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
   );
 };
 
-const SignOutButton = (props: { authed: boolean }) => {
-  const { authed } = props;
-  const color = useColorModeValue("gray.900", "gray.400");
-  const hoverColor = useColorModeValue("red.500", "red.400");
-  return authed ? (
-    <Button
-      display={{ base: "none", md: "flex" }}
-      color={color}
-      size="md"
-      variant="ghost"
-      fontSize="lg"
-      fontWeight="medium"
-      as="a"
-      onClick={() => signOut({ callbackUrl: "/" })}
-      _focus={{ boxShadow: "none" }}
-      _hover={{ color: hoverColor, cursor: "pointer" }}
-    >
-      Sign out
-    </Button>
-  ) : (
-    <></>
-  );
-};
-
 const MobileNavHeader = (props: {
   isOpen: boolean;
   onClose: React.MouseEventHandler<HTMLButtonElement>;
@@ -153,16 +129,6 @@ const MobileNavHeader = (props: {
         {HeaderLink({
           text: "Pricing",
           href: "/pricing",
-          buttonProps: linkButtonStyles,
-        })}
-        {HeaderLink({
-          text: "Docs",
-          href: "/docs",
-          buttonProps: linkButtonStyles,
-        })}
-        {HeaderLink({
-          text: "About",
-          href: "/about",
           buttonProps: linkButtonStyles,
         })}
       </VStack>
@@ -248,16 +214,11 @@ export const Header = () => {
               text: "Pricing",
               href: "/pricing",
             })}
-            {HeaderLink({
-              text: "Docs",
-              href: "/docs/getting-started/introduction",
-            })}
           </HStack>
         </Flex>
         <Flex justify="flex-end" align="center" color="gray.400">
           <HStack justify="flex-end" align="center" color="gray.400" mr=".8em">
             {GoToAppOrSigninButton({ authed: authed })}
-            {SignOutButton({ authed: authed })}
           </HStack>
           <IconButton {...defaultColorModeToggleStyles} />
           <IconButton {...defaultMobileNavHamburgerStyles} />

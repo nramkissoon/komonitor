@@ -93,6 +93,27 @@ API:
         ☐ design api key creation, storage, etc.
         ☐ research what header API keys are sent in
 
+Projects:
+    CDK:
+        ☐ create project dbs, ownerId pk, proj id sk
+        ☐ create LSI on monitors,  sk = proj id
+    WebApp: 
+        api:
+            ☐ create project API
+            ☐ update project settings
+            ☐ delete project
+            ☐ get user projects
+        monitor:
+            ☐ assign to project in create update form
+            ☐ remove monitor from project
+        SideBar:
+             ☐  indicate personal account
+             ☐  project selection 
+             ☐  uptime
+             ☐  account setting on bottom
+        ☐ get user projects
+        ☐ get monitors for project
+
 
 Uptime HTTP:
     ✔  design new creation and edit form @done(21-12-06 11:49)
@@ -137,7 +158,7 @@ Uptime Lambda:
     ✔ add status codes to status updates @done(21-12-01 13:29)
     ✔ use user agent Komonitor @10/22 @done(21-10-18 14:31)
     ✔ investigate response times @done(21-10-19 19:54)
-    ☐ add response data to status req
+    ✔ add response data to status req @done(22-01-19 11:36)
 
 Website change monitoring:
     ☐ scope
