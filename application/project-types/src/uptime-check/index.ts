@@ -9,6 +9,58 @@ export interface HttpParameters {
   body?: string;
 }
 
+export type TimingPhaseProperties =
+  | "firstByte"
+  | "download"
+  | "total"
+  | "wait"
+  | "dns"
+  | "tcp";
+
+export type NumericalOperators =
+  | "equal"
+  | "greater"
+  | "less"
+  | "greater_or_equal"
+  | "less_or_equal"
+  | "not_equal";
+
+export type JsonOperators =
+  | "equal"
+  | "greater"
+  | "less"
+  | "greater_or_equal"
+  | "less_or_equal"
+  | "not_equal"
+  | "null"
+  | "not_null"
+  | "empty"
+  | "not_empty"
+  | "contains"
+  | "not_contains";
+
+export interface LatencyCheck {
+  property: TimingPhaseProperties;
+  comparison: NumericalOperators;
+  expected: number;
+}
+
+export interface CodeCheck {
+  comparison: NumericalOperators;
+  expected: number;
+}
+
+export interface BodyCheck {
+  property: string;
+  comparison: string;
+  expected?: string;
+  expectedType?: "string" | "number" | "boolean";
+}
+export interface UpConditionCheck {
+  type: "latency" | "code" | "body";
+  condition: LatencyCheck | CodeCheck | BodyCheck;
+}
+
 export interface CoreUptimeMonitor {
   url: string;
   name: string;
