@@ -1,3 +1,4 @@
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,6 +7,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  IconButton,
   Input,
 } from "@chakra-ui/react";
 import {
@@ -14,11 +16,12 @@ import {
   FieldArrayMethodProps,
   FieldArrayWithId,
   FieldError,
+  UseFormSetValue,
 } from "react-hook-form";
 import { Inputs } from "./Create-Update-Form-Rewrite";
 
 interface HttpHeaderFormFieldProps {
-  fields: FieldArrayWithId<Inputs, "http_headers", "id">[];
+  fields: FieldArrayWithId<Inputs, "http_parameters.headers", "id">[];
   append: (
     value:
       | Partial<{
@@ -50,6 +53,7 @@ interface HttpHeaderFormFieldProps {
         }[]
       | undefined;
   };
+  setValue: UseFormSetValue<Inputs>;
 }
 
 function NewHeaderButton(
@@ -75,9 +79,17 @@ function NewHeaderButton(
 }
 
 export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
-  const { fields, append, remove, control, productId, errors, touchedFields } =
-    props;
-
+  const {
+    fields,
+    append,
+    remove,
+    control,
+    productId,
+    errors,
+    touchedFields,
+    setValue,
+  } = props;
+  console.log(fields);
   return (
     <>
       <FormControl
@@ -94,9 +106,9 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
             <Box key={item.id} mb="1em">
               <Flex flexDir={["column", "row"]}>
                 <Controller
+                  defaultValue=""
                   control={control}
-                  defaultValue={"Name"}
-                  name={`http_headers.${index}.header`}
+                  name={`http_parameters.headers.${index}.header`}
                   rules={{
                     maxLength: {
                       value: 100,
@@ -113,8 +125,11 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
                         errors.http_headers[index].header !== undefined
                       }
                     >
-                      <FormLabel htmlFor="http_headers">Header Name</FormLabel>
-                      <Input {...field} />
+                      <Input
+                        key={item.id}
+                        {...field}
+                        placeholder="Custom Header Name"
+                      />
                       <FormErrorMessage>
                         {errors.http_headers
                           ? errors.http_headers[index].header?.message
@@ -124,9 +139,9 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
                   )}
                 />
                 <Controller
+                  defaultValue=""
                   control={control}
-                  name={`http_headers.${index}.value`}
-                  defaultValue={"Value"}
+                  name={`http_parameters.headers.${index}.value`}
                   rules={{
                     maxLength: {
                       value: 200,
@@ -143,8 +158,7 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
                         errors.http_headers[index].value !== undefined
                       }
                     >
-                      <FormLabel htmlFor="http_headers">Header Value</FormLabel>
-                      <Input {...field} />
+                      <Input key={item.id} {...field} placeholder="Value" />
                       <FormErrorMessage>
                         {errors.http_headers
                           ? errors.http_headers[index].value?.message
@@ -153,18 +167,18 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
                     </FormControl>
                   )}
                 />
-                <Button
-                  colorScheme="gray"
+                <IconButton
+                  aria-label="delete header"
+                  icon={<DeleteIcon />}
+                  colorScheme="red"
                   color="white"
-                  bg="gray.400"
+                  bg="red.500"
                   fontWeight="medium"
-                  minW="75px"
                   _hover={{ bg: "red.600" }}
                   onClick={() => remove(index)}
-                  mt={["10px", "32px"]}
                 >
                   Delete
-                </Button>
+                </IconButton>
               </Flex>
             </Box>
           );

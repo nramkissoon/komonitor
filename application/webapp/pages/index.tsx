@@ -1,6 +1,6 @@
-import { Alert, Flex } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { PageLayout } from "../src/common/components/Page-Layout";
+import { Advanced } from "../src/modules/landing-page/Advanced";
 import { Banner } from "../src/modules/landing-page/Banner";
 import { ComingSoon } from "../src/modules/landing-page/Coming-Soon";
 import { CTA } from "../src/modules/landing-page/Cta";
@@ -16,21 +16,11 @@ const Home: NextPage = () => {
         description:
           "Komonitor is an online service for creating and managing monitors and alerts for your websites. Know when things go wrong and fix them before your customers even notice.",
       }}
-      alert={
-        <Alert variant="subtle" status="success" fontWeight="medium">
-          <Flex width="100%" alignItems="center" justifyContent="center">
-            <p>
-              What's New: We just launched Slack Alerts! Get alert messages
-              delivered directly to your workspace!
-            </p>
-          </Flex>
-        </Alert>
-      }
     >
       <Banner />
       <Features />
       <NoCode />
-
+      <Advanced />
       <ComingSoon />
       <CTA />
     </PageLayout>

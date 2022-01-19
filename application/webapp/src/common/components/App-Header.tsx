@@ -137,11 +137,11 @@ const MobileNavHeader = (props: {
           href: "/app/uptime",
           buttonProps: linkButtonStyles,
         })}
-        {HeaderLink({
+        {/* {HeaderLink({
           text: "Lighthouse",
           href: "/app/lighthouse",
           buttonProps: linkButtonStyles,
-        })}
+        })} */}
         {HeaderLink({
           text: "Docs",
           href: "/docs",
@@ -222,10 +222,10 @@ export const AppHeader = () => {
               text: "Uptime",
               href: "/app/uptime",
             })}
-            {HeaderLink({
+            {/* {HeaderLink({
               text: "Lighthouse",
               href: "/app/lighthouse",
-            })}
+            })} */}
             {HeaderLink({
               text: "Docs",
               href: "/docs/getting-started/introduction",

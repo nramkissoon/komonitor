@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
+import { PLAN_PRICE_IDS, PLAN_PRODUCT_IDS } from "../billing/plans";
+import { CtaButton, ctaButtonCharacteristics } from "./Pricing-Cards";
 
 function TableSectionRow(borderColor: string, title: string) {
   return (
@@ -65,10 +67,12 @@ function CheckIcon(color: string) {
 
 const monitorSectionData = [
   ["Uptime", "5 Monitors", "50 Monitors", "500 Monitors"],
+  ["HTTP API Uptime", CheckIcon, CheckIcon, CheckIcon],
   ["Lighthouse*", "1 Monitor", "10 Monitors", "30 Monitors"],
   ["Uptime Check Frequency", "5 minutes", "1 minute", "1 minute"],
   ["Lighthouse Check Frequency*", "7 days", "1 day", "1 day"],
   ["Webhook updates", "-", CheckIcon, CheckIcon],
+  ["Regions", "16", "16", "16"],
 ];
 
 const alertSectionData = [
@@ -95,7 +99,15 @@ const supportSectionData = [
   ["Account limits", "Fixed", "Fixed", "Customizable on request"],
 ];
 
-export function ComparisonTable() {
+export function ComparisonTable({
+  user,
+  productId,
+  showAnnualPricing,
+}: {
+  showAnnualPricing: boolean;
+  productId: string | undefined;
+  user: any;
+}) {
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
   return (
     <Fade in={true}>
@@ -166,6 +178,48 @@ export function ComparisonTable() {
               {TableRows(tableBorderColor, dataSectionData)}
               {TableSectionRow(tableBorderColor, "Support")}
               {TableRows(tableBorderColor, supportSectionData)}
+              <Tr>
+                <Td py={2} borderColor={tableBorderColor}></Td>
+                <Td py={2} borderColor={tableBorderColor}>
+                  <CtaButton
+                    width="13em"
+                    {...ctaButtonCharacteristics(
+                      user,
+                      productId,
+                      PLAN_PRODUCT_IDS.FREE,
+                      showAnnualPricing
+                        ? PLAN_PRICE_IDS.ANNUAL.FREE
+                        : PLAN_PRICE_IDS.MONTHLY.FREE
+                    )}
+                  />
+                </Td>
+                <Td py={2} borderColor={tableBorderColor}>
+                  <CtaButton
+                    width="13em"
+                    {...ctaButtonCharacteristics(
+                      user,
+                      productId,
+                      PLAN_PRODUCT_IDS.FREELANCER,
+                      showAnnualPricing
+                        ? PLAN_PRICE_IDS.ANNUAL.FREELANCER
+                        : PLAN_PRICE_IDS.MONTHLY.FREELANCER
+                    )}
+                  />
+                </Td>
+                <Td py={2} borderColor={tableBorderColor}>
+                  <CtaButton
+                    width="13em"
+                    {...ctaButtonCharacteristics(
+                      user,
+                      productId,
+                      PLAN_PRODUCT_IDS.BUSINESS,
+                      showAnnualPricing
+                        ? PLAN_PRICE_IDS.ANNUAL.BUSINESS
+                        : PLAN_PRICE_IDS.MONTHLY.BUSINESS
+                    )}
+                  />
+                </Td>
+              </Tr>
             </Tbody>
           </Table>
         </Box>

@@ -26,7 +26,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Router, { useRouter } from "next/router";
-import { Alert, ChannelType, UptimeMonitor } from "project-types";
+import { Alert, ChannelType, HttpMethods, UptimeMonitor } from "project-types";
 import React from "react";
 import {
   Controller,
@@ -55,33 +55,44 @@ export type Inputs = {
   name: string;
   region: string;
   frequency: string;
-  failures_before_alert: number;
+  failures_before_alert?: number;
   webhook_url: string;
+  http_parameters: {
+    method: HttpMethods;
+    body: string;
+    headers: {
+      header: string;
+      value: string;
+    }[];
+  };
   alert?: Alert;
-  http_headers: {
-    header: string;
-    value: string;
-  }[];
+  paused: boolean;
 };
 
 // Used to prefill fields with current monitor attributes
 function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   if (!monitor) return undefined;
   let http_headers;
-  if (monitor.http_headers) {
-    http_headers = Object.keys(monitor.http_headers).map((header) => ({
-      header: header,
-      value: monitor.http_headers ? monitor.http_headers[header] : "",
-    }));
+  if (monitor.http_parameters.headers !== undefined) {
+    http_headers = Object.keys(monitor.http_parameters.headers).map(
+      (header) => ({
+        header: header,
+        value: monitor.http_parameters.headers![header],
+      })
+    );
   }
+  const { http_parameters, ...rest } = monitor;
   const placeholders: any = {
-    ...monitor,
+    ...rest,
   };
   if (placeholders.webhook_url)
     placeholders.webhook_url = placeholders.webhook_url.replace("https://", "");
   placeholders.url = placeholders.url.replace("https://", "");
   placeholders.frequency = placeholders.frequency.toString();
-  placeholders.http_headers = http_headers;
+  placeholders.http_parameters = {};
+  placeholders.http_parameters["headers"] = http_headers;
+  placeholders.http_parameters["body"] = monitor.http_parameters.body;
+  placeholders.http_parameters["method"] = monitor.http_parameters.method;
   return placeholders as Inputs;
 }
 
@@ -101,8 +112,22 @@ function createRegionSelectOptions() {
   }));
 }
 
+function createHttpMethodOptions() {
+  return ["GET", "POST", "PATCH", "PUT", "HEAD", "DELETE"].map((method) => ({
+    value: method,
+    label: method,
+    isDisabled: false,
+  }));
+}
+
 export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   let { product_id, currentMonitorAttributes } = props;
+
+  const placeholders = React.useMemo(() => {
+    return createFormPlaceholdersFromMonitor(
+      currentMonitorAttributes
+    ) as unknown as Inputs;
+  }, [currentMonitorAttributes]);
 
   const createNewMonitor = currentMonitorAttributes === undefined;
   const { mutate } = useSWRConfig();
@@ -121,15 +146,19 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     clearErrors,
     setError,
   } = useForm<Inputs>({
-    defaultValues: createNewMonitor
-      ? undefined
-      : (createFormPlaceholdersFromMonitor(
-          currentMonitorAttributes
-        ) as unknown as Inputs),
+    defaultValues: createNewMonitor ? undefined : placeholders,
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "http_headers",
+    name: "http_parameters.headers",
+  });
+
+  const watchHttpHeaderArray = watch("http_parameters.headers");
+  const controlledHttpHeaderFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchHttpHeaderArray[index],
+    };
   });
 
   const [hasAlert, setHasAlert] = React.useState<boolean>(
@@ -189,6 +218,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
         }
       }
     } else {
+      data.failures_before_alert = undefined;
       data.alert = undefined;
     }
 
@@ -233,12 +263,12 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       >
         {createNewMonitor ? "Create Uptime Monitor" : "Edit Monitor"}
       </Heading>
-      <Container mb="3em" p="0" maxW="6xl">
+      <Container mb="3em" p="0" maxW="4xl">
         <chakra.form onSubmit={handleSubmit(onSubmit)}>
           <Box
             p="2em"
-            borderRadius="lg"
-            shadow="lg"
+            borderRadius="md"
+            shadow="md"
             bg={useColorModeValue("white", "#0f131a")}
             mb="1.5em"
           >
@@ -371,8 +401,8 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
           </Box>
           <Box
             p="2em"
-            borderRadius="lg"
-            shadow="lg"
+            borderRadius="md"
+            shadow="md"
             mb="1.5em"
             bg={useColorModeValue("white", "#0f131a")}
           >
@@ -518,8 +548,101 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
           </Box>
           <Box
             p="2em"
-            borderRadius="lg"
-            shadow="lg"
+            borderRadius="md"
+            shadow="md"
+            bg={useColorModeValue("white", "#0f131a")}
+            mb="1.5em"
+          >
+            <Accordion allowToggle>
+              <AccordionItem border="none">
+                <AccordionButton
+                  borderRadius="md"
+                  _hover={{ bgColor: useColorModeValue("gray.50", "gray.500") }}
+                >
+                  <Heading size="md">HTTP Settings</Heading>
+                  <AccordionIcon boxSize="8" />
+                </AccordionButton>
+                <AccordionPanel pb={4}>
+                  <Controller
+                    name="http_parameters.method"
+                    defaultValue="GET"
+                    control={control}
+                    rules={{
+                      required: "HTTP method is required.",
+                    }}
+                    render={({ field }) => (
+                      <FormControl
+                        isInvalid={
+                          errors.http_parameters?.method
+                            ? touchedFields.http_parameters?.method
+                            : false
+                        }
+                        isRequired
+                        mb="1.5em"
+                      >
+                        <FormLabel htmlFor="http_parameters.method">
+                          HTTP Method
+                        </FormLabel>
+                        <ReactSelect
+                          options={createHttpMethodOptions()}
+                          placeholder="Select HTTP Method"
+                          field={field as any}
+                          setValue={setValue}
+                        />
+                        <FormErrorMessage>
+                          {errors.http_parameters?.method?.message}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  />
+                  <Controller
+                    name="http_parameters.body"
+                    control={control}
+                    rules={{}}
+                    render={({ field }) => (
+                      <FormControl
+                        isInvalid={
+                          errors.http_parameters?.body
+                            ? touchedFields.http_parameters?.body
+                            : false
+                        }
+                        mb="1.5em"
+                      >
+                        <FormLabel htmlFor="http_parameters.body">
+                          HTTP Body
+                        </FormLabel>
+                        <Textarea
+                          {...field}
+                          id="http_parameters.body"
+                          placeholder="HTTP Body"
+                        />
+                        <FormHelperText>
+                          Remember to set the Content-Type Header below!
+                        </FormHelperText>
+                        <FormErrorMessage>
+                          {errors.http_parameters?.body?.message}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  />
+                  <HttpHeaderFormField
+                    fields={controlledHttpHeaderFields}
+                    touchedFields={touchedFields as any}
+                    append={append}
+                    remove={remove}
+                    errors={errors as any}
+                    productId={product_id}
+                    setValue={setValue}
+                    control={control}
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+          </Box>
+          <Box
+            p="2em"
+            borderRadius="md"
+            shadow="md"
             mb="1.5em"
             bg={useColorModeValue("white", "#0f131a")}
           >
@@ -527,7 +650,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               <AccordionItem border="none">
                 <AccordionButton
                   borderRadius="md"
-                  _hover={{ bgColor: useColorModeValue("blue.50", "blue.500") }}
+                  _hover={{ bgColor: useColorModeValue("gray.50", "gray.500") }}
                 >
                   <Heading size="md">Advanced Settings</Heading>
                   <AccordionIcon boxSize="8" />
@@ -564,17 +687,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                         </FormErrorMessage>
                       </FormControl>
                     )}
-                  />
-                  <HttpHeaderFormField
-                    {...{
-                      fields,
-                      append,
-                      remove,
-                      control,
-                      errors,
-                      touchedFields,
-                      productId: product_id,
-                    }}
                   />
                 </AccordionPanel>
               </AccordionItem>

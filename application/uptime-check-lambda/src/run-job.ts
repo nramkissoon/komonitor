@@ -10,13 +10,13 @@ import {
   UptimeMonitorStatus,
   UptimeMonitorWebhookNotification,
 } from "project-types";
-import request from "request";
 import { config } from "./config";
 import {
   getPreviousAlertInvocationForMonitor,
   writeAlertInvocation,
   writeStatusToDB,
 } from "./db";
+import { request } from "./http";
 
 const asyncInvokeLambda = async (event: {
   monitorId: string;
@@ -38,51 +38,76 @@ const fetchTimeout = setTimeout(() => {
   controller.abort();
 }, 5000);
 
-const fetchCall = async (
-  url: string,
-  httpHeaders?: { [header: string]: string }
-) => {
-  try {
-    const res = await new Promise<
-      | { ok: boolean; code: number | undefined; latency: number | undefined }
-      | undefined
-    >((resolve, reject) =>
-      request(
-        {
-          url: url,
-          method: "GET",
-          time: true,
-          timeout: 5000,
-          headers: {
-            ...httpHeaders,
-          },
-        },
-        (err, response) => {
-          if (err) {
-            resolve({
-              ok: false,
-              code: response ? response.statusCode : undefined,
-              latency: undefined,
-            });
-          } else {
-            resolve({
-              ok: response?.statusCode
-                ? (response.statusCode >= 200 && response.statusCode < 300) ||
-                  response.statusCode === 429 // Too many requests
-                : false,
-              code: response.statusCode,
-              latency: response.timingPhases?.firstByte,
-            });
-          }
-        }
-      )
-    );
+// const fetchCall = async (
+//   url: string,
+//   method: string,
+//   httpHeaders?: { [header: string]: string },
+//   body?: string
+// ) => {
+//   try {
+//     const res = await new Promise<
+//       | {
+//           ok: boolean;
+//           code: number | undefined;
+//           latency: number | undefined;
+//           body: string | undefined;
+//         }
+//       | undefined
+//     >((resolve, reject) =>
+//       request(
+//         {
+//           url: url,
+//           method: method,
+//           time: true,
+//           timeout: 5000,
+//           headers: {
+//             ...httpHeaders,
+//           },
+//           body: body,
+//         },
+//         (err, response) => {
+//           if (err) {
+//             resolve({
+//               ok: false,
+//               code: response ? response.statusCode : undefined,
+//               latency: undefined,
+//               body: undefined,
+//             });
+//           } else {
+//             let latency = -1;
+//             if (response.timingPhases) {
+//               latency = response.timingPhases.firstByte;
+//               response.timingPhases;
+//             }
+//             resolve({
+//               ok: response?.statusCode
+//                 ? (response.statusCode >= 200 && response.statusCode < 300) ||
+//                   response.statusCode === 429 // Too many requests
+//                 : false,
+//               code: response.statusCode,
+//               latency: latency,
+//               body: response.body ?? undefined,
+//             });
+//           }
+//         }
+//       )
+//     );
 
-    return { response: res?.ok, statusCode: res?.code, latency: res?.latency };
-  } catch (err) {
-    return { response: false, statusCode: undefined, latency: undefined };
-  }
-};
+//     return {
+//       response: res?.ok,
+//       statusCode: res?.code,
+//       latency: res?.latency,
+//       body: res?.body,
+//     };
+//   } catch (err) {
+//     return {
+//       response: false,
+//       statusCode: undefined,
+//       latency: undefined,
+//       body: undefined,
+//     };
+//   }
+// };
 
 const webhookNotifyCall = async (
   url: string,
@@ -107,99 +132,84 @@ const webhookNotifyCall = async (
 };
 
 const buildMonitorStatus = (
-  ok: boolean,
-  latencies: number[],
-  monitor_id: string,
-  region: string,
-  responseStatusCode: number
+  fetchResult: Pick<UptimeMonitorStatus, "request" | "response">,
+  monitor: UptimeMonitor
 ): UptimeMonitorStatus => {
   return {
-    monitor_id: monitor_id,
+    monitor_id: monitor.monitor_id,
     timestamp: new Date().getTime(),
-    status: ok ? "up" : "down",
-    latency:
-      latencies.length >= 1
-        ? latencies.reduce((a, b) => a + b) / latencies.length
-        : -1,
-    region: region,
-    response_status_code: responseStatusCode,
+    status:
+      fetchResult.response.statusCode >= 200 &&
+      fetchResult.response.statusCode < 300
+        ? "up"
+        : "down",
+    response: fetchResult.response,
+    request: fetchResult.request,
+    monitor_snapshot: monitor,
   };
 };
 
-const buildWebhook = (
-  monitorStatus: UptimeMonitorStatus,
-  url: string,
-  name: string
-): UptimeMonitorWebhookNotification => {
-  return {
-    trigger: monitorStatus.status,
-    monitor_type: "uptime",
-    latency: monitorStatus.latency,
-    region: monitorStatus.region,
-    url: url,
-    name: name,
-  };
-};
+// const buildWebhook = (
+//   monitorStatus: UptimeMonitorStatus,
+//   url: string,
+//   name: string
+// ): UptimeMonitorWebhookNotification => {
+//   return {
+//     trigger: monitorStatus.status,
+//     monitor_type: "uptime",
+//     latency: monitorStatus.response.latency,
+//     region: monitorStatus.monitor_snapshot.region,
+//     url: url,
+//     name: name,
+//   };
+// };
 
 export const runJob = async (job: UptimeMonitor) => {
-  const {
-    name,
-    url,
-    region,
-    webhook_url,
-    monitor_id,
-    owner_id,
-    http_headers,
-    alert,
-  } = job;
-
-  const latencies: number[] = [];
-
-  let fetchResult = await fetchCall(url, http_headers ?? {});
-  if (fetchResult.response?.valueOf() && fetchResult.latency !== undefined) {
-    latencies.push(fetchResult.latency);
-  }
-
-  const status = buildMonitorStatus(
-    fetchResult.response !== undefined ? fetchResult.response.valueOf() : false,
-    latencies,
-    monitor_id,
-    region,
-    fetchResult.statusCode === undefined ? -1 : fetchResult.statusCode
-  );
-
+  const { url, monitor_id, owner_id, http_parameters, alert } = job;
+  console.log(http_parameters);
   try {
-    const dbWriteResponse = await writeStatusToDB(status);
-  } catch (err) {}
-
-  if (webhook_url) {
-    const webhook = buildWebhook(status, url, name);
-
-    await webhookNotifyCall(webhook_url, webhook);
-  }
-
-  if (status.status === "up" && alert) {
-    const lastAlertForMonitor = await getPreviousAlertInvocationForMonitor(
-      monitor_id,
-      config.alertInvocationTableName
+    let fetchResult = await request(
+      url,
+      http_parameters.method,
+      http_parameters.headers ?? {},
+      http_parameters.body ?? undefined
     );
 
-    if (lastAlertForMonitor && lastAlertForMonitor.ongoing) {
-      lastAlertForMonitor.ongoing = false; // no longer in alert
-      const res = await writeAlertInvocation(
-        config.alertInvocationTableName,
-        lastAlertForMonitor
+    const status = buildMonitorStatus(fetchResult as any, job);
+    console.log(status);
+    const dbWriteResponse = await writeStatusToDB(status);
+
+    // if (webhook_url) {
+    //   const webhook = buildWebhook(status, url, name);
+
+    //   await webhookNotifyCall(webhook_url, webhook);
+    // }
+
+    if (status.status === "up" && alert) {
+      const lastAlertForMonitor = await getPreviousAlertInvocationForMonitor(
+        monitor_id,
+        config.alertInvocationTableName
       );
 
-      // TODO invoke lambda
-    }
-  }
+      if (lastAlertForMonitor && lastAlertForMonitor.ongoing) {
+        lastAlertForMonitor.ongoing = false; // no longer in alert
+        const res = await writeAlertInvocation(
+          config.alertInvocationTableName,
+          lastAlertForMonitor
+        );
 
-  if (status.status === "down" && alert) {
-    const res = await asyncInvokeLambda({
-      monitorId: monitor_id,
-      ownerId: owner_id,
-      monitorType: "uptime-monitor",
-    });
+        // TODO invoke lambda
+      }
+    }
+
+    if (status.status === "down" && alert) {
+      const res = await asyncInvokeLambda({
+        monitorId: monitor_id,
+        ownerId: owner_id,
+        monitorType: "uptime-monitor",
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
 };

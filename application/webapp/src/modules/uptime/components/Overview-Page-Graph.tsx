@@ -117,7 +117,9 @@ function buildGraphSerie(
     data: statuses.map((status) => {
       const dataPoint: Datum = {
         x: getTimeString(offset, status.timestamp),
-        y: status.latency,
+        y: (status as any).latency // TODO revert latency status
+          ? (status as any).latency
+          : status.response.timings.phases.total ?? -1,
       };
       return dataPoint;
     }),

@@ -63,7 +63,11 @@ export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
 
   let perc90, perc95, uptime;
   if (statuses && statuses.length !== 0) {
-    let responseTimes = statuses.map((status) => status.latency);
+    let responseTimes = statuses.map((status) =>
+      (status as any).latency // TODO revert latency status
+        ? (status as any).latency
+        : status.response.timings.phases.total ?? -1
+    );
     perc90 = percentile(responseTimes, 90);
     if (perc90 === -1) perc90 = "N/A";
     else {
