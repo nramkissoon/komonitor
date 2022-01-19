@@ -67,13 +67,14 @@ export function getTimeString(tz: string, timestamp: number) {
     .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
 }
 
-export function convertUptimeMonitorStatusesToStatusesWithReadableTimeStamp(
+export function convertUptimeMonitorStatusesToStatusesWithReadableTimeStampAndStatusCode(
   tz: string,
   statuses: UptimeMonitorStatus[]
 ) {
   const newStatuses = statuses.map((status) => ({
     ...status,
     timestampAsUserTz: getTimeString(tz, status.timestamp),
+    response_status_code: status.response.statusCode,
   }));
   return newStatuses;
 }
