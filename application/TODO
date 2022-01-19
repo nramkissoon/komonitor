@@ -83,25 +83,16 @@ User pref dates:
 Customer Serve:
     ☐ notification for new users -> email template
 
-Sign in:
-    ✔  migrate to formik and delete formik dep @done(22-01-07 12:04)
+Teams:
+    ☐ scope teams
 
-Weekly emails: 
-    Email Template: 
-        ☐  include unsub button
-    Lambda: 
-        ✔  set up lambda @done(22-01-12 20:28)
-        ☐  add lambda and weekly rule to us-east-1 stack
-        ✔  lambda can read user table @done(22-01-13 10:44)
-        ✔  lambda can read user monitors and user monitor statuses for the week @done(22-01-13 10:44)
-        ✔  lambda has ses access @done(22-01-13 10:44)
-        ☐  promise all nodemailer sends
-    Settings:
-        ✔  add toggle to account settings @done(22-01-07 11:32)
-    DB: 
-        ✔ add field to user model @done(22-01-07 09:52)
-    Sign up: 
-        ✔ set weekly email to true @done(22-01-07 09:51)
+API:
+    ☐ research rate limiting
+    ☐ API server design (api.komonitor.com)
+    API keys:
+        ☐ design api key creation, storage, etc.
+        ☐ research what header API keys are sent in
+
 
 Uptime HTTP:
     ✔  design new creation and edit form @done(21-12-06 11:49)
@@ -112,19 +103,23 @@ Uptime HTTP:
     ✔  remove retries from verification and create and edit forms @done(21-12-01 13:06)
     ✔  add HTTP headers to forms @done(21-12-06 11:49)
     ☐  design dashboard to show HTTP settings
-    ☐  add HTTP methods to model
-    ☐  add HTTP methods in check lambda
-    ☐  add HTTP methods to forms
-    ☐  add HTTP body to model
-    ☐  add HTTP body to check lambda
-    ☐  add HTTP body to form
-
+    ✔  add HTTP methods to model @done(22-01-13 22:37)
+    ✔  add HTTP methods in check lambda @done(22-01-13 22:37)
+    ✔  add HTTP methods to forms @done(22-01-13 22:37)
+    ✔  add HTTP body to model @done(22-01-13 22:37)
+    ✔  add HTTP body to check lambda @done(22-01-13 22:37)
+    ✔  add HTTP body to form @done(22-01-13 22:37)
+    ✔  TEST THE HTTP SETTINGS DAMMIT @done(22-01-18 18:40)
+    ✔  CHECK BODY INPUTS @done(22-01-19 09:29)
+    ✔  check google latency @done(22-01-18 18:40)
+    ✔  CHANGE PROD MONITORS TO NEW STRUCTURE @done(22-01-18 18:40)
+    ☐  http redirects
 Alert Lambda: 
     ✔  add slack alerts @done(22-01-03 13:26)
      ✔ verify slack alerts @done(22-01-05 14:28)
 
 Uptime Alerts: 
-    ☐ aattach multiple alerts to monitor
+    ✘ aattach multiple alerts to monitor @cancelled(22-01-18 18:40)
 
 Alerts:
     ✔  do not resend down alerts -> add ongoing field to invocation @done(21-12-30 12:34)

@@ -57,7 +57,9 @@ function createRowPropsFromMonitorStatus(
 ): RowProps {
   return {
     status: status.status ?? "No Data",
-    responseTime: status.latency,
+    responseTime: (status as any).latency // TODO revert latency status
+      ? (status as any).latency
+      : status.response.timings.phases.total ?? -1,
     timestamp: status.timestamp,
     filterString: [status.status, getTimeString(offset, status.timestamp)].join(
       " "

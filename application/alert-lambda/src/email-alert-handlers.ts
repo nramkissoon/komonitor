@@ -1,7 +1,7 @@
 import Email from "email-templates";
 import { Alert, UptimeMonitor, UptimeMonitorStatus, User } from "project-types";
 import {
-  convertUptimeMonitorStatusesToStatusesWithReadableTimeStamp,
+  convertUptimeMonitorStatusesToStatusesWithReadableTimeStampAndStatusCode,
   emailTransporter,
   regionToLocationStringMap,
 } from "./config";
@@ -15,7 +15,10 @@ export async function sendUptimeMonitorAlertEmail(
   try {
     const tz = user.tz ?? "Etc/GMT";
     const statusesForTemplate =
-      convertUptimeMonitorStatusesToStatusesWithReadableTimeStamp(tz, statuses);
+      convertUptimeMonitorStatusesToStatusesWithReadableTimeStampAndStatusCode(
+        tz,
+        statuses
+      );
     const email = new Email();
     const html = await email.render("uptime/html", {
       monitor: monitor,

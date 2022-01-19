@@ -10,11 +10,9 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/client";
 import router from "next/router";
 import React from "react";
 import { PLAN_PRICE_IDS, PLAN_PRODUCT_IDS } from "../billing/plans";
-import { useUserServicePlanProductId } from "../user/client";
 
 interface PricingCardProps {
   price: number;
@@ -123,30 +121,7 @@ function PricingCard(props: PricingCardProps) {
               {perString}
             </chakra.span>
           </Text>
-          <Box
-            as="button"
-            onClick={() => ctaButtonProps.onClickFunc()}
-            w={["full"]}
-            display="inline-flex"
-            alignItems="center"
-            justifyContent="center"
-            px={4}
-            py={3}
-            border="solid transparent"
-            fontWeight="bold"
-            letterSpacing="wide"
-            fontSize="xl"
-            rounded="md"
-            shadow="md"
-            color="white"
-            bg={useColorModeValue("blue.400", "blue.500")}
-            _hover={{
-              bg: useColorModeValue("blue.600", "blue.700"),
-              cursor: "pointer",
-            }}
-          >
-            {ctaButtonProps.text}
-          </Box>
+          <CtaButton {...ctaButtonProps} />
         </Box>
         <Flex px={10} pt={5} pb={10} direction="column">
           <Stack mb={5} spacing={4}>
@@ -158,7 +133,44 @@ function PricingCard(props: PricingCardProps) {
   );
 }
 
-function ctaButtonCharacteristics(
+export const CtaButton = ({
+  text,
+  onClickFunc,
+  width,
+}: {
+  text: string;
+  onClickFunc: Function;
+  width?: string;
+}) => {
+  return (
+    <Box
+      as="button"
+      onClick={() => onClickFunc()}
+      w={width ? width : ["full"]}
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      px={4}
+      py={3}
+      border="solid transparent"
+      fontWeight="bold"
+      letterSpacing="wide"
+      fontSize="xl"
+      rounded="md"
+      shadow="md"
+      color="white"
+      bg={useColorModeValue("blue.400", "blue.500")}
+      _hover={{
+        bg: useColorModeValue("blue.600", "blue.700"),
+        cursor: "pointer",
+      }}
+    >
+      {text}
+    </Box>
+  );
+};
+
+export function ctaButtonCharacteristics(
   user: any,
   userProductId: any,
   productId: string,
@@ -193,20 +205,13 @@ function ctaButtonCharacteristics(
   };
 }
 
-export function PricingCards() {
-  const [session, loading] = useSession();
-  const {
-    data,
-    isLoading: userServicePlanIsLoading,
-    isError,
-  } = useUserServicePlanProductId();
-
-  const [showAnnualPricing, setShowAnnualPricing] = React.useState(false);
-
-  const user = session && session?.user;
-  const productId = data ? data.productId : undefined;
-
-  let isLoading = userServicePlanIsLoading || loading;
+export function PricingCards(props: {
+  showAnnualPricing: boolean;
+  setShowAnnualPricing: React.Dispatch<React.SetStateAction<boolean>>;
+  productId: string | undefined;
+  user: any;
+}) {
+  const { showAnnualPricing, setShowAnnualPricing, productId, user } = props;
 
   return (
     <>

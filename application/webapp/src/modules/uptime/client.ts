@@ -133,13 +133,20 @@ export async function deleteMonitor(
 }
 
 function createCoreMonitorFromFormData(formData: Inputs) {
-  const form_http_headers: { header: string; value: string }[] =
-    formData.http_headers ?? [];
+  const form_http_headers: { header?: string; value?: string }[] =
+    formData.http_parameters.headers ?? [];
 
   let headers: { [header: string]: string } = {};
-  form_http_headers.forEach(
-    (header) => (headers[header.header] = header.value)
-  );
+  form_http_headers.forEach((header) => {
+    if (
+      header.header &&
+      header.value &&
+      header.header.length > 0 &&
+      header.value.length > 0
+    ) {
+      headers[header.header] = header.value;
+    }
+  });
 
   const monitor: CoreUptimeMonitor = {
     url: "https://" + formData.url,
@@ -162,7 +169,14 @@ function createCoreMonitorFromFormData(formData: Inputs) {
           description: formData.alert?.description ?? "",
         }
       : undefined,
-    http_headers: form_http_headers.length > 0 ? headers : undefined,
+    http_parameters: {
+      method: formData.http_parameters.method,
+      headers: Object.keys(headers).length > 0 ? headers : undefined,
+      body:
+        formData.http_parameters.body?.length > 0
+          ? formData.http_parameters.body
+          : undefined,
+    },
   };
   return monitor;
 }

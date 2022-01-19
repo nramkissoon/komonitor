@@ -138,7 +138,7 @@ export function Features() {
         header: Copy.Features.Alert.Header,
         subheader: Copy.Features.Alert.Subheader,
         list: Copy.Features.Alert.List,
-        image: "/alert-dashboard.png",
+        image: "/alert-dashboard.jpg",
         reverse: true,
       })}
     </Flex>

@@ -15,7 +15,10 @@ export const writeStatusToDB = async (
     ? process.env.MONITOR_STATUS_TABLE_NAME
     : "dev_uptime_monitor_status";
 
-  const item = marshall(status);
+  const item = marshall(status, {
+    removeUndefinedValues: true,
+    convertClassInstanceToMap: true,
+  });
 
   const input: PutItemCommandInput = {
     TableName: tableName,
@@ -28,6 +31,7 @@ export const writeStatusToDB = async (
     const result = await ddbClient.send(putItemCommand);
     return true;
   } catch (err) {
+    console.log(err);
     return false;
   }
 };
