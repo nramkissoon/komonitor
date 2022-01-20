@@ -7,7 +7,7 @@ export class DevStackDdbTables extends cdk.Construct {
   public readonly lighthouseJobTableFrequencyGsiName: string;
   public readonly uptimeMonitorStatusTable: dynamodb.Table;
   public readonly uptimeCheckMonitorTableFrequencyGsiName: string;
-  public readonly uptimeCheckMonitorTableProjectIdLsiName: string;
+  public readonly uptimeCheckMonitorTableProjectIdGsiName: string;
   public readonly userTable: dynamodb.Table;
   public readonly alertInvocationTable: dynamodb.Table;
   public readonly stripeWebhooksTable: dynamodb.Table;
@@ -48,10 +48,12 @@ export class DevStackDdbTables extends cdk.Construct {
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
-    this.uptimeCheckMonitorTableProjectIdLsiName = "projectIdLSI";
+    // CloudFormation cannot update a stack when a custom-named resource requires replacing.
+    this.uptimeCheckMonitorTableProjectIdGsiName = "projectIdGsi";
 
-    this.uptimeMonitorTable.addLocalSecondaryIndex({
-      indexName: this.uptimeCheckMonitorTableProjectIdLsiName,
+    this.uptimeMonitorTable.addGlobalSecondaryIndex({
+      indexName: this.uptimeCheckMonitorTableProjectIdGsiName,
+      partitionKey: { name: "owner_id", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "project_id", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
     });
