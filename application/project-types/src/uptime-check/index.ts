@@ -80,6 +80,7 @@ export interface UptimeMonitor extends CoreUptimeMonitor {
   monitor_id: string;
   created_at: number;
   last_updated: number;
+  project_id: string;
 }
 
 export type UptimeStatusResponse = Pick<

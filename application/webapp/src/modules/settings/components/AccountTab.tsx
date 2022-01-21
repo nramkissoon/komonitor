@@ -6,6 +6,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { signOut } from "next-auth/client";
 import React from "react";
 import { useUser, useUserTimezoneAndOffset } from "../../user/client";
 import { ColorModeToggle } from "./ColorModeToggle";
@@ -15,6 +16,27 @@ import {
 } from "./Delete-User-Dialog";
 import { EmailOptInSelector } from "./EmailOptInSelector";
 import { TimezoneSelector } from "./Timezone-Selector";
+
+const SignOutButton = () => {
+  return (
+    <Button
+      color={useColorModeValue("gray.900", "red.400")}
+      size="md"
+      variant="ghost"
+      fontSize="md"
+      fontWeight="medium"
+      as="a"
+      onClick={() => signOut({ callbackUrl: "/" })}
+      _focus={{ boxShadow: "none" }}
+      _hover={{
+        color: useColorModeValue("red.500", "red.400"),
+        cursor: "pointer",
+      }}
+    >
+      Sign out
+    </Button>
+  );
+};
 
 export function AccountTab() {
   const errorToast = useToast();
@@ -82,6 +104,8 @@ export function AccountTab() {
             mutate={userMutate}
           />
         )}
+        <Divider mb="1em" />
+        <SignOutButton />
       </Box>
       <Box
         bg={useColorModeValue("white", "#0f131a")}

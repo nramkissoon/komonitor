@@ -1,4 +1,4 @@
-import { SettingsIcon } from "@chakra-ui/icons";
+import { CheckIcon, SearchIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,27 +6,38 @@ import {
   chakra,
   CloseButton,
   CloseButtonProps,
+  Divider,
   Flex,
   FlexProps,
+  Heading,
   HStack,
   HTMLChakraProps,
   IconButton,
   IconButtonProps,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Slide,
   SlideProps,
   Spacer,
   StackProps,
-  Tooltip,
+  useColorMode,
   useColorModeValue,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { signOut, useSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import Link from "next/link";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
+import { HiMoon, HiSun } from "react-icons/hi";
 import { HeaderLogo } from "./Header-Logo";
+import { useTeam } from "./TeamProvider";
 
 const HeaderLink = (props: {
   text: string;
@@ -56,30 +67,6 @@ const HeaderLink = (props: {
         {text}
       </Button>
     </Link>
-  );
-};
-
-const SignOutButton = (props: { authed: boolean }) => {
-  const { authed } = props;
-  return authed ? (
-    <Button
-      color={useColorModeValue("gray.900", "red.400")}
-      size="md"
-      variant="ghost"
-      fontSize="md"
-      fontWeight="medium"
-      as="a"
-      onClick={() => signOut({ callbackUrl: "/" })}
-      _focus={{ boxShadow: "none" }}
-      _hover={{
-        color: useColorModeValue("red.500", "red.400"),
-        cursor: "pointer",
-      }}
-    >
-      Sign out
-    </Button>
-  ) : (
-    <></>
   );
 };
 
@@ -152,6 +139,84 @@ const MobileNavHeader = (props: {
   );
 };
 
+const TeamSelection = () => {
+  const { setTeam, team } = useTeam();
+
+  const isPersonal = team === "personal";
+
+  return (
+    <Popover placement="bottom-start">
+      <PopoverTrigger>
+        <Button
+          rightIcon={<TriangleDownIcon />}
+          variant="outline"
+          bg={useColorModeValue("white", "gray.950")}
+          borderColor={useColorModeValue("black", "gray.600")}
+          px="5"
+          fontWeight="normal"
+          letterSpacing="wider"
+        >
+          {isPersonal ? "Personal Account" : team}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent backgroundColor={useColorModeValue("white", "gray.950")}>
+        <PopoverBody p="0">
+          <Flex flexDir="column">
+            <InputGroup mr="1em">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<SearchIcon color="gray.300" />}
+              />
+              <Input
+                rounded="sm"
+                border="none"
+                size="md"
+                placeholder="Search..."
+                background={useColorModeValue("white", "gray.950")}
+              />
+            </InputGroup>
+            <Divider />
+            <Flex
+              mx="2"
+              px="4"
+              my="2"
+              py="1"
+              rounded="lg"
+              alignItems="center"
+              justifyContent="space-between"
+              bg={
+                isPersonal
+                  ? useColorModeValue("blue.100", "gray.700")
+                  : "inherit"
+              }
+            >
+              <Box fontSize="lg">Personal Account</Box>
+              {isPersonal ? (
+                <Box>
+                  <CheckIcon boxSize="5" />
+                </Box>
+              ) : null}
+            </Flex>
+          </Flex>
+          <Divider />
+          <Flex mx="2" px="4" my="2" py="1" flexDir="column">
+            <Heading
+              as="h3"
+              fontSize="sm"
+              fontWeight="normal"
+              letterSpacing="wider"
+              color={useColorModeValue("gray.400", "gray.500")}
+            >
+              Teams
+            </Heading>
+            <Box fontSize="lg">Coming soon</Box>
+          </Flex>
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 export const AppHeader = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -176,15 +241,21 @@ export const AppHeader = () => {
     alignItems: "center",
   };
 
-  const defaultSettingsCogStyles: IconButtonProps = {
+  const { toggleColorMode: toggleMode } = useColorMode();
+  const colorModeText = useColorModeValue("dark", "light");
+  let darkIcon = HiMoon;
+  let lightIcon = HiSun;
+  let SwitchIcon = useColorModeValue(darkIcon, lightIcon);
+
+  const defaultColorModeToggleStyles: IconButtonProps = {
     size: "md",
-    fontSize: "1.4em",
-    "aria-label": `Settings`,
+    fontSize: "1.8em",
+    "aria-label": `Switch to ${colorModeText} mode`,
     variant: "ghost",
     color: useColorModeValue("gray.500", "inherit"),
     ml: { base: "0", sm: "3" },
-    onClick: () => router.push("/app/settings/"),
-    icon: <SettingsIcon />,
+    onClick: toggleMode,
+    icon: <SwitchIcon />,
   };
 
   const defaultMobileNavHamburgerStyles: IconButtonProps = {
@@ -196,12 +267,6 @@ export const AppHeader = () => {
     ml: { base: "0", sm: "3" },
     icon: <AiOutlineMenu />,
     onClick: onOpen,
-  };
-
-  const defaultLinksHstackContainerStyles: StackProps = {
-    spacing: "6",
-    display: { base: "none", md: "none", lg: "flex" },
-    fontSize: "lg",
   };
 
   return (
@@ -217,29 +282,15 @@ export const AppHeader = () => {
           </Link>
         </Flex>
         <Flex ml="2em">
-          <HStack {...defaultLinksHstackContainerStyles}>
-            {HeaderLink({
-              text: "Uptime",
-              href: "/app/uptime",
-            })}
-            {/* {HeaderLink({
-              text: "Lighthouse",
-              href: "/app/lighthouse",
-            })} */}
-            {HeaderLink({
-              text: "Docs",
-              href: "/docs/getting-started/introduction",
-            })}
-          </HStack>
+          <TeamSelection />
         </Flex>
         <Spacer />
         <Flex justify="flex-end" align="center" color="gray.400">
-          <HStack justify="flex-end" align="center" color="gray.400">
-            {SignOutButton({ authed: authed })}
-          </HStack>
-          <Tooltip label="Settings" placement="bottom">
-            <IconButton {...defaultSettingsCogStyles} />
-          </Tooltip>
+          {HeaderLink({
+            text: "Docs",
+            href: "/docs/getting-started/introduction",
+          })}
+          <IconButton {...defaultColorModeToggleStyles} />
           <IconButton {...defaultMobileNavHamburgerStyles} />
         </Flex>
       </Flex>

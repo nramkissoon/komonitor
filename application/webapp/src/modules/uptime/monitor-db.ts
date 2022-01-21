@@ -128,8 +128,8 @@ export async function putMonitor(
         convertClassInstanceToMap: true,
       }),
       ConditionExpression: isUpdate
-        ? "attribute_exists(monitor_id)" // ensure a monitor exists that can be updated
-        : "attribute_not_exists(monitor_id)", // avoid overwriting preexisting monitors when creating a new monitor
+        ? "attribute_exists(monitor_id) AND attribute_exists(owner_id)" // ensure a monitor exists that can be updated
+        : "attribute_not_exists(monitor_id) AND attribute_not_exists(owner_id)", // avoid overwriting preexisting monitors when creating a new monitor
     };
     const response = await ddbClient.send(
       new PutItemCommand(putItemCommandInput)
