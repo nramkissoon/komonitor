@@ -1,8 +1,7 @@
 import { Project } from "project-types";
-import { useContext } from "react";
 import useSWR from "swr";
 import { env } from "../../../common/client-utils";
-import { TeamContext } from "../../../common/components/TeamProvider";
+import { useTeam } from "../../../common/components/TeamProvider";
 
 export const projectsApiUrl = env.BASE_URL + "api/projects";
 
@@ -13,7 +12,7 @@ const projectFetcher = (url: string, team: string | undefined) => {
 
 export const useProjects = () => {
   // team determines what projects to get
-  const { team } = useContext(TeamContext);
+  const { team } = useTeam();
   const { data, error } = useSWR([projectsApiUrl, team], projectFetcher);
 
   return {

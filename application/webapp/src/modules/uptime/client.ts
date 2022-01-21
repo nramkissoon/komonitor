@@ -223,6 +223,7 @@ function createUpdatedMonitorFromFormData(formData: any) {
     last_updated: Number.parseInt(formData.last_updated),
     created_at: Number.parseInt(formData.created_at),
     owner_id: formData.owner_id,
+    project_id: formData.project_id,
     ...coreAttributes,
   };
   return monitor;

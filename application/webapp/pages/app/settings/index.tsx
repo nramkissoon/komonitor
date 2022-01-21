@@ -14,6 +14,11 @@ const App: ExtendedNextPage = () => {
       <AppSubNav
         links={[
           { isSelected: false, href: "/app", text: "Projects" },
+          {
+            isSelected: false,
+            href: "/app/integrations",
+            text: "Integrations",
+          },
           { isSelected: true, href: "/app/settings", text: "Settings" },
         ]}
       />

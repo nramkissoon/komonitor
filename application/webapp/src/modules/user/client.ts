@@ -64,6 +64,15 @@ export function useUserSlackInstallation() {
   };
 }
 
+// used to grab all user integrations at once
+export function useUserIntegrations() {
+  const { data, isError } = useUserSlackInstallation();
+  return {
+    integrations: [{ data, type: "Slack" }],
+    isError,
+  };
+}
+
 export async function deleteUser(onError: (message: string) => void) {
   const response = await fetch(userApiUrl, { method: "DELETE" });
   if (response.ok) {

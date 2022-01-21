@@ -21,6 +21,7 @@ export const AppNavLink = ({ text, isSelected, href }: AppLinkProps) => {
           color={useColorModeValue("gray.700", "whiteAlpha.800")}
           borderBottom={isSelected ? "1px" : "none"}
           borderColor={useColorModeValue("blue.500", "blue.300")}
+          _hover={{ bg: useColorModeValue("gray.200", "gray.700") }}
         >
           {text}
         </Button>
