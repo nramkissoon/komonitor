@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface TeamContextType {
-  team: string;
+  team?: string;
   setTeam: (team: string) => void;
 }
 

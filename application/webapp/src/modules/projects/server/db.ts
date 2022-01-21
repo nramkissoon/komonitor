@@ -61,7 +61,7 @@ export async function getProjectForOwnerByProjectId(
     if (response?.Count === 1 && response.Items) {
       return unmarshall(response.Items[0]) as Project;
     }
-    return;
+    throw new Error("project not in db");
   } catch (err) {
     console.log(err);
     throw err as Error;
