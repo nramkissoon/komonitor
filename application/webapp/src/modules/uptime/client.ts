@@ -25,6 +25,24 @@ export function useUptimeMonitors() {
   };
 }
 
+export function useUptimeMonitorsForProject(projectId: string) {
+  const fetcher = (url: string, projectId: string) => {
+    const urlWithParams = url + "?" + "projectId=" + projectId;
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+
+  const { data, error } = useSWR([projectId], fetcher, {
+    shouldRetryOnError: true,
+    errorRetryInterval: 10000, // retry in 10 seconds
+  });
+
+  return {
+    monitors: data as { [projectId: string]: UptimeMonitor[] },
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+
 // Used for the main uptime page, get status for all user monitors
 export function use24HourMonitorStatuses(monitorIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {

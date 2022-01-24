@@ -59,3 +59,20 @@ export function createMonitorIdToStatusArrayMap(
   }
   return map;
 }
+
+export function createProjectIdToMonitorArrayMap(
+  ids: string[],
+  monitors: UptimeMonitor[]
+) {
+  const map: { [key: string]: UptimeMonitor[] } = {};
+  for (let id of ids) {
+    if (!map[id]) {
+      map[id] = [];
+    }
+  }
+  for (let monitor of monitors) {
+    const id = monitor.project_id;
+    map[id].push(monitor);
+  }
+  return map;
+}

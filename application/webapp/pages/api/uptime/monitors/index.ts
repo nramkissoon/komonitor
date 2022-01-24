@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
+import { UptimeMonitor } from "project-types";
 import { ddbClient, env } from "../../../../src/common/server-utils";
 import {
   getPreviousAlertInvocationForMonitor,
@@ -10,7 +11,8 @@ import { getUptimeMonitorAllowanceFromProductId } from "../../../../src/modules/
 import {
   deleteMonitor,
   getMonitorForUserByMonitorId,
-  getMonitorsForUser,
+  getMonitorsForMultipleProjectsForOwner,
+  getMonitorsForOwner,
   putMonitor,
 } from "../../../../src/modules/uptime/monitor-db";
 import {
@@ -32,12 +34,39 @@ async function getHandler(
   session: Session
 ) {
   try {
-    const userId = session.uid as string;
-    const monitors = await getMonitorsForUser(
-      ddbClient,
-      env.UPTIME_MONITOR_TABLE_NAME,
-      userId
-    );
+    const { projectId: projectIds, team } = req.query;
+
+    let ownerId = session.uid as string;
+
+    if (typeof team === "string") {
+      // verify get permissions for individual userId on team
+      //ownerId = teamId;
+    }
+
+    const projectIdsAsList =
+      typeof projectIds === "string" ? [projectIds] : projectIds;
+
+    let monitors: UptimeMonitor[] | { [projectId: string]: UptimeMonitor[] } =
+      [];
+
+    if (projectIdsAsList.length === 0) {
+      // get all monitors for this owner
+      monitors = await getMonitorsForOwner(
+        ddbClient,
+        env.UPTIME_MONITOR_TABLE_NAME,
+        ownerId
+      );
+    } else {
+      // get the projectId to monitor map
+      monitors = await getMonitorsForMultipleProjectsForOwner(
+        ddbClient,
+        env.UPTIME_MONITOR_TABLE_NAME,
+        env.UPTIME_MONITOR_TABLE_PID_GSI_NAME,
+        projectIdsAsList,
+        ownerId
+      );
+    }
+
     res.status(200);
     res.json(monitors);
   } catch (err) {
@@ -134,7 +163,11 @@ async function createHandler(
     );
     const allowance = getUptimeMonitorAllowanceFromProductId(productId);
     const currentMonitorsTotal = (
-      await getMonitorsForUser(ddbClient, env.UPTIME_MONITOR_TABLE_NAME, userId)
+      await getMonitorsForOwner(
+        ddbClient,
+        env.UPTIME_MONITOR_TABLE_NAME,
+        userId
+      )
     ).length;
 
     if (allowance <= currentMonitorsTotal || !valid) {

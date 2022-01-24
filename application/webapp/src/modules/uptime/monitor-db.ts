@@ -10,18 +10,19 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { UptimeMonitor } from "project-types";
+import { createProjectIdToMonitorArrayMap } from "./utils";
 
-export async function getMonitorsForUser(
+export async function getMonitorsForOwner(
   ddbClient: DynamoDBClient,
   tableName: string,
-  userId: string
+  ownerId: string
 ) {
   try {
     const queryCommandInput: QueryCommandInput = {
       TableName: tableName,
       KeyConditionExpression: "owner_id = :partitionkeyval",
       ExpressionAttributeValues: {
-        ":partitionkeyval": { S: userId },
+        ":partitionkeyval": { S: ownerId },
       },
     };
     const query = paginateQuery({ client: ddbClient }, queryCommandInput);
@@ -41,6 +42,68 @@ export async function getMonitorsForUser(
     return [];
   }
 }
+
+const getMonitorsForProjectForOwner = async (
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  GsiName: string,
+  projectId: string,
+  ownerId: string
+) => {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: tableName,
+      KeyConditionExpression:
+        "owner_id = :partitionKeyVal AND project_id = :sortKeyVal",
+      ExpressionAttributeValues: {
+        ":partitionKeyVal": { S: ownerId },
+        ":sortKeyVal": { S: projectId },
+      },
+      IndexName: GsiName,
+    };
+    const query = paginateQuery({ client: ddbClient }, queryCommandInput);
+    const monitors: UptimeMonitor[] = [];
+    let done = false;
+    while (!done) {
+      const page = await query.next();
+      done = page.done === undefined || page.done;
+      const queryItems = page.value?.Items ? page.value.Items : [];
+      queryItems.forEach((item) =>
+        monitors.push(unmarshall(item) as UptimeMonitor)
+      );
+    }
+    return monitors;
+  } catch (err) {
+    console.log(err);
+    throw err as Error;
+  }
+};
+
+export const getMonitorsForMultipleProjectsForOwner = async (
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  GsiName: string,
+  projectIds: string[],
+  ownerId: string
+) => {
+  const allMonitors: UptimeMonitor[] = [];
+  const promises = [];
+  for (let id of projectIds) {
+    promises.push(
+      getMonitorsForProjectForOwner(ddbClient, tableName, GsiName, id, ownerId)
+    );
+  }
+  const results = await Promise.allSettled(promises);
+  for (let result of results) {
+    if (result.status === "fulfilled") {
+      allMonitors.push(...result.value);
+    } else {
+      console.error("error getMonitorsForMultipleProjectsForOwner");
+    }
+  }
+
+  return createProjectIdToMonitorArrayMap(projectIds, allMonitors);
+};
 
 export async function getMonitorForUserByMonitorId(
   ddbClient: DynamoDBClient,
@@ -96,7 +159,7 @@ export async function deleteAllMonitorsForUser(
   userId: string
 ) {
   try {
-    const monitors = await getMonitorsForUser(ddbClient, tableName, userId);
+    const monitors = await getMonitorsForOwner(ddbClient, tableName, userId);
     const monitorIds = monitors.map((monitor) => monitor.monitor_id);
     for (let monitorId of monitorIds) {
       await deleteMonitor(ddbClient, tableName, monitorId, userId);
