@@ -86,6 +86,7 @@ const verifyProjectFromFormIsProject = (
     created_at: 0,
     updated_at: 0,
     uptime_monitors: [],
+    tags: [],
   };
   const keys = Object.keys(dummyProject);
   for (let key of keys) {

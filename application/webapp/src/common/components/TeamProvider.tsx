@@ -20,10 +20,10 @@ export const TeamProvider = ({
   value,
   children,
 }: {
-  value: string;
+  value: string | undefined;
   children?: React.ReactNode;
 }) => {
-  const [team, rawSetTeam] = React.useState<string>(value);
+  const [team, rawSetTeam] = React.useState<string | undefined>(value);
 
   const setTeam = React.useCallback((value: string) => {
     rawSetTeam(value);

@@ -142,7 +142,7 @@ const MobileNavHeader = (props: {
 const TeamSelection = () => {
   const { setTeam, team } = useTeam();
 
-  const isPersonal = team === "personal";
+  const isPersonal = team === undefined;
 
   return (
     <Popover placement="bottom-start">

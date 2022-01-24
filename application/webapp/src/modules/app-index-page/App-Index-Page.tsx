@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   chakra,
+  Divider,
   Flex,
   Grid,
   GridItem,
@@ -17,6 +18,8 @@ import Link from "next/link";
 import { Project } from "project-types";
 import React from "react";
 import { AppSubNav } from "../../common/components/App-Sub-Nav";
+import { useProjects } from "../projects/client/client";
+import { CreateForm } from "../projects/client/components/Create-Form";
 
 const ProjectsGrid: React.FC<{}> = (props) => (
   <Grid
@@ -27,7 +30,7 @@ const ProjectsGrid: React.FC<{}> = (props) => (
       "repeat(4, 1fr)",
     ]}
     gap={6}
-    my="5"
+    my="4"
   >
     {props.children}
   </Grid>
@@ -36,7 +39,7 @@ const ProjectsGrid: React.FC<{}> = (props) => (
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
     <GridItem colSpan={1}>
-      <Link href={"/app/projects/" + project.project_id} passHref>
+      <Link href={"/app/" + project.project_id} passHref>
         <Box
           bg={useColorModeValue("white", "gray.950")}
           p="5"
@@ -77,42 +80,29 @@ const ProjectCard = ({ project }: { project: Project }) => {
 };
 
 const ProjectsTab = () => {
-  const projects: Project[] = [
-    {
-      project_id: "Test-Project",
-      uptime_monitors: [],
-      owner_id: "asd",
-      created_at: 0,
-      updated_at: 230,
-    },
-    {
-      project_id: "Test-Project2",
-      uptime_monitors: [],
-      owner_id: "asd",
-      created_at: 0,
-      updated_at: 230,
-    },
-    {
-      project_id: "Test-Project3",
-      uptime_monitors: [],
-      owner_id: "asd",
-      created_at: 0,
-      updated_at: 230,
-    },
-    {
-      project_id: "Test-Project4",
-      uptime_monitors: [],
-      owner_id: "asd",
-      created_at: 0,
-      updated_at: 230,
-    },
-  ];
+  const [newProjectFormVisible, setNewProjectFormVisible] =
+    React.useState(false);
+
+  const { projects, projectsFetchError, projectsIsLoading, mutateProjects } =
+    useProjects();
 
   const [searchQuery, setSearchQuery] = React.useState("");
-  const fuse = new Fuse(projects, { keys: ["project_id"] });
+  const fuse = new Fuse(projects ?? [], { keys: ["project_id"] });
   const results = fuse.search(searchQuery);
   return (
     <Flex flexDir="column" maxW="6xl" margin="auto">
+      <Heading textAlign="left" fontWeight="medium" mb=".2em" fontSize="3xl">
+        Projects
+      </Heading>
+      <Heading
+        textAlign="left"
+        fontWeight="normal"
+        mb="1em"
+        fontSize="xl"
+        color="gray.500"
+      >
+        Use projects to logically group and organize your monitors.
+      </Heading>
       <Flex>
         <InputGroup mr="1em">
           <InputLeftElement
@@ -127,42 +117,44 @@ const ProjectsTab = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </InputGroup>
-        <Link passHref href="/app/projects/new">
-          <Button
-            fontWeight="normal"
-            px="6"
-            as="a"
-            fontSize="lg"
-            shadow="sm"
-            colorScheme="blue"
-            bgColor="blue.400"
-            color="white"
-            _hover={{
-              bg: "blue.600",
-            }}
-          >
-            New Project
-          </Button>
-        </Link>
+        <Button
+          fontWeight="normal"
+          px="6"
+          fontSize="lg"
+          shadow="sm"
+          colorScheme="blue"
+          bgColor="blue.400"
+          color="white"
+          _hover={{
+            bg: "blue.600",
+          }}
+          onClick={() => setNewProjectFormVisible(true)}
+        >
+          New Project
+        </Button>
       </Flex>
-      {projects.length === 0 && (
+      <Box mt="4" w="full" hidden={!newProjectFormVisible}>
+        <CreateForm setIsVisible={setNewProjectFormVisible} />
+        <Divider
+          borderColor={useColorModeValue("gray.300", "whiteAlpha.300")}
+          mt="4"
+          mb="2"
+        />
+      </Box>
+
+      {projects && projects.length === 0 && (
         <Box textAlign="center" fontWeight="medium" p="2em" fontSize="3xl">
           <chakra.p>No projects have been created.</chakra.p>
-          <Link passHref href="/app/projects/new">
-            <chakra.a
-              fontWeight="normal"
-              fontSize="2xl"
-              color={useColorModeValue("blue.400", "blue.300")}
-              _hover={{
-                color: "blue.600",
-              }}
-            >
-              Create a new project to get started.
-            </chakra.a>
-          </Link>
+          <chakra.span
+            fontWeight="normal"
+            fontSize="2xl"
+            color={useColorModeValue("blue.400", "blue.300")}
+          >
+            Create a new project to get started.
+          </chakra.span>
         </Box>
       )}
-      {projects.length > 0 && (
+      {projects && projects.length > 0 && (
         <ProjectsGrid>
           {searchQuery
             ? results.map((project) => (

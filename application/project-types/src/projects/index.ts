@@ -4,4 +4,5 @@ export interface Project {
   created_at: number;
   updated_at: number;
   uptime_monitors: string[];
+  tags: string[];
 }

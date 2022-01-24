@@ -108,7 +108,7 @@ const getIntegrationInfoBars = (
             </InfoBarContainer>
           );
       default:
-        return <></>;
+        return <div key="key"></div>;
     }
   });
 };

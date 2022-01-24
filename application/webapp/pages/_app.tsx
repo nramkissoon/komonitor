@@ -63,7 +63,7 @@ export default function App({
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
           <Auth>
-            <TeamProvider value={"personal"}>
+            <TeamProvider value={undefined}>
               <Component {...pageProps} />
             </TeamProvider>
           </Auth>

@@ -96,23 +96,21 @@ API:
 Projects:
     CDK:
         ☐ create project dbs, ownerId pk, proj id sk
-        ☐ create LSI on monitors,  sk = proj id
+        ✔ create LSI on monitors,  sk = proj id @done(22-01-24 13:25)
     WebApp: 
         api:
-            ☐ create project API
-            ☐ update project settings
-            ☐ delete project
-            ☐ get user projects
+            ✔ create project API @done(22-01-24 13:25)
+            ✔ update project settings @done(22-01-24 13:25)
+            ✔ delete project @done(22-01-24 13:25)
+            ✔ get user projects @done(22-01-24 13:25)
         monitor:
             ☐ assign to project in create update form
-            ☐ remove monitor from project
+            ☐ transfer monitor from project
         SideBar:
              ☐  indicate personal account
-             ☐  project selection 
-             ☐  uptime
-             ☐  account setting on bottom
-        ☐ get user projects
-        ☐ get monitors for project
+             ✔  project selection @done(22-01-24 13:26)
+        ✔ get user projects @done(22-01-24 13:27)
+        ✔ get monitors for project @done(22-01-24 13:27)
 
 
 Uptime HTTP:

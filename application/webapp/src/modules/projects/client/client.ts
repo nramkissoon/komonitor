@@ -13,12 +13,16 @@ const projectFetcher = (url: string, team: string | undefined) => {
 export const useProjects = () => {
   // team determines what projects to get
   const { team } = useTeam();
-  const { data, error } = useSWR([projectsApiUrl, team], projectFetcher);
+  const { data, error, mutate } = useSWR(
+    [projectsApiUrl, team],
+    projectFetcher
+  );
 
   return {
     projects: data as Project[],
     projectsIsLoading: !error && !data,
     projectsFetchError: error,
+    mutateProjects: mutate,
   };
 };
 

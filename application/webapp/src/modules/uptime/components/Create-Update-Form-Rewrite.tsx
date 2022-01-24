@@ -66,6 +66,7 @@ export type Inputs = {
     }[];
   };
   alert?: Alert;
+  project_id: string;
   paused: boolean;
 };
 
