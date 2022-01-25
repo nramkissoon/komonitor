@@ -93,7 +93,7 @@ API:
 
 Projects:
     CDK:
-        ☐ create project dbs, ownerId pk, proj id sk
+        ✔ create project dbs, ownerId pk, proj id sk @done(22-01-25 14:39)
         ✔ create LSI on monitors,  sk = proj id @done(22-01-24 13:25)
     WebApp: 
         api:
@@ -106,13 +106,14 @@ Projects:
             ☐ implement permissions checks
             ☐ transfer monitor from project
         SideBar:
-             ☐  indicate personal account
+             ✔  indicate personal account @done(22-01-25 14:39)
              ✔  project selection @done(22-01-24 13:26)
         ✔ get user projects @done(22-01-24 13:27)
         ✔ get monitors for project @done(22-01-24 13:27)
         ☐  slack must work
         ☐  design project index page and tabs
         ✔  fix the header size @done(22-01-25 10:08)
+        ☐ delete projects for user when user deleted
 
 
 Uptime HTTP:

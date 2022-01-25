@@ -1,4 +1,9 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
   Box,
   Button,
   chakra,
@@ -9,19 +14,136 @@ import {
   InputLeftAddon,
   Text,
   useColorModeValue,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { RefObject } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { AppSubNav } from "../../../../src/common/components/App-Sub-Nav";
 import { PageLayout } from "../../../../src/common/components/Page-Layout";
 import { useTeam } from "../../../../src/common/components/TeamProvider";
 import {
+  deleteProject,
   updateProject,
   useProjects,
 } from "../../../../src/modules/projects/client/client";
 import { ExtendedNextPage } from "../../../_app";
+
+function useDeleteProjectDialog() {
+  const cancelRef = React.useRef(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return {
+    cancelRef,
+    isOpen,
+    onClose,
+    onOpen,
+  };
+}
+
+interface DeleteProjectDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  leastDestructiveRef: RefObject<any>;
+  onError: (message: string) => void;
+  projectName: string;
+}
+
+function DeleteProjectDialog(props: DeleteProjectDialogProps) {
+  const { isOpen, onClose, leastDestructiveRef, onError, projectName } = props;
+  const router = useRouter();
+  const errorToast = useToast();
+  const postErrorToast = (message: string) =>
+    errorToast({
+      title: "Unable to perform action",
+      description: message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      variant: "solid",
+      position: "top",
+    });
+  const [inputVal, setInputVal] = React.useState("");
+  const [inputIsError, setInputIsError] = React.useState("");
+  const handleInputChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => setInputVal(event.target.value);
+
+  const handleOnSubmit = async () => {
+    if (inputVal && inputVal !== projectName) {
+      setInputIsError("Enter project name in the input above to delete.");
+      return;
+    } else if (inputVal === projectName) {
+      await deleteProject(
+        projectName,
+        () => {
+          router.push("/app");
+        },
+        () =>
+          postErrorToast("An unknown error occurred. Please try again later.")
+      );
+    }
+  };
+
+  const resetOnClose = () => {
+    setInputVal("");
+    setInputIsError("");
+    onClose();
+  };
+
+  return (
+    <AlertDialog
+      leastDestructiveRef={leastDestructiveRef}
+      isOpen={isOpen}
+      onClose={resetOnClose}
+      size="2xl"
+    >
+      <AlertDialogContent>
+        <AlertDialogHeader fontSize="2xl" fontWeight="normal">
+          Delete Project
+        </AlertDialogHeader>
+        <AlertDialogBody>
+          <Text mb="1em">
+            Are you sure? This project and associated monitors will be{" "}
+            <chakra.span color="red.500" fontSize="lg" fontWeight="semibold">
+              permanently
+            </chakra.span>{" "}
+            deleted. You cannot undo this action afterwards.
+          </Text>
+          <Text>Enter project name below to confirm:</Text>
+          <Input
+            value={inputVal}
+            onChange={handleInputChange}
+            placeholder={projectName}
+            mb="1"
+            shadow="sm"
+          />
+          <Text color="red.500">{inputIsError}</Text>
+        </AlertDialogBody>
+        <AlertDialogFooter>
+          <Button
+            ref={leastDestructiveRef}
+            onClick={resetOnClose}
+            mr="1.5em"
+            fontWeight="normal"
+          >
+            Cancel
+          </Button>
+          <Button
+            colorScheme="red"
+            color="white"
+            bgColor="red.500"
+            fontWeight="normal"
+            onClick={handleOnSubmit}
+          >
+            Delete
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
 
 const NameChangeForm = ({ currentName }: { currentName: string }) => {
   const { projects, projectsFetchError, projectsIsLoading, mutateProjects } =
@@ -155,35 +277,51 @@ const NameChangeForm = ({ currentName }: { currentName: string }) => {
   );
 };
 
-const DangerZone = () => {
+const DangerZone = ({ projectName }: { projectName: string }) => {
+  const { cancelRef, isOpen, onClose, onOpen } = useDeleteProjectDialog();
   return (
-    <Box
-      w="full"
-      rounded="md"
-      bg={useColorModeValue("white", "gray.950")}
-      py="6"
-      px="6"
-      mt="6"
-    >
-      <Heading as="h2" fontSize="xl" fontWeight="medium" color="red.500" mb="6">
-        Danger Zone
-      </Heading>
-      <Button
-        colorScheme="red"
-        color="white"
-        bgColor="red.500"
-        shadow="sm"
-        _hover={{
-          bg: "red.600",
-        }}
-        fontWeight="normal"
-        onClick={() => {
-          //openDeleteDialog({ name: monitorName, id: monitorId });
-        }}
+    <>
+      <DeleteProjectDialog
+        onClose={onClose}
+        isOpen={isOpen}
+        onError={() => {}}
+        projectName={projectName}
+        leastDestructiveRef={cancelRef}
+      />
+      <Box
+        w="full"
+        rounded="md"
+        bg={useColorModeValue("white", "gray.950")}
+        py="6"
+        px="6"
+        mt="6"
       >
-        Delete Project
-      </Button>
-    </Box>
+        <Heading
+          as="h2"
+          fontSize="xl"
+          fontWeight="medium"
+          color="red.500"
+          mb="6"
+        >
+          Danger Zone
+        </Heading>
+        <Button
+          colorScheme="red"
+          color="white"
+          bgColor="red.500"
+          shadow="sm"
+          _hover={{
+            bg: "red.600",
+          }}
+          fontWeight="normal"
+          onClick={() => {
+            onOpen();
+          }}
+        >
+          Delete Project
+        </Button>
+      </Box>
+    </>
   );
 };
 
@@ -233,7 +371,7 @@ const Overview: ExtendedNextPage = () => {
         Manage and edit project settings here.
       </Heading>
       <NameChangeForm currentName={projectId as string} />
-      <DangerZone />
+      <DangerZone projectName={projectId as string} />
     </PageLayout>
   );
 };
