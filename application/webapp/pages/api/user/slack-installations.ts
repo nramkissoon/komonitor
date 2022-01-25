@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
-  getMonitorsForUser,
+  getMonitorsForOwner,
   putMonitor,
 } from "../../../src/modules/uptime/monitor-db";
 import {
@@ -88,7 +88,7 @@ async function deleteHandler(
 
     if (!slackInstallation) throw new Error("no slack installation to delete");
 
-    const uptimeMonitors = await getMonitorsForUser(
+    const uptimeMonitors = await getMonitorsForOwner(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
       userId

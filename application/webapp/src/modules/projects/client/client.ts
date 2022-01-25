@@ -63,17 +63,24 @@ export const createProject = async (
         break;
       case 400:
         errorMessage = "Invalid project attributes sent to server.";
+        break;
       case 500:
         errorMessage = "Internal server error. Please try again later.";
+        break;
       default:
         errorMessage = "An unknown error occurred. Please try again later.";
+        break;
     }
     onError ? onError(errorMessage) : null;
   }
 };
 
 export const updateProject = async (
-  formData: any,
+  formData: {
+    updateType: keyof Project;
+    newValue: unknown;
+    originalId: string;
+  },
   onSuccess?: () => void,
   onError?: (message: string) => void
 ) => {
@@ -94,10 +101,13 @@ export const updateProject = async (
         break;
       case 400:
         errorMessage = "Invalid project attributes sent to server.";
+        break;
       case 500:
         errorMessage = "Internal server error. Please try again later.";
+        break;
       default:
         errorMessage = "An unknown error occurred. Please try again later.";
+        break;
     }
     onError ? onError(errorMessage) : null;
   }

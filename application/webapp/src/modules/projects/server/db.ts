@@ -7,6 +7,8 @@ import {
   PutItemCommandInput,
   QueryCommand,
   QueryCommandInput,
+  UpdateItemCommand,
+  UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Project } from "project-types";
@@ -118,6 +120,29 @@ export async function deleteProjectAndAssociatedAssets(
   }
 }
 
+export async function deleteProject(
+  ddbClient: DynamoDBClient,
+  projectTableName: string,
+  ownerId: string,
+  projectId: string
+) {
+  try {
+    const deleteItemCommandInput: DeleteItemCommandInput = {
+      TableName: projectTableName,
+      Key: { owner_id: { S: ownerId }, project_id: { S: projectId } },
+    };
+    const response = await ddbClient.send(
+      new DeleteItemCommand(deleteItemCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+    throw new Error("delete item command error");
+  } catch (err) {
+    console.log.apply(err);
+    throw err as Error;
+  }
+}
+
 export async function createProject(
   ddbClient: DynamoDBClient,
   projectTableName: string,
@@ -146,29 +171,31 @@ export async function createProject(
   }
 }
 
-export async function updateProject(
+export async function updateProjectId(
   ddbClient: DynamoDBClient,
   projectTableName: string,
-  project: Project
+  project: Project,
+  oldId: string
 ) {
   try {
-    const putItemCommandInput: PutItemCommandInput = {
+    const updateItemCommandInput: UpdateItemCommandInput = {
       TableName: projectTableName,
-      Item: marshall(project, {
-        removeUndefinedValues: true,
-        convertEmptyValues: true,
-        convertClassInstanceToMap: true,
-      }),
-      ConditionExpression:
-        "attribute_exists(project_id) AND attribute_exists(owner_id)",
+      Key: {
+        project_id: { S: oldId },
+        owner_id: { S: project.owner_id },
+      },
+      UpdateExpression: "SET project_id = :new",
+      ExpressionAttributeValues: {
+        ":new": { S: project.project_id },
+      },
     };
 
     const response = await ddbClient.send(
-      new PutItemCommand(putItemCommandInput)
+      new UpdateItemCommand(updateItemCommandInput)
     );
     const statusCode = response.$metadata.httpStatusCode as number;
     if (statusCode >= 200 && statusCode < 300) return true;
-    throw new Error("put item command error");
+    throw new Error("update item command error");
   } catch (err) {
     throw err as Error;
   }

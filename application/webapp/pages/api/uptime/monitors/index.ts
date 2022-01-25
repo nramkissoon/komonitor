@@ -49,7 +49,7 @@ async function getHandler(
     let monitors: UptimeMonitor[] | { [projectId: string]: UptimeMonitor[] } =
       [];
 
-    if (projectIdsAsList.length === 0) {
+    if (!projectIdsAsList || projectIdsAsList.length === 0) {
       // get all monitors for this owner
       monitors = await getMonitorsForOwner(
         ddbClient,
@@ -70,6 +70,7 @@ async function getHandler(
     res.status(200);
     res.json(monitors);
   } catch (err) {
+    console.log(err);
     res.status(500);
   }
 }

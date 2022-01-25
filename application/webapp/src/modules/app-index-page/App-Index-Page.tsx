@@ -30,7 +30,7 @@ const ProjectsGrid: React.FC<{}> = (props) => (
       "repeat(4, 1fr)",
     ]}
     gap={6}
-    my="4"
+    my="5"
   >
     {props.children}
   </Grid>
@@ -39,7 +39,7 @@ const ProjectsGrid: React.FC<{}> = (props) => (
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
     <GridItem colSpan={1}>
-      <Link href={"/app/" + project.project_id} passHref>
+      <Link href={"/app/projects/" + project.project_id} passHref>
         <Box
           bg={useColorModeValue("white", "gray.950")}
           p="5"

@@ -13,6 +13,7 @@ Webapp:
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:
+        ☐ refactor page layout
         ✔ Style the email verification email @done(21-10-11 14:14)
         ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
         ☐ view invocation object modal when clicked on in invocation tables
@@ -77,9 +78,6 @@ Webapp:
     teams: 
         ☐  scope
 
-User pref dates:
-    ✔ verify alert TZ @done(22-01-12 20:18)
-
 Customer Serve:
     ☐ notification for new users -> email template
 
@@ -104,13 +102,17 @@ Projects:
             ✔ delete project @done(22-01-24 13:25)
             ✔ get user projects @done(22-01-24 13:25)
         monitor:
-            ☐ assign to project in create update form
+            ☐ assign to project in create update form using hook
+            ☐ implement permissions checks
             ☐ transfer monitor from project
         SideBar:
              ☐  indicate personal account
              ✔  project selection @done(22-01-24 13:26)
         ✔ get user projects @done(22-01-24 13:27)
         ✔ get monitors for project @done(22-01-24 13:27)
+        ☐  slack must work
+        ☐  design project index page and tabs
+        ✔  fix the header size @done(22-01-25 10:08)
 
 
 Uptime HTTP:

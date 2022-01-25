@@ -7,6 +7,8 @@ import {
   PutItemCommandInput,
   QueryCommand,
   QueryCommandInput,
+  UpdateItemCommand,
+  UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { UptimeMonitor } from "project-types";
@@ -203,5 +205,69 @@ export async function putMonitor(
   } catch (err) {
     console.log(err);
     return false;
+  }
+}
+
+export async function transferMonitorToProject(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  monitorId: string,
+  ownerId: string,
+  newProjectId: string
+) {
+  try {
+    const updateItemCommandInput: UpdateItemCommandInput = {
+      TableName: tableName,
+      Key: {
+        owner_id: { S: ownerId },
+        monitor_id: { S: monitorId },
+      },
+      UpdateExpression: "SET project_id =: new",
+      ExpressionAttributeValues: {
+        ":new": { S: newProjectId },
+      },
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateItemCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+    return false;
+  } catch (err) {
+    console.log(err);
+    throw err as Error;
+  }
+}
+
+export async function transferMultipleMonitorsToProject(
+  ddbClient: DynamoDBClient,
+  tableName: string,
+  monitorIds: string[],
+  ownerId: string,
+  newProjectId: string
+) {
+  try {
+    const updatePromises = [];
+    for (let id of monitorIds) {
+      updatePromises.push(
+        transferMonitorToProject(
+          ddbClient,
+          tableName,
+          id,
+          ownerId,
+          newProjectId
+        )
+      );
+    }
+
+    const results = await Promise.allSettled(updatePromises);
+    for (let result of results) {
+      if (result.status === "rejected")
+        throw new Error("rejected project transfer");
+    }
+    return true;
+  } catch (err) {
+    console.log(err);
+    throw err as Error;
   }
 }

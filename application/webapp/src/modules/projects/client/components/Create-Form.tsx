@@ -75,7 +75,7 @@ export const CreateForm = ({
       data,
       async () => {
         await mutateProjects();
-        Router.push("/app/" + data.project_id);
+        Router.push("/app/projects/" + data.project_id);
       },
       postErrorToast
     );

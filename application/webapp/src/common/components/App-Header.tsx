@@ -223,21 +223,19 @@ export const AppHeader = () => {
   const [session, loading] = useSession();
   const authed = session?.user !== undefined;
 
+  const router = useRouter();
+  const { projectId } = router.query;
+
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
-    w: "full",
-    px: { base: 2, sm: 4, md: "6em", xl: "12em" },
+    maxW: ["sm", "xl", "3xl", "5xl", "6xl"],
+    m: "auto",
     py: 4,
-    bg: useColorModeValue("white", "gray.900"),
-    borderBottomColor: useColorModeValue("gray.100", "gray.800"),
-    borderBottomWidth: useColorModeValue("0px", "1px"),
-    shadow: "sm",
   };
 
   const defaultFlexContainerStyles: FlexProps = {
     h: "full",
     w: "full",
-    px: "6",
     alignItems: "center",
   };
 
@@ -270,31 +268,47 @@ export const AppHeader = () => {
   };
 
   return (
-    <chakra.header {...defaultHeaderContainerStyles}>
-      <Flex {...defaultFlexContainerStyles}>
-        <Flex align="flex-start">
-          <Link href="/" passHref>
-            <HStack>
-              <Box w="fit-content">
-                <HeaderLogo />
+    <Box
+      bg={useColorModeValue("white", "gray.900")}
+      borderBottom={useColorModeValue("gray.100", "gray.800")}
+      shadow="sm"
+    >
+      <chakra.header {...defaultHeaderContainerStyles}>
+        <Flex {...defaultFlexContainerStyles}>
+          <Flex align="flex-start">
+            <Link href="/" passHref>
+              <HStack>
+                <Box w="fit-content">
+                  <HeaderLogo />
+                </Box>
+              </HStack>
+            </Link>
+          </Flex>
+          <Flex ml="2em" alignItems="center">
+            <TeamSelection />
+            {projectId && (
+              <Box fontSize="lg">
+                <chakra.span mx="15px" color="gray.500" fontWeight="bold">
+                  /
+                </chakra.span>
+                <chakra.span fontWeight="normal" letterSpacing="wider">
+                  {projectId}
+                </chakra.span>
               </Box>
-            </HStack>
-          </Link>
+            )}
+          </Flex>
+          <Spacer />
+          <Flex justify="flex-end" align="center" color="gray.400">
+            {HeaderLink({
+              text: "Docs",
+              href: "/docs/getting-started/introduction",
+            })}
+            <IconButton {...defaultColorModeToggleStyles} />
+            <IconButton {...defaultMobileNavHamburgerStyles} />
+          </Flex>
         </Flex>
-        <Flex ml="2em">
-          <TeamSelection />
-        </Flex>
-        <Spacer />
-        <Flex justify="flex-end" align="center" color="gray.400">
-          {HeaderLink({
-            text: "Docs",
-            href: "/docs/getting-started/introduction",
-          })}
-          <IconButton {...defaultColorModeToggleStyles} />
-          <IconButton {...defaultMobileNavHamburgerStyles} />
-        </Flex>
-      </Flex>
-      {MobileNavHeader({ isOpen: isOpen, onClose: onClose })}
-    </chakra.header>
+        {MobileNavHeader({ isOpen: isOpen, onClose: onClose })}
+      </chakra.header>
+    </Box>
   );
 };

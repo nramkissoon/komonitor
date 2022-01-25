@@ -24,7 +24,7 @@ export function PageLayout(props: PageLayoutProps & any) {
       <Seo {...seoProps} />
       <Box display="flex" flexDir="column" minH="95vh" p={0} m={0}>
         {header}
-        <PageContainer maxW={maxW}>{props.children}</PageContainer>
+        <PageContainer isAppPage={isAppPage}>{props.children}</PageContainer>
         {footer}
       </Box>
     </>

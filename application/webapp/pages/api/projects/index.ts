@@ -5,11 +5,12 @@ import { Project } from "project-types";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
   createProject,
+  deleteProject,
   deleteProjectAndAssociatedAssets,
   getProjectForOwnerByProjectId,
   getProjectsForOwner,
-  updateProject,
 } from "../../../src/modules/projects/server/db";
+import { transferMultipleMonitorsToProject } from "../../../src/modules/uptime/monitor-db";
 
 const getOwnerId = (req: NextApiRequest, session: Session) => {
   const userId = session.uid as string;
@@ -142,13 +143,19 @@ async function updateHandler(
   session: Session
 ) {
   try {
-    const project = req.body as Project;
-    const { project_id, owner_id } = project;
+    const formData = req.body as {
+      updateType: keyof Project;
+      newValue: unknown;
+      originalId: string;
+    };
+
+    const ownerId = getOwnerId(req, session);
+    const { originalId } = formData;
     const projectInDb = await getProjectForOwnerByProjectId(
       ddbClient,
       env.PROJECTS_TABLE_NAME,
-      owner_id,
-      project_id
+      ownerId,
+      originalId
     );
 
     if (!verifyEditPermission(req, session, projectInDb)) {
@@ -156,15 +163,45 @@ async function updateHandler(
       return;
     }
 
-    // ensure no funny business happens
-    project.created_at = projectInDb.created_at;
-    project.updated_at = new Date().getTime();
+    projectInDb.updated_at = new Date().getTime();
 
-    const updated = await updateProject(
-      ddbClient,
-      env.PROJECTS_TABLE_NAME,
-      project
-    );
+    let updated = false;
+    // ensure no funny business happens
+    switch (formData.updateType) {
+      case "project_id":
+        if (typeof formData.newValue !== "string") {
+          console.log("HERE");
+          res.status(400);
+          return;
+        }
+
+        projectInDb.project_id = formData.newValue;
+        updated = await createProject(
+          ddbClient,
+          env.PROJECTS_TABLE_NAME,
+          projectInDb
+        );
+        updated =
+          updated &&
+          (await deleteProject(
+            ddbClient,
+            env.PROJECTS_TABLE_NAME,
+            ownerId,
+            originalId
+          ));
+        updated =
+          updated &&
+          (await transferMultipleMonitorsToProject(
+            ddbClient,
+            env.PROJECTS_TABLE_NAME,
+            projectInDb.uptime_monitors,
+            ownerId,
+            formData.newValue
+          ));
+        break;
+      default:
+        break;
+    }
 
     if (updated) {
       res.status(200);
@@ -173,6 +210,7 @@ async function updateHandler(
 
     return;
   } catch (err) {
+    console.log(err);
     res.status(500);
     return;
   }
