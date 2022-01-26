@@ -6,6 +6,7 @@ import {
 } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
+import { useProjects } from "../projects/client/client";
 import { Inputs } from "./components/Create-Update-Form-Rewrite";
 import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "./utils";
 
@@ -44,6 +45,30 @@ export function useUptimeMonitorsForProject(projectId: string) {
   };
 }
 
+export function useUptimeMonitorsForMultipleProjects(projectIds: string[]) {
+  const fetcher = (url: string, ...ids: string[]) => {
+    const urlWithParams =
+      url + "?" + ids.map((id) => "projectId=" + id).join("&");
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+
+  const { data, error, mutate } = useSWR(
+    [monitorApiUrl, ...projectIds],
+    fetcher,
+    {
+      shouldRetryOnError: true,
+      errorRetryInterval: 10000, // retry in 10 seconds
+    }
+  );
+
+  return {
+    monitors: data as { [projectId: string]: UptimeMonitor[] },
+    isLoading: !error && !data,
+    isError: error,
+    mutate: mutate,
+  };
+}
+
 // Used for the main uptime page, get status for all user monitors
 export function use24HourMonitorStatuses(monitorIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {
@@ -63,11 +88,70 @@ export function use24HourMonitorStatuses(monitorIds: string[]) {
   );
 
   return {
-    statuses: data as { [monitorId: string]: UptimeMonitorStatus[] },
+    statuses: (data as { [monitorId: string]: UptimeMonitorStatus[] }) ?? {},
     isLoading: !error && !data,
     isError: error,
   };
 }
+
+export const useMonitorsAnd24HrStatusesForProject = (projectId: string) => {
+  const {
+    monitors,
+    isError: isErrorMonitors,
+    isLoading: isLoadingMonitors,
+  } = useUptimeMonitorsForProject(projectId);
+  const {
+    statuses,
+    isLoading: isLoadingStatuses,
+    isError: isErrorStatuses,
+  } = use24HourMonitorStatuses(
+    monitors[projectId]
+      ? monitors[projectId].map((monitor) => monitor.monitor_id)
+      : []
+  );
+
+  return {
+    monitors,
+    statuses,
+    isLoading: isLoadingMonitors || isLoadingStatuses,
+    isError: isErrorMonitors || isErrorStatuses,
+  };
+};
+
+export const useMonitorsAnd24HrStatusesForAllOwnerProjects = () => {
+  const { projects } = useProjects();
+  const {
+    monitors,
+    isError: isErrorMonitors,
+    isLoading: isLoadingMonitors,
+  } = useUptimeMonitorsForMultipleProjects(
+    projects ? projects.map((p) => p.project_id) : []
+  );
+
+  const monitorIds: string[] = [];
+  if (monitors) {
+    for (let projectId of Object.keys(monitors)) {
+      if (Array.isArray(monitors[projectId])) {
+        monitorIds.push(...monitors[projectId].map((m) => m.monitor_id));
+      }
+    }
+  }
+
+  const {
+    statuses,
+    isLoading: isLoadingStatuses,
+    isError: isErrorStatuses,
+  } = use24HourMonitorStatuses(monitorIds);
+
+  return {
+    monitors,
+    statuses,
+    isLoadingMonitors,
+    isLoadingStatuses,
+    isErrorMonitors,
+    isErrorStatuses,
+  };
+};
 
 // This function and the 30 day version is used for specific monitor views
 export function use7DayMonitorStatuses(monitorId: string) {

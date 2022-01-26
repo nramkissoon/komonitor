@@ -11,15 +11,18 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Fuse from "fuse.js";
 import Link from "next/link";
-import { Project } from "project-types";
+import { Project, UptimeMonitor } from "project-types";
 import React from "react";
+import { timeAgo } from "../../common/client-utils";
 import { AppSubNav } from "../../common/components/App-Sub-Nav";
 import { useProjects } from "../projects/client/client";
 import { CreateForm } from "../projects/client/components/Create-Form";
+import { useMonitorsAnd24HrStatusesForAllOwnerProjects } from "../uptime/client";
 
 const ProjectsGrid: React.FC<{}> = (props) => (
   <Grid
@@ -36,7 +39,13 @@ const ProjectsGrid: React.FC<{}> = (props) => (
   </Grid>
 );
 
-const ProjectCard = ({ project }: { project: Project }) => {
+const ProjectCard = ({
+  project,
+  uptimeMonitors,
+}: {
+  project: Project;
+  uptimeMonitors: UptimeMonitor[];
+}) => {
   return (
     <GridItem colSpan={1}>
       <Link href={"/app/projects/" + project.project_id} passHref>
@@ -73,6 +82,11 @@ const ProjectCard = ({ project }: { project: Project }) => {
           <Heading as="h2" fontSize="xl" fontWeight="medium">
             {project.project_id}
           </Heading>
+          <Text color="gray.500">
+            Created {timeAgo.format(project.created_at)}
+          </Text>
+          <Divider />
+          <Text mt="10px">Total uptime monitors: {uptimeMonitors.length}</Text>
         </Box>
       </Link>
     </GridItem>
@@ -85,6 +99,7 @@ const ProjectsTab = () => {
 
   const { projects, projectsFetchError, projectsIsLoading, mutateProjects } =
     useProjects();
+  const { monitors } = useMonitorsAnd24HrStatusesForAllOwnerProjects();
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const fuse = new Fuse(projects ?? [], { keys: ["project_id"] });
@@ -161,10 +176,19 @@ const ProjectsTab = () => {
                 <ProjectCard
                   key={project.item.project_id}
                   project={project.item}
+                  uptimeMonitors={
+                    monitors ? monitors[project.item.project_id] ?? [] : []
+                  }
                 />
               ))
             : projects.map((project) => (
-                <ProjectCard key={project.project_id} project={project} />
+                <ProjectCard
+                  key={project.project_id}
+                  project={project}
+                  uptimeMonitors={
+                    monitors ? monitors[project.project_id] ?? [] : []
+                  }
+                />
               ))}
         </ProjectsGrid>
       )}

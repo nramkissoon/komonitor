@@ -1,21 +1,9 @@
-import { Alert, AlertInvocation } from "project-types";
+import { AlertInvocation } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
 
 export const alertApiUrl = env.BASE_URL + "api/alerts";
 export const invocationApiUrl = env.BASE_URL + "api/alerts/invocations";
-
-export function useAlerts() {
-  const fetcher = (url: string) =>
-    fetch(url, { method: "GET" }).then((r) => r.json());
-  const { data, error } = useSWR(alertApiUrl, fetcher);
-
-  return {
-    alerts: data as Alert[],
-    isLoading: !error && !data,
-    isError: error,
-  };
-}
 
 export function useAlertInvocationsAllTime(monitorIds: string[]) {
   const fetcher = (url: string, ...ids: string[]) => {
@@ -41,32 +29,4 @@ export function useAlertInvocationsAllTime(monitorIds: string[]) {
     isLoading: !error && !data,
     isError: error,
   };
-}
-
-export async function deleteAlert(
-  alertId: string,
-  onSuccess?: () => void,
-  onError?: (msg: string) => void
-) {
-  const response = await fetch(alertApiUrl + `?alertId=${alertId}`, {
-    method: "DELETE",
-  });
-  if (response.ok) {
-    onSuccess ? onSuccess() : null;
-    return true;
-  } else {
-    let errorMessage;
-    switch (response.status) {
-      case 403:
-        errorMessage = `Unable to detach monitors, please try again later or manually detach monitors.`;
-        break;
-      case 400:
-        errorMessage = "Invalid request sent to server.";
-      case 500:
-        errorMessage = "Internal server error. Please try again later.";
-      default:
-        errorMessage = "An unknown error occurred. Please try again later.";
-    }
-    onError ? onError(errorMessage) : null;
-  }
 }

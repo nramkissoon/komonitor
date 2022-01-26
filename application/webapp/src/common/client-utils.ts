@@ -19,7 +19,7 @@ export const minutesToString: { [key: number]: string } = {
   1440: "Every 24 hours",
 };
 
-TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(en);
 export const timeAgo = new TimeAgo("en-US");
 
 export const regionToLocationStringMap: { [key: string]: string } = {
