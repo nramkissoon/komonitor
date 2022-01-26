@@ -285,7 +285,6 @@ export function OverviewTable(props: TableProps) {
         monitorId: deleteMonitor.monitorId as string,
         onClose: onCloseDeleteDialog,
         leastDestructiveRef: cancelRef,
-        mutate: mutate,
       })}
       {GlobalFilter({ globalFilter, setGlobalFilter })}
       <Box

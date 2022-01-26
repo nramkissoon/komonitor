@@ -7,8 +7,9 @@ import {
   Button,
   chakra,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { RefObject } from "react";
-import { deleteMonitor, monitorApiUrl } from "../client";
+import { deleteMonitor, useUptimeMonitorsForProject } from "../client";
 
 interface DeleteMonitorDialogProps {
   isOpen: boolean;
@@ -16,12 +17,14 @@ interface DeleteMonitorDialogProps {
   name: string;
   onClose: () => void;
   leastDestructiveRef: RefObject<any>;
-  mutate: Function;
 }
 
 export function MonitorDeleteDialog(props: DeleteMonitorDialogProps) {
-  const { isOpen, monitorId, name, onClose, leastDestructiveRef, mutate } =
-    props;
+  const { isOpen, monitorId, name, onClose, leastDestructiveRef } = props;
+
+  const router = useRouter();
+  const { projectId } = router.query;
+  const { mutate } = useUptimeMonitorsForProject(projectId as string);
   return (
     <AlertDialog
       leastDestructiveRef={leastDestructiveRef}
@@ -55,7 +58,7 @@ export function MonitorDeleteDialog(props: DeleteMonitorDialogProps) {
             fontWeight="normal"
             onClick={async () => {
               const deleted = await deleteMonitor(monitorId);
-              if (deleted) await mutate(monitorApiUrl);
+              if (deleted) await mutate();
               onClose();
             }}
           >

@@ -102,9 +102,10 @@ Projects:
             ✔ delete project @done(22-01-24 13:25)
             ✔ get user projects @done(22-01-24 13:25)
         monitor:
-            ☐ assign to project in create update form using hook
-            ☐ implement permissions checks
+            ✔ assign to project in create update form using hook @done(22-01-26 12:25)
+            ✔ implement permissions checks @done(22-01-26 12:25)
             ✔ transfer monitor from project @done(22-01-26 10:18)
+            ☐ edit monitor
         SideBar:
              ✔  indicate personal account @done(22-01-25 14:39)
              ✔  project selection @done(22-01-24 13:26)

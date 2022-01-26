@@ -31,7 +31,7 @@ export function useUptimeMonitorsForProject(projectId: string) {
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 
-  const { data, error } = useSWR([monitorApiUrl, projectId], fetcher, {
+  const { data, error, mutate } = useSWR([monitorApiUrl, projectId], fetcher, {
     shouldRetryOnError: true,
     errorRetryInterval: 10000, // retry in 10 seconds
   });
@@ -40,6 +40,7 @@ export function useUptimeMonitorsForProject(projectId: string) {
     monitors: data as { [projectId: string]: UptimeMonitor[] },
     isLoading: !error && !data,
     isError: error,
+    mutate: mutate,
   };
 }
 

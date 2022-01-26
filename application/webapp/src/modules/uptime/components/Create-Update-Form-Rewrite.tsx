@@ -34,14 +34,17 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
-import { useSWRConfig } from "swr";
 import {
   minutesToString,
   regionToLocationStringMap,
 } from "../../../common/client-utils";
 import { ReactSelect } from "../../../common/components/React-Select";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
-import { createMonitor, updateMonitor } from "../client";
+import {
+  createMonitor,
+  updateMonitor,
+  useUptimeMonitorsForProject,
+} from "../client";
 import { HttpHeaderFormField } from "./Http-Header-Form-Field";
 import { RecipientFormController } from "./Recipient-Form-Controller";
 
@@ -132,9 +135,11 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   }, [currentMonitorAttributes]);
 
   const createNewMonitor = currentMonitorAttributes === undefined;
-  const { mutate } = useSWRConfig();
+
   const router = useRouter();
   const { projectId } = router.query;
+
+  const { mutate } = useUptimeMonitorsForProject(projectId as string);
 
   const errorToast = useToast();
   const {
@@ -231,11 +236,10 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     if (createNewMonitor && Object.keys(errors).length === 0) {
       await createMonitor(
         data,
-        () =>
-          Router.push({
-            pathname: "/app/uptime",
-            query: { newMonitorCreated: "true" },
-          }),
+        async () => {
+          await mutate();
+          closeForm();
+        },
         postErrorToast
       );
     } else {
@@ -256,7 +260,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
         postErrorToast
       );
     }
-    mutate("/api/uptime/monitors", null, true);
   };
   return (
     <>
