@@ -86,7 +86,6 @@ const verifyProjectFromFormIsProject = (
     project_id: "",
     created_at: 0,
     updated_at: 0,
-    uptime_monitors: [],
     tags: [],
   };
   const keys = Object.keys(dummyProject);
@@ -193,10 +192,11 @@ async function updateHandler(
           updated &&
           (await transferMultipleMonitorsToProject(
             ddbClient,
-            env.PROJECTS_TABLE_NAME,
-            projectInDb.uptime_monitors,
+            env.UPTIME_MONITOR_TABLE_NAME,
+            originalId,
             ownerId,
-            formData.newValue
+            formData.newValue,
+            env.UPTIME_MONITOR_TABLE_PID_GSI_NAME
           ));
         break;
       default:
@@ -273,6 +273,7 @@ async function deleteHandler(
       ddbClient,
       env.PROJECTS_TABLE_NAME,
       env.UPTIME_MONITOR_TABLE_NAME,
+      env.UPTIME_MONITOR_TABLE_PID_GSI_NAME,
       ownerId,
       projectId as string
     );

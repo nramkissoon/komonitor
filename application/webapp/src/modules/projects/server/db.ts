@@ -12,7 +12,10 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Project } from "project-types";
-import { deleteMonitor } from "../../uptime/monitor-db";
+import {
+  deleteMonitor,
+  getMonitorsForProjectForOwner,
+} from "../../uptime/monitor-db";
 
 export async function getProjectsForOwner(
   ddbClient: DynamoDBClient,
@@ -74,6 +77,7 @@ export async function deleteProjectAndAssociatedAssets(
   ddbClient: DynamoDBClient,
   projectTableName: string,
   uptimeMonitorTableName: string,
+  uptimeGsiName: string,
   ownerId: string,
   projectId: string
 ) {
@@ -87,7 +91,15 @@ export async function deleteProjectAndAssociatedAssets(
 
     if (!project) throw new Error("project not found for deletion");
 
-    const uptimeMonitorIds = project.uptime_monitors;
+    const uptimeMonitorIds = (
+      await getMonitorsForProjectForOwner(
+        ddbClient,
+        uptimeMonitorTableName,
+        uptimeGsiName,
+        projectId,
+        ownerId
+      )
+    ).map((monitor) => monitor.monitor_id);
 
     const deletionPromises: Promise<boolean>[] = [];
 

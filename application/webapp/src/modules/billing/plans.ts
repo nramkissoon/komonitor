@@ -20,22 +20,11 @@ export const PLAN_PRICE_IDS = {
 export function getUptimeMonitorAllowanceFromProductId(id: string | undefined) {
   switch (id) {
     case PLAN_PRODUCT_IDS.FREELANCER:
-      return 80;
-    case PLAN_PRODUCT_IDS.BUSINESS:
       return 500;
-    default:
-      return 5;
-  }
-}
-
-export function getAlertAllowanceFromProductId(id: string | undefined) {
-  switch (id) {
-    case PLAN_PRODUCT_IDS.FREELANCER:
-      return 20;
     case PLAN_PRODUCT_IDS.BUSINESS:
-      return 50;
+      return 5000;
     default:
-      return 3;
+      return 100;
   }
 }
 

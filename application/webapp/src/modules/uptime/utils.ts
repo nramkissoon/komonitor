@@ -21,6 +21,7 @@ export function createNewMonitorFromCore(
   const monitor: UptimeMonitor = {
     owner_id: userId,
     monitor_id: createMonitorId(),
+    project_id: core.project_id,
     created_at: now,
     last_updated: now,
     url: core.url,

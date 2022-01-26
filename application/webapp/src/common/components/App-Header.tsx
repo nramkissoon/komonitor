@@ -176,27 +176,31 @@ const TeamSelection = () => {
               />
             </InputGroup>
             <Divider />
-            <Flex
-              mx="2"
-              px="4"
-              my="2"
-              py="1"
-              rounded="lg"
-              alignItems="center"
-              justifyContent="space-between"
-              bg={
-                isPersonal
-                  ? useColorModeValue("blue.100", "gray.700")
-                  : "inherit"
-              }
-            >
-              <Box fontSize="lg">Personal Account</Box>
-              {isPersonal ? (
-                <Box>
-                  <CheckIcon boxSize="5" />
-                </Box>
-              ) : null}
-            </Flex>
+            <Link href="/app" passHref>
+              <Flex
+                mx="2"
+                px="4"
+                my="2"
+                py="1"
+                rounded="lg"
+                alignItems="center"
+                justifyContent="space-between"
+                bg={
+                  isPersonal
+                    ? useColorModeValue("blue.100", "gray.700")
+                    : "inherit"
+                }
+                _hover={{ cursor: "pointer" }}
+              >
+                <Box fontSize="lg">Personal Account</Box>
+
+                {isPersonal ? (
+                  <Box>
+                    <CheckIcon boxSize="5" />
+                  </Box>
+                ) : null}
+              </Flex>
+            </Link>
           </Flex>
           <Divider />
           <Flex mx="2" px="4" my="2" py="1" flexDir="column">

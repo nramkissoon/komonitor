@@ -325,7 +325,7 @@ const DangerZone = ({ projectName }: { projectName: string }) => {
   );
 };
 
-const Overview: ExtendedNextPage = () => {
+const Settings: ExtendedNextPage = () => {
   const router = useRouter();
   const { projectId } = router.query;
   const { projects, projectsIsLoading, projectsFetchError } = useProjects();
@@ -376,5 +376,5 @@ const Overview: ExtendedNextPage = () => {
   );
 };
 
-Overview.requiresAuth = true;
-export default Overview;
+Settings.requiresAuth = true;
+export default Settings;

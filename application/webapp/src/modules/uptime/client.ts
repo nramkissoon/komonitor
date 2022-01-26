@@ -31,7 +31,7 @@ export function useUptimeMonitorsForProject(projectId: string) {
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 
-  const { data, error } = useSWR([projectId], fetcher, {
+  const { data, error } = useSWR([monitorApiUrl, projectId], fetcher, {
     shouldRetryOnError: true,
     errorRetryInterval: 10000, // retry in 10 seconds
   });
@@ -170,6 +170,7 @@ function createCoreMonitorFromFormData(formData: Inputs) {
     url: "https://" + formData.url,
     name: formData.name,
     region: formData.region,
+    project_id: formData.project_id,
     frequency: Number.parseInt(
       formData.frequency
     ) as UptimeCheckSupportedFrequenciesInMinutes,
@@ -241,7 +242,6 @@ function createUpdatedMonitorFromFormData(formData: any) {
     last_updated: Number.parseInt(formData.last_updated),
     created_at: Number.parseInt(formData.created_at),
     owner_id: formData.owner_id,
-    project_id: formData.project_id,
     ...coreAttributes,
   };
   return monitor;

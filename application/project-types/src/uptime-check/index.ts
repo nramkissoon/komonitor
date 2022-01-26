@@ -69,6 +69,7 @@ export interface CoreUptimeMonitor {
   region: string;
   frequency: number;
   http_parameters: HttpParameters;
+  project_id: string;
   alert?: Alert;
   failures_before_alert?: number;
   webhook_url?: string;
@@ -80,7 +81,6 @@ export interface UptimeMonitor extends CoreUptimeMonitor {
   monitor_id: string;
   created_at: number;
   last_updated: number;
-  project_id: string;
 }
 
 export type UptimeStatusResponse = Pick<

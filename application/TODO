@@ -104,7 +104,7 @@ Projects:
         monitor:
             ☐ assign to project in create update form using hook
             ☐ implement permissions checks
-            ☐ transfer monitor from project
+            ✔ transfer monitor from project @done(22-01-26 10:18)
         SideBar:
              ✔  indicate personal account @done(22-01-25 14:39)
              ✔  project selection @done(22-01-24 13:26)
@@ -114,6 +114,8 @@ Projects:
         ☐  design project index page and tabs
         ✔  fix the header size @done(22-01-25 10:08)
         ☐ delete projects for user when user deleted
+        ☐ update pricing and landing page + limiters
+        ☐ update docs
 
 
 Uptime HTTP:

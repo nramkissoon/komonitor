@@ -51,7 +51,6 @@ export const CreateForm = ({
     defaultValues: {
       created_at: 0,
       updated_at: 0,
-      uptime_monitors: [],
       project_id: "",
       tags: [],
       owner_id: "",

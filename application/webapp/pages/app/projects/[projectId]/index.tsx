@@ -7,6 +7,7 @@ import { AppSubNav } from "../../../../src/common/components/App-Sub-Nav";
 import { PageLayout } from "../../../../src/common/components/Page-Layout";
 import { useTeam } from "../../../../src/common/components/TeamProvider";
 import { useProjects } from "../../../../src/modules/projects/client/client";
+import { useUptimeMonitorsForProject } from "../../../../src/modules/uptime/client";
 import { ExtendedNextPage } from "../../../_app";
 
 const Overview: ExtendedNextPage = () => {
@@ -14,6 +15,9 @@ const Overview: ExtendedNextPage = () => {
   const { projectId } = router.query;
   const { projects, projectsIsLoading, projectsFetchError } = useProjects();
   const { team } = useTeam();
+  const { monitors: data } = useUptimeMonitorsForProject(projectId as string);
+
+  const monitors = data ? data[projectId as string] : [];
 
   if (projects) {
     if (!projects.find((project) => project.project_id === projectId)) {

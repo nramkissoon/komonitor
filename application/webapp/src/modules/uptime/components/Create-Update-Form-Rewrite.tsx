@@ -48,6 +48,7 @@ import { RecipientFormController } from "./Recipient-Form-Controller";
 interface CreateUpdateFormProps {
   product_id: string;
   currentMonitorAttributes?: UptimeMonitor;
+  closeForm: () => void;
 }
 
 export type Inputs = {
@@ -122,7 +123,7 @@ function createHttpMethodOptions() {
 }
 
 export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
-  let { product_id, currentMonitorAttributes } = props;
+  let { product_id, currentMonitorAttributes, closeForm } = props;
 
   const placeholders = React.useMemo(() => {
     return createFormPlaceholdersFromMonitor(
@@ -133,6 +134,8 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   const createNewMonitor = currentMonitorAttributes === undefined;
   const { mutate } = useSWRConfig();
   const router = useRouter();
+  const { projectId } = router.query;
+
   const errorToast = useToast();
   const {
     register,
@@ -147,7 +150,9 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     clearErrors,
     setError,
   } = useForm<Inputs>({
-    defaultValues: createNewMonitor ? undefined : placeholders,
+    defaultValues: createNewMonitor
+      ? { project_id: projectId as string }
+      : placeholders,
   });
   const { fields, append, remove } = useFieldArray({
     control,
@@ -255,16 +260,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   };
   return (
     <>
-      <Heading
-        textAlign="center"
-        mt="1em"
-        mb="1em"
-        size="lg"
-        fontWeight="medium"
-      >
-        {createNewMonitor ? "Create Uptime Monitor" : "Edit Monitor"}
-      </Heading>
-      <Container mb="3em" p="0" maxW="4xl">
+      <Container mb="3em" p="0" maxW="6xl">
         <chakra.form onSubmit={handleSubmit(onSubmit)}>
           <Box
             p="2em"
@@ -701,7 +697,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
             shadow="md"
             fontSize="lg"
             fontWeight="medium"
-            onClick={() => router.back()}
+            onClick={closeForm}
             _hover={{ bg: "gray.500" }}
             mr="1.4em"
           >

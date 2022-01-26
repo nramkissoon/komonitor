@@ -45,7 +45,7 @@ export async function getMonitorsForOwner(
   }
 }
 
-const getMonitorsForProjectForOwner = async (
+export const getMonitorsForProjectForOwner = async (
   ddbClient: DynamoDBClient,
   tableName: string,
   GsiName: string,
@@ -222,7 +222,7 @@ export async function transferMonitorToProject(
         owner_id: { S: ownerId },
         monitor_id: { S: monitorId },
       },
-      UpdateExpression: "SET project_id =: new",
+      UpdateExpression: "SET project_id = :new",
       ExpressionAttributeValues: {
         ":new": { S: newProjectId },
       },
@@ -242,11 +242,21 @@ export async function transferMonitorToProject(
 export async function transferMultipleMonitorsToProject(
   ddbClient: DynamoDBClient,
   tableName: string,
-  monitorIds: string[],
+  originalId: string,
   ownerId: string,
-  newProjectId: string
+  newProjectId: string,
+  gsiName: string
 ) {
   try {
+    const monitorIds = (
+      await getMonitorsForProjectForOwner(
+        ddbClient,
+        tableName,
+        gsiName,
+        originalId,
+        ownerId
+      )
+    ).map((monitor) => monitor.monitor_id);
     const updatePromises = [];
     for (let id of monitorIds) {
       updatePromises.push(

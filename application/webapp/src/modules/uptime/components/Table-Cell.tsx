@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -24,11 +24,16 @@ interface DescriptionCellProps {
 }
 
 export function DescriptionCell(props: DescriptionCellProps) {
+  const router = useRouter();
+  const { projectId } = router.query;
   return (
     <Box>
       <Tooltip label="Details">
         <Box w="fit-content">
-          <Link passHref href={`/app/uptime/${props.monitorId}`}>
+          <Link
+            passHref
+            href={`/app/projects/${projectId}/uptime/${props.monitorId}`}
+          >
             <Box
               _hover={{
                 cursor: "pointer",
@@ -148,6 +153,8 @@ interface ActionsCellProps {
 }
 
 export function ActionsCell(props: ActionsCellProps) {
+  const router = useRouter();
+  const { projectId } = router.query;
   return (
     <Flex justifyContent="flex-start">
       <Tooltip label="Details">
@@ -159,7 +166,9 @@ export function ActionsCell(props: ActionsCellProps) {
           bgColor="gray.500"
           mr="1.3em"
           onClick={() => {
-            router.push("/app/uptime/" + props.cellValues.monitorId);
+            router.push(
+              `/app/projects/${projectId}/uptime/` + props.cellValues.monitorId
+            );
           }}
           _hover={{
             bg: "gray.600",
@@ -175,7 +184,11 @@ export function ActionsCell(props: ActionsCellProps) {
           bgColor="blue.500"
           mr="1.3em"
           onClick={() => {
-            router.push("/app/uptime/" + props.cellValues.monitorId + "/edit");
+            router.push(
+              `/app/projects/${projectId}/uptime/` +
+                props.cellValues.monitorId +
+                "/edit"
+            );
           }}
           _hover={{
             bg: "blue.600",

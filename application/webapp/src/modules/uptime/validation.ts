@@ -11,6 +11,7 @@ export function isValidCoreUptimeMonitor(
     typeof obj.name === "string" &&
     typeof obj.region === "string" &&
     typeof obj.frequency === "number" &&
+    typeof obj.project_id === "string" &&
     isValidFrequency(obj.frequency, product_id) &&
     isValidName(obj.name) &&
     isValidUrl(obj.url) &&
