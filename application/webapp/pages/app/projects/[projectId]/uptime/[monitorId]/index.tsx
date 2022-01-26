@@ -4,22 +4,23 @@ import { UptimeMonitor } from "project-types";
 import React from "react";
 import { LoadingSpinner } from "../../../../../../src/common/components/Loading-Spinner";
 import { PageLayout } from "../../../../../../src/common/components/Page-Layout";
-import { useUptimeMonitors } from "../../../../../../src/modules/uptime/client";
+import { useUptimeMonitorsForProject } from "../../../../../../src/modules/uptime/client";
 import { OverviewPage } from "../../../../../../src/modules/uptime/components/Overview-Page";
 import { ExtendedNextPage } from "../../../../../_app";
 
 const Overview: ExtendedNextPage = () => {
-  const {
+  const router = useRouter();
+  const { monitorId, projectId } = router.query;
+  let {
     monitors,
     isLoading: monitorsIsLoading,
     isError: monitorsIsError,
-  } = useUptimeMonitors(); // use monitors at the root page because this is the minimum data we need to render children components
+  } = useUptimeMonitorsForProject(projectId as string); // use monitors at the root page because this is the minimum data we need to render children components
 
-  const router = useRouter();
-  const { monitorId } = router.query;
+  let projectMonitors = monitors ? monitors[projectId as string] : [];
 
   let monitor: UptimeMonitor | undefined;
-  for (let m of monitors ?? []) {
+  for (let m of projectMonitors ?? []) {
     if (m.monitor_id === monitorId) monitor = m;
   }
   return (

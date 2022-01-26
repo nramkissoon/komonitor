@@ -16,7 +16,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import router from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
 import { timeAgo } from "../../../common/client-utils";
 
@@ -28,6 +28,7 @@ interface OverviewPageHeaderProps {
   monitorId: string;
   monitorRegion: string;
   openDeleteDialog: Function;
+  openEditForm: () => void;
 }
 
 // Header that contains the name of the monitor + other attributes + some actions
@@ -40,7 +41,10 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
     monitorId,
     openDeleteDialog,
     monitorRegion,
+    openEditForm,
   } = props;
+  const router = useRouter();
+  const { projectId } = router.query;
   let color = "gray";
   if (currentStatus === "up") color = "green";
   if (currentStatus === "down") color = "red";
@@ -89,7 +93,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
           }}
           fontWeight="normal"
           onClick={() => {
-            router.push("/app/uptime/");
+            router.push("/app/projects/" + projectId + "/uptime");
           }}
         >
           Back to all monitors
@@ -104,7 +108,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
             bg: "blue.600",
           }}
           fontWeight="normal"
-          onClick={() => router.push("/app/uptime/" + monitorId + "/edit")}
+          onClick={openEditForm}
         >
           Edit
         </Button>

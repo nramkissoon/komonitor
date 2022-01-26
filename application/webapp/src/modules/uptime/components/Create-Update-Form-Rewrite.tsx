@@ -25,7 +25,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { Alert, ChannelType, HttpMethods, UptimeMonitor } from "project-types";
 import React from "react";
 import {
@@ -251,11 +251,9 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       augmentedValues.last_updated = currentMonitorAttributes?.last_updated;
       await updateMonitor(
         augmentedValues,
-        () => {
-          Router.push({
-            pathname: "/app/uptime/" + augmentedValues.monitor_id,
-            query: { monitorUpdated: "true" },
-          });
+        async () => {
+          await mutate();
+          closeForm();
         },
         postErrorToast
       );

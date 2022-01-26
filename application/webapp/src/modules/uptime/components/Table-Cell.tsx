@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -172,26 +172,6 @@ export function ActionsCell(props: ActionsCellProps) {
           }}
           _hover={{
             bg: "gray.600",
-          }}
-        />
-      </Tooltip>
-      <Tooltip label="Edit">
-        <IconButton
-          aria-label="edit monitor"
-          icon={<EditIcon />}
-          colorScheme="blue"
-          color="white"
-          bgColor="blue.500"
-          mr="1.3em"
-          onClick={() => {
-            router.push(
-              `/app/projects/${projectId}/uptime/` +
-                props.cellValues.monitorId +
-                "/edit"
-            );
-          }}
-          _hover={{
-            bg: "blue.600",
           }}
         />
       </Tooltip>

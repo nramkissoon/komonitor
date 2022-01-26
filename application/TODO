@@ -105,7 +105,7 @@ Projects:
             ✔ assign to project in create update form using hook @done(22-01-26 12:25)
             ✔ implement permissions checks @done(22-01-26 12:25)
             ✔ transfer monitor from project @done(22-01-26 10:18)
-            ☐ edit monitor
+            ✔ edit monitor @done(22-01-26 14:42)
         SideBar:
              ✔  indicate personal account @done(22-01-25 14:39)
              ✔  project selection @done(22-01-24 13:26)
@@ -118,6 +118,11 @@ Projects:
         ☐ update pricing and landing page + limiters
         ☐ update docs
 
+Slack Mult:
+    ☐ add multiple slack integrations, check if workspace/channel combo exists
+    ☐ alert lambda match channel wrkspc compound key
+    ☐ uptime monitor select use compound key
+    ☐ client get slack installation multiple from api
 
 Uptime HTTP:
     ✔  design new creation and edit form @done(21-12-06 11:49)
