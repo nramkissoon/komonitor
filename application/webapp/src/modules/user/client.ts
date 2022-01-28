@@ -47,7 +47,7 @@ export function useUser() {
   };
 }
 
-export function useUserSlackInstallation() {
+export function useUserSlackInstallations() {
   const fetcher = (url: string) =>
     fetch(url, { method: "GET" }).then((r) => r.json());
 
@@ -56,19 +56,28 @@ export function useUserSlackInstallation() {
     fetcher,
     {}
   );
+
   return {
-    data: data as SlackInstallation | undefined,
+    data: data as SlackInstallation[] | undefined,
     isLoading: !error && !data,
     isError: error,
     mutate: mutate,
   };
 }
 
+export type Integrations = {
+  data: SlackInstallation<"v1" | "v2", boolean> | undefined;
+  type: "Slack";
+}[];
+
 // used to grab all user integrations at once
 export function useUserIntegrations() {
-  const { data, isError } = useUserSlackInstallation();
+  const { data, isError } = useUserSlackInstallations();
+  const slackIntegrations: Integrations = data
+    ? data.map((integ) => ({ data: integ, type: "Slack" }))
+    : [];
   return {
-    integrations: [{ data, type: "Slack" }],
+    integrations: [...slackIntegrations] as Integrations,
     isError,
   };
 }

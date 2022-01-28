@@ -117,12 +117,20 @@ Projects:
         ☐ delete projects for user when user deleted
         ☐ update pricing and landing page + limiters
         ☐ update docs
+        ☐ limit project creation on free accounts
+        ☐ enable webhooks?
+        ☐ view sample status in landing
+        ☐ weekly report emails
 
 Slack Mult:
+    ☐ dont uninstall from workspace when deleting integ
+    ✔  verfiy update when changing names @done(22-01-27 12:41)
+    ☐  verify appending slack installations if unique
     ☐ add multiple slack integrations, check if workspace/channel combo exists
-    ☐ alert lambda match channel wrkspc compound key
-    ☐ uptime monitor select use compound key
-    ☐ client get slack installation multiple from api
+    ✔ alert lambda match channel wrkspc compound key @done(22-01-27 17:23)
+    ☐ verify slack alert
+    ✔ uptime monitor select use compound key @done(22-01-27 14:56)
+    ✔ client get slack installation multiple from api @done(22-01-27 14:56)
 
 Uptime HTTP:
     ✔  design new creation and edit form @done(21-12-06 11:49)

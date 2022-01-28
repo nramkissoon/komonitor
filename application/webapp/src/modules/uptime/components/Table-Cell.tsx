@@ -139,7 +139,7 @@ export function StatusObjectCell({
       }}
       fontWeight="normal"
     >
-      View Full JSON
+      View Full Status
     </Button>
   );
 }

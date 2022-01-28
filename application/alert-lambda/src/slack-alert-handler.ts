@@ -34,6 +34,16 @@ const createUptimeMonitorSlackAlertMessage = (
   };
 };
 
+const getTeamChannelIdFromCompoundKey = (key: string) => {
+  const array = key.split("#");
+  if (array.length !== 2)
+    throw new Error("invalid slack compound key on monitor");
+  return {
+    team: array[0],
+    channel: array[1],
+  };
+};
+
 export const sendUptimeMonitorSlackAlert = async (
   monitor: UptimeMonitor,
   alert: Alert,
@@ -52,10 +62,14 @@ export const sendUptimeMonitorSlackAlert = async (
       throw new Error(`no slack alert for user ${user.id}`);
     }
 
-    const slackChannelId = alert.recipients.Slack[0];
+    const slackTeamChannelId = getTeamChannelIdFromCompoundKey(
+      alert.recipients.Slack[0]
+    );
 
     const webhook = user.slack_installations.filter(
-      (i) => i.incomingWebhook?.channelId === slackChannelId
+      (i) =>
+        i.incomingWebhook?.channelId === slackTeamChannelId.channel &&
+        i.team?.id === slackTeamChannelId.team
     )[0].incomingWebhook?.url;
 
     if (!webhook) {

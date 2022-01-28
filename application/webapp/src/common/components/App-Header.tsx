@@ -1,4 +1,9 @@
-import { CheckIcon, SearchIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import {
+  ArrowBackIcon,
+  CheckIcon,
+  SearchIcon,
+  TriangleDownIcon,
+} from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -34,7 +39,6 @@ import { useSession } from "next-auth/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { AiOutlineMenu } from "react-icons/ai";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { HeaderLogo } from "./Header-Logo";
 import { useTeam } from "./TeamProvider";
@@ -229,6 +233,7 @@ export const AppHeader = () => {
 
   const router = useRouter();
   const { projectId } = router.query;
+  const { team } = useTeam();
 
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
@@ -258,17 +263,6 @@ export const AppHeader = () => {
     ml: { base: "0", sm: "3" },
     onClick: toggleMode,
     icon: <SwitchIcon />,
-  };
-
-  const defaultMobileNavHamburgerStyles: IconButtonProps = {
-    display: { base: "flex", md: "flex", lg: "none" },
-    "aria-label": "Open menu",
-    fontSize: "1.8em",
-    color: useColorModeValue("gray.500", "inherit"),
-    variant: "ghost",
-    ml: { base: "0", sm: "3" },
-    icon: <AiOutlineMenu />,
-    onClick: onOpen,
   };
 
   return (
@@ -303,15 +297,29 @@ export const AppHeader = () => {
           </Flex>
           <Spacer />
           <Flex justify="flex-end" align="center" color="gray.400">
+            {projectId && (
+              <Link href={team ? "/" + team : "/app"} passHref>
+                <Button
+                  p="0"
+                  bg="none"
+                  color={useColorModeValue("gray.900", "gray.400")}
+                  _hover={{ color: useColorModeValue("gray.500", "white") }}
+                  display="flex"
+                  w="fit-content"
+                  alignItems="center"
+                  fontWeight="medium"
+                >
+                  <ArrowBackIcon /> Return to projects
+                </Button>
+              </Link>
+            )}
             {HeaderLink({
               text: "Docs",
               href: "/docs/getting-started/introduction",
             })}
             <IconButton {...defaultColorModeToggleStyles} />
-            <IconButton {...defaultMobileNavHamburgerStyles} />
           </Flex>
         </Flex>
-        {MobileNavHeader({ isOpen: isOpen, onClose: onClose })}
       </chakra.header>
     </Box>
   );

@@ -9,6 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { SlackInstallation } from "project-types";
 import React from "react";
 import {
   Control,
@@ -22,7 +23,7 @@ import {
   ReactSelect,
 } from "../../../common/components/React-Select";
 import { getAlertRecipientLimitFromProductId } from "../../billing/plans";
-import { useUserSlackInstallation } from "../../user/client";
+import { useUserSlackInstallations } from "../../user/client";
 import { Inputs } from "./Create-Update-Form-Rewrite";
 
 interface RecipientFormControllerProps {
@@ -38,6 +39,20 @@ interface RecipientFormControllerProps {
   clearErrors: UseFormClearErrors<Inputs>;
 }
 
+const createTeamChannelIdCompoundKey = (installation: SlackInstallation) => {
+  return [installation.team?.id, installation.incomingWebhook?.channelId].join(
+    "#"
+  );
+};
+
+const createSlackInstallationOptions = (installations: SlackInstallation[]) => {
+  return installations.map((i) => ({
+    label: (i.incomingWebhook?.channel as string) + ` (in ${i.team?.name})`,
+    value: createTeamChannelIdCompoundKey(i),
+    isDisabled: false,
+  }));
+};
+
 export const RecipientFormController = (
   props: RecipientFormControllerProps
 ) => {
@@ -51,10 +66,10 @@ export const RecipientFormController = (
     clearErrors,
   } = props;
   let {
-    data: slackInstallation,
+    data: slackInstallations,
     isError: slackIsError,
     isLoading: slackIsLoading,
-  } = useUserSlackInstallation();
+  } = useUserSlackInstallations();
   const { field: emailField } = useController({
     control: control,
     name: "alert.recipients.Email",
@@ -139,7 +154,7 @@ export const RecipientFormController = (
         />
       )}
       <Flex mt="1em">
-        {!slackInstallation && !slackIsLoading ? (
+        {!slackInstallations && !slackIsLoading ? (
           <Box>
             <Link href="/app/settings?tab=2" passHref>
               <chakra.a
@@ -165,9 +180,9 @@ export const RecipientFormController = (
           </chakra.span>
         )}
         <Switch
-          display={!slackInstallation && !slackIsLoading ? "none" : "inherit"}
+          display={!slackInstallations && !slackIsLoading ? "none" : "inherit"}
           isChecked={addSlack}
-          isDisabled={!hasAlert || (!slackInstallation && !slackIsLoading)}
+          isDisabled={!hasAlert || (!slackInstallations && !slackIsLoading)}
           onChange={(e) => {
             toggleAddSlack(e.target.checked);
             clearErrors("alert.recipients.Slack");
@@ -176,17 +191,15 @@ export const RecipientFormController = (
           }}
         />
       </Flex>
-      {addSlack && slackInstallation && (
+      {addSlack && slackInstallations !== undefined && (
         <Controller
           name="alert.recipients.Slack"
           control={control}
           render={({ field, fieldState }) => {
-            if (slackInstallation) {
-              const installationOption = {
-                label: slackInstallation.incomingWebhook?.channel as string,
-                value: slackInstallation.incomingWebhook?.channelId as string,
-                isDisabled: false,
-              };
+            if (slackInstallations !== undefined) {
+              const installationOptions =
+                createSlackInstallationOptions(slackInstallations);
+
               return (
                 <FormControl
                   isDisabled={!hasAlert || !addSlack}
@@ -194,12 +207,12 @@ export const RecipientFormController = (
                   isRequired
                   mt="1em"
                 >
-                  <FormLabel htmlFor="recipients">
-                    Slack Channel (Workspace: {slackInstallation.team?.name})
-                  </FormLabel>
+                  <FormLabel htmlFor="recipients">Slack Channel</FormLabel>
                   <ReactSelect
-                    defaultValue={field.value ? installationOption : undefined}
-                    options={[installationOption]}
+                    defaultValue={
+                      field.value ? installationOptions[0] : undefined
+                    }
+                    options={installationOptions}
                     placeholder={"Slack Channel"}
                     field={field as any}
                     setValue={(fieldName: string, value: string) => {

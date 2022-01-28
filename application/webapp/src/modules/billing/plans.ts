@@ -22,9 +22,15 @@ export function getUptimeMonitorAllowanceFromProductId(id: string | undefined) {
     case PLAN_PRODUCT_IDS.FREELANCER:
       return 500;
     case PLAN_PRODUCT_IDS.BUSINESS:
-      return 5000;
+      return 2500;
     default:
-      return 100;
+      return 80;
+  }
+}
+
+export function getProjectAllowanceFromProductId(id: string | undefined) {
+  if (!id || id === PLAN_PRODUCT_IDS.FREE) {
+    return 10;
   }
 }
 

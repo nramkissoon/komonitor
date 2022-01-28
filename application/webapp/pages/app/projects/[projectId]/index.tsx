@@ -1,6 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import { Link, useColorModeValue } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { AppSubNav } from "../../../../src/common/components/App-Sub-Nav";
@@ -46,19 +43,6 @@ const Overview: ExtendedNextPage = () => {
           },
         ]}
       />
-      <NextLink href={team ? "/" + team : "/app"} passHref>
-        <Link
-          p="0"
-          bg="none"
-          color={useColorModeValue("gray.400", "gray.500")}
-          _hover={{ color: "blue.600" }}
-          display="flex"
-          w="fit-content"
-          alignItems="center"
-        >
-          <ArrowBackIcon /> Return to project dashboard
-        </Link>
-      </NextLink>
     </PageLayout>
   );
 };

@@ -1,7 +1,7 @@
 import { Box, Button, chakra, Flex, useColorModeValue } from "@chakra-ui/react";
 import { SlackInstallation } from "project-types";
 import { useTeam } from "../../../common/components/TeamProvider";
-import { useUserIntegrations } from "../../user/client";
+import { Integrations, useUserIntegrations } from "../../user/client";
 import { SlackSvg } from "./Icons";
 
 const SlackInstallationInfoBar = ({
@@ -20,7 +20,7 @@ const SlackInstallationInfoBar = ({
         flexDir={["column", "row"]}
       >
         <Box>
-          You will receive alerts in the{" "}
+          You can receive alerts in the{" "}
           <chakra.span color="red.400">
             {installation?.incomingWebhook?.channel ?? ""}
           </chakra.span>{" "}
@@ -71,9 +71,7 @@ const InfoBarContainer: React.FC<{}> = ({ children }) => {
   );
 };
 
-const getIntegrationInfoBars = (
-  integrations: { data: any; type: string }[]
-) => {
+const getIntegrationInfoBars = (integrations: Integrations) => {
   return integrations.map((integration) => {
     switch (integration.type) {
       case "Slack":
