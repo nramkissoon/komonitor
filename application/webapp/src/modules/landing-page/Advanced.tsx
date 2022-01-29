@@ -2,8 +2,6 @@ import {
   Box,
   chakra,
   Flex,
-  Grid,
-  GridItem,
   Icon,
   Table,
   Tbody,
@@ -12,8 +10,6 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { darcula } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import { v4 as uuidv4 } from "uuid";
 
 const JsonSample = () => {
@@ -57,11 +53,7 @@ const JsonSample = () => {
       }
     }
   }`;
-  return (
-    <SyntaxHighlighter language="javascript" theme={darcula}>
-      {codeString}
-    </SyntaxHighlighter>
-  );
+  return { codeString };
 };
 
 function TableSectionRow(borderColor: string, title: string) {
@@ -159,52 +151,43 @@ export const Advanced = () => {
         Customize your monitor's HTTP requests to match your use case and
         analyze the response.
       </chakra.h2>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-        <GridItem colSpan={2}>
-          <Box
-            w="100%"
-            shadow="md"
-            bg={useColorModeValue("white", "#0f131a")}
-            borderRadius="lg"
-            p="1.5em"
-            mb="10px"
-            maxW="4xl"
-          >
-            <Box
-              overflow="auto"
-              css={{
-                "&::-webkit-scrollbar": {
-                  width: "10px",
-                  height: "10px",
-                },
-                "&::-webkit-scrollbar-track": {
-                  width: "10px",
-                  height: "10px",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  background: useColorModeValue("#E2E8F0", "#1A202C"),
-                },
-              }}
-            >
-              <Table>
-                <Thead></Thead>
-                <Tbody>
-                  {TableSectionRow(
-                    tableBorderColor,
-                    "Custom Request Parameters"
-                  )}
-                  {TableRows(tableBorderColor, requestSectionData)}
-                  {TableSectionRow(tableBorderColor, "Response Data")}
-                  {TableRows(tableBorderColor, responseSectionData)}
-                </Tbody>
-              </Table>
-            </Box>
-          </Box>
-        </GridItem>
-        <GridItem colSpan={1}>
-          <JsonSample />
-        </GridItem>
-      </Grid>
+
+      <Box
+        w="100%"
+        shadow="md"
+        bg={useColorModeValue("white", "#0f131a")}
+        borderRadius="lg"
+        p="1.5em"
+        mb="10px"
+        maxW="4xl"
+      >
+        <Box
+          overflow="auto"
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "10px",
+              height: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "10px",
+              height: "10px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: useColorModeValue("#E2E8F0", "#1A202C"),
+            },
+          }}
+        >
+          <Table>
+            <Thead></Thead>
+            <Tbody>
+              {TableSectionRow(tableBorderColor, "Custom Request Parameters")}
+              {TableRows(tableBorderColor, requestSectionData)}
+              {TableSectionRow(tableBorderColor, "Response Data")}
+              {TableRows(tableBorderColor, responseSectionData)}
+            </Tbody>
+          </Table>
+        </Box>
+      </Box>
       <chakra.h3
         fontSize="2xl"
         fontWeight="bold"

@@ -9,8 +9,6 @@ import {
   Button,
   ButtonProps,
   chakra,
-  CloseButton,
-  CloseButtonProps,
   Divider,
   Flex,
   FlexProps,
@@ -26,20 +24,17 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Slide,
-  SlideProps,
   Spacer,
-  StackProps,
   useColorMode,
   useColorModeValue,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi";
+import { useUptimeMonitorsForProject } from "../../modules/uptime/client";
 import { HeaderLogo } from "./Header-Logo";
 import { useTeam } from "./TeamProvider";
 
@@ -71,75 +66,6 @@ const HeaderLink = (props: {
         {text}
       </Button>
     </Link>
-  );
-};
-
-const MobileNavHeader = (props: {
-  isOpen: boolean;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
-}) => {
-  const { isOpen, onClose } = props;
-
-  const defaultSlideTransitionStyles: SlideProps = {
-    direction: "right",
-    style: { zIndex: 10 },
-    in: isOpen,
-  };
-
-  const defaultVstackContainerStyles: StackProps = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "column",
-    p: 2,
-    pb: 4,
-    bg: useColorModeValue("white", "gray.900"),
-    rounded: "md",
-    shadow: "sm",
-    spacing: 4,
-  };
-
-  const defaultCloseButtonStyles: CloseButtonProps = {
-    "aria-label": "Close menu",
-    justifySelf: "self-start",
-    onClick: onClose,
-    bg: useColorModeValue("white", "gray.900"),
-  };
-
-  const linkButtonStyles: ButtonProps = {
-    w: "80%",
-    h: "3em",
-    fontSize: "xl",
-    bg: useColorModeValue("blue.100", "gray.700"),
-    color: useColorModeValue("gray.900", "white"),
-    _hover: {
-      bg: useColorModeValue("blue.300", "gray.400"),
-      color: useColorModeValue("gray.100", "white"),
-    },
-  };
-
-  return (
-    <Slide {...defaultSlideTransitionStyles}>
-      <VStack {...defaultVstackContainerStyles}>
-        <CloseButton {...defaultCloseButtonStyles} />
-        {HeaderLink({
-          text: "Uptime",
-          href: "/app/uptime",
-          buttonProps: linkButtonStyles,
-        })}
-        {/* {HeaderLink({
-          text: "Lighthouse",
-          href: "/app/lighthouse",
-          buttonProps: linkButtonStyles,
-        })} */}
-        {HeaderLink({
-          text: "Docs",
-          href: "/docs",
-          buttonProps: linkButtonStyles,
-        })}
-      </VStack>
-    </Slide>
   );
 };
 
@@ -232,8 +158,10 @@ export const AppHeader = () => {
   const authed = session?.user !== undefined;
 
   const router = useRouter();
-  const { projectId } = router.query;
+  const { projectId, monitorId } = router.query;
   const { team } = useTeam();
+
+  const { monitors } = useUptimeMonitorsForProject(projectId as string);
 
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
@@ -291,6 +219,20 @@ export const AppHeader = () => {
                 </chakra.span>
                 <chakra.span fontWeight="normal" letterSpacing="wider">
                   {projectId}
+                </chakra.span>
+              </Box>
+            )}
+            {monitorId && (
+              <Box fontSize="lg">
+                <chakra.span mx="15px" color="gray.500" fontWeight="bold">
+                  /
+                </chakra.span>
+                <chakra.span fontWeight="normal" letterSpacing="wider">
+                  {monitors
+                    ? monitors[projectId as string].find(
+                        (m) => m.monitor_id === monitorId
+                      )?.name
+                    : ""}
                 </chakra.span>
               </Box>
             )}

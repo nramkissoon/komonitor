@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import { SlackInstallation } from "project-types";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
+import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { useTeam } from "../../../common/components/TeamProvider";
 import { Integrations, useUserIntegrations } from "../../user/client";
 import { SlackSvg } from "./Icons";
@@ -130,9 +131,13 @@ const getIntegrationInfoBars = (integrations: Integrations) => {
 export const ActiveIntegrationList = () => {
   const { team } = useTeam();
 
-  const { integrations, isError } = useUserIntegrations();
+  const { integrations, isError, isLoading } = useUserIntegrations();
 
   // add filtering and sorting integrations
 
-  return <Flex flexDir="column">{getIntegrationInfoBars(integrations)}</Flex>;
+  return integrations && !isLoading ? (
+    <Flex flexDir="column"> {getIntegrationInfoBars(integrations)}</Flex>
+  ) : (
+    <LoadingSpinner />
+  );
 };

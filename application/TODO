@@ -114,6 +114,7 @@ Projects:
         ☐  slack must work
         ☐  design project index page and tabs
         ✔  fix the header size @done(22-01-25 10:08)
+        ✔ header add links to proiject and monitor @done(22-01-29 13:31)
         ☐ delete projects for user when user deleted
         ☐ update pricing and landing page + limiters
         ☐ update docs

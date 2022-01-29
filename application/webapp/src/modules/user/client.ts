@@ -73,13 +73,14 @@ export type Integrations = {
 
 // used to grab all user integrations at once
 export function useUserIntegrations() {
-  const { data, isError, mutate } = useUserSlackInstallations();
+  const { data, isError, mutate, isLoading } = useUserSlackInstallations();
   const slackIntegrations: Integrations = data
     ? data.map((integ) => ({ data: integ, type: "Slack", mutate: mutate }))
     : [];
   return {
     integrations: [...slackIntegrations] as Integrations,
     isError,
+    isLoading,
   };
 }
 
