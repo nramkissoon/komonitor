@@ -1,16 +1,62 @@
-import { Box, Button, chakra, Flex, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  chakra,
+  Flex,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
+import dynamic from "next/dynamic";
 import { SlackInstallation } from "project-types";
+import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useTeam } from "../../../common/components/TeamProvider";
 import { Integrations, useUserIntegrations } from "../../user/client";
 import { SlackSvg } from "./Icons";
+import { RemoveSlackInstallationDialogProps } from "./RemoveDialogs";
+
+const RemoveSlackInstallationDialog =
+  dynamic<RemoveSlackInstallationDialogProps>(() =>
+    import("./RemoveDialogs").then((mod) => mod.RemoveSlackInstallationDialog)
+  );
+
+const RemoveIntegrationButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <Button
+      rounded="full"
+      colorScheme="red"
+      color="red.500"
+      variant="ghost"
+      onClick={onClick}
+    >
+      Remove Integration
+    </Button>
+  );
+};
 
 const SlackInstallationInfoBar = ({
   installation,
+  mutate,
 }: {
   installation: SlackInstallation;
+  mutate: () => void;
 }) => {
+  const { onOpen, onClose, isOpen } = useDisclosure();
+  const cancelRef = React.useRef(true);
   return (
     <>
+      {isOpen && (
+        <RemoveSlackInstallationDialog
+          leastDestructiveRef={cancelRef}
+          isOpen={isOpen}
+          onClose={onClose}
+          workspace={installation.team?.name ?? ""}
+          channel={installation.incomingWebhook?.channel ?? ""}
+          mutate={mutate}
+          channelId={installation.incomingWebhook?.channelId ?? ""}
+          teamId={installation.team?.id ?? ""}
+        />
+      )}
       <Box marginLeft={[0, "20px"]}>{SlackSvg}</Box>
       <Flex
         mx="20px"
@@ -21,26 +67,17 @@ const SlackInstallationInfoBar = ({
       >
         <Box>
           You can receive alerts in the{" "}
-          <chakra.span color="red.400">
+          <chakra.span color="blue.400">
             {installation?.incomingWebhook?.channel ?? ""}
           </chakra.span>{" "}
           Slack channel in the{" "}
-          <chakra.span color="red.400">
+          <chakra.span color="blue.400">
             {installation?.team?.name ?? ""}
           </chakra.span>{" "}
           workspace.
         </Box>
         <Box>
-          <Button
-            rounded="full"
-            bg="#4A154B"
-            _hover={{
-              bg: "red.600",
-            }}
-            //onClick={props.openUninstallDialog}
-          >
-            Uninstall Slack
-          </Button>
+          <RemoveIntegrationButton onClick={onOpen} />
         </Box>
       </Flex>
     </>
@@ -50,12 +87,12 @@ const SlackInstallationInfoBar = ({
 const InfoBarContainer: React.FC<{}> = ({ children }) => {
   return (
     <Flex
-      key="slack"
       px="10px"
       alignItems="center"
       bg={useColorModeValue("white", "gray.950")}
       py="4"
       w="full"
+      mb="15px"
       rounded={["lg", "full"]}
       border="1px"
       borderColor={useColorModeValue("gray.300", "gray.600")}
@@ -77,8 +114,11 @@ const getIntegrationInfoBars = (integrations: Integrations) => {
       case "Slack":
         if (integration.data)
           return (
-            <InfoBarContainer key="slack">
-              <SlackInstallationInfoBar installation={integration.data} />
+            <InfoBarContainer key={uuidv4()}>
+              <SlackInstallationInfoBar
+                installation={integration.data}
+                mutate={integration.mutate}
+              />
             </InfoBarContainer>
           );
       default:
@@ -92,5 +132,7 @@ export const ActiveIntegrationList = () => {
 
   const { integrations, isError } = useUserIntegrations();
 
-  return <Flex>{getIntegrationInfoBars(integrations)}</Flex>;
+  // add filtering and sorting integrations
+
+  return <Flex flexDir="column">{getIntegrationInfoBars(integrations)}</Flex>;
 };

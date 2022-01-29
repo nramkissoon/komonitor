@@ -439,9 +439,28 @@ export async function getUserSlackInstallations(
 export async function deleteUserSlackInstallation(
   ddbClient: DynamoDBClient,
   userTableName: string,
-  userId: string
+  userId: string,
+  teamId: string,
+  channelId: string
 ) {
   try {
+    const currentInstallations = await getUserSlackInstallations(
+      ddbClient,
+      userTableName,
+      userId
+    );
+
+    const updatedInstallations = currentInstallations.filter(
+      (i) =>
+        !(i.team?.id === teamId && i.incomingWebhook?.channelId === channelId)
+    );
+
+    const marshalledInstallations = updatedInstallations.map(
+      (installation) => ({
+        M: marshall(installation, { removeUndefinedValues: true }),
+      })
+    );
+
     const updateCommandInput: UpdateItemCommandInput = {
       TableName: userTableName,
       ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
@@ -449,8 +468,12 @@ export async function deleteUserSlackInstallation(
         pk: { S: "USER#" + userId },
         sk: { S: "USER#" + userId },
       },
-
-      UpdateExpression: "REMOVE slack_installations",
+      ExpressionAttributeValues: {
+        ":i": {
+          L: marshalledInstallations,
+        },
+      },
+      UpdateExpression: "SET slack_installations = :i",
     };
 
     const response = await ddbClient.send(
@@ -483,7 +506,7 @@ export async function addUserSlackInstallation(
       },
       ExpressionAttributeValues: {
         ":i": {
-          M: marshall(installation, { removeUndefinedValues: true }),
+          L: [{ M: marshall(installation, { removeUndefinedValues: true }) }],
         },
       },
       UpdateExpression:

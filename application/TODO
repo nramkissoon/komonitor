@@ -72,7 +72,7 @@ Webapp:
         ✔  add to delete user api @done(21-11-14 20:54)
         ☐  verify
     Website View:
-        ☐  scope
+        ✘  scope @cancelled(22-01-28 22:28)
     custom status pages: 
         ☐  scope
     teams: 
@@ -123,12 +123,15 @@ Projects:
         ☐ weekly report emails
 
 Slack Mult:
-    ☐ dont uninstall from workspace when deleting integ
+    ✔ dont uninstall from workspace when deleting integ @done(22-01-28 13:59)
     ✔  verfiy update when changing names @done(22-01-27 12:41)
-    ☐  verify appending slack installations if unique
-    ☐ add multiple slack integrations, check if workspace/channel combo exists
+    ✔  verify appending slack installations if unique @done(22-01-28 20:56)
+    ✔ add multiple slack integrations, check if workspace/channel combo exists @done(22-01-28 21:05)
     ✔ alert lambda match channel wrkspc compound key @done(22-01-27 17:23)
     ☐ verify slack alert
+    ✔ verify slack deletion @done(22-01-28 21:35)
+    ✔ verify adding slack integ @done(22-01-28 21:04)
+    ✔  verify messages on integrations completion @done(22-01-28 22:03)
     ✔ uptime monitor select use compound key @done(22-01-27 14:56)
     ✔ client get slack installation multiple from api @done(22-01-27 14:56)
 

@@ -60,8 +60,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props.redirect = {
         permanent: false,
         destination:
-          clientEnv.BASE_URL + `app/integrations?alreadyInstalled=true`,
+          clientEnv.BASE_URL + `app/integrations?slackAlreadyInstalled=true`,
       };
+
+      return props;
     }
   }
 

@@ -13,6 +13,16 @@ import {
   updateUserSlackInstallation,
 } from "../../../src/modules/user/user-db";
 
+const getTeamChannelIdFromCompoundKey = (key: string) => {
+  const array = key.split("#");
+  if (array.length !== 2)
+    throw new Error("invalid slack compound key on monitor");
+  return {
+    team: array[0],
+    channel: array[1],
+  };
+};
+
 async function getHandler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -84,6 +94,15 @@ async function deleteHandler(
   session: Session
 ) {
   try {
+    const teamChannelId = JSON.parse(req.body); // ???????????????????
+    const teamId = teamChannelId.teamId;
+    const channelId = teamChannelId.channelId;
+
+    if (!teamId || !channelId) {
+      res.status(400);
+      return;
+    }
+
     const userId = session.uid as string;
 
     const slackInstallations = await getUserSlackInstallations(
@@ -104,7 +123,16 @@ async function deleteHandler(
       ? uptimeMonitors.filter((monitor) => {
           if (monitor.alert) {
             for (let channel of monitor.alert.channels) {
-              if (channel === "Slack") return true;
+              if (channel === "Slack") {
+                const compoundKey = monitor.alert.recipients.Slack![0];
+                const components = getTeamChannelIdFromCompoundKey(compoundKey);
+                if (
+                  components.channel === channelId &&
+                  components.team === teamId
+                ) {
+                  return true;
+                }
+              }
             }
           }
           return false;
@@ -141,7 +169,9 @@ async function deleteHandler(
     const deleted = await deleteUserSlackInstallation(
       ddbClient,
       env.USER_TABLE_NAME,
-      userId
+      userId,
+      teamId,
+      channelId
     );
 
     if (!deleted) {

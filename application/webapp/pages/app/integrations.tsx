@@ -1,4 +1,7 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
   Heading,
   Tab,
   TabList,
@@ -12,11 +15,17 @@ import React from "react";
 import { AppSubNav } from "../../src/common/components/App-Sub-Nav";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import { ActiveIntegrationList } from "../../src/modules/integrations/components/ActiveIntegrationList";
+import { NewIntegrationsList } from "../../src/modules/integrations/components/NewIntegrationsList";
 import { ExtendedNextPage } from "../_app";
 
 const App: ExtendedNextPage = () => {
   const router = useRouter();
-  const { tab } = router.query;
+  const {
+    slackAlreadyInstalled,
+    slackIntegrationSuccess,
+    slackIntegrationCanceled,
+  } = router.query;
+
   return (
     <PageLayout isAppPage maxW={["sm", "xl", "3xl", "5xl", "6xl"]}>
       <AppSubNav
@@ -43,6 +52,34 @@ const App: ExtendedNextPage = () => {
         These integrations are available in any project in your personal
         account.
       </Heading>
+      {slackAlreadyInstalled === "true" && (
+        <Alert status="warning" mt="-.2em" mb=".5em" variant="left-accent">
+          <AlertIcon />
+          <AlertDescription>
+            Slack already integrated with given workspace and channel.
+          </AlertDescription>
+        </Alert>
+      )}
+      {slackIntegrationSuccess === "true" && (
+        <Alert status="success" mt="-.2em" mb=".5em" variant="left-accent">
+          <AlertIcon />
+          <AlertDescription>Slack successfully installed!</AlertDescription>
+        </Alert>
+      )}
+      {slackIntegrationSuccess === "false" && (
+        <Alert status="error" mt="-.2em" mb=".5em" variant="left-accent">
+          <AlertIcon />
+          <AlertDescription>
+            Slack installation failed, please try again later.
+          </AlertDescription>
+        </Alert>
+      )}
+      {slackIntegrationCanceled === "true" && (
+        <Alert status="warning" mt="-.2em" mb=".5em" variant="left-accent">
+          <AlertIcon />
+          <AlertDescription>Slack integration canceled.</AlertDescription>
+        </Alert>
+      )}
       <Tabs variant="line">
         <TabList>
           <Tab
@@ -63,7 +100,7 @@ const App: ExtendedNextPage = () => {
             <ActiveIntegrationList />
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
+            <NewIntegrationsList />
           </TabPanel>
         </TabPanels>
       </Tabs>
