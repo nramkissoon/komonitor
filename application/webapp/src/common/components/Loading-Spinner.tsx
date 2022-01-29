@@ -1,4 +1,10 @@
-import { Box, Center, Spinner, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Spinner,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React from "react";
 
 export const LoadingSpinner = () => {
@@ -18,3 +24,19 @@ export const LoadingSpinner = () => {
     </Center>
   );
 };
+
+export const SimpleLoadingSpinner = () => (
+  <Flex my="5px">
+    <Spinner
+      w="30px"
+      h="30px"
+      thickness="3px"
+      speed=".8s"
+      emptyColor={useColorModeValue("gray.200", "gray.700")}
+      color={useColorModeValue("blue.300", "blue.300")}
+    />{" "}
+    <Box fontSize="xl" ml="10px">
+      Loading data...
+    </Box>
+  </Flex>
+);

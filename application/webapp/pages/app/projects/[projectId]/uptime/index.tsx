@@ -123,11 +123,7 @@ const Page: ExtendedNextPage = () => {
       </Flex>
       {!isCreateFormOpen && (
         <>
-          {monitorsIsLoading && (
-            <Fade in={monitorsIsLoading} delay={0.2}>
-              {LoadingSpinner()}
-            </Fade>
-          )}
+          {monitorsIsLoading && <LoadingSpinner />}
           {hasMonitors && (
             <Fade in={!monitorsIsLoading}>
               <OverviewTable

@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { signOut } from "next-auth/client";
 import React from "react";
+import { SimpleLoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { useUser, useUserTimezoneAndOffset } from "../../user/client";
 import { ColorModeToggle } from "./ColorModeToggle";
 import {
@@ -86,23 +87,27 @@ export function AccountTab() {
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Timezone Preference:
         </Text>
-        {!tzPrefIsLoading && tzAndOffset && (
+        {!tzPrefIsLoading && tzAndOffset ? (
           <TimezoneSelector
             initialTz={tzAndOffset?.tz ?? "Etc/GMT"}
             mutate={tzMutate}
           />
+        ) : (
+          <SimpleLoadingSpinner />
         )}
         <Divider mb="1em" />
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Email Preferences:
         </Text>
-        {!userIsLoading && user && (
+        {!userIsLoading && user ? (
           <EmailOptInSelector
             initialValue={
               user.emailOptIn !== undefined ? user.emailOptIn : false
             }
             mutate={userMutate}
           />
+        ) : (
+          <SimpleLoadingSpinner />
         )}
         <Divider mb="1em" />
         <SignOutButton />
