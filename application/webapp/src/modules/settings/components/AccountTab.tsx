@@ -33,6 +33,7 @@ const SignOutButton = () => {
         color: useColorModeValue("red.500", "red.400"),
         cursor: "pointer",
       }}
+      p={0}
     >
       Sign out
     </Button>

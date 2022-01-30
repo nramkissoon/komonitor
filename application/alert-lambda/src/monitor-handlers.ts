@@ -126,21 +126,25 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
   }
 
   const channels = alert.channels;
-  let alertTriggered = false;
+  let alertTriggered = true;
 
   for (let channelType of channels) {
     if (channelType === "Email") {
-      alertTriggered = await sendUptimeMonitorAlertEmail(
+      const emailSent = await sendUptimeMonitorAlertEmail(
         monitor,
         alert,
         triggeringStatuses,
         user
       );
+      if (!emailSent) {
+        alertTriggered = false;
+      }
     }
     if (channelType === "Slack") {
-      alertTriggered =
-        alertTriggered &&
-        (await sendUptimeMonitorSlackAlert(monitor, alert, user));
+      const slackSent = await sendUptimeMonitorSlackAlert(monitor, alert, user);
+      if (!slackSent) {
+        alertTriggered = false;
+      }
     }
   }
 

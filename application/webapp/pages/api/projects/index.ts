@@ -4,6 +4,10 @@ import { getSession } from "next-auth/client";
 import { Project } from "project-types";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
+  getProjectAllowanceFromProductId,
+  PLAN_PRODUCT_IDS,
+} from "../../../src/modules/billing/plans";
+import {
   createProject,
   deleteProject,
   deleteProjectAndAssociatedAssets,
@@ -11,6 +15,7 @@ import {
   getProjectsForOwner,
 } from "../../../src/modules/projects/server/db";
 import { transferMultipleMonitorsToProject } from "../../../src/modules/uptime/monitor-db";
+import { getServicePlanProductIdForUser } from "../../../src/modules/user/user-db";
 
 const getOwnerId = (req: NextApiRequest, session: Session) => {
   const userId = session.uid as string;
@@ -122,7 +127,6 @@ async function getHandler(
 ) {
   try {
     const ownerId = getOwnerId(req, session);
-
     const projects = await getProjectsForOwner(
       ddbClient,
       env.PROJECTS_TABLE_NAME,
@@ -226,6 +230,28 @@ async function createHandler(
     if (!verifyCreatePermission(req, session)) {
       res.status(403);
       return;
+    }
+
+    const ownerId = getOwnerId(req, session);
+
+    // TODO check this for teams
+    const productId = await getServicePlanProductIdForUser(
+      ddbClient,
+      env.USER_TABLE_NAME,
+      ownerId
+    );
+
+    if (productId === PLAN_PRODUCT_IDS.FREE) {
+      const projects = await getProjectsForOwner(
+        ddbClient,
+        env.PROJECTS_TABLE_NAME,
+        ownerId
+      );
+
+      if (projects.length === getProjectAllowanceFromProductId(productId)) {
+        res.status(403);
+        return;
+      }
     }
 
     if (!verifyProjectFromFormIsProject(projectFromForm)) {

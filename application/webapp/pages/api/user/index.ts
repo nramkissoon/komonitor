@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import { PLAN_PRODUCT_IDS } from "../../../src/modules/billing/plans";
-import { deleteAllMonitorsForUser } from "../../../src/modules/uptime/monitor-db";
+import { deleteAllProjectsAndAssociatedAssetsForOwner } from "../../../src/modules/projects/server/db";
 import {
   deleteUserById,
   getServicePlanProductIdForUser,
@@ -55,9 +55,11 @@ async function deleteHandler(
       return;
     }
 
-    const uptimeMonitorsDeleted = await deleteAllMonitorsForUser(
+    const projectsDeleted = await deleteAllProjectsAndAssociatedAssetsForOwner(
       ddbClient,
+      env.PROJECTS_TABLE_NAME,
       env.UPTIME_MONITOR_TABLE_NAME,
+      env.UPTIME_MONITOR_TABLE_PID_GSI_NAME,
       userId
     );
 

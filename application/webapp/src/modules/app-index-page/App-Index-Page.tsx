@@ -20,6 +20,7 @@ import { Project, UptimeMonitor } from "project-types";
 import React from "react";
 import { timeAgo } from "../../common/client-utils";
 import { AppSubNav } from "../../common/components/App-Sub-Nav";
+import { LoadingSpinner } from "../../common/components/Loading-Spinner";
 import { useProjects } from "../projects/client/client";
 import { CreateForm } from "../projects/client/components/Create-Form";
 import { useMonitorsAnd24HrStatusesForAllOwnerProjects } from "../uptime/client";
@@ -156,8 +157,8 @@ const ProjectsTab = () => {
           mb="2"
         />
       </Box>
-
-      {projects && projects.length === 0 && (
+      {projectsIsLoading && <LoadingSpinner />}
+      {!projectsIsLoading && projects && projects.length === 0 && (
         <Box textAlign="center" fontWeight="medium" p="2em" fontSize="3xl">
           <chakra.p>No projects have been created.</chakra.p>
           <chakra.span
@@ -169,7 +170,7 @@ const ProjectsTab = () => {
           </chakra.span>
         </Box>
       )}
-      {projects && projects.length > 0 && (
+      {!projectsIsLoading && projects && projects.length > 0 && (
         <ProjectsGrid>
           {searchQuery
             ? results.map((project) => (

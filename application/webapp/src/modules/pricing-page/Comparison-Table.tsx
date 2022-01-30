@@ -66,7 +66,7 @@ function CheckIcon(color: string) {
 }
 
 const monitorSectionData = [
-  ["Uptime", "5 Monitors", "50 Monitors", "500 Monitors"],
+  ["Uptime", "80 Monitors", "500 Monitors", "2500 Monitors"],
   ["HTTP API Uptime", CheckIcon, CheckIcon, CheckIcon],
   ["Lighthouse*", "1 Monitor", "10 Monitors", "30 Monitors"],
   ["Uptime Check Frequency", "5 minutes", "1 minute", "1 minute"],

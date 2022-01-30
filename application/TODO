@@ -115,13 +115,16 @@ Projects:
         ☐  design project index page and tabs
         ✔  fix the header size @done(22-01-25 10:08)
         ✔ header add links to proiject and monitor @done(22-01-29 13:31)
-        ☐ delete projects for user when user deleted
-        ☐ update pricing and landing page + limiters
+        ✔ delete projects for user when user deleted @done(22-01-30 14:06)
+        ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
         ☐ update docs
         ☐ limit project creation on free accounts
         ☐ enable webhooks?
         ☐ view sample status in landing
         ☐ weekly report emails
+
+TEAMS: 
+    ☐  search todos
 
 Slack Mult:
     ✔ dont uninstall from workspace when deleting integ @done(22-01-28 13:59)
@@ -129,7 +132,7 @@ Slack Mult:
     ✔  verify appending slack installations if unique @done(22-01-28 20:56)
     ✔ add multiple slack integrations, check if workspace/channel combo exists @done(22-01-28 21:05)
     ✔ alert lambda match channel wrkspc compound key @done(22-01-27 17:23)
-    ☐ verify slack alert
+    ✔ verify slack alert @done(22-01-30 14:53)
     ✔ verify slack deletion @done(22-01-28 21:35)
     ✔ verify adding slack integ @done(22-01-28 21:04)
     ✔  verify messages on integrations completion @done(22-01-28 22:03)

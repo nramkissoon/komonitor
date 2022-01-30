@@ -25,7 +25,8 @@ const createUptimeMonitorSlackAlertMessage = (
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*<https://komonitor.com/app/uptime/${monitor.monitor_id}|View monitor>*`,
+              // TODO CHANGE FOR TEAMS
+              text: `*<https://komonitor.com/app/projects/${monitor.project_id}/uptime/${monitor.monitor_id}|View monitor>*`,
             },
           },
         ],

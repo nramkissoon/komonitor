@@ -73,6 +73,47 @@ export async function getProjectForOwnerByProjectId(
   }
 }
 
+export async function deleteAllProjectsAndAssociatedAssetsForOwner(
+  ddbClient: DynamoDBClient,
+  projectTableName: string,
+  uptimeMonitorTableName: string,
+  uptimeGsiName: string,
+  ownerId: string
+) {
+  try {
+    const projects = await getProjectsForOwner(
+      ddbClient,
+      projectTableName,
+      ownerId
+    );
+    const deletePromises = [];
+    for (let project of projects) {
+      deletePromises.push(
+        deleteProjectAndAssociatedAssets(
+          ddbClient,
+          projectTableName,
+          uptimeMonitorTableName,
+          uptimeGsiName,
+          ownerId,
+          project.project_id
+        )
+      );
+    }
+
+    const results = await Promise.allSettled(deletePromises);
+
+    for (let result of results) {
+      if (result.status === "rejected" || result.value === false) {
+        throw new Error("could not delete all monitors for project");
+      }
+    }
+    return true;
+  } catch (err) {
+    console.log(err);
+    throw err as Error;
+  }
+}
+
 export async function deleteProjectAndAssociatedAssets(
   ddbClient: DynamoDBClient,
   projectTableName: string,
