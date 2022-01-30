@@ -91,6 +91,8 @@ API:
         ☐ design api key creation, storage, etc.
         ☐ research what header API keys are sent in
 
+
+
 Projects:
     CDK:
         ✔ create project dbs, ownerId pk, proj id sk @done(22-01-25 14:39)
@@ -111,78 +113,43 @@ Projects:
              ✔  project selection @done(22-01-24 13:26)
         ✔ get user projects @done(22-01-24 13:27)
         ✔ get monitors for project @done(22-01-24 13:27)
-        ☐  slack must work
+        ✔  slack must work @done(22-01-30 14:56)
         ☐  design project index page and tabs
         ✔  fix the header size @done(22-01-25 10:08)
         ✔ header add links to proiject and monitor @done(22-01-29 13:31)
         ✔ delete projects for user when user deleted @done(22-01-30 14:06)
         ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
         ☐ update docs
-        ☐ limit project creation on free accounts
+        ✔ limit project creation on free accounts @done(22-01-30 15:39)
         ☐ enable webhooks?
-        ☐ view sample status in landing
+        ✘ view sample status in landing @cancelled(22-01-30 15:39)
         ☐ weekly report emails
 
 TEAMS: 
     ☐  search todos
 
-Slack Mult:
-    ✔ dont uninstall from workspace when deleting integ @done(22-01-28 13:59)
-    ✔  verfiy update when changing names @done(22-01-27 12:41)
-    ✔  verify appending slack installations if unique @done(22-01-28 20:56)
-    ✔ add multiple slack integrations, check if workspace/channel combo exists @done(22-01-28 21:05)
-    ✔ alert lambda match channel wrkspc compound key @done(22-01-27 17:23)
-    ✔ verify slack alert @done(22-01-30 14:53)
-    ✔ verify slack deletion @done(22-01-28 21:35)
-    ✔ verify adding slack integ @done(22-01-28 21:04)
-    ✔  verify messages on integrations completion @done(22-01-28 22:03)
-    ✔ uptime monitor select use compound key @done(22-01-27 14:56)
-    ✔ client get slack installation multiple from api @done(22-01-27 14:56)
+Onboarding:
+    ☐ create onboarding page
+    ☐ define steps and fields to collect
+    ☐ implement form
+    ☐ update user obj with form data
 
 Uptime HTTP:
-    ✔  design new creation and edit form @done(21-12-06 11:49)
-    ✔ implement HTTP headers in model @done(21-12-01 14:21)
-    ✔  add HTTP headers to check in lambda @done(21-12-01 14:33)
-    ✔  remove retries param from model @done(21-12-01 13:06)
-    ✔  remove retries from lambda @done(21-12-01 13:01)
-    ✔  remove retries from verification and create and edit forms @done(21-12-01 13:06)
-    ✔  add HTTP headers to forms @done(21-12-06 11:49)
-    ☐  design dashboard to show HTTP settings
-    ✔  add HTTP methods to model @done(22-01-13 22:37)
-    ✔  add HTTP methods in check lambda @done(22-01-13 22:37)
-    ✔  add HTTP methods to forms @done(22-01-13 22:37)
-    ✔  add HTTP body to model @done(22-01-13 22:37)
-    ✔  add HTTP body to check lambda @done(22-01-13 22:37)
-    ✔  add HTTP body to form @done(22-01-13 22:37)
-    ✔  TEST THE HTTP SETTINGS DAMMIT @done(22-01-18 18:40)
-    ✔  CHECK BODY INPUTS @done(22-01-19 09:29)
-    ✔  check google latency @done(22-01-18 18:40)
-    ✔  CHANGE PROD MONITORS TO NEW STRUCTURE @done(22-01-18 18:40)
-    ☐  http redirects
-Alert Lambda: 
-    ✔  add slack alerts @done(22-01-03 13:26)
-     ✔ verify slack alerts @done(22-01-05 14:28)
+    ☐  design dashboard to show HTTP settings + alerts
+    ☐  follow http redirects
+    ☐  pause function
 
-Uptime Alerts: 
-    ✘ aattach multiple alerts to monitor @cancelled(22-01-18 18:40)
+Stripe:
+    ☐ change freelancer plan to startup
 
-Alerts:
-    ✔  do not resend down alerts -> add ongoing field to invocation @done(21-12-30 12:34)
-    ✔  switch ongoing alert invoke to false upon alert deletion, monitor detachment @done(21-12-31 09:46)
-    ✔  monitor alerts page -> show ongoing @done(21-12-30 13:11)
+Uptime Assertions:
+
 
 Blog: 
     ☐ Ecommerce use case - high latency -> lost revenue
     ☐ Buy vs. build -> time spent on product vs. infra
     ☐ Monitoring tenets -> SRE chapter
     ☐ Twitter alert use case -> better comm with users + public
-
-Uptime Lambda:
-    ✔ invoke alert lambda on monitor failure with monitor id and owner id @done(21-10-17 22:14)
-    ✔ add status codes to status updates @done(21-12-01 13:29)
-    ✔ use user agent Komonitor @10/22 @done(21-10-18 14:31)
-    ✔ investigate response times @done(21-10-19 19:54)
-    ✔ add response data to status req @done(22-01-19 11:36)
 
 Website change monitoring:
     ☐ scope
@@ -200,19 +167,6 @@ Lighthouse:
     ☐ cdk setup S3 bucket
     ☐ remove lighthouse pricing impl
 
-CDK:
-    ✔ create the prod ddb tables in us-east-1 @started(21-11-15 11:33) @done(21-11-30 13:14) @lasted(2w1d1h41m11s)
-    ✔ create us-east-1 prod stack @started(21-11-15 11:34) @done(21-11-30 13:14) @lasted(2w1d1h40m12s)
-
-Prod Stack:
-    ✔ abstract lambdas @done(21-11-30 13:14)
-    ✔ abstract rules @done(21-11-25 21:01)
-    ✔ lambdas call us-east-1 db but refer to each other @done(21-11-30 13:14)
-
-Logging and Error Handling:
-    ✔ Decide logging strategy for webapp @10/29 @done(21-11-30 13:14)
-    ✔ replace console.log/error in webapp with logging provider @done(21-11-30 13:14)
-    ✔ Decide logging strategy for lambdas and implement @done(21-11-30 13:14)
 
 Bugs: 
     ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page

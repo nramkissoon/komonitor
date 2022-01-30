@@ -7,6 +7,7 @@ export interface HttpParameters {
   method: HttpMethods;
   headers?: { [header: string]: string };
   body?: string;
+  follow_redirects?: boolean;
 }
 
 export type TimingPhaseProperties =
@@ -58,6 +59,7 @@ export interface BodyCheck {
   expected?: string;
   expectedType?: "string" | "number" | "boolean";
 }
+
 export interface UpConditionCheck {
   type: "latency" | "code" | "body";
   condition: LatencyCheck | CodeCheck | BodyCheck;

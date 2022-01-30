@@ -27,21 +27,20 @@ interface PricingCardProps {
 
 const planFeatureList: { [productId: string]: string[] } = {
   FREE: [
-    "Free forever",
-    "Access to uptime, browser, and Google Lighthouse checks",
-    "Good for testing simple applications that could scale later",
-    "Basic email alerting",
+    "Try out our monitoring solutions at no cost",
+    "Monitor simple applications with room to scale later",
+    "Alerting + integrations with your favorite tools",
     "7-day data retention",
   ],
   FREELANCER: [
-    "Monitor several websites in production",
-    "Advanced alerting + integration with messaging services",
+    "Monitor several websites and API's in production",
+    "Alerting + integrations with your favorite tools",
     "Priority support and onboarding",
-    "30-day data retention",
+    "365-day data retention",
   ],
   BUSINESS: [
-    "Scale to hundreds of monitors in production",
-    "Advanced alerting + integration with messaging services",
+    "Scale to thousands of monitors in production",
+    "Advanced alerting + integrations with your favorite tools",
     "Highest priority support and onboarding",
     "Custom service limits to suit business needs",
     "365-day data retention",
