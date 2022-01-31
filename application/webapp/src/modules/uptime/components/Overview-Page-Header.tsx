@@ -17,8 +17,11 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { UptimeMonitor } from "project-types";
 import React from "react";
+import { AiOutlinePause, AiOutlinePlaySquare } from "react-icons/ai";
 import { timeAgo } from "../../../common/client-utils";
+import { togglePauseMonitor } from "../client";
 
 interface OverviewPageHeaderProps {
   monitorName: string;
@@ -29,6 +32,8 @@ interface OverviewPageHeaderProps {
   monitorRegion: string;
   openDeleteDialog: Function;
   openEditForm: () => void;
+  monitor: UptimeMonitor;
+  mutate: any;
 }
 
 // Header that contains the name of the monitor + other attributes + some actions
@@ -42,12 +47,16 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
     openDeleteDialog,
     monitorRegion,
     openEditForm,
+    monitor,
+    mutate,
   } = props;
   const router = useRouter();
   const { projectId } = router.query;
   let color = "gray";
+  const [paused, setIsPaused] = React.useState(monitor.paused);
   if (currentStatus === "up") color = "green";
   if (currentStatus === "down") color = "red";
+  if (paused) color = "gray";
   const now = Date.now();
   return (
     <Flex mb="1em">
@@ -58,7 +67,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
             {monitorUrl} <ExternalLinkIcon />
           </Box>
         </Link>
-        <Flex>
+        <Flex flexDir={["column", null, null, "row"]}>
           <Badge
             variant="subtle"
             colorScheme={color}
@@ -67,10 +76,12 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
             py=".1em"
             px=".6em"
             borderRadius="md"
+            w="fit-content"
+            mr="5px"
           >
-            {currentStatus ? currentStatus : "No Data"}
+            {paused ? "Paused" : currentStatus ? currentStatus : "Pending"}
           </Badge>
-          <Text py=".1em" px=".6em">
+          <Text py=".1em">
             {lastChecked
               ? "Last checked " +
                 timeAgo.format(now - (now - lastChecked)) +
@@ -97,6 +108,29 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
           }}
         >
           Back to all monitors
+        </Button>
+        <Button
+          leftIcon={paused ? <AiOutlinePlaySquare /> : <AiOutlinePause />}
+          colorScheme="gray"
+          color="white"
+          bgColor="gray.500"
+          shadow="sm"
+          _hover={{
+            bg: "gray.600",
+          }}
+          fontWeight="normal"
+          onClick={async () => {
+            await togglePauseMonitor(
+              monitor,
+              () => {
+                setIsPaused(!paused);
+              },
+              () => {}
+            );
+            await mutate();
+          }}
+        >
+          {paused ? "Resume" : "Pause"}
         </Button>
         <Button
           leftIcon={<EditIcon />}

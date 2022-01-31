@@ -77,6 +77,7 @@ const EditFormModal = ({
 
 interface OverviewPageProps {
   monitor: UptimeMonitor;
+  mutate: () => void;
 }
 
 export function OverviewPage(props: OverviewPageProps) {
@@ -166,6 +167,8 @@ export function OverviewPage(props: OverviewPageProps) {
         productId={data ? data.productId : ""}
       />
       <OverviewPageHeader
+        monitor={monitor}
+        mutate={mutate}
         monitorName={name}
         monitorUrl={url}
         currentStatus={mostRecentStatus?.status as string}

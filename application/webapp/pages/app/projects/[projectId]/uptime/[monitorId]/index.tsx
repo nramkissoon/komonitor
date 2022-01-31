@@ -15,19 +15,22 @@ const Overview: ExtendedNextPage = () => {
     monitors,
     isLoading: monitorsIsLoading,
     isError: monitorsIsError,
+    mutate,
   } = useUptimeMonitorsForProject(projectId as string); // use monitors at the root page because this is the minimum data we need to render children components
 
   let projectMonitors = monitors ? monitors[projectId as string] : [];
 
   let monitor: UptimeMonitor | undefined;
-  for (let m of projectMonitors ?? []) {
-    if (m.monitor_id === monitorId) monitor = m;
-  }
+  monitor = React.useMemo(() => {
+    for (let m of projectMonitors ?? []) {
+      if (m.monitor_id === monitorId) return m;
+    }
+  }, [projectMonitors]);
   return (
     <PageLayout isAppPage>
       {!monitorsIsLoading && monitor ? (
         <Fade in={!monitorsIsLoading}>
-          <OverviewPage monitor={monitor} />
+          <OverviewPage monitor={monitor} mutate={mutate} />
         </Fade>
       ) : (
         <Fade in={monitorsIsLoading} delay={0.2}>

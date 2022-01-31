@@ -9,8 +9,8 @@ Onboarding:
 
 Uptime HTTP:
     ☐  design dashboard to show HTTP settings + alerts
-    ☐  follow http redirects
-    ☐  pause function
+    ✔  follow http redirects @done(22-01-31 13:20)
+    ✔  pause function @done(22-01-31 13:58)
 
 API service:
     ☐  set up repo and deploy to vercel
@@ -58,6 +58,8 @@ Usage Tab:
 
 Webhooks:
     ☐ design
+
+☐ pause function graph weirdness
 
 ------------------------------------------------------------------------------------------
 

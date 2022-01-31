@@ -365,6 +365,44 @@ export async function updateMonitor(
   }
 }
 
+export async function togglePauseMonitor(
+  monitor: UptimeMonitor,
+  onSuccess?: () => void,
+  onError?: (message: string) => void
+) {
+  if (monitor.paused === undefined) {
+    monitor.paused = true;
+  } else {
+    monitor.paused = !monitor.paused;
+  }
+
+  const response = await fetch(monitorApiUrl, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(monitor),
+  });
+
+  if (response.ok) {
+    onSuccess ? onSuccess() : null;
+  } else {
+    let errorMessage;
+    switch (response.status) {
+      case 403:
+        errorMessage = "Monitor does not belong to requester.";
+        break;
+      case 400:
+        errorMessage = "Invalid monitor attributes sent to server.";
+      case 500:
+        errorMessage = "Internal server error. Please try again later.";
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError ? onError(errorMessage) : null;
+  }
+}
+
 // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣤⣤⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀
 // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⠟⠉⠉⠉⠉⠉⠉⠉⠙⠻⢶⣄⠀⠀⠀⠀⠀
 // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣷⡀⠀⠀⠀
