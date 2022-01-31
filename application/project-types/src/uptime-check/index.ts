@@ -104,7 +104,13 @@ export type UptimeStatusResponse = Pick<
 
 export type UptimeStatusRequest = Omit<
   Options,
-  "parseJson" | "stringifyJson" | "pagination" | "hooks" | "request" | "retry"
+  | "parseJson"
+  | "stringifyJson"
+  | "pagination"
+  | "hooks"
+  | "request"
+  | "retry"
+  | "throwHttpErrors"
 >;
 
 export interface UptimeMonitorStatus {

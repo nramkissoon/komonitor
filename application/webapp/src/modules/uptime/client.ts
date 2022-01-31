@@ -280,6 +280,7 @@ function createCoreMonitorFromFormData(formData: Inputs) {
         formData.http_parameters.body?.length > 0
           ? formData.http_parameters.body
           : undefined,
+      follow_redirects: formData.http_parameters.follow_redirects,
     },
   };
   return monitor;

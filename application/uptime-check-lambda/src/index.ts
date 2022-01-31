@@ -9,7 +9,9 @@ export const handler = async (event: any) => {
 
     const jobPromises = [];
     for (let job of jobs) {
-      jobPromises.push(runJob(job));
+      if (!job.paused) {
+        jobPromises.push(runJob(job));
+      }
     }
     const allSettled = await Promise.allSettled(jobPromises);
     const end = performance.now();

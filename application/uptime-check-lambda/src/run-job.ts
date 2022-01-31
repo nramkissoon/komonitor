@@ -38,77 +38,6 @@ const fetchTimeout = setTimeout(() => {
   controller.abort();
 }, 5000);
 
-// const fetchCall = async (
-//   url: string,
-//   method: string,
-//   httpHeaders?: { [header: string]: string },
-//   body?: string
-// ) => {
-//   try {
-//     const res = await new Promise<
-//       | {
-//           ok: boolean;
-//           code: number | undefined;
-//           latency: number | undefined;
-//           body: string | undefined;
-//         }
-//       | undefined
-//     >((resolve, reject) =>
-//       request(
-//         {
-//           url: url,
-//           method: method,
-//           time: true,
-//           timeout: 5000,
-//           headers: {
-//             ...httpHeaders,
-//           },
-//           body: body,
-//         },
-//         (err, response) => {
-//           if (err) {
-//             resolve({
-//               ok: false,
-//               code: response ? response.statusCode : undefined,
-//               latency: undefined,
-//               body: undefined,
-//             });
-//           } else {
-//             let latency = -1;
-//             if (response.timingPhases) {
-//               latency = response.timingPhases.firstByte;
-//               response.timingPhases;
-//             }
-//             resolve({
-//               ok: response?.statusCode
-//                 ? (response.statusCode >= 200 && response.statusCode < 300) ||
-//                   response.statusCode === 429 // Too many requests
-//                 : false,
-//               code: response.statusCode,
-//               latency: latency,
-//               body: response.body ?? undefined,
-//             });
-//           }
-//         }
-//       )
-//     );
-
-//     return {
-//       response: res?.ok,
-//       statusCode: res?.code,
-//       latency: res?.latency,
-//       body: res?.body,
-//     };
-//   } catch (err) {
-//     return {
-//       response: false,
-//       statusCode: undefined,
-//       latency: undefined,
-//       body: undefined,
-//     };
-//   }
-// };
-
 const webhookNotifyCall = async (
   url: string,
   webhookNotification: UptimeMonitorWebhookNotification
@@ -166,13 +95,14 @@ const buildMonitorStatus = (
 
 export const runJob = async (job: UptimeMonitor) => {
   const { url, monitor_id, owner_id, http_parameters, alert } = job;
-  console.log(http_parameters);
+
   try {
     let fetchResult = await request(
       url,
       http_parameters.method,
       http_parameters.headers ?? {},
-      http_parameters.body ?? undefined
+      http_parameters.body ?? undefined,
+      http_parameters.follow_redirects
     );
 
     const status = buildMonitorStatus(fetchResult as any, job);

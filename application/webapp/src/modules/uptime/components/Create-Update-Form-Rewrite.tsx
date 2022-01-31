@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   chakra,
+  Checkbox,
   Container,
   Flex,
   FormControl,
@@ -68,10 +69,10 @@ export type Inputs = {
       header: string;
       value: string;
     }[];
+    follow_redirects: boolean;
   };
   alert?: Alert;
   project_id: string;
-  paused: boolean;
 };
 
 // Used to prefill fields with current monitor attributes
@@ -98,6 +99,8 @@ function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   placeholders.http_parameters["headers"] = http_headers;
   placeholders.http_parameters["body"] = monitor.http_parameters.body;
   placeholders.http_parameters["method"] = monitor.http_parameters.method;
+  placeholders.http_parameters["follow_redirects"] =
+    monitor.http_parameters.follow_redirects;
   return placeholders as Inputs;
 }
 
@@ -165,6 +168,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   });
 
   const watchHttpHeaderArray = watch("http_parameters.headers");
+  const watchFollowRedirects = watch("http_parameters.follow_redirects");
   const controlledHttpHeaderFields = fields.map((field, index) => {
     return {
       ...field,
@@ -620,6 +624,21 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                         <FormErrorMessage>
                           {errors.http_parameters?.body?.message}
                         </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="http_parameters.follow_redirects"
+                    render={({ field }) => (
+                      <FormControl mb="1.5em">
+                        <Checkbox
+                          {...field}
+                          isChecked={watchFollowRedirects}
+                          value="follow redirects"
+                        >
+                          Follow redirects
+                        </Checkbox>
                       </FormControl>
                     )}
                   />
