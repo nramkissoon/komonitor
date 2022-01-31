@@ -1,8 +1,11 @@
 //https://github.com/chakra-ui/chakra-ui/blob/main/website/pages/docs/%5B%5B...slug%5D%5D.tsx
 
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 import { InferGetStaticPropsType } from "next";
 import { MDXRemote } from "next-mdx-remote";
 import { MDXComponents } from "../../src/common/components/Mdx-Components";
+import theme from "../../src/common/components/theme";
 import MDXLayout from "../../src/modules/docs/components/Mdx";
 import loadMDXFromPages from "../../src/modules/mdx-utils/load-mdx-dir";
 
@@ -12,10 +15,24 @@ export default function Page({
   mdxSource,
   frontMatter,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const docsTheme = extendTheme(
+    {
+      styles: {
+        global: (props: any) => ({
+          body: {
+            bg: mode("white", "gray.900")(props),
+          },
+        }),
+      },
+    },
+    theme
+  );
   return (
-    <MDXLayout frontmatter={frontMatter}>
-      <MDXRemote {...mdxSource} components={MDXComponents} />
-    </MDXLayout>
+    <ChakraProvider theme={docsTheme}>
+      <MDXLayout frontmatter={frontMatter}>
+        <MDXRemote {...mdxSource} components={MDXComponents} />
+      </MDXLayout>
+    </ChakraProvider>
   );
 }
 

@@ -37,14 +37,13 @@ Projects:
         ✔ get user projects @done(22-01-24 13:27)
         ✔ get monitors for project @done(22-01-24 13:27)
         ✔  slack must work @done(22-01-30 14:56)
-        ☐  design project index page and tabs
+        ✔  design project index page and tabs @done(22-01-31 11:47)
         ✔  fix the header size @done(22-01-25 10:08)
         ✔ header add links to proiject and monitor @done(22-01-29 13:31)
         ✔ delete projects for user when user deleted @done(22-01-30 14:06)
         ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
         ☐ design new docs
         ✔ limit project creation on free accounts @done(22-01-30 15:39)
-        ☐ enable webhooks?
         ✘ view sample status in landing @cancelled(22-01-30 15:39)
         ☐ weekly report emails -> cdk changes if necc
 
@@ -56,6 +55,9 @@ Uptime Assertions:
 
 Usage Tab:
     ☐ 
+
+Webhooks:
+    ☐ design
 
 ------------------------------------------------------------------------------------------
 
