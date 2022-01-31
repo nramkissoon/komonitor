@@ -2,6 +2,7 @@ import {
   CoreUptimeMonitor,
   UptimeMonitor,
   UptimeMonitorStatus,
+  UptimeMonitorWithStatuses,
 } from "project-types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -76,4 +77,19 @@ export function createProjectIdToMonitorArrayMap(
     map[id].push(monitor);
   }
   return map;
+}
+
+export function createMonitorDataWithStatus(
+  statusesMap: { [monitorId: string]: UptimeMonitorStatus[] },
+  monitors: UptimeMonitor[]
+) {
+  const data: UptimeMonitorWithStatuses[] = [];
+  for (let monitor of monitors) {
+    const newData: UptimeMonitorWithStatuses = {
+      statuses: statusesMap[monitor.monitor_id] ?? [],
+      ...monitor,
+    };
+    data.push(newData);
+  }
+  return data;
 }

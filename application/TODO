@@ -1,14 +1,68 @@
+devops:
+    ☐  npm function for copying env to vercel
+
+Onboarding:
+    ☐ create onboarding page
+    ☐ define steps and fields to collect
+    ☐ implement form
+    ☐ update user obj with form data
+
+Uptime HTTP:
+    ☐  design dashboard to show HTTP settings + alerts
+    ☐  follow http redirects
+    ☐  pause function
+
+API service:
+    ☐  set up repo and deploy to vercel
+
+
+Projects:
+    CDK:
+        ✔ create project dbs, ownerId pk, proj id sk @done(22-01-25 14:39)
+        ✔ create LSI on monitors,  sk = proj id @done(22-01-24 13:25)
+    WebApp: 
+        api:
+            ✔ create project API @done(22-01-24 13:25)
+            ✔ update project settings @done(22-01-24 13:25)
+            ✔ delete project @done(22-01-24 13:25)
+            ✔ get user projects @done(22-01-24 13:25)
+        monitor:
+            ✔ assign to project in create update form using hook @done(22-01-26 12:25)
+            ✔ implement permissions checks @done(22-01-26 12:25)
+            ✔ transfer monitor from project @done(22-01-26 10:18)
+            ✔ edit monitor @done(22-01-26 14:42)
+        SideBar:
+                ✔  indicate personal account @done(22-01-25 14:39)
+                ✔  project selection @done(22-01-24 13:26)
+        ✔ get user projects @done(22-01-24 13:27)
+        ✔ get monitors for project @done(22-01-24 13:27)
+        ✔  slack must work @done(22-01-30 14:56)
+        ☐  design project index page and tabs
+        ✔  fix the header size @done(22-01-25 10:08)
+        ✔ header add links to proiject and monitor @done(22-01-29 13:31)
+        ✔ delete projects for user when user deleted @done(22-01-30 14:06)
+        ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
+        ☐ design new docs
+        ✔ limit project creation on free accounts @done(22-01-30 15:39)
+        ☐ enable webhooks?
+        ✘ view sample status in landing @cancelled(22-01-30 15:39)
+        ☐ weekly report emails -> cdk changes if necc
+
+------------------------------------------------------------------------------------------
+
+Uptime Assertions:
+    ☐ form changes, if no checks default to 200 OK and make it clear to user
+    ☐ implement uptime monitor first -> if no assertions -> default -> else -> run assertion
+
+Usage Tab:
+    ☐ 
+
+------------------------------------------------------------------------------------------
+
+Stripe:
+    ☐ change freelancer plan to startup
 Webapp: 
-    Pricing page:
-        ✔  move loading spinner to CTA buttons @done(22-01-01 07:40)
-    Alert:
-        ✘ email alert only to account owner @cancelled(21-12-12 19:32)
-    Settings:
-        
-    Stripe:
-        ✔ add annual plans @done(22-01-12 15:03)
-        ✔ add monthly and annual pids to dev vercel @done(22-01-12 15:03)
-        ✔ add monthly and annual pids to prod vercel @done(22-01-12 15:03)
+       
         
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
@@ -17,59 +71,24 @@ Webapp:
         ✔ Style the email verification email @done(21-10-11 14:14)
         ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
         ☐ view invocation object modal when clicked on in invocation tables
-        ✔ create a coming soon page component @10/29 @done(21-10-26 13:26)
-        ✔  coming soon page redirects to roadmap page @10/29 @done(21-10-26 13:26)
-        ✔ create 404 page @10/29 @done(21-10-25 14:03)
-        ✘ check aws region to locations in webapp client @10/29 @started(21-10-26 13:30) @cancelled(21-10-26 13:32) @wasted(2m48s)
-        ✔  timezones based on user pref @done(21-12-01 13:57)
+
         ☐  convert service SLA's to monitor resolutions SRE p62\
-        ✔  download data as csv or json @done(21-12-09 12:13)
-        ✔  Add alts to all images @done(21-11-03 15:52)
-        ☐  disable alert from dashboard
-        ✔  convert regions to place names @started(21-11-15 11:34) @done(21-11-15 11:56) @lasted(22m24s)
-        ✔  view uptime statuses up to 30 days ago @done(21-11-15 15:29)
-        ✔  fix uptime graph x axis @done(21-11-15 15:29)
-        ✔  graph weirdness when switching since @done(21-11-15 15:29)
-        ☐  add warning that uptime monitor has no alert in overview table
+
 
         ✘  new user onboarding -> ask what they'll use for @cancelled(22-01-12 20:17)
         ☐  add no alert warning to monitor creation form + overview page
     API: 
         ☐ check if subscriptions are valid in API's
-    Landing: 
-        ✔ create a design and sections @10/22 @done(21-10-22 13:37)
-        ✔ Copy @10/22 @started(21-10-26 13:42) @done(21-10-26 15:18) @lasted(1h36m23s)
-        ✔ implement the design @done(21-11-02 12:01)
-    Legal: 
-        ✔ PP @done(21-11-11 12:46)
-        ✔ TOS @done(21-11-10 12:36)
-        ✘ GDPR cookie acceptance @cancelled(21-11-10 11:06)
-    Signup: 
-        ✘ add checkbox for agreeing to email updates on product @cancelled(22-01-12 20:17)
-        ✔ store value in db @done(22-01-12 20:17)
-        ✔ add toggle for emails in settings @done(22-01-12 20:17)
-    Slack Alerts:
-        ✔ Form changes when slack type is selected @done(22-01-05 15:34)
-        ✔ form has connect to slack button @done(22-01-05 15:34)
-        ✔ verify we can redirect with the form after user has added bot to workspace @done(22-01-05 15:34)
-        ✔ research slack auth flows @done(22-01-05 15:34)
+
     Webhook Alerts: 
         ☐ initial design
     SNS Topic Alerts:
         ☐ scope possibility
-    Docs:
-        ✔ Create 3 column design @done(21-10-26 18:48)
-        ✔ Set up mdx @done(21-11-05 11:17)
-        ✔ define sections and subsections @done(21-11-05 11:17)
-        ✔ implement sidebar nav @done(21-11-05 11:17)
-        ✔ fill content @done(22-01-12 20:18)
+
     SEO:
-    SSL checks: 
-        ✘ scope @cancelled(21-12-06 11:50)
+
     Delete by user id:
-        ✔  uptime monitors @done(21-11-14 20:54)
-        ✔  alerts @done(21-11-14 20:54)
-        ✔  add to delete user api @done(21-11-14 20:54)
+
         ☐  verify
     Website View:
         ✘  scope @cancelled(22-01-28 22:28)
@@ -93,56 +112,13 @@ API:
 
 
 
-Projects:
-    CDK:
-        ✔ create project dbs, ownerId pk, proj id sk @done(22-01-25 14:39)
-        ✔ create LSI on monitors,  sk = proj id @done(22-01-24 13:25)
-    WebApp: 
-        api:
-            ✔ create project API @done(22-01-24 13:25)
-            ✔ update project settings @done(22-01-24 13:25)
-            ✔ delete project @done(22-01-24 13:25)
-            ✔ get user projects @done(22-01-24 13:25)
-        monitor:
-            ✔ assign to project in create update form using hook @done(22-01-26 12:25)
-            ✔ implement permissions checks @done(22-01-26 12:25)
-            ✔ transfer monitor from project @done(22-01-26 10:18)
-            ✔ edit monitor @done(22-01-26 14:42)
-        SideBar:
-             ✔  indicate personal account @done(22-01-25 14:39)
-             ✔  project selection @done(22-01-24 13:26)
-        ✔ get user projects @done(22-01-24 13:27)
-        ✔ get monitors for project @done(22-01-24 13:27)
-        ✔  slack must work @done(22-01-30 14:56)
-        ☐  design project index page and tabs
-        ✔  fix the header size @done(22-01-25 10:08)
-        ✔ header add links to proiject and monitor @done(22-01-29 13:31)
-        ✔ delete projects for user when user deleted @done(22-01-30 14:06)
-        ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
-        ☐ update docs
-        ✔ limit project creation on free accounts @done(22-01-30 15:39)
-        ☐ enable webhooks?
-        ✘ view sample status in landing @cancelled(22-01-30 15:39)
-        ☐ weekly report emails
 
 TEAMS: 
     ☐  search todos
 
-Onboarding:
-    ☐ create onboarding page
-    ☐ define steps and fields to collect
-    ☐ implement form
-    ☐ update user obj with form data
 
-Uptime HTTP:
-    ☐  design dashboard to show HTTP settings + alerts
-    ☐  follow http redirects
-    ☐  pause function
 
-Stripe:
-    ☐ change freelancer plan to startup
 
-Uptime Assertions:
 
 
 Blog: 
@@ -181,5 +157,4 @@ Bugs:
     ☐  consolidate useUser hooks to one api call
     ☐  consolidate db logic into one package
 
-✔ hire in public @done(22-01-07 09:23)
 ☐ product gif generation

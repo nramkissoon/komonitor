@@ -26,6 +26,7 @@ export async function getInvocationsByMonitorId(
         ":partitionkeyval": { S: monitorId },
         ":sinceval": { N: since.toString() },
       },
+      ScanIndexForward: false,
     };
     const query = paginateQuery({ client: ddbClient }, queryCommandInput);
     const invocations: AlertInvocation[] = [];
