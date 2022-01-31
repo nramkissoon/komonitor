@@ -42,7 +42,7 @@ Projects:
         ✔ header add links to proiject and monitor @done(22-01-29 13:31)
         ✔ delete projects for user when user deleted @done(22-01-30 14:06)
         ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
-        ☐ design new docs
+        ☐ rewrite docs
         ✔ limit project creation on free accounts @done(22-01-30 15:39)
         ✘ view sample status in landing @cancelled(22-01-30 15:39)
         ☐ weekly report emails -> cdk changes if necc
@@ -158,5 +158,6 @@ Bugs:
      ☐ add sweden to cdk
     ☐  consolidate useUser hooks to one api call
     ☐  consolidate db logic into one package
+    ☐  color mode does not persits from docs to any other page -> check provider
 
 ☐ product gif generation
