@@ -37,14 +37,6 @@ export const SidebarRoutes: SidebarRouteSection[] = [
         title: "What is an Uptime Monitor?",
         path: "/docs/uptime-monitor/what-is-it",
       },
-      {
-        title: "Working with Uptime Monitors",
-        path: "/docs/uptime-monitor/working-with-uptime-monitors",
-      },
-      {
-        title: "Supported Regions",
-        path: "/docs/uptime-monitor/supported-regions",
-      },
     ],
   },
 ];

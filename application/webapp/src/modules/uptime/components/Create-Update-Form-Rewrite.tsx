@@ -656,7 +656,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               </AccordionItem>
             </Accordion>
           </Box>
-          <Box
+          {/* <Box
             p="2em"
             borderRadius="md"
             shadow="md"
@@ -708,7 +708,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
-          </Box>
+          </Box> */}
           <Button
             size="lg"
             colorScheme="gray"

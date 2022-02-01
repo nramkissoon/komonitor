@@ -1,5 +1,5 @@
 ---
-title: What is an Uptime Monitor
+title: What is an Uptime Monitor?
 description: Uptime monitors regularly check URL's and determines if websites are down.
 ---
 
@@ -27,11 +27,15 @@ or editing an uptime monitor, you define these properties to adjust the monitor'
 
 - `Failures Before Alert` - the number of failures that are tolerated before an alert is triggered
 - `Alert Description` - description text that will show up in alerts
+- `Channels` - methods the alert will be delivered (e.g. email, Slack)
+- `Recipients` - lists of who will receive alerts through the defined alert channels
 
-### Advanced Settings
+### HTTP Settings
 
-- `Webhook URL` - a URL the monitor should push uptime statuses to, this feature is available for paid-plan users
+- `Method` - the HTTP method used to send an uptime check to the website
 - `HTTP Headers` - custom HTTP headers that should be sent as a part of the HTTP request uptime check
+- `Body` - the request body sent during the uptime check
+- `Follow Redirects` - indicates whether or not to follow redirects during HTTP request
 
 ### Uptime Monitor Status Properties
 
@@ -40,6 +44,27 @@ Uptime monitor status are a record of a _specific_ uptime check at a particular 
 - `monitor_id` - the ID of the monitor that created the status
 - `timestamp` - the timestamp of the status in milliseconds
 - `status` - the status of the website--either 'down' or 'up'
-- `latency` - the latency of the HTTP response in milliseconds
-- `region` - the region of the uptime check was performed in
-- `response_status_code` - the response code of the HTTP response from the website (e.g. 404)
+- `request` - the request object containing request options and other data used during the uptime check
+- `response` - the response object returned from the website, contains data such as response times
+- `monitor_snapshot` - a copy of the uptime monitor during the time of uptime check corresponding to this status
+
+## Uptime Monitor Supported Regions
+
+Here is a list of currently supported regions where uptime monitors can be deployed:
+
+- Virginia, USA
+- Ohio, USA
+- Northern California, USA
+- Oregon, USA
+- Mumbai, India
+- Seoul, South Korea
+- Singapore
+- Sydney, Australia
+- Tokyo, Japan
+- Central Canada
+- Frankfurt, Germany
+- Ireland
+- London, UK
+- Paris, France
+- Stockholm, Sweden
+- São Paulo, Brazil

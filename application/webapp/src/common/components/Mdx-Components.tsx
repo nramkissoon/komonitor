@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import {
   Alert,
+  AlertIcon,
   Box,
   Button,
   Center,
@@ -54,14 +55,15 @@ export const MDXComponents = {
   li: (props: any) => <chakra.li fontSize="xl" mt=".2em" ml="1em" {...props} />,
   blockquote: (props: any) => (
     <Alert
-      role="warning"
-      colorScheme="red"
+      status="error"
       variant="left-accent"
       as="blockquote"
       rounded="4px"
-      shadow="md"
-      {...props}
-    />
+      mt="7px"
+    >
+      <AlertIcon />
+      <div {...props}></div>
+    </Alert>
   ),
 
   docImg: (props: any) => (
