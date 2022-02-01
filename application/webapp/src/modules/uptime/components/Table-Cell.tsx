@@ -67,6 +67,7 @@ export function StatusCell(props: StatusCellProps) {
   let color = "gray";
   if (props.status === "up") color = "green";
   if (props.status === "down") color = "red";
+  if (props.status === "paused") color = "gray";
   return (
     <Badge
       variant="subtle"

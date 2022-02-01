@@ -1,13 +1,7 @@
 
-Onboarding:
-    ☐ create onboarding page
-    ☐ welcome page
-    define steps and fields to collect:
-        ☐ where did you hear about Komonitor - Google, IndieHackers, Twitter, Reddit, word of mouth, Other
-        ☐ name
-        ☐ use case - Monitoring a production app/website, monitoring an API, Just looking a around
-    ☐ implement form
-    ☐ update user obj with form data
+Uptime Assertions:
+    ☐ form changes, if no checks default to 200 OK and make it clear to user
+    ✔ implement uptime monitor first -> if no assertions -> default -> else -> run assertion @done(22-02-01 15:30)
 
 Uptime HTTP:
     ☐  design dashboard to show HTTP settings + alerts
@@ -15,7 +9,7 @@ Uptime HTTP:
     ✔  pause function @done(22-01-31 13:58)
 
 API service:
-    ☐  set up repo and deploy to vercel -> needs to be on main
+    ✔  set up repo and deploy @done(22-02-01 12:31)
 
 
 Projects:
@@ -51,9 +45,7 @@ Projects:
 
 ------------------------------------------------------------------------------------------
 
-Uptime Assertions:
-    ☐ form changes, if no checks default to 200 OK and make it clear to user
-    ☐ implement uptime monitor first -> if no assertions -> default -> else -> run assertion
+
 
 Usage Tab:
     ☐ 
@@ -61,9 +53,28 @@ Usage Tab:
 Webhooks:
     ☐ design
 
-☐ pause function graph weirdness
+✘ pause function graph weirdness @cancelled(22-02-01 12:29)
+
+☐ scope demo page
+
+☐ scope status pages
+
+☐ increase data retention and view for free plan to 90 days
+
+☐ pricing page
+
 
 ------------------------------------------------------------------------------------------
+
+Onboarding:
+    ☐ create onboarding page
+    ☐ welcome page
+    define steps and fields to collect:
+        ☐ where did you hear about Komonitor - Google, IndieHackers, Twitter, Reddit, word of mouth, Other
+        ☐ name
+        ☐ use case - Monitoring a production app/website, monitoring an API, Just looking a around
+    ☐ implement form
+    ☐ update user obj with form data
 
 Stripe:
     ☐ change freelancer plan to startup

@@ -42,6 +42,8 @@ export type JsonOperators =
   | "contains"
   | "not_contains";
 
+export type HtmlOperators = "contains" | "not_contains";
+
 export interface LatencyCheck {
   property: TimingPhaseProperties;
   comparison: NumericalOperators;
@@ -53,16 +55,22 @@ export interface CodeCheck {
   expected: number;
 }
 
-export interface BodyCheck {
+export interface JsonBodyCheck {
+  expectedBodyContentType: "application/json";
+  comparison: JsonOperators;
   property: string;
-  comparison: string;
   expected?: string;
-  expectedType?: "string" | "number" | "boolean";
+}
+
+export interface HtmlBodyCheck {
+  comparison: HtmlOperators;
+  expected: string;
+  expectedBodyContentType: "text/html";
 }
 
 export interface UpConditionCheck {
-  type: "latency" | "code" | "body";
-  condition: LatencyCheck | CodeCheck | BodyCheck;
+  type: "latency" | "code" | "json_body" | "html_body";
+  condition: LatencyCheck | CodeCheck | JsonBodyCheck | HtmlBodyCheck;
 }
 
 export interface CoreUptimeMonitor {
@@ -76,6 +84,7 @@ export interface CoreUptimeMonitor {
   failures_before_alert?: number;
   webhook_url?: string;
   paused?: boolean;
+  up_condition_checks?: UpConditionCheck[];
 }
 
 export interface UptimeMonitor extends CoreUptimeMonitor {

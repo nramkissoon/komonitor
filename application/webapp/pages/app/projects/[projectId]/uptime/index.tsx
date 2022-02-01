@@ -118,7 +118,7 @@ const Page: ExtendedNextPage = () => {
           }}
           onClick={() => toggleOpenCreateForm()}
         >
-          {isCreateFormOpen ? "Cancel Creation" : "+ Create a Monitor"}
+          {isCreateFormOpen ? "Cancel" : "+ Create a Monitor"}
         </Button>
       </Flex>
       {!isCreateFormOpen && (

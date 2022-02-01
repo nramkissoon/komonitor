@@ -90,7 +90,11 @@ const createUptimeMostRecentStatusTableRows = (
       lastChecked: mostRecentStatus
         ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
         : "N/A",
-      status: mostRecentStatus ? mostRecentStatus.status : "Pending Data",
+      status: monitor.paused
+        ? "paused"
+        : mostRecentStatus
+        ? mostRecentStatus.status
+        : "Pending Data",
       filterString: [
         monitor.name,
         monitor.url,

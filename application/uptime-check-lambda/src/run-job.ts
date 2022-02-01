@@ -17,6 +17,7 @@ import {
   writeStatusToDB,
 } from "./db";
 import { request } from "./http";
+import { runUpConditionChecks } from "./utils";
 
 const asyncInvokeLambda = async (event: {
   monitorId: string;
@@ -62,16 +63,13 @@ const webhookNotifyCall = async (
 
 const buildMonitorStatus = (
   fetchResult: Pick<UptimeMonitorStatus, "request" | "response">,
+  isUp: boolean,
   monitor: UptimeMonitor
 ): UptimeMonitorStatus => {
   return {
     monitor_id: monitor.monitor_id,
     timestamp: new Date().getTime(),
-    status:
-      fetchResult.response.statusCode >= 200 &&
-      fetchResult.response.statusCode < 300
-        ? "up"
-        : "down",
+    status: isUp ? "up" : "down",
     response: fetchResult.response,
     request: fetchResult.request,
     monitor_snapshot: monitor,
@@ -94,7 +92,14 @@ const buildMonitorStatus = (
 // };
 
 export const runJob = async (job: UptimeMonitor) => {
-  const { url, monitor_id, owner_id, http_parameters, alert } = job;
+  const {
+    url,
+    monitor_id,
+    owner_id,
+    http_parameters,
+    alert,
+    up_condition_checks,
+  } = job;
 
   try {
     let fetchResult = await request(
@@ -105,7 +110,18 @@ export const runJob = async (job: UptimeMonitor) => {
       http_parameters.follow_redirects
     );
 
-    const status = buildMonitorStatus(fetchResult as any, job);
+    let isUp = false;
+    if (up_condition_checks && up_condition_checks.length > 0) {
+      isUp = runUpConditionChecks(up_condition_checks, fetchResult.response);
+    } else {
+      // run the default check
+      isUp = runUpConditionChecks(
+        [{ type: "code", condition: { comparison: "equal", expected: 200 } }],
+        fetchResult.response
+      );
+    }
+
+    const status = buildMonitorStatus(fetchResult as any, isUp, job);
     console.log(status);
     const dbWriteResponse = await writeStatusToDB(status);
 

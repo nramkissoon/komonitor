@@ -16,6 +16,7 @@
     "@types/node": "^16.7.3",
     "@types/node-fetch": "^2.5.12",
     "@types/request": "^2.48.7",
+    "@types/jsonpath": "^0.2.0",
     "typescript": "^4.4.2"
   },
   "engines": {"node": "^14.13.1"},
@@ -26,6 +27,7 @@
     "abort-controller": "^3.0.0",
     "request": "^2.88.2",
     "project-types": "^1.0.0",
-    "got": "11.8.3"
+    "got": "11.8.3",
+    "jsonpath": "^1.1.1"
   }
 }
