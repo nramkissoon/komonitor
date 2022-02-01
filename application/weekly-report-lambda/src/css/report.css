@@ -37,6 +37,12 @@ td {
 .name-td {
   word-break: break-all;
 }
+.container {
+  width: 600px;
+  background: white;
+  padding: 0;
+  margin: auto;
+}
 .main-table {
   width: 600px;
   border: 0;
@@ -58,6 +64,10 @@ tr.space > th {
 }
 .lg {
   font-size: large;
+}
+
+.margin-left {
+  margin-left: 7px;
 }
 
 .bold {

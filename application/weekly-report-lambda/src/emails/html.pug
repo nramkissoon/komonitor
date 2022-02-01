@@ -2,39 +2,42 @@ html
     head
         link(rel="stylesheet", href="/css/report.css", data-inline)
 
-    body 
-        table.main-table 
-            tr 
-                td.title Weekly Monitor Report 
-            tr.space 
-                td.date #{fromMonth + " " + fromDate + " - " + toMonth + " " + toDate} 
-        table.main-table 
-            tbody 
-                tr.bottom-border.space 
-                    th.left Monitor 
-                    th.center Region
-                    th.center Alerts 
-                    th.right Uptime 
-                each monitor in monitorData
-                    tr.bottom-border.space 
-                        td.left.name-td 
-                            div.bold #{monitor.name}
-                            div!= `<a href="${monitor.url}">${monitor.url}</a>`
-                        td.center #{monitor.region}
-                        td.center.bold #{monitor.alerts}
-                        td.right.bold #{monitor.uptime}
+    body
+        div.container 
+            table.main-table
+                tr 
+                    td.title Weekly Monitor Report 
+                tr.space 
+                    td.date #{fromMonth + " " + fromDate + " - " + toMonth + " " + toDate}
+            each project in projects
+                div.bold.lg.margin-left #{'Project: ' + project.projectId}
+                table.main-table.spaced 
+                    tbody
+                        tr.bottom-border.space 
+                            th.left Monitor 
+                            th.center Region
+                            th.center Alerts 
+                            th.right Uptime 
+                        each monitor in project.monitors
+                            tr.bottom-border.space 
+                                td.left.name-td 
+                                    div.bold #{monitor.name}
+                                    div!= `<a href="${monitor.url}">${monitor.url}</a>`
+                                td.center #{monitor.region}
+                                td.center.bold #{monitor.alerts}
+                                td.right.bold #{monitor.uptime}
 
-        table.main-table 
-            if overEmailLimit 
+            table.main-table 
+                if overEmailLimit 
+                    tr 
+                        td 
+                            p!= `*This email does not cover all of your monitors, view the rest on <a href="https://komonitor.com/app">Komonitor</a>.`
+                else 
+                    tr 
+                        td 
+                            p!= `View and manage your monitors on <a href="https://komonitor.com/app">Komonitor</a>.`
+
                 tr 
                     td 
-                        p!= `*This email does not cover all of your monitors, view the rest on <a href="https://komonitor.com/app">Komonitor</a>.`
-            else 
-                tr 
-                    td 
-                        p!= `View and manage your monitors on <a href="https://komonitor.com/app">Komonitor</a>.`
-
-            tr 
-                td 
-                    p!= `To opt out of weekly report emails, <a href="https://komonitor.com/app/settings">Go to Account Settings</a>.`
-                    p!= `This is a no-reply email. For support, please contact us at <b>support@komonitor.com</b>.`
+                        p!= `To opt out of weekly report emails, <a href="https://komonitor.com/app/settings">Go to Account Settings</a>.`
+                        p!= `This is a no-reply email. For support, please contact us at <b>support@komonitor.com</b>.`

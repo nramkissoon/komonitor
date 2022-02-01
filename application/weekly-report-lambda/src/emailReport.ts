@@ -17,13 +17,7 @@ import {
 
 interface EmailProps {
   overEmailLimit: boolean;
-  monitorData: (
-    | Pick<UptimeMonitor, "name" | "url" | "region">
-    | {
-        uptime: string;
-        alerts: number;
-      }
-  )[];
+  projects: any;
 }
 
 const calculateUptime = (statuses: UptimeMonitorStatus[]) => {
@@ -67,6 +61,43 @@ const sendEmail = async (
   }
 };
 
+const sortUptimeMonitorsByProject = async (monitors: UptimeMonitor[]) => {
+  const emailLimit = 5;
+  let overLimit = false;
+  const projectIds = new Set(monitors.map((m) => m.project_id));
+  const monitorIds = monitors.map((monitor) => monitor.monitor_id);
+  const uptimeStatuses = await getStatusesForMultipleMonitors1Week(
+    ddbClient,
+    monitorIds,
+    config.uptimeMonitorStatusTableName
+  );
+
+  const uptimeAlerts = await getTotalAlertsForMultipleMonitors1Week(
+    ddbClient,
+    monitorIds,
+    config.alertInvocationTableName
+  );
+  const result = [];
+  for (let id of projectIds) {
+    const list = monitors.filter((m) => m.project_id === id);
+    const withData = list.map((m) => ({
+      uptime: calculateUptime(uptimeStatuses[m.monitor_id])
+        ? calculateUptime(uptimeStatuses[m.monitor_id]) + "%"
+        : "No data.",
+      alerts: uptimeAlerts[m.monitor_id],
+      name: m.name,
+      url: m.url,
+      region: regionToLocationStringMap[m.region],
+    }));
+    overLimit = overLimit || list.length > emailLimit;
+    result.push({
+      projectId: id,
+      monitors: withData.slice(0, Math.min(emailLimit, list.length)),
+    });
+  }
+  return { result, overLimit };
+};
+
 export const sendEmailReportToUser = async (user: User): Promise<boolean> => {
   try {
     const uptimeMonitors = await getMonitorsForUser(
@@ -77,44 +108,13 @@ export const sendEmailReportToUser = async (user: User): Promise<boolean> => {
 
     if (uptimeMonitors.length === 0) throw new Error("no monitors");
 
-    const emailLimit = 8;
-
-    const overEmailLimit = uptimeMonitors.length > emailLimit;
-
-    const includedUptimeMonitors = uptimeMonitors
-      .map((monitor) => ({
-        name: monitor.name,
-        id: monitor.monitor_id,
-        url: monitor.url,
-        region: monitor.region,
-      }))
-      .slice(0, Math.min(emailLimit, uptimeMonitors.length));
-
-    const monitorIds = includedUptimeMonitors.map((monitor) => monitor.id);
-
-    const uptimeStatuses = await getStatusesForMultipleMonitors1Week(
-      ddbClient,
-      monitorIds,
-      config.uptimeMonitorStatusTableName
-    );
-
-    const uptimeAlerts = await getTotalAlertsForMultipleMonitors1Week(
-      ddbClient,
-      monitorIds,
-      config.alertInvocationTableName
+    const includedMonitorsByProject = await sortUptimeMonitorsByProject(
+      uptimeMonitors
     );
 
     const emailProps: EmailProps = {
-      overEmailLimit: overEmailLimit,
-      monitorData: includedUptimeMonitors.map((monitor) => ({
-        uptime: calculateUptime(uptimeStatuses[monitor.id])
-          ? calculateUptime(uptimeStatuses[monitor.id]) + "%"
-          : "No data.",
-        alerts: uptimeAlerts[monitor.id],
-        name: monitor.name,
-        url: monitor.url,
-        region: regionToLocationStringMap[monitor.region],
-      })),
+      overEmailLimit: includedMonitorsByProject.overLimit,
+      projects: includedMonitorsByProject.result,
     };
 
     await sendEmail(user, emailProps);
