@@ -47,7 +47,7 @@ export function useUser() {
   };
 }
 
-export function useUserSlackInstallation() {
+export function useUserSlackInstallations() {
   const fetcher = (url: string) =>
     fetch(url, { method: "GET" }).then((r) => r.json());
 
@@ -56,11 +56,31 @@ export function useUserSlackInstallation() {
     fetcher,
     {}
   );
+
   return {
-    data: data as SlackInstallation | undefined,
+    data: data as SlackInstallation[] | undefined,
     isLoading: !error && !data,
     isError: error,
     mutate: mutate,
+  };
+}
+
+export type Integrations = {
+  data: SlackInstallation<"v1" | "v2", boolean> | undefined;
+  type: "Slack";
+  mutate: () => void;
+}[];
+
+// used to grab all user integrations at once
+export function useUserIntegrations() {
+  const { data, isError, mutate, isLoading } = useUserSlackInstallations();
+  const slackIntegrations: Integrations = data
+    ? data.map((integ) => ({ data: integ, type: "Slack", mutate: mutate }))
+    : [];
+  return {
+    integrations: [...slackIntegrations] as Integrations,
+    isError,
+    isLoading,
   };
 }
 
@@ -89,27 +109,18 @@ export async function deleteUser(onError: (message: string) => void) {
   return true;
 }
 
-export async function deleteUserSlackInstallation(
-  onSuccess: (
-    title: string,
-    message: string,
-    status: "info" | "warning" | "success" | "error"
-  ) => void,
-  onError: (
-    title: string,
-    message: string,
-    status: "info" | "warning" | "success" | "error"
-  ) => void
+export async function deleteSlackIntegration(
+  channelId: string,
+  teamId: string,
+  onSuccess: () => void,
+  onError: (message: string) => void
 ) {
   const response = await fetch(userSlackInstallationApiUrl, {
     method: "DELETE",
+    body: JSON.stringify({ channelId: channelId, teamId: teamId }),
   });
   if (response.ok) {
-    onSuccess(
-      "Uninstalled Slack",
-      "Slack was successfully uninstalled from your workspace.",
-      "success"
-    );
+    onSuccess();
     return true;
   } else {
     let errorMessage;
@@ -125,7 +136,7 @@ export async function deleteUserSlackInstallation(
       default:
         errorMessage = "An unknown error occurred. Please try again later.";
     }
-    onError("Unable to Uninstall Slack", errorMessage, "error");
+    onError(errorMessage);
     return false;
   }
 }

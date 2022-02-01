@@ -12,6 +12,50 @@ import {
 } from "@chakra-ui/react";
 import { v4 as uuidv4 } from "uuid";
 
+const JsonSample = () => {
+  const codeString = `{
+    "monitor_snapshot": {
+      "monitor_id": "up-8de84a39-f049-47d8-998b-560b794a3e96",
+      "name": "My-Website-Monitor",
+      "project_id": "My Website",
+      "owner_id": "e5c1126a04567a873bdfcf4d79b35b04",
+      "region": "us-east-1",
+      "http_parameters": {
+        "method": "GET",
+        "headers": {
+          "Content-Type": "text"
+        }
+      },
+      "url": "https://my-website.com",
+      "frequency": 30
+    },
+    "status": "up",
+    "complete": true,
+    "statusCode": 200,
+    "timings": {
+        "lookup": 1643294154262,
+        "secureConnect": 1643294154320,
+        "upload": 1643294154320,
+        "response": 1643294154356,
+        "start": 1643294154262,
+        "end": 1643294154359,
+        "socket": 1643294154262,
+        "connect": 1643294154300,
+      "phases": {
+        "tcp": 38,
+        "request": 0,
+        "wait": 0,
+        "download": 3,
+        "total": 97,
+        "dns": 0,
+        "tls": 20,
+        "firstByte": 36
+      }
+    }
+  }`;
+  return { codeString };
+};
+
 function TableSectionRow(borderColor: string, title: string) {
   return (
     <Tr bg={useColorModeValue("gray.50", "gray.900")}>
@@ -83,7 +127,7 @@ const responseSectionData = [
 export const Advanced = () => {
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
   return (
-    <Flex mb="3em" flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center">
       <chakra.h1
         textAlign="center"
         fontSize="5xl"
@@ -107,6 +151,7 @@ export const Advanced = () => {
         Customize your monitor's HTTP requests to match your use case and
         analyze the response.
       </chakra.h2>
+
       <Box
         w="100%"
         shadow="md"
@@ -150,7 +195,6 @@ export const Advanced = () => {
         lineHeight="shorter"
         mx="auto"
         color={useColorModeValue("gray.800", "gray.100")}
-        mb=".3em"
         maxW="3xl"
       >
         Komonitor allows for advanced uptime monitoring by providing as much

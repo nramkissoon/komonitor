@@ -1,4 +1,10 @@
-import { UptimeMonitor } from "project-types";
+import {
+  CodeCheck,
+  LatencyCheck,
+  NumericalOperators,
+  UptimeMonitor,
+  UptimeStatusResponse,
+} from "project-types";
 
 // reads event object for any valid jobs
 export const getJobs = (event: any): UptimeMonitor[] => {
@@ -14,4 +20,46 @@ export const getJobs = (event: any): UptimeMonitor[] => {
   });
 
   return jobs;
+};
+
+export const numericComparison = (
+  value: number,
+  operator: NumericalOperators,
+  expected: number
+) => {
+  switch (operator) {
+    case "equal":
+      return value === expected;
+    case "greater":
+      return value > expected;
+    case "greater_or_equal":
+      return value >= expected;
+    case "less":
+      return value < expected;
+    case "less_or_equal":
+      return value <= expected;
+    case "not_equal":
+      return value !== expected;
+  }
+};
+
+export const latencyCheckPassed = (
+  { property, comparison, expected }: LatencyCheck,
+  response: UptimeStatusResponse
+) => {
+  if (response.timings.phases[property] === undefined) {
+    return false;
+  }
+  return numericComparison(
+    response.timings.phases[property] as number,
+    comparison,
+    expected
+  );
+};
+
+export const codeCheckPassed = (
+  { comparison, expected }: CodeCheck,
+  response: UptimeStatusResponse
+) => {
+  return numericComparison(response.statusCode, comparison, expected);
 };

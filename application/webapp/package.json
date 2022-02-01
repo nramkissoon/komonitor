@@ -67,7 +67,8 @@
     "remark-toc": "^7.0.0",
     "remark-unwrap-images": "^2.0.0",
     "next-transpile-modules": "^9.0.0",
-    "luxon": "^2.1.1"
+    "luxon": "^2.1.1",
+    "fuse.js": "^6.5.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

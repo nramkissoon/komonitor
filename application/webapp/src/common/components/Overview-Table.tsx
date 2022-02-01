@@ -83,6 +83,7 @@ interface OverviewTableProps {
 
 export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
   const { data, columns, itemType, containerBoxProps, jsonDownLoad } = props;
+
   const rows: RowProps[] = React.useMemo(
     () => data.rowPropsGeneratorFunction(...data.dependencies),
     [...data.dependencies]

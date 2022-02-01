@@ -89,7 +89,6 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
     touchedFields,
     setValue,
   } = props;
-  console.log(fields);
   return (
     <>
       <FormControl

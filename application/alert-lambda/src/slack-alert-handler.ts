@@ -25,12 +25,23 @@ const createUptimeMonitorSlackAlertMessage = (
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `*<https://komonitor.com/app/uptime/${monitor.monitor_id}|View monitor>*`,
+              // TODO CHANGE FOR TEAMS
+              text: `*<https://komonitor.com/app/projects/${monitor.project_id}/uptime/${monitor.monitor_id}|View monitor>*`,
             },
           },
         ],
       },
     ],
+  };
+};
+
+const getTeamChannelIdFromCompoundKey = (key: string) => {
+  const array = key.split("#");
+  if (array.length !== 2)
+    throw new Error("invalid slack compound key on monitor");
+  return {
+    team: array[0],
+    channel: array[1],
   };
 };
 
@@ -52,10 +63,14 @@ export const sendUptimeMonitorSlackAlert = async (
       throw new Error(`no slack alert for user ${user.id}`);
     }
 
-    const slackChannelId = alert.recipients.Slack[0];
+    const slackTeamChannelId = getTeamChannelIdFromCompoundKey(
+      alert.recipients.Slack[0]
+    );
 
     const webhook = user.slack_installations.filter(
-      (i) => i.incomingWebhook?.channelId === slackChannelId
+      (i) =>
+        i.incomingWebhook?.channelId === slackTeamChannelId.channel &&
+        i.team?.id === slackTeamChannelId.team
     )[0].incomingWebhook?.url;
 
     if (!webhook) {

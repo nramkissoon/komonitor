@@ -1,84 +1,107 @@
+
+Onboarding:
+    ☐ create onboarding page
+    ☐ welcome page
+    define steps and fields to collect:
+        ☐ where did you hear about Komonitor - Google, IndieHackers, Twitter, Reddit, word of mouth, Other
+        ☐ name
+        ☐ use case - Monitoring a production app/website, monitoring an API, Just looking a around
+    ☐ implement form
+    ☐ update user obj with form data
+
+Uptime HTTP:
+    ☐  design dashboard to show HTTP settings + alerts
+    ✔  follow http redirects @done(22-01-31 13:20)
+    ✔  pause function @done(22-01-31 13:58)
+
+API service:
+    ☐  set up repo and deploy to vercel -> needs to be on main
+
+
+Projects:
+    CDK:
+        ✔ create project dbs, ownerId pk, proj id sk @done(22-01-25 14:39)
+        ✔ create LSI on monitors,  sk = proj id @done(22-01-24 13:25)
+    WebApp: 
+        api:
+            ✔ create project API @done(22-01-24 13:25)
+            ✔ update project settings @done(22-01-24 13:25)
+            ✔ delete project @done(22-01-24 13:25)
+            ✔ get user projects @done(22-01-24 13:25)
+        monitor:
+            ✔ assign to project in create update form using hook @done(22-01-26 12:25)
+            ✔ implement permissions checks @done(22-01-26 12:25)
+            ✔ transfer monitor from project @done(22-01-26 10:18)
+            ✔ edit monitor @done(22-01-26 14:42)
+        SideBar:
+                ✔  indicate personal account @done(22-01-25 14:39)
+                ✔  project selection @done(22-01-24 13:26)
+        ✔ get user projects @done(22-01-24 13:27)
+        ✔ get monitors for project @done(22-01-24 13:27)
+        ✔  slack must work @done(22-01-30 14:56)
+        ✔  design project index page and tabs @done(22-01-31 11:47)
+        ✔  fix the header size @done(22-01-25 10:08)
+        ✔ header add links to proiject and monitor @done(22-01-29 13:31)
+        ✔ delete projects for user when user deleted @done(22-01-30 14:06)
+        ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
+        ✔ rewrite docs @done(22-02-01 10:37)
+        ✔ limit project creation on free accounts @done(22-01-30 15:39)
+        ✘ view sample status in landing @cancelled(22-01-30 15:39)
+        ✔ weekly report emails -> cdk changes if necc @done(22-02-01 11:37)
+
+------------------------------------------------------------------------------------------
+
+Uptime Assertions:
+    ☐ form changes, if no checks default to 200 OK and make it clear to user
+    ☐ implement uptime monitor first -> if no assertions -> default -> else -> run assertion
+
+Usage Tab:
+    ☐ 
+
+Webhooks:
+    ☐ design
+
+☐ pause function graph weirdness
+
+------------------------------------------------------------------------------------------
+
+Stripe:
+    ☐ change freelancer plan to startup
 Webapp: 
-    Pricing page:
-        ✔  move loading spinner to CTA buttons @done(22-01-01 07:40)
-    Alert:
-        ✘ email alert only to account owner @cancelled(21-12-12 19:32)
-    Settings:
-        
-    Stripe:
-        ✔ add annual plans @done(22-01-12 15:03)
-        ✔ add monthly and annual pids to dev vercel @done(22-01-12 15:03)
-        ✔ add monthly and annual pids to prod vercel @done(22-01-12 15:03)
+       
         
     Alert Invocations:
         ✔ implement get handler @done(21-10-07 14:56)
     UI:
+        ☐ refactor page layout
         ✔ Style the email verification email @done(21-10-11 14:14)
         ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
         ☐ view invocation object modal when clicked on in invocation tables
-        ✔ create a coming soon page component @10/29 @done(21-10-26 13:26)
-        ✔  coming soon page redirects to roadmap page @10/29 @done(21-10-26 13:26)
-        ✔ create 404 page @10/29 @done(21-10-25 14:03)
-        ✘ check aws region to locations in webapp client @10/29 @started(21-10-26 13:30) @cancelled(21-10-26 13:32) @wasted(2m48s)
-        ✔  timezones based on user pref @done(21-12-01 13:57)
+
         ☐  convert service SLA's to monitor resolutions SRE p62\
-        ✔  download data as csv or json @done(21-12-09 12:13)
-        ✔  Add alts to all images @done(21-11-03 15:52)
-        ☐  disable alert from dashboard
-        ✔  convert regions to place names @started(21-11-15 11:34) @done(21-11-15 11:56) @lasted(22m24s)
-        ✔  view uptime statuses up to 30 days ago @done(21-11-15 15:29)
-        ✔  fix uptime graph x axis @done(21-11-15 15:29)
-        ✔  graph weirdness when switching since @done(21-11-15 15:29)
-        ☐  add warning that uptime monitor has no alert in overview table
+
 
         ✘  new user onboarding -> ask what they'll use for @cancelled(22-01-12 20:17)
         ☐  add no alert warning to monitor creation form + overview page
     API: 
         ☐ check if subscriptions are valid in API's
-    Landing: 
-        ✔ create a design and sections @10/22 @done(21-10-22 13:37)
-        ✔ Copy @10/22 @started(21-10-26 13:42) @done(21-10-26 15:18) @lasted(1h36m23s)
-        ✔ implement the design @done(21-11-02 12:01)
-    Legal: 
-        ✔ PP @done(21-11-11 12:46)
-        ✔ TOS @done(21-11-10 12:36)
-        ✘ GDPR cookie acceptance @cancelled(21-11-10 11:06)
-    Signup: 
-        ✘ add checkbox for agreeing to email updates on product @cancelled(22-01-12 20:17)
-        ✔ store value in db @done(22-01-12 20:17)
-        ✔ add toggle for emails in settings @done(22-01-12 20:17)
-    Slack Alerts:
-        ✔ Form changes when slack type is selected @done(22-01-05 15:34)
-        ✔ form has connect to slack button @done(22-01-05 15:34)
-        ✔ verify we can redirect with the form after user has added bot to workspace @done(22-01-05 15:34)
-        ✔ research slack auth flows @done(22-01-05 15:34)
+
     Webhook Alerts: 
         ☐ initial design
     SNS Topic Alerts:
         ☐ scope possibility
-    Docs:
-        ✔ Create 3 column design @done(21-10-26 18:48)
-        ✔ Set up mdx @done(21-11-05 11:17)
-        ✔ define sections and subsections @done(21-11-05 11:17)
-        ✔ implement sidebar nav @done(21-11-05 11:17)
-        ✔ fill content @done(22-01-12 20:18)
+
     SEO:
-    SSL checks: 
-        ✘ scope @cancelled(21-12-06 11:50)
+
     Delete by user id:
-        ✔  uptime monitors @done(21-11-14 20:54)
-        ✔  alerts @done(21-11-14 20:54)
-        ✔  add to delete user api @done(21-11-14 20:54)
+
         ☐  verify
     Website View:
-        ☐  scope
+        ✘  scope @cancelled(22-01-28 22:28)
     custom status pages: 
         ☐  scope
     teams: 
         ☐  scope
-
-User pref dates:
-    ✔ verify alert TZ @done(22-01-12 20:18)
 
 Customer Serve:
     ☐ notification for new users -> email template
@@ -94,50 +117,21 @@ API:
         ☐ research what header API keys are sent in
 
 
-Uptime HTTP:
-    ✔  design new creation and edit form @done(21-12-06 11:49)
-    ✔ implement HTTP headers in model @done(21-12-01 14:21)
-    ✔  add HTTP headers to check in lambda @done(21-12-01 14:33)
-    ✔  remove retries param from model @done(21-12-01 13:06)
-    ✔  remove retries from lambda @done(21-12-01 13:01)
-    ✔  remove retries from verification and create and edit forms @done(21-12-01 13:06)
-    ✔  add HTTP headers to forms @done(21-12-06 11:49)
-    ☐  design dashboard to show HTTP settings
-    ✔  add HTTP methods to model @done(22-01-13 22:37)
-    ✔  add HTTP methods in check lambda @done(22-01-13 22:37)
-    ✔  add HTTP methods to forms @done(22-01-13 22:37)
-    ✔  add HTTP body to model @done(22-01-13 22:37)
-    ✔  add HTTP body to check lambda @done(22-01-13 22:37)
-    ✔  add HTTP body to form @done(22-01-13 22:37)
-    ✔  TEST THE HTTP SETTINGS DAMMIT @done(22-01-18 18:40)
-    ✔  CHECK BODY INPUTS @done(22-01-19 09:29)
-    ✔  check google latency @done(22-01-18 18:40)
-    ✔  CHANGE PROD MONITORS TO NEW STRUCTURE @done(22-01-18 18:40)
-    ☐  http redirects
-Alert Lambda: 
-    ✔  add slack alerts @done(22-01-03 13:26)
-     ✔ verify slack alerts @done(22-01-05 14:28)
 
-Uptime Alerts: 
-    ✘ aattach multiple alerts to monitor @cancelled(22-01-18 18:40)
 
-Alerts:
-    ✔  do not resend down alerts -> add ongoing field to invocation @done(21-12-30 12:34)
-    ✔  switch ongoing alert invoke to false upon alert deletion, monitor detachment @done(21-12-31 09:46)
-    ✔  monitor alerts page -> show ongoing @done(21-12-30 13:11)
+TEAMS: 
+    ☐  search todos
+
+
+
+
+
 
 Blog: 
     ☐ Ecommerce use case - high latency -> lost revenue
     ☐ Buy vs. build -> time spent on product vs. infra
     ☐ Monitoring tenets -> SRE chapter
     ☐ Twitter alert use case -> better comm with users + public
-
-Uptime Lambda:
-    ✔ invoke alert lambda on monitor failure with monitor id and owner id @done(21-10-17 22:14)
-    ✔ add status codes to status updates @done(21-12-01 13:29)
-    ✔ use user agent Komonitor @10/22 @done(21-10-18 14:31)
-    ✔ investigate response times @done(21-10-19 19:54)
-    ☐ add response data to status req
 
 Website change monitoring:
     ☐ scope
@@ -155,19 +149,6 @@ Lighthouse:
     ☐ cdk setup S3 bucket
     ☐ remove lighthouse pricing impl
 
-CDK:
-    ✔ create the prod ddb tables in us-east-1 @started(21-11-15 11:33) @done(21-11-30 13:14) @lasted(2w1d1h41m11s)
-    ✔ create us-east-1 prod stack @started(21-11-15 11:34) @done(21-11-30 13:14) @lasted(2w1d1h40m12s)
-
-Prod Stack:
-    ✔ abstract lambdas @done(21-11-30 13:14)
-    ✔ abstract rules @done(21-11-25 21:01)
-    ✔ lambdas call us-east-1 db but refer to each other @done(21-11-30 13:14)
-
-Logging and Error Handling:
-    ✔ Decide logging strategy for webapp @10/29 @done(21-11-30 13:14)
-    ✔ replace console.log/error in webapp with logging provider @done(21-11-30 13:14)
-    ✔ Decide logging strategy for lambdas and implement @done(21-11-30 13:14)
 
 Bugs: 
     ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
@@ -181,6 +162,6 @@ Bugs:
      ☐ add sweden to cdk
     ☐  consolidate useUser hooks to one api call
     ☐  consolidate db logic into one package
+    ☐  color mode does not persits from docs to any other page -> check provider
 
-✔ hire in public @done(22-01-07 09:23)
 ☐ product gif generation

@@ -11,7 +11,6 @@ import {
 import React from "react";
 import { AccountTab } from "./AccountTab";
 import { BillingTab } from "./BillingTab";
-import { IntegrationsTab } from "./Integrations-Tab";
 
 interface SettingsTabsProps {
   initialTab: number;
@@ -47,7 +46,6 @@ export function SettingsTabs(props: SettingsTabsProps) {
         <TabList w="225px" mr="10px" mt="20px">
           <Tab {...tabStyles}>Account</Tab>
           <Tab {...tabStyles}>Billing</Tab>
-          <Tab {...tabStyles}>Integrations</Tab>
         </TabList>
         <TabPanels>
           <TabPanel p="0">
@@ -55,9 +53,6 @@ export function SettingsTabs(props: SettingsTabsProps) {
           </TabPanel>
           <TabPanel p="0">
             <BillingTab />
-          </TabPanel>
-          <TabPanel p="0">
-            <IntegrationsTab />
           </TabPanel>
         </TabPanels>
       </Tabs>

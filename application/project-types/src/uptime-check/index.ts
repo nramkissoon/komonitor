@@ -7,6 +7,62 @@ export interface HttpParameters {
   method: HttpMethods;
   headers?: { [header: string]: string };
   body?: string;
+  follow_redirects?: boolean;
+}
+
+export type TimingPhaseProperties =
+  | "firstByte"
+  | "download"
+  | "total"
+  | "wait"
+  | "dns"
+  | "tls"
+  | "request"
+  | "tcp";
+
+export type NumericalOperators =
+  | "equal"
+  | "greater"
+  | "less"
+  | "greater_or_equal"
+  | "less_or_equal"
+  | "not_equal";
+
+export type JsonOperators =
+  | "equal"
+  | "greater"
+  | "less"
+  | "greater_or_equal"
+  | "less_or_equal"
+  | "not_equal"
+  | "null"
+  | "not_null"
+  | "empty"
+  | "not_empty"
+  | "contains"
+  | "not_contains";
+
+export interface LatencyCheck {
+  property: TimingPhaseProperties;
+  comparison: NumericalOperators;
+  expected: number;
+}
+
+export interface CodeCheck {
+  comparison: NumericalOperators;
+  expected: number;
+}
+
+export interface BodyCheck {
+  property: string;
+  comparison: string;
+  expected?: string;
+  expectedType?: "string" | "number" | "boolean";
+}
+
+export interface UpConditionCheck {
+  type: "latency" | "code" | "body";
+  condition: LatencyCheck | CodeCheck | BodyCheck;
 }
 
 export interface CoreUptimeMonitor {
@@ -15,6 +71,7 @@ export interface CoreUptimeMonitor {
   region: string;
   frequency: number;
   http_parameters: HttpParameters;
+  project_id: string;
   alert?: Alert;
   failures_before_alert?: number;
   webhook_url?: string;
@@ -47,7 +104,13 @@ export type UptimeStatusResponse = Pick<
 
 export type UptimeStatusRequest = Omit<
   Options,
-  "parseJson" | "stringifyJson" | "pagination" | "hooks" | "request" | "retry"
+  | "parseJson"
+  | "stringifyJson"
+  | "pagination"
+  | "hooks"
+  | "request"
+  | "retry"
+  | "throwHttpErrors"
 >;
 
 export interface UptimeMonitorStatus {

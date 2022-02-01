@@ -1,237 +1,218 @@
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, SearchIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   chakra,
+  Divider,
   Flex,
-  SimpleGrid,
-  Spacer,
+  Grid,
+  GridItem,
+  Heading,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
-import { PLAN_PRODUCT_IDS } from "../billing/plans";
-import { createAndRedirectToCustomerPortal } from "../settings/client";
-import { use24HourMonitorStatuses, useUptimeMonitors } from "../uptime/client";
-import { useUserServicePlanProductId } from "../user/client";
+import Fuse from "fuse.js";
+import Link from "next/link";
+import { Project, UptimeMonitor } from "project-types";
+import React from "react";
+import { timeAgo } from "../../common/client-utils";
+import { AppSubNav } from "../../common/components/App-Sub-Nav";
+import { LoadingSpinner } from "../../common/components/Loading-Spinner";
+import { useProjects } from "../projects/client/client";
+import { CreateForm } from "../projects/client/components/Create-Form";
+import { useMonitorsAnd24HrStatusesForAllOwnerProjects } from "../uptime/client";
 
-const Link = (props: { href: string; children: React.ReactNode }) => (
-  <NextLink href={props.href} passHref>
-    <chakra.a
-      color={useColorModeValue("blue.400", "blue.500")}
-      _hover={{ cursor: "pointer", color: "gray.500" }}
-    >
-      {props.children}
-    </chakra.a>
-  </NextLink>
+const ProjectsGrid: React.FC<{}> = (props) => (
+  <Grid
+    templateColumns={[
+      "repeat(1, 1fr)",
+      "repeat(2, 1fr)",
+      null,
+      "repeat(4, 1fr)",
+    ]}
+    gap={6}
+    my="5"
+  >
+    {props.children}
+  </Grid>
 );
 
-const UptimeMonitorPanel = () => {
-  const { monitors, isLoading, isError } = useUptimeMonitors();
-  const {
-    statuses,
-    isLoading: statusesIsLoading,
-    isError: statusesIsError,
-  } = use24HourMonitorStatuses(
-    monitors ? monitors.map((monitor) => monitor.monitor_id) : []
-  );
-
-  const downMonitorsTotal =
-    monitors && statuses
-      ? (
-          monitors.map((monitor) => {
-            const mostRecentStatus = statuses[monitor.monitor_id].sort(
-              (prev, next) => prev.timestamp - next.timestamp
-            )[0];
-
-            const isDown = mostRecentStatus
-              ? mostRecentStatus.status === "down"
-              : false;
-            if (isDown) return 1;
-            return 0;
-          }) as number[]
-        ).reduce((prev, next) => prev + next)
-      : 0;
-
-  const totalMonitors = monitors ? monitors.length : 0;
-
+const ProjectCard = ({
+  project,
+  uptimeMonitors,
+}: {
+  project: Project;
+  uptimeMonitors: UptimeMonitor[];
+}) => {
   return (
-    <Flex
-      bg={useColorModeValue("white", "#0f131a")}
-      shadow="lg"
-      borderRadius="md"
-      py="2em"
-      px="1.5em"
-      flexDir="column"
-    >
-      <chakra.h2
-        fontSize="2xl"
-        fontWeight="bold"
-        textAlign={["center", "center", "left"]}
-      >
-        Uptime Monitors
-      </chakra.h2>
-      <chakra.h3 color="gray.600">
-        Create, manage and inspect uptime monitors for your websites.
-      </chakra.h3>
-      <chakra.hr my="10px" />
-      {monitors && !isLoading && totalMonitors === 0 ? (
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <chakra.h4 fontSize="lg">No monitors have been created.</chakra.h4>
-          <NextLink href="app/uptime/new" passHref>
-            <chakra.a
-              fontWeight="medium"
-              color={useColorModeValue("blue.400", "blue.500")}
-              _hover={{ cursor: "pointer", color: "gray.500" }}
-            >
-              + Create a Monitor
-            </chakra.a>
-          </NextLink>
-        </Flex>
-      ) : (
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <chakra.h4 fontSize="lg">Total monitors: {totalMonitors}</chakra.h4>
-          <NextLink href="app/uptime/new" passHref>
-            <chakra.a
-              fontWeight="medium"
-              color={useColorModeValue("blue.400", "blue.500")}
-              _hover={{ cursor: "pointer", color: "gray.500" }}
-            >
-              + Create a Monitor
-            </chakra.a>
-          </NextLink>
-        </Flex>
-      )}
-      <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-        <chakra.h4 fontSize="lg">
-          Total current down monitors: {downMonitorsTotal}
-        </chakra.h4>
-      </Flex>
-      <Spacer />
-      <NextLink passHref href={"/app/uptime"}>
-        <Button
-          mt="1.5em"
-          float="left"
-          size="lg"
-          as="a"
-          fontSize="xl"
-          fontWeight="normal"
-          px="1em"
-          shadow="md"
-          colorScheme="blue"
-          bgColor="blue.400"
-          color="white"
+    <GridItem colSpan={1}>
+      <Link href={"/app/projects/" + project.project_id} passHref>
+        <Box
+          bg={useColorModeValue("white", "gray.950")}
+          p="5"
+          position="relative"
+          rounded="lg"
+          border="1px"
+          borderColor={useColorModeValue("gray.300", "whiteAlpha.300")}
+          transitionDuration=".3s"
           _hover={{
-            bg: "blue.600",
+            border: "1px solid",
+            borderColor: "blue.300",
+            cursor: "pointer",
           }}
-          rightIcon={<ArrowForwardIcon />}
+          role="group"
         >
-          Go to Monitors
-        </Button>
-      </NextLink>
-    </Flex>
+          <Box
+            position="absolute"
+            top="-4"
+            right="-4"
+            bg={useColorModeValue("blue.300", "gray.700")}
+            rounded="full"
+            p="2"
+            visibility="hidden"
+            _groupHover={{ visibility: "visible" }}
+          >
+            <ExternalLinkIcon
+              boxSize={6}
+              color={useColorModeValue("gray.50", "blue.300")}
+            />
+          </Box>
+          <Heading as="h2" fontSize="xl" fontWeight="medium">
+            {project.project_id}
+          </Heading>
+          <Text color="gray.500">
+            Created {timeAgo.format(project.created_at)}
+          </Text>
+          <Divider />
+          <Text mt="10px">Total uptime monitors: {uptimeMonitors.length}</Text>
+        </Box>
+      </Link>
+    </GridItem>
   );
 };
 
-const SettingsPanel = () => {
-  const { data, isLoading, isError } = useUserServicePlanProductId();
-  let productId = data ? data.productId : PLAN_PRODUCT_IDS.FREE;
+const ProjectsTab = () => {
+  const [newProjectFormVisible, setNewProjectFormVisible] =
+    React.useState(false);
+
+  const { projects, projectsFetchError, projectsIsLoading, mutateProjects } =
+    useProjects();
+  const { monitors } = useMonitorsAnd24HrStatusesForAllOwnerProjects();
+
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const fuse = new Fuse(projects ?? [], { keys: ["project_id"] });
+  const results = fuse.search(searchQuery);
   return (
-    <Flex
-      bg={useColorModeValue("white", "#0f131a")}
-      shadow="lg"
-      borderRadius="md"
-      py="2em"
-      px="1.5em"
-      flexDir="column"
-    >
-      <chakra.h2
-        fontSize="2xl"
-        fontWeight="bold"
-        textAlign={["center", "center", "left"]}
+    <Flex flexDir="column" maxW="6xl" margin="auto">
+      <Heading textAlign="left" fontWeight="medium" mb=".2em" fontSize="3xl">
+        Projects
+      </Heading>
+      <Heading
+        textAlign="left"
+        fontWeight="normal"
+        mb="1em"
+        fontSize="xl"
+        color="gray.500"
       >
-        Account
-      </chakra.h2>
-      <chakra.h3 color="gray.600">
-        Manage your account settings, subscriptions, and integrations.
-      </chakra.h3>
-      <chakra.hr my="10px" />
-      {productId === PLAN_PRODUCT_IDS.FREE ? (
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <chakra.h4 fontSize="lg">Your account is on free tier.</chakra.h4>
-          <NextLink href="pricing" passHref>
-            <chakra.a
-              fontWeight="medium"
-              color={useColorModeValue("blue.400", "blue.500")}
-              _hover={{ cursor: "pointer", color: "gray.500" }}
-            >
-              Upgrade Account
-            </chakra.a>
-          </NextLink>
-        </Flex>
-      ) : (
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <chakra.h4 fontSize="lg">
-            Your account is on a paid subscription.
-          </chakra.h4>
-          <Button
-            variant="unstyled"
-            onClick={() => createAndRedirectToCustomerPortal()}
-            fontWeight="medium"
-            color={useColorModeValue("blue.400", "blue.500")}
-            _hover={{ cursor: "pointer", color: "gray.500" }}
-          >
-            Manage Subscription
-          </Button>
-        </Flex>
-      )}
-      <Spacer />
-      <NextLink passHref href={"/app/settings"}>
+        Use projects to logically group and organize your monitors.
+      </Heading>
+      <Flex>
+        <InputGroup mr="1em">
+          <InputLeftElement
+            pointerEvents="none"
+            children={<SearchIcon color="gray.300" />}
+          />
+          <Input
+            shadow="sm"
+            placeholder="Search projects..."
+            background={useColorModeValue("white", "gray.950")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </InputGroup>
         <Button
-          mt="1.5em"
-          float="left"
-          size="lg"
-          as="a"
-          fontSize="xl"
           fontWeight="normal"
-          px="1em"
-          shadow="md"
+          px="6"
+          fontSize="lg"
+          shadow="sm"
           colorScheme="blue"
           bgColor="blue.400"
           color="white"
           _hover={{
             bg: "blue.600",
           }}
-          rightIcon={<ArrowForwardIcon />}
+          onClick={() => setNewProjectFormVisible(true)}
         >
-          Go to Account Settings
+          New Project
         </Button>
-      </NextLink>
+      </Flex>
+      <Box mt="4" w="full" hidden={!newProjectFormVisible}>
+        <CreateForm setIsVisible={setNewProjectFormVisible} />
+        <Divider
+          borderColor={useColorModeValue("gray.300", "whiteAlpha.300")}
+          mt="4"
+          mb="2"
+        />
+      </Box>
+      {projectsIsLoading && <LoadingSpinner />}
+      {!projectsIsLoading && projects && projects.length === 0 && (
+        <Box textAlign="center" fontWeight="medium" p="2em" fontSize="3xl">
+          <chakra.p>No projects have been created.</chakra.p>
+          <chakra.span
+            fontWeight="normal"
+            fontSize="2xl"
+            color={useColorModeValue("blue.400", "blue.300")}
+          >
+            Create a new project to get started.
+          </chakra.span>
+        </Box>
+      )}
+      {!projectsIsLoading && projects && projects.length > 0 && (
+        <ProjectsGrid>
+          {searchQuery
+            ? results.map((project) => (
+                <ProjectCard
+                  key={project.item.project_id}
+                  project={project.item}
+                  uptimeMonitors={
+                    monitors ? monitors[project.item.project_id] ?? [] : []
+                  }
+                />
+              ))
+            : projects.map((project) => (
+                <ProjectCard
+                  key={project.project_id}
+                  project={project}
+                  uptimeMonitors={
+                    monitors ? monitors[project.project_id] ?? [] : []
+                  }
+                />
+              ))}
+        </ProjectsGrid>
+      )}
     </Flex>
   );
 };
 
 export function AppIndexPage() {
   return (
-    <Flex flexDir="column">
-      <Flex
-        mb="2rem"
-        justifyContent="space-between"
-        flexDir={["column", "column", "row"]}
-      >
-        <chakra.h2 fontSize="xl" fontWeight="medium">
-          At a glance:
-        </chakra.h2>
-        <chakra.h2 fontSize="xl" fontWeight="medium">
-          New to Komonitor? Check out the{" "}
-          <Link href="/docs/getting-started/introduction">
-            docs to get started
-          </Link>
-          !
-        </chakra.h2>
-      </Flex>
-      <SimpleGrid columns={[1, 1, 2]} spacingX={[6, 10]} spacingY={[10]}>
-        <UptimeMonitorPanel />
-        <SettingsPanel />
-      </SimpleGrid>
-    </Flex>
+    <>
+      <AppSubNav
+        links={[
+          { isSelected: true, href: "/app", text: "Projects" },
+          {
+            isSelected: false,
+            href: "/app/integrations",
+            text: "Integrations",
+          },
+          { isSelected: false, href: "/app/settings", text: "Settings" },
+        ]}
+      />
+
+      <ProjectsTab />
+    </>
   );
 }

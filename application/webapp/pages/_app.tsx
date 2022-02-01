@@ -13,6 +13,7 @@ import {
 } from "next-auth/client";
 import { DefaultSeo } from "next-seo";
 import React from "react";
+import { TeamProvider } from "../src/common/components/TeamProvider";
 import theme from "../src/common/components/theme";
 
 type Extensions = {
@@ -62,7 +63,9 @@ export default function App({
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
           <Auth>
-            <Component {...pageProps} />
+            <TeamProvider value={undefined}>
+              <Component {...pageProps} />
+            </TeamProvider>
           </Auth>
         ) : (
           <Component {...pageProps} />

@@ -23,6 +23,7 @@ async function getStatusesForMonitor(
         ":partitionkeyval": { S: monitorId },
         ":sortkeyval": { N: since.toString() },
       },
+      ScanIndexForward: false,
     };
     const query = paginateQuery({ client: ddbClient }, queryCommandInput);
     const statuses: UptimeMonitorStatus[] = [];

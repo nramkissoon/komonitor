@@ -1,10 +1,12 @@
 import {
   Box,
+  Center,
   chakra,
   Fade,
   Flex,
   Heading,
   Icon,
+  Image,
   Table,
   Tbody,
   Td,
@@ -66,11 +68,10 @@ function CheckIcon(color: string) {
 }
 
 const monitorSectionData = [
-  ["Uptime", "5 Monitors", "50 Monitors", "500 Monitors"],
+  ["Projects", "10", "unlimited", "unlimited"],
+  ["Uptime", "80 Monitors", "500 Monitors", "2500 Monitors"],
   ["HTTP API Uptime", CheckIcon, CheckIcon, CheckIcon],
-  ["Lighthouse*", "1 Monitor", "10 Monitors", "30 Monitors"],
   ["Uptime Check Frequency", "5 minutes", "1 minute", "1 minute"],
-  ["Lighthouse Check Frequency*", "7 days", "1 day", "1 day"],
   ["Webhook updates", "-", CheckIcon, CheckIcon],
   ["Regions", "16", "16", "16"],
 ];
@@ -81,7 +82,7 @@ const alertSectionData = [
   ["Email Recipients per Alert", "1", "5", "10"],
 ];
 
-const dataSectionData = [["Data Retention", "7 days", "30 days", "365 days"]];
+const dataSectionData = [["Data Retention", "7 days", "365 days", "365 days"]];
 
 const supportSectionData = [
   [
@@ -224,9 +225,43 @@ export function ComparisonTable({
           </Table>
         </Box>
       </Box>
-      <chakra.p color="gray.500" fontSize="sm" mb="3em">
-        * feature coming soon
-      </chakra.p>
+      <Center mt="40px">
+        <Flex
+          mb="2em"
+          h="auto"
+          bg={useColorModeValue("green.50", "green.700")}
+          px="20px"
+          py="10px"
+          rounded="xl"
+          borderWidth="2px"
+          borderColor={useColorModeValue("green.200", "green.500")}
+          alignItems="center"
+          flexDir={["column", null, "row", "row"]}
+        >
+          <Image
+            src="/stripe-climate/badge.svg"
+            boxSize={["40px", "45px", "50px"]}
+            bg={useColorModeValue("green.50", "gray.200")}
+            p="5px"
+            borderRadius="lg"
+          />{" "}
+          <chakra.div
+            ml={["3px", "5px", "7px", "10px"]}
+            fontSize={["md", null, "lg", "xl"]}
+            fontWeight="bold"
+            lineHeight={["30px", "30px", "50px"]}
+          >
+            We partner with{" "}
+            <chakra.span
+              color={useColorModeValue("#6772e5", "white")}
+              fontWeight="extrabold"
+            >
+              Stripe
+            </chakra.span>{" "}
+            and contribute 1% of your purchase total to carbon removal.
+          </chakra.div>
+        </Flex>
+      </Center>
     </Fade>
   );
 }

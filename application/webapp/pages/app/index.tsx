@@ -4,7 +4,7 @@ import { ExtendedNextPage } from "../_app";
 
 const Page: ExtendedNextPage = () => {
   return (
-    <PageLayout isAppPage>
+    <PageLayout isAppPage maxW={["sm", "xl", "3xl", "5xl", "6xl"]}>
       <AppIndexPage />
     </PageLayout>
   );

@@ -111,6 +111,8 @@ const Sidebar = ({ routes }: { routes: any }) => {
       className="sidebar-content"
       flexShrink={0}
       display={{ base: "none", md: "block" }}
+      borderRight="1px"
+      borderColor={useColorModeValue("gray.300", "gray.700")}
     >
       <SidebarContent routes={routes} pathname={pathname} contentRef={ref} />
     </Box>

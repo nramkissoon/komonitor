@@ -1,7 +1,8 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
+  Button,
   Flex,
   IconButton,
   Text,
@@ -9,7 +10,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import router from "next/router";
+import { useRouter } from "next/router";
+import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { getTimeString } from "../../../common/client-utils";
@@ -22,11 +24,16 @@ interface DescriptionCellProps {
 }
 
 export function DescriptionCell(props: DescriptionCellProps) {
+  const router = useRouter();
+  const { projectId } = router.query;
   return (
     <Box>
       <Tooltip label="Details">
         <Box w="fit-content">
-          <Link passHref href={`/app/uptime/${props.monitorId}`}>
+          <Link
+            passHref
+            href={`/app/projects/${projectId}/uptime/${props.monitorId}`}
+          >
             <Box
               _hover={{
                 cursor: "pointer",
@@ -95,6 +102,48 @@ export function TimestampCell(props: TimestampCellProps) {
   return <>{getTimeString(offset, timestamp)}</>;
 }
 
+interface ResponseCellProps {
+  code: number;
+  message?: string;
+}
+
+export function ResponseCell({ code, message }: ResponseCellProps) {
+  return (
+    <>
+      {code}
+      {message ? " " + message : null}
+    </>
+  );
+}
+
+export function StatusObjectCell({
+  status,
+  setStatusToView,
+  onOpen,
+}: {
+  status: UptimeMonitorStatus;
+  setStatusToView: React.Dispatch<
+    React.SetStateAction<UptimeMonitorStatus | undefined>
+  >;
+  onOpen: () => void;
+}) {
+  return (
+    <Button
+      aria-label="view monitor status JSON object"
+      icon={<AiOutlineInfoCircle />}
+      variant="ghost"
+      colorScheme="blue"
+      onClick={() => {
+        setStatusToView(status);
+        onOpen();
+      }}
+      fontWeight="normal"
+    >
+      View Full Status
+    </Button>
+  );
+}
+
 interface ActionsCellProps {
   cellValues: {
     monitorId: string;
@@ -104,6 +153,8 @@ interface ActionsCellProps {
 }
 
 export function ActionsCell(props: ActionsCellProps) {
+  const router = useRouter();
+  const { projectId } = router.query;
   return (
     <Flex justifyContent="flex-start">
       <Tooltip label="Details">
@@ -115,26 +166,12 @@ export function ActionsCell(props: ActionsCellProps) {
           bgColor="gray.500"
           mr="1.3em"
           onClick={() => {
-            router.push("/app/uptime/" + props.cellValues.monitorId);
+            router.push(
+              `/app/projects/${projectId}/uptime/` + props.cellValues.monitorId
+            );
           }}
           _hover={{
             bg: "gray.600",
-          }}
-        />
-      </Tooltip>
-      <Tooltip label="Edit">
-        <IconButton
-          aria-label="edit monitor"
-          icon={<EditIcon />}
-          colorScheme="blue"
-          color="white"
-          bgColor="blue.500"
-          mr="1.3em"
-          onClick={() => {
-            router.push("/app/uptime/" + props.cellValues.monitorId + "/edit");
-          }}
-          _hover={{
-            bg: "blue.600",
           }}
         />
       </Tooltip>

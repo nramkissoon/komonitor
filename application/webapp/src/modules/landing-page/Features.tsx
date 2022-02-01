@@ -45,7 +45,7 @@ function Feature(props: FeatureProps) {
 
   return (
     <Flex
-      mb="4em"
+      mt="4em"
       flexDir={[column, column, column, row as any]}
       alignItems="center"
       bg={useColorModeValue("white", "#0f131a")}
@@ -99,7 +99,7 @@ function Feature(props: FeatureProps) {
 export function Features() {
   const { domRef: headerRef, isVisible: headerIsVisible } = useFadeInView();
   return (
-    <Flex mb="3em" flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center">
       <chakra.h1
         ref={headerRef as RefObject<HTMLHeadingElement>}
         textAlign="center"
@@ -119,7 +119,6 @@ export function Features() {
         w={["70%"]}
         mx="auto"
         color={useColorModeValue("gray.600", "gray.400")}
-        mb="2em"
       >
         Know when things go wrong,{" "}
         <chakra.span color="red.500" fontWeight="extrabold">

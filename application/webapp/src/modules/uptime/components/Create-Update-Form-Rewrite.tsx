@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   chakra,
+  Checkbox,
   Container,
   Flex,
   FormControl,
@@ -25,7 +26,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { Alert, ChannelType, HttpMethods, UptimeMonitor } from "project-types";
 import React from "react";
 import {
@@ -34,20 +35,24 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
-import { useSWRConfig } from "swr";
 import {
   minutesToString,
   regionToLocationStringMap,
 } from "../../../common/client-utils";
 import { ReactSelect } from "../../../common/components/React-Select";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
-import { createMonitor, updateMonitor } from "../client";
+import {
+  createMonitor,
+  updateMonitor,
+  useUptimeMonitorsForProject,
+} from "../client";
 import { HttpHeaderFormField } from "./Http-Header-Form-Field";
 import { RecipientFormController } from "./Recipient-Form-Controller";
 
 interface CreateUpdateFormProps {
   product_id: string;
   currentMonitorAttributes?: UptimeMonitor;
+  closeForm: () => void;
 }
 
 export type Inputs = {
@@ -64,9 +69,10 @@ export type Inputs = {
       header: string;
       value: string;
     }[];
+    follow_redirects: boolean;
   };
   alert?: Alert;
-  paused: boolean;
+  project_id: string;
 };
 
 // Used to prefill fields with current monitor attributes
@@ -93,6 +99,8 @@ function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   placeholders.http_parameters["headers"] = http_headers;
   placeholders.http_parameters["body"] = monitor.http_parameters.body;
   placeholders.http_parameters["method"] = monitor.http_parameters.method;
+  placeholders.http_parameters["follow_redirects"] =
+    monitor.http_parameters.follow_redirects;
   return placeholders as Inputs;
 }
 
@@ -121,7 +129,7 @@ function createHttpMethodOptions() {
 }
 
 export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
-  let { product_id, currentMonitorAttributes } = props;
+  let { product_id, currentMonitorAttributes, closeForm } = props;
 
   const placeholders = React.useMemo(() => {
     return createFormPlaceholdersFromMonitor(
@@ -130,8 +138,12 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   }, [currentMonitorAttributes]);
 
   const createNewMonitor = currentMonitorAttributes === undefined;
-  const { mutate } = useSWRConfig();
+
   const router = useRouter();
+  const { projectId } = router.query;
+
+  const { mutate } = useUptimeMonitorsForProject(projectId as string);
+
   const errorToast = useToast();
   const {
     register,
@@ -146,7 +158,9 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     clearErrors,
     setError,
   } = useForm<Inputs>({
-    defaultValues: createNewMonitor ? undefined : placeholders,
+    defaultValues: createNewMonitor
+      ? { project_id: projectId as string }
+      : placeholders,
   });
   const { fields, append, remove } = useFieldArray({
     control,
@@ -154,6 +168,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   });
 
   const watchHttpHeaderArray = watch("http_parameters.headers");
+  const watchFollowRedirects = watch("http_parameters.follow_redirects");
   const controlledHttpHeaderFields = fields.map((field, index) => {
     return {
       ...field,
@@ -225,11 +240,10 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     if (createNewMonitor && Object.keys(errors).length === 0) {
       await createMonitor(
         data,
-        () =>
-          Router.push({
-            pathname: "/app/uptime",
-            query: { newMonitorCreated: "true" },
-          }),
+        async () => {
+          await mutate();
+          closeForm();
+        },
         postErrorToast
       );
     } else {
@@ -241,29 +255,17 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       augmentedValues.last_updated = currentMonitorAttributes?.last_updated;
       await updateMonitor(
         augmentedValues,
-        () => {
-          Router.push({
-            pathname: "/app/uptime/" + augmentedValues.monitor_id,
-            query: { monitorUpdated: "true" },
-          });
+        async () => {
+          await mutate();
+          closeForm();
         },
         postErrorToast
       );
     }
-    mutate("/api/uptime/monitors", null, true);
   };
   return (
     <>
-      <Heading
-        textAlign="center"
-        mt="1em"
-        mb="1em"
-        size="lg"
-        fontWeight="medium"
-      >
-        {createNewMonitor ? "Create Uptime Monitor" : "Edit Monitor"}
-      </Heading>
-      <Container mb="3em" p="0" maxW="4xl">
+      <Container mb="3em" p="0" maxW="6xl">
         <chakra.form onSubmit={handleSubmit(onSubmit)}>
           <Box
             p="2em"
@@ -625,6 +627,21 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       </FormControl>
                     )}
                   />
+                  <Controller
+                    control={control}
+                    name="http_parameters.follow_redirects"
+                    render={({ field }) => (
+                      <FormControl mb="1.5em">
+                        <Checkbox
+                          {...field}
+                          isChecked={watchFollowRedirects}
+                          value="follow redirects"
+                        >
+                          Follow redirects
+                        </Checkbox>
+                      </FormControl>
+                    )}
+                  />
                   <HttpHeaderFormField
                     fields={controlledHttpHeaderFields}
                     touchedFields={touchedFields as any}
@@ -639,7 +656,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               </AccordionItem>
             </Accordion>
           </Box>
-          <Box
+          {/* <Box
             p="2em"
             borderRadius="md"
             shadow="md"
@@ -691,7 +708,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
-          </Box>
+          </Box> */}
           <Button
             size="lg"
             colorScheme="gray"
@@ -700,7 +717,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
             shadow="md"
             fontSize="lg"
             fontWeight="medium"
-            onClick={() => router.back()}
+            onClick={closeForm}
             _hover={{ bg: "gray.500" }}
             mr="1.4em"
           >

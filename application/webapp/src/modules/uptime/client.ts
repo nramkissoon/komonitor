@@ -6,6 +6,7 @@ import {
 } from "project-types";
 import useSWR from "swr";
 import { env } from "../../common/client-utils";
+import { useProjects } from "../projects/client/client";
 import { Inputs } from "./components/Create-Update-Form-Rewrite";
 import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "./utils";
 
@@ -22,6 +23,49 @@ export function useUptimeMonitors() {
     monitors: data as UptimeMonitor[],
     isLoading: !error && !data,
     isError: error,
+  };
+}
+
+export function useUptimeMonitorsForProject(projectId: string) {
+  const fetcher = (url: string, projectId: string) => {
+    const urlWithParams = url + "?" + "projectId=" + projectId;
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+
+  const { data, error, mutate } = useSWR([monitorApiUrl, projectId], fetcher, {
+    shouldRetryOnError: true,
+    errorRetryInterval: 10000, // retry in 10 seconds
+  });
+
+  return {
+    monitors: data as { [projectId: string]: UptimeMonitor[] },
+    isLoading: !error && !data,
+    isError: error,
+    mutate: mutate,
+  };
+}
+
+export function useUptimeMonitorsForMultipleProjects(projectIds: string[]) {
+  const fetcher = (url: string, ...ids: string[]) => {
+    const urlWithParams =
+      url + "?" + ids.map((id) => "projectId=" + id).join("&");
+    return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
+  };
+
+  const { data, error, mutate } = useSWR(
+    [monitorApiUrl, ...projectIds],
+    fetcher,
+    {
+      shouldRetryOnError: true,
+      errorRetryInterval: 10000, // retry in 10 seconds
+    }
+  );
+
+  return {
+    monitors: data as { [projectId: string]: UptimeMonitor[] },
+    isLoading: !error && !data,
+    isError: error,
+    mutate: mutate,
   };
 }
 
@@ -44,11 +88,70 @@ export function use24HourMonitorStatuses(monitorIds: string[]) {
   );
 
   return {
-    statuses: data as { [monitorId: string]: UptimeMonitorStatus[] },
+    statuses: (data as { [monitorId: string]: UptimeMonitorStatus[] }) ?? {},
     isLoading: !error && !data,
     isError: error,
   };
 }
+
+export const useMonitorsAnd24HrStatusesForProject = (projectId: string) => {
+  const {
+    monitors,
+    isError: isErrorMonitors,
+    isLoading: isLoadingMonitors,
+  } = useUptimeMonitorsForProject(projectId);
+  const {
+    statuses,
+    isLoading: isLoadingStatuses,
+    isError: isErrorStatuses,
+  } = use24HourMonitorStatuses(
+    monitors[projectId]
+      ? monitors[projectId].map((monitor) => monitor.monitor_id)
+      : []
+  );
+
+  return {
+    monitors,
+    statuses,
+    isLoading: isLoadingMonitors || isLoadingStatuses,
+    isError: isErrorMonitors || isErrorStatuses,
+  };
+};
+
+export const useMonitorsAnd24HrStatusesForAllOwnerProjects = () => {
+  const { projects } = useProjects();
+  const {
+    monitors,
+    isError: isErrorMonitors,
+    isLoading: isLoadingMonitors,
+  } = useUptimeMonitorsForMultipleProjects(
+    projects ? projects.map((p) => p.project_id) : []
+  );
+
+  const monitorIds: string[] = [];
+  if (monitors) {
+    for (let projectId of Object.keys(monitors)) {
+      if (Array.isArray(monitors[projectId])) {
+        monitorIds.push(...monitors[projectId].map((m) => m.monitor_id));
+      }
+    }
+  }
+
+  const {
+    statuses,
+    isLoading: isLoadingStatuses,
+    isError: isErrorStatuses,
+  } = use24HourMonitorStatuses(monitorIds);
+
+  return {
+    monitors,
+    statuses,
+    isLoadingMonitors,
+    isLoadingStatuses,
+    isErrorMonitors,
+    isErrorStatuses,
+  };
+};
 
 // This function and the 30 day version is used for specific monitor views
 export function use7DayMonitorStatuses(monitorId: string) {
@@ -152,6 +255,7 @@ function createCoreMonitorFromFormData(formData: Inputs) {
     url: "https://" + formData.url,
     name: formData.name,
     region: formData.region,
+    project_id: formData.project_id,
     frequency: Number.parseInt(
       formData.frequency
     ) as UptimeCheckSupportedFrequenciesInMinutes,
@@ -176,6 +280,7 @@ function createCoreMonitorFromFormData(formData: Inputs) {
         formData.http_parameters.body?.length > 0
           ? formData.http_parameters.body
           : undefined,
+      follow_redirects: formData.http_parameters.follow_redirects,
     },
   };
   return monitor;
@@ -241,6 +346,44 @@ export async function updateMonitor(
     },
     body: JSON.stringify(monitor),
   });
+  if (response.ok) {
+    onSuccess ? onSuccess() : null;
+  } else {
+    let errorMessage;
+    switch (response.status) {
+      case 403:
+        errorMessage = "Monitor does not belong to requester.";
+        break;
+      case 400:
+        errorMessage = "Invalid monitor attributes sent to server.";
+      case 500:
+        errorMessage = "Internal server error. Please try again later.";
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError ? onError(errorMessage) : null;
+  }
+}
+
+export async function togglePauseMonitor(
+  monitor: UptimeMonitor,
+  onSuccess?: () => void,
+  onError?: (message: string) => void
+) {
+  if (monitor.paused === undefined) {
+    monitor.paused = true;
+  } else {
+    monitor.paused = !monitor.paused;
+  }
+
+  const response = await fetch(monitorApiUrl, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(monitor),
+  });
+
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {

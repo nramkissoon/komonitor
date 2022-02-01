@@ -58,6 +58,6 @@ export default NextAuth({
     signOut: "/auth/signout",
     error: "/auth/signin",
     verifyRequest: "/auth/signin?info=VerificationSent",
-    newUser: "/app/new-user",
+    newUser: "/app",
   },
 });

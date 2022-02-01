@@ -6,7 +6,9 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { signOut } from "next-auth/client";
 import React from "react";
+import { SimpleLoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { useUser, useUserTimezoneAndOffset } from "../../user/client";
 import { ColorModeToggle } from "./ColorModeToggle";
 import {
@@ -15,6 +17,28 @@ import {
 } from "./Delete-User-Dialog";
 import { EmailOptInSelector } from "./EmailOptInSelector";
 import { TimezoneSelector } from "./Timezone-Selector";
+
+const SignOutButton = () => {
+  return (
+    <Button
+      color={useColorModeValue("gray.900", "red.400")}
+      size="md"
+      variant="ghost"
+      fontSize="md"
+      fontWeight="medium"
+      as="a"
+      onClick={() => signOut({ callbackUrl: "/" })}
+      _focus={{ boxShadow: "none" }}
+      _hover={{
+        color: useColorModeValue("red.500", "red.400"),
+        cursor: "pointer",
+      }}
+      p={0}
+    >
+      Sign out
+    </Button>
+  );
+};
 
 export function AccountTab() {
   const errorToast = useToast();
@@ -64,24 +88,30 @@ export function AccountTab() {
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Timezone Preference:
         </Text>
-        {!tzPrefIsLoading && tzAndOffset && (
+        {!tzPrefIsLoading && tzAndOffset ? (
           <TimezoneSelector
             initialTz={tzAndOffset?.tz ?? "Etc/GMT"}
             mutate={tzMutate}
           />
+        ) : (
+          <SimpleLoadingSpinner />
         )}
         <Divider mb="1em" />
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Email Preferences:
         </Text>
-        {!userIsLoading && user && (
+        {!userIsLoading && user ? (
           <EmailOptInSelector
             initialValue={
               user.emailOptIn !== undefined ? user.emailOptIn : false
             }
             mutate={userMutate}
           />
+        ) : (
+          <SimpleLoadingSpinner />
         )}
+        <Divider mb="1em" />
+        <SignOutButton />
       </Box>
       <Box
         bg={useColorModeValue("white", "#0f131a")}

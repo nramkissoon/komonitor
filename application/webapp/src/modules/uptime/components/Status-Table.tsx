@@ -8,9 +8,16 @@ import {
 } from "@chakra-ui/input";
 import {
   Box,
+  chakra,
   Fade,
   Flex,
   Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   ScaleFade,
   Spacer,
   Table,
@@ -20,6 +27,7 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { UptimeMonitorStatus } from "project-types";
 import React from "react";
@@ -36,12 +44,23 @@ import { JSONDownloadButton } from "../../../common/components/JSON-Download-But
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { TablePagination } from "../../../common/components/Table-Pagination";
 import { TableSortColumnUi } from "../../../common/components/Table-Sort-Column-UI";
-import { ResponseTimeCellProps, StatusCell, TimestampCell } from "./Table-Cell";
+import {
+  ResponseCell,
+  ResponseTimeCellProps,
+  StatusCell,
+  StatusObjectCell,
+  TimestampCell,
+} from "./Table-Cell";
 
 export interface RowProps {
   status: string;
   responseTime: number;
   timestamp: number;
+  response: {
+    code: number;
+    message?: string;
+  };
+  statusObj: UptimeMonitorStatus;
   filterString: string;
 }
 
@@ -59,12 +78,58 @@ function createRowPropsFromMonitorStatus(
     status: status.status ?? "No Data",
     responseTime: (status as any).latency // TODO revert latency status
       ? (status as any).latency
-      : status.response.timings.phases.total ?? -1,
+      : status.response.timings.phases.firstByte ?? -1,
+    response: {
+      code: status.response.statusCode,
+      message: status.response.statusMessage,
+    },
     timestamp: status.timestamp,
-    filterString: [status.status, getTimeString(offset, status.timestamp)].join(
-      " "
-    ),
+    filterString: [
+      status.status,
+      getTimeString(offset, status.timestamp),
+      status.response.statusCode,
+      status.response.statusMessage,
+    ].join(" "),
+    statusObj: status,
   };
+}
+
+function StatusObjectModal({
+  status,
+  isOpen,
+  onClose,
+}: {
+  status?: UptimeMonitorStatus;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent maxW="5xl">
+        <ModalHeader>Monitor Status</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody
+          overflowX="scroll"
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "10px",
+              height: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "10px",
+              height: "10px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: useColorModeValue("#E2E8F0", "#1A202C"),
+            },
+          }}
+        >
+          <chakra.pre>{JSON.stringify(status, null, 2)}</chakra.pre>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
 }
 
 function GlobalFilter(props: {
@@ -106,6 +171,10 @@ function GlobalFilter(props: {
 
 export default function StatusTable(props: TableProps) {
   const { monitorId, statuses, offset } = props;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [statusToView, setStatusToView] = React.useState<
+    UptimeMonitorStatus | undefined
+  >(undefined);
 
   const data = React.useMemo(() => {
     return statuses
@@ -125,16 +194,33 @@ export default function StatusTable(props: TableProps) {
         Cell: (props) => StatusCell({ status: props.cell.value }),
       },
       {
-        Header: "Response Time",
+        Header: "Response Time (time-to-first-byte)",
         accessor: "responseTime",
         Cell: (props) =>
           ResponseTimeCellProps({ responseTime: props.cell.value }),
+      },
+      {
+        Header: "Response Status Code",
+        accessor: "response",
+        disableSortBy: true,
+        Cell: (props) => ResponseCell({ ...props.cell.value }),
       },
       {
         Header: "Timestamp",
         accessor: "timestamp",
         Cell: (props) =>
           TimestampCell({ timestamp: props.cell.value, offset: offset }),
+      },
+      {
+        Header: "Actions",
+        accessor: "statusObj",
+        disableSortBy: true,
+        Cell: (props) =>
+          StatusObjectCell({
+            status: props.cell.value,
+            onOpen,
+            setStatusToView,
+          }),
       },
       {
         id: "filter-column",
@@ -181,6 +267,11 @@ export default function StatusTable(props: TableProps) {
       p="1.5em"
       mb="2em"
     >
+      <StatusObjectModal
+        status={statusToView}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
       <Heading textAlign="center" size="lg" mb=".7em">
         Monitor Statuses
       </Heading>
@@ -226,7 +317,7 @@ export default function StatusTable(props: TableProps) {
                         >
                           <Flex>
                             <Box my="auto">{column.render("Header")}</Box>
-                            {column.id !== "status" ? (
+                            {!column.disableSortBy ? (
                               <>
                                 <Spacer />
                                 <TableSortColumnUi

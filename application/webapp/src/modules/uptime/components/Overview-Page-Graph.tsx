@@ -119,7 +119,7 @@ function buildGraphSerie(
         x: getTimeString(offset, status.timestamp),
         y: (status as any).latency // TODO revert latency status
           ? (status as any).latency
-          : status.response.timings.phases.total ?? -1,
+          : status.response.timings.phases.firstByte ?? -1,
       };
       return dataPoint;
     }),

@@ -68,7 +68,7 @@ function Feature(props: FeatureProps) {
 
 export function NoCode() {
   return (
-    <Flex mb="3em" flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center">
       <chakra.h1
         textAlign="center"
         fontSize="5xl"
@@ -170,7 +170,6 @@ export function NoCode() {
         lineHeight="shorter"
         mx="auto"
         color={useColorModeValue("gray.800", "gray.100")}
-        mb=".8em"
       >
         - e-commerce site owner (doesn't code)
       </chakra.h3>

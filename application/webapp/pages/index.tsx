@@ -1,3 +1,4 @@
+import { Divider, useColorModeValue } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { Advanced } from "../src/modules/landing-page/Advanced";
@@ -6,6 +7,17 @@ import { ComingSoon } from "../src/modules/landing-page/Coming-Soon";
 import { CTA } from "../src/modules/landing-page/Cta";
 import { Features } from "../src/modules/landing-page/Features";
 import { NoCode } from "../src/modules/landing-page/Nocode";
+
+const SectionDivider = () => (
+  <Divider
+    maxW="md"
+    margin="auto"
+    borderWidth="1px"
+    borderColor={useColorModeValue("blue.500", "blue.300")}
+    mt="5em"
+    mb=".8em"
+  />
+);
 
 const Home: NextPage = () => {
   return (
@@ -18,9 +30,13 @@ const Home: NextPage = () => {
       }}
     >
       <Banner />
+      <SectionDivider />
       <Features />
+      <SectionDivider />
       <NoCode />
+      <SectionDivider />
       <Advanced />
+      <SectionDivider />
       <ComingSoon />
       <CTA />
     </PageLayout>

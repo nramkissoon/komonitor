@@ -16,6 +16,7 @@ const buildUptimeStatusRequestOptions = (
     hooks,
     request,
     retry,
+    throwHttpErrors,
     ...rest
   } = options;
   return { ...rest };
@@ -61,10 +62,11 @@ export const request = async (
   url: string,
   method: HttpMethods,
   httpHeaders?: { [header: string]: string },
-  body?: string
+  body?: string,
+  followRedirects?: boolean
 ): Promise<Pick<UptimeMonitorStatus, "request" | "response">> => {
   const options: OptionsOfUnknownResponseBody = {
-    headers: { ...httpHeaders },
+    headers: { ...httpHeaders, "User-Agent": "komonitor" },
     timeout: { response: 5000 },
     body: body,
     allowGetBody: true,
@@ -73,6 +75,7 @@ export const request = async (
       maxRetryAfter: undefined,
     },
     throwHttpErrors: false,
+    followRedirect: followRedirects,
   };
   try {
     let response: Response<unknown>;

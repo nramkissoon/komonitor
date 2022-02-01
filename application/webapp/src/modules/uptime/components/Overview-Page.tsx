@@ -1,11 +1,19 @@
 import {
   Box,
   Divider,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import router from "next/router";
@@ -25,6 +33,7 @@ import {
 } from "../../user/client";
 import { deleteMonitor, useMonitorStatusHistory } from "../client";
 import { yesterday } from "../utils";
+import { CreateUpdateFormRewrite } from "./Create-Update-Form-Rewrite";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
 import { OverviewPageGraphProps } from "./Overview-Page-Graph";
 import { OverviewPageHeader } from "./Overview-Page-Header";
@@ -37,8 +46,38 @@ const MonitorAlertsOverview = dynamic(
   () => import("./Monitor-Alerts-Overview")
 );
 
+const EditFormModal = ({
+  monitor,
+  productId,
+  isOpen,
+  onClose,
+}: {
+  monitor: UptimeMonitor;
+  productId: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent maxW="6xl" bg={useColorModeValue("gray.50", "gray.900")}>
+        <ModalHeader mb="-10px">Edit Uptime Monitor</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <CreateUpdateFormRewrite
+            product_id={productId}
+            closeForm={onClose}
+            currentMonitorAttributes={monitor}
+          />
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
+
 interface OverviewPageProps {
   monitor: UptimeMonitor;
+  mutate: () => void;
 }
 
 export function OverviewPage(props: OverviewPageProps) {
@@ -46,6 +85,8 @@ export function OverviewPage(props: OverviewPageProps) {
   const [monitorStatusSince, setMonitorStatusSince] = React.useState<string>(
     yesterday.toString()
   );
+
+  const { isOpen: isEditFormOpen, onOpen, onClose } = useDisclosure();
 
   const {
     data,
@@ -119,7 +160,15 @@ export function OverviewPage(props: OverviewPageProps) {
         itemType="monitor"
         onSuccess={() => router.push("/app/uptime")}
       />
+      <EditFormModal
+        isOpen={isEditFormOpen}
+        onClose={onClose}
+        monitor={monitor}
+        productId={data ? data.productId : ""}
+      />
       <OverviewPageHeader
+        monitor={monitor}
+        mutate={mutate}
         monitorName={name}
         monitorUrl={url}
         currentStatus={mostRecentStatus?.status as string}
@@ -127,6 +176,7 @@ export function OverviewPage(props: OverviewPageProps) {
         monitorId={monitor_id}
         monitorRegion={regionToLocationStringMap[region]}
         openDeleteDialog={openDeleteDialog}
+        openEditForm={onOpen}
       />
       <Divider mb="1em" />
       <SelectStatusHistoryRadioButtons

@@ -44,7 +44,7 @@ const CtaButton = () => {
 
 export function Banner() {
   return (
-    <Flex mb="5em" flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center">
       <Box>
         <chakra.h1
           textAlign="center"

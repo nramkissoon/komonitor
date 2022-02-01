@@ -38,6 +38,7 @@ import {
   timeAgo,
 } from "../../../common/client-utils";
 import { TableSortColumnUi } from "../../../common/components/Table-Sort-Column-UI";
+import { createMonitorDataWithStatus } from "../utils";
 import { MonitorDeleteDialog } from "./Delete-Monitor-Dialog";
 import { ActionsCell, DescriptionCell, StatusCell } from "./Table-Cell";
 
@@ -142,21 +143,6 @@ function GlobalFilter(props: {
       />
     </InputGroup>
   );
-}
-
-function createMonitorDataWithStatus(
-  statusesMap: { [monitorId: string]: UptimeMonitorStatus[] },
-  monitors: UptimeMonitor[]
-) {
-  const data: UptimeMonitorWithStatuses[] = [];
-  for (let monitor of monitors) {
-    const newData: UptimeMonitorWithStatuses = {
-      statuses: statusesMap[monitor.monitor_id] ?? [],
-      ...monitor,
-    };
-    data.push(newData);
-  }
-  return data;
 }
 
 export function OverviewTable(props: TableProps) {
@@ -285,7 +271,6 @@ export function OverviewTable(props: TableProps) {
         monitorId: deleteMonitor.monitorId as string,
         onClose: onCloseDeleteDialog,
         leastDestructiveRef: cancelRef,
-        mutate: mutate,
       })}
       {GlobalFilter({ globalFilter, setGlobalFilter })}
       <Box

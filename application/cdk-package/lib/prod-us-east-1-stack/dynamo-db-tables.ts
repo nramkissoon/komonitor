@@ -5,11 +5,13 @@ export class ProdDdbTables extends cdk.Construct {
   public readonly uptimeMonitorTable: dynamodb.Table;
   public readonly uptimeMonitorStatusTable: dynamodb.Table;
   public readonly uptimeMonitorTableFrequencyGsiName: string;
+  public readonly uptimeCheckMonitorTableProjectIdGsiName: string;
   public readonly userTable: dynamodb.Table;
   public readonly alertInvocationTable: dynamodb.Table;
   public readonly stripeWebhooksTable: dynamodb.Table;
   public readonly lighthouseJobTable: dynamodb.Table;
   public readonly lighthouseJobTableFrequencyGsiName: string;
+  public readonly projectsTable: dynamodb.Table;
 
   constructor(scope: cdk.Construct, id: string, props: {}) {
     super(scope, id);
@@ -45,6 +47,16 @@ export class ProdDdbTables extends cdk.Construct {
       indexName: this.uptimeMonitorTableFrequencyGsiName,
       partitionKey: { name: "frequency", type: dynamodb.AttributeType.NUMBER },
       sortKey: { name: "region", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    // CloudFormation cannot update a stack when a custom-named resource requires replacing.
+    this.uptimeCheckMonitorTableProjectIdGsiName = "projectIdGsi";
+
+    this.uptimeMonitorTable.addGlobalSecondaryIndex({
+      indexName: this.uptimeCheckMonitorTableProjectIdGsiName,
+      partitionKey: { name: "owner_id", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "project_id", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
@@ -116,5 +128,16 @@ export class ProdDdbTables extends cdk.Construct {
         tableName: "komonitor-prod-stripe-webhook",
       }
     );
+
+    this.projectsTable = new dynamodb.Table(this, "projects", {
+      partitionKey: {
+        name: "owner_id",
+        type: dynamodb.AttributeType.STRING,
+      },
+      sortKey: { name: "project_id", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      tableName: "komonitor-prod-projects",
+    });
   }
 }

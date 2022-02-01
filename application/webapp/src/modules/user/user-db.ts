@@ -415,7 +415,7 @@ export async function getUserFromStripeCustomerId(
   }
 }
 
-export async function getUserSlackInstallation(
+export async function getUserSlackInstallations(
   ddbClient: DynamoDBClient,
   userTableName: string,
   userId: string
@@ -428,8 +428,8 @@ export async function getUserSlackInstallation(
 
     const installations = user.slack_installations ?? [];
 
-    if (installations.length === 0) return;
-    return installations[0];
+    if (installations.length === 0) return [];
+    return installations;
   } catch (err) {
     console.error(err);
     throw err;
@@ -439,9 +439,28 @@ export async function getUserSlackInstallation(
 export async function deleteUserSlackInstallation(
   ddbClient: DynamoDBClient,
   userTableName: string,
-  userId: string
+  userId: string,
+  teamId: string,
+  channelId: string
 ) {
   try {
+    const currentInstallations = await getUserSlackInstallations(
+      ddbClient,
+      userTableName,
+      userId
+    );
+
+    const updatedInstallations = currentInstallations.filter(
+      (i) =>
+        !(i.team?.id === teamId && i.incomingWebhook?.channelId === channelId)
+    );
+
+    const marshalledInstallations = updatedInstallations.map(
+      (installation) => ({
+        M: marshall(installation, { removeUndefinedValues: true }),
+      })
+    );
+
     const updateCommandInput: UpdateItemCommandInput = {
       TableName: userTableName,
       ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
@@ -449,8 +468,12 @@ export async function deleteUserSlackInstallation(
         pk: { S: "USER#" + userId },
         sk: { S: "USER#" + userId },
       },
-
-      UpdateExpression: "REMOVE slack_installations",
+      ExpressionAttributeValues: {
+        ":i": {
+          L: marshalledInstallations,
+        },
+      },
+      UpdateExpression: "SET slack_installations = :i",
     };
 
     const response = await ddbClient.send(
@@ -467,7 +490,7 @@ export async function deleteUserSlackInstallation(
   }
 }
 
-export async function updateUserSlackInstallation(
+export async function addUserSlackInstallation(
   ddbClient: DynamoDBClient,
   userTableName: string,
   userId: string,
@@ -486,6 +509,67 @@ export async function updateUserSlackInstallation(
           L: [{ M: marshall(installation, { removeUndefinedValues: true }) }],
         },
       },
+      UpdateExpression:
+        "SET slack_installations = list_append(slack_installations, :i)",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+export async function updateUserSlackInstallation(
+  ddbClient: DynamoDBClient,
+  userTableName: string,
+  userId: string,
+  oldInstallation: SlackInstallation,
+  installation: SlackInstallation
+) {
+  try {
+    const currentInstallations = await getUserSlackInstallations(
+      ddbClient,
+      userTableName,
+      userId
+    );
+
+    const updatedInstallations = currentInstallations.map((i) => {
+      if (
+        i.team?.id === oldInstallation.team?.id &&
+        i.incomingWebhook?.channelId ===
+          oldInstallation.incomingWebhook?.channelId
+      ) {
+        i = installation;
+      }
+      return i;
+    });
+
+    const marshalledInstallations = updatedInstallations.map(
+      (installation) => ({
+        M: marshall(installation, { removeUndefinedValues: true }),
+      })
+    );
+
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: userTableName,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      ExpressionAttributeValues: {
+        ":i": {
+          L: marshalledInstallations,
+        },
+      },
       UpdateExpression: "SET slack_installations = :i",
     };
 
@@ -498,7 +582,7 @@ export async function updateUserSlackInstallation(
     // throw an error with the requestId for debugging
     throw new Error(response.$metadata.requestId);
   } catch (err) {
-    // TODO log
+    console.log(err);
     throw err;
   }
 }
