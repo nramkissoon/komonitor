@@ -47,7 +47,7 @@ Projects:
         ✔ rewrite docs @done(22-02-01 10:37)
         ✔ limit project creation on free accounts @done(22-01-30 15:39)
         ✘ view sample status in landing @cancelled(22-01-30 15:39)
-        ☐ weekly report emails -> cdk changes if necc
+        ✔ weekly report emails -> cdk changes if necc @done(22-02-01 11:37)
 
 ------------------------------------------------------------------------------------------
 
