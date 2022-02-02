@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
 import { regionToLocationStringMap } from "../../../common/client-utils";
@@ -24,6 +24,7 @@ import {
   DeleteDialog,
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
+import { useTeam } from "../../../common/components/TeamProvider";
 import { useAlertInvocationsAllTime } from "../../alerts/client";
 import { InvocationTable } from "../../alerts/components/Invocation-Table";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
@@ -42,9 +43,6 @@ const OverviewPageGraph = dynamic<OverviewPageGraphProps>(() =>
   import("./Overview-Page-Graph").then((module) => module.OverviewPageGraph)
 );
 const StatusTable = dynamic(() => import("./Status-Table"));
-const MonitorAlertsOverview = dynamic(
-  () => import("./Monitor-Alerts-Overview")
-);
 
 const EditFormModal = ({
   monitor,
@@ -103,6 +101,10 @@ export function OverviewPage(props: OverviewPageProps) {
   const { monitor } = props;
   const { name, url, monitor_id, region, alert } = monitor;
 
+  const router = useRouter();
+  const { team } = useTeam();
+  const { projectId } = router.query;
+
   const {
     statuses,
     isError: statusesIsError,
@@ -158,7 +160,12 @@ export function OverviewPage(props: OverviewPageProps) {
         mutateApiUrl="/api/uptime/monitors"
         deleteApiFunc={deleteMonitor}
         itemType="monitor"
-        onSuccess={() => router.push("/app/uptime")}
+        onSuccess={() =>
+          router.push(
+            ((`/${team ? team : "app"}/projects/` + projectId) as string) +
+              "/uptime"
+          )
+        }
       />
       <EditFormModal
         isOpen={isEditFormOpen}

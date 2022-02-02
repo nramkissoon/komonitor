@@ -31,29 +31,34 @@ export const runUpConditionChecks = (
   conditions: UpConditionCheck[],
   response: UptimeStatusResponse
 ) => {
-  let passed = true;
-  let check;
-  for (let condition of conditions) {
-    switch (condition.type) {
-      case "code":
-        check = condition.condition as CodeCheck;
-        passed = passed && codeCheckPassed(check, response);
-        break;
-      case "latency":
-        check = condition.condition as LatencyCheck;
-        passed = passed && latencyCheckPassed(check, response);
-        break;
-      case "html_body":
-        check = condition.condition as HtmlBodyCheck;
-        passed = passed && htmlBodyCheckPassed(check, response);
-        break;
-      case "json_body":
-        break;
-      default:
-        break;
+  try {
+    let passed = true;
+    let check;
+    for (let condition of conditions) {
+      switch (condition.type) {
+        case "code":
+          check = condition.condition as CodeCheck;
+          passed = passed && codeCheckPassed(check, response);
+          break;
+        case "latency":
+          check = condition.condition as LatencyCheck;
+          passed = passed && latencyCheckPassed(check, response);
+          break;
+        case "html_body":
+          check = condition.condition as HtmlBodyCheck;
+          passed = passed && htmlBodyCheckPassed(check, response);
+          break;
+        case "json_body":
+          break;
+        default:
+          break;
+      }
     }
+    return passed;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
-  return passed;
 };
 
 export const numericComparison = (

@@ -27,10 +27,17 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { Alert, ChannelType, HttpMethods, UptimeMonitor } from "project-types";
+import {
+  Alert,
+  ChannelType,
+  HttpMethods,
+  UpConditionCheck,
+  UptimeMonitor,
+} from "project-types";
 import React from "react";
 import {
   Controller,
+  FormProvider,
   SubmitHandler,
   useFieldArray,
   useForm,
@@ -48,6 +55,7 @@ import {
 } from "../client";
 import { HttpHeaderFormField } from "./Http-Header-Form-Field";
 import { RecipientFormController } from "./Recipient-Form-Controller";
+import { UpConditionCheckFields } from "./Up-Condition-Check-Fields";
 
 interface CreateUpdateFormProps {
   product_id: string;
@@ -71,6 +79,7 @@ export type Inputs = {
     }[];
     follow_redirects: boolean;
   };
+  up_condition_checks?: UpConditionCheck[];
   alert?: Alert;
   project_id: string;
 };
@@ -95,6 +104,7 @@ function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
     placeholders.webhook_url = placeholders.webhook_url.replace("https://", "");
   placeholders.url = placeholders.url.replace("https://", "");
   placeholders.frequency = placeholders.frequency.toString();
+  placeholders.up_condition_checks = monitor.up_condition_checks;
   placeholders.http_parameters = {};
   placeholders.http_parameters["headers"] = http_headers;
   placeholders.http_parameters["body"] = monitor.http_parameters.body;
@@ -145,6 +155,12 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   const { mutate } = useUptimeMonitorsForProject(projectId as string);
 
   const errorToast = useToast();
+
+  const methods = useForm<Inputs>({
+    defaultValues: createNewMonitor
+      ? { project_id: projectId as string }
+      : placeholders,
+  });
   const {
     register,
     handleSubmit,
@@ -157,15 +173,16 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     getValues,
     clearErrors,
     setError,
-  } = useForm<Inputs>({
-    defaultValues: createNewMonitor
-      ? { project_id: projectId as string }
-      : placeholders,
-  });
+  } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "http_parameters.headers",
   });
+  const {
+    fields: upConditionFields,
+    append: appendUpCondition,
+    remove: removeUpCondition,
+  } = useFieldArray({ control, name: "up_condition_checks" });
 
   const watchHttpHeaderArray = watch("http_parameters.headers");
   const watchFollowRedirects = watch("http_parameters.follow_redirects");
@@ -266,397 +283,435 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   return (
     <>
       <Container mb="3em" p="0" maxW="6xl">
-        <chakra.form onSubmit={handleSubmit(onSubmit)}>
-          <Box
-            p="2em"
-            borderRadius="md"
-            shadow="md"
-            bg={useColorModeValue("white", "#0f131a")}
-            mb="1.5em"
-          >
-            <Heading size="md" mb="15px">
-              Monitor Settings
-            </Heading>
-            <Controller
-              name="name"
-              defaultValue=""
-              control={control}
-              rules={{
-                required: "Monitor name is required.",
-                maxLength: {
-                  value: 50,
-                  message: "Name must be 50 characters or under in length.",
-                },
-                pattern: {
-                  value: /^[a-zA-Z0-9-_]+$/i,
-                  message:
-                    "Name must consist of alphanumeric characters, hyphens, and underscores.",
-                },
-              }}
-              render={({ field }) => (
-                <FormControl
-                  isInvalid={errors.name ? touchedFields.name : false}
-                  isRequired
-                  mb="1.5em"
-                >
-                  <FormLabel htmlFor="name">Monitor Name</FormLabel>
-                  <Input {...field} id="name" placeholder="Monitor Name" />
-                  <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-                </FormControl>
-              )}
-            />
-            <Controller
-              name="url"
-              defaultValue=""
-              control={control}
-              rules={{
-                required: "URL is required.",
-                maxLength: {
-                  value: 250,
-                  message: "URL must be 250 characters or under in length.",
-                },
-              }}
-              render={({ field }) => (
-                <FormControl
-                  isInvalid={errors.url ? touchedFields.url : false}
-                  isRequired
-                  mb="1.5em"
-                  isDisabled={!createNewMonitor}
-                >
-                  <FormLabel htmlFor="url">
-                    URL {!createNewMonitor && "(URL not editable.)"}
-                  </FormLabel>
-                  <InputGroup id="url">
-                    <InputLeftAddon children="https://" />
-                    <Input {...field} placeholder="your-website.com" />
-                  </InputGroup>
-                  <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
-                </FormControl>
-              )}
-            />
-            <Controller
-              name="region"
-              defaultValue=""
-              control={control}
-              rules={{
-                required: "Region is required.",
-              }}
-              render={({ field }) => (
-                <FormControl
-                  isInvalid={errors.region ? touchedFields.region : false}
-                  isRequired
-                  mb="1.5em"
-                >
-                  <FormLabel htmlFor="region">
-                    <Tooltip
-                      placement="right-end"
-                      label="AWS Region to run this monitor from."
-                      openDelay={500}
-                    >
-                      Region
-                    </Tooltip>
-                  </FormLabel>
-                  <ReactSelect
-                    options={createRegionSelectOptions()}
-                    placeholder="Select Region"
-                    field={field as any}
-                    setValue={setValue}
-                  />
-                  <FormErrorMessage>{errors.region?.message}</FormErrorMessage>
-                </FormControl>
-              )}
-            />
-            <Controller
-              name="frequency"
-              defaultValue=""
-              control={control}
-              rules={{
-                required: "Frequency is required.",
-              }}
-              render={({ field }) => (
-                <FormControl
-                  isInvalid={errors.frequency ? touchedFields.frequency : false}
-                  isRequired
-                  mb=".5em"
-                >
-                  <FormLabel htmlFor="region">
-                    <Tooltip
-                      placement="right-end"
-                      label="Frequency at which the monitor runs an uptime check."
-                      openDelay={500}
-                    >
-                      Check Frequency
-                    </Tooltip>
-                  </FormLabel>
-                  <ReactSelect
-                    options={freqSelectFieldOptions}
-                    placeholder="Select Frequency"
-                    field={field as any}
-                    setValue={setValue}
-                  />
-                  <FormErrorMessage>
-                    {errors.frequency?.message}
-                  </FormErrorMessage>
-                </FormControl>
-              )}
-            />
-          </Box>
-          <Box
-            p="2em"
-            borderRadius="md"
-            shadow="md"
-            mb="1.5em"
-            bg={useColorModeValue("white", "#0f131a")}
-          >
-            <Flex justifyContent="space-between">
-              <Heading size="md">Alert Settings</Heading>
-              <Box>
-                <chakra.span mr="1rem" fontSize="lg" fontWeight="medium">
-                  Add an alert?
-                </chakra.span>
-                <Switch
-                  size="lg"
-                  isChecked={hasAlert}
-                  onChange={(e) => {
-                    if (!e.target.checked) {
-                      clearErrors("alert.recipients");
-                      resetField("alert");
-                    }
-                    setHasAlert(e.target.checked);
-                  }}
-                />
-              </Box>
-            </Flex>
-
-            <Controller
-              name="failures_before_alert"
-              control={control}
-              defaultValue={1}
-              rules={
-                hasAlert
-                  ? {
-                      required: "Required.",
-                      max: {
-                        value: 5,
-                        message:
-                          "Number of failures must be between 1 and 5 inclusive.",
-                      },
-                      min: {
-                        value: 1,
-                        message:
-                          "Number of failures must be between 1 and 5 inclusive.",
-                      },
-                    }
-                  : undefined
-              }
-              render={({ field }) => (
-                <FormControl
-                  isInvalid={
-                    errors.failures_before_alert
-                      ? touchedFields.failures_before_alert
-                      : false
-                  }
-                  isRequired
-                  isDisabled={!hasAlert}
-                  mb=".5em"
-                >
-                  <FormLabel htmlFor="failuresBeforeRetry">
-                    <Tooltip
-                      placement="right-end"
-                      label="Number of failed uptime checks before an alert is sent."
-                      openDelay={500}
-                    >
-                      Failures Before Alert
-                    </Tooltip>
-                  </FormLabel>
-                  <NumberInput
-                    min={1}
-                    step={1}
-                    max={5}
-                    clampValueOnBlur={false}
-                    value={hasAlert ? field.value : ""}
+        <FormProvider {...methods}>
+          <chakra.form onSubmit={handleSubmit(onSubmit)}>
+            <Box
+              p="2em"
+              borderRadius="md"
+              shadow="md"
+              bg={useColorModeValue("white", "#0f131a")}
+              mb="1.5em"
+            >
+              <Heading size="md" mb="15px">
+                Monitor Settings
+              </Heading>
+              <Controller
+                name="name"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: "Monitor name is required.",
+                  maxLength: {
+                    value: 50,
+                    message: "Name must be 50 characters or under in length.",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9-_]+$/i,
+                    message:
+                      "Name must consist of alphanumeric characters, hyphens, and underscores.",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={errors.name ? touchedFields.name : false}
+                    isRequired
+                    mb="1.5em"
                   >
-                    <NumberInputField
+                    <FormLabel htmlFor="name">Monitor Name</FormLabel>
+                    <Input {...field} id="name" placeholder="Monitor Name" />
+                    <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="url"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: "URL is required.",
+                  maxLength: {
+                    value: 250,
+                    message: "URL must be 250 characters or under in length.",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={errors.url ? touchedFields.url : false}
+                    isRequired
+                    mb="1.5em"
+                    isDisabled={!createNewMonitor}
+                  >
+                    <FormLabel htmlFor="url">
+                      URL {!createNewMonitor && "(URL not editable.)"}
+                    </FormLabel>
+                    <InputGroup id="url">
+                      <InputLeftAddon children="https://" />
+                      <Input {...field} placeholder="your-website.com" />
+                    </InputGroup>
+                    <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="region"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: "Region is required.",
+                }}
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={errors.region ? touchedFields.region : false}
+                    isRequired
+                    mb="1.5em"
+                  >
+                    <FormLabel htmlFor="region">
+                      <Tooltip
+                        placement="right-end"
+                        label="AWS Region to run this monitor from."
+                        openDelay={500}
+                      >
+                        Region
+                      </Tooltip>
+                    </FormLabel>
+                    <ReactSelect
+                      options={createRegionSelectOptions()}
+                      placeholder="Select Region"
+                      field={field as any}
+                      setValue={setValue}
+                    />
+                    <FormErrorMessage>
+                      {errors.region?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="frequency"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: "Frequency is required.",
+                }}
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={
+                      errors.frequency ? touchedFields.frequency : false
+                    }
+                    isRequired
+                    mb=".5em"
+                  >
+                    <FormLabel htmlFor="region">
+                      <Tooltip
+                        placement="right-end"
+                        label="Frequency at which the monitor runs an uptime check."
+                        openDelay={500}
+                      >
+                        Check Frequency
+                      </Tooltip>
+                    </FormLabel>
+                    <ReactSelect
+                      options={freqSelectFieldOptions}
+                      placeholder="Select Frequency"
+                      field={field as any}
+                      setValue={setValue}
+                    />
+                    <FormErrorMessage>
+                      {errors.frequency?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+            </Box>
+            <Box
+              p="2em"
+              borderRadius="md"
+              shadow="md"
+              mb="1.5em"
+              bg={useColorModeValue("white", "#0f131a")}
+            >
+              <Flex justifyContent="space-between">
+                <Heading size="md">Alert Settings</Heading>
+                <Box>
+                  <chakra.span mr="1rem" fontSize="lg" fontWeight="medium">
+                    Add an alert?
+                  </chakra.span>
+                  <Switch
+                    size="lg"
+                    isChecked={hasAlert}
+                    onChange={(e) => {
+                      if (!e.target.checked) {
+                        clearErrors("alert.recipients");
+                        resetField("alert");
+                      }
+                      setHasAlert(e.target.checked);
+                    }}
+                  />
+                </Box>
+              </Flex>
+
+              <Controller
+                name="failures_before_alert"
+                control={control}
+                defaultValue={1}
+                rules={
+                  hasAlert
+                    ? {
+                        required: "Required.",
+                        max: {
+                          value: 5,
+                          message:
+                            "Number of failures must be between 1 and 5 inclusive.",
+                        },
+                        min: {
+                          value: 1,
+                          message:
+                            "Number of failures must be between 1 and 5 inclusive.",
+                        },
+                      }
+                    : undefined
+                }
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={
+                      errors.failures_before_alert
+                        ? touchedFields.failures_before_alert
+                        : false
+                    }
+                    isRequired
+                    isDisabled={!hasAlert}
+                    mb=".5em"
+                  >
+                    <FormLabel htmlFor="failuresBeforeRetry">
+                      <Tooltip
+                        placement="right-end"
+                        label="Number of failed uptime checks before an alert is sent."
+                        openDelay={500}
+                      >
+                        Failures Before Alert
+                      </Tooltip>
+                    </FormLabel>
+                    <NumberInput
+                      min={1}
+                      step={1}
+                      max={5}
+                      clampValueOnBlur={false}
+                      value={hasAlert ? field.value : ""}
+                    >
+                      <NumberInputField
+                        {...field}
+                        placeholder="Failure amount"
+                        value={hasAlert ? field.value : ""}
+                      />
+                    </NumberInput>
+                    <FormErrorMessage>
+                      {errors.failures_before_alert?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="alert.description"
+                defaultValue=""
+                control={control}
+                rules={
+                  hasAlert
+                    ? {
+                        required: "Alert description is required.",
+                        maxLength: {
+                          value: 300,
+                          message:
+                            "Description must be 300 characters or less.",
+                        },
+                      }
+                    : undefined
+                }
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={
+                      errors.alert?.description
+                        ? touchedFields.alert?.description
+                        : false
+                    }
+                    isRequired
+                    mb="1.5em"
+                    isDisabled={!hasAlert}
+                  >
+                    <FormLabel htmlFor="description">
+                      Alert Description
+                    </FormLabel>
+                    <Textarea
                       {...field}
-                      placeholder="Failure amount"
+                      id="description"
+                      placeholder="Alert Description"
+                      isDisabled={!hasAlert}
                       value={hasAlert ? field.value : ""}
                     />
-                  </NumberInput>
-                  <FormErrorMessage>
-                    {errors.failures_before_alert?.message}
-                  </FormErrorMessage>
-                </FormControl>
+                    <FormHelperText>
+                      Descriptions appear in the alert when they are sent. You
+                      should put useful information about the alert and/or
+                      incident action items here.
+                    </FormHelperText>
+                    <FormErrorMessage>
+                      {errors.alert?.description?.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+              {errors.alert?.recipients && (
+                <chakra.span color="red.400" fontSize="md">
+                  {(errors.alert.recipients as any).message}
+                </chakra.span>
               )}
-            />
-            <Controller
-              name="alert.description"
-              defaultValue=""
-              control={control}
-              rules={
-                hasAlert
-                  ? {
-                      required: "Alert description is required.",
-                      maxLength: {
-                        value: 300,
-                        message: "Description must be 300 characters or less.",
-                      },
-                    }
-                  : undefined
-              }
-              render={({ field }) => (
-                <FormControl
-                  isInvalid={
-                    errors.alert?.description
-                      ? touchedFields.alert?.description
-                      : false
-                  }
-                  isRequired
-                  mb="1.5em"
-                  isDisabled={!hasAlert}
-                >
-                  <FormLabel htmlFor="description">Alert Description</FormLabel>
-                  <Textarea
-                    {...field}
-                    id="description"
-                    placeholder="Alert Description"
-                    isDisabled={!hasAlert}
-                    value={hasAlert ? field.value : ""}
-                  />
-                  <FormHelperText>
-                    Descriptions appear in the alert when they are sent. You
-                    should put useful information about the alert and/or
-                    incident action items here.
-                  </FormHelperText>
-                  <FormErrorMessage>
-                    {errors.alert?.description?.message}
-                  </FormErrorMessage>
-                </FormControl>
-              )}
-            />
-            {errors.alert?.recipients && (
-              <chakra.span color="red.400" fontSize="md">
-                {(errors.alert.recipients as any).message}
-              </chakra.span>
-            )}
-            <RecipientFormController
-              control={control}
-              productId={product_id}
-              postErrorToast={postErrorToast}
-              setValue={setValue}
-              hasAlert={hasAlert}
-              currentValues={getValues("alert.recipients")}
-              clearErrors={clearErrors}
-            />
-          </Box>
-          <Box
-            p="2em"
-            borderRadius="md"
-            shadow="md"
-            bg={useColorModeValue("white", "#0f131a")}
-            mb="1.5em"
-          >
-            <Accordion allowToggle>
-              <AccordionItem border="none">
-                <AccordionButton
-                  borderRadius="md"
-                  _hover={{ bgColor: useColorModeValue("gray.50", "gray.500") }}
-                >
-                  <Heading size="md">HTTP Settings</Heading>
-                  <AccordionIcon boxSize="8" />
-                </AccordionButton>
-                <AccordionPanel pb={4}>
-                  <Controller
-                    name="http_parameters.method"
-                    defaultValue="GET"
-                    control={control}
-                    rules={{
-                      required: "HTTP method is required.",
+              <RecipientFormController
+                control={control}
+                productId={product_id}
+                postErrorToast={postErrorToast}
+                setValue={setValue}
+                hasAlert={hasAlert}
+                currentValues={getValues("alert.recipients")}
+                clearErrors={clearErrors}
+              />
+            </Box>
+            <Box
+              p="2em"
+              borderRadius="md"
+              shadow="md"
+              bg={useColorModeValue("white", "#0f131a")}
+              mb="1.5em"
+            >
+              <Accordion allowToggle>
+                <AccordionItem border="none">
+                  <AccordionButton
+                    borderRadius="md"
+                    _hover={{
+                      bgColor: useColorModeValue("gray.50", "gray.500"),
                     }}
-                    render={({ field }) => (
-                      <FormControl
-                        isInvalid={
-                          errors.http_parameters?.method
-                            ? touchedFields.http_parameters?.method
-                            : false
-                        }
-                        isRequired
-                        mb="1.5em"
-                      >
-                        <FormLabel htmlFor="http_parameters.method">
-                          HTTP Method
-                        </FormLabel>
-                        <ReactSelect
-                          options={createHttpMethodOptions()}
-                          placeholder="Select HTTP Method"
-                          field={field as any}
-                          setValue={setValue}
-                        />
-                        <FormErrorMessage>
-                          {errors.http_parameters?.method?.message}
-                        </FormErrorMessage>
-                      </FormControl>
-                    )}
-                  />
-                  <Controller
-                    name="http_parameters.body"
-                    control={control}
-                    rules={{}}
-                    render={({ field }) => (
-                      <FormControl
-                        isInvalid={
-                          errors.http_parameters?.body
-                            ? touchedFields.http_parameters?.body
-                            : false
-                        }
-                        mb="1.5em"
-                      >
-                        <FormLabel htmlFor="http_parameters.body">
-                          HTTP Body
-                        </FormLabel>
-                        <Textarea
-                          {...field}
-                          id="http_parameters.body"
-                          placeholder="HTTP Body"
-                        />
-                        <FormHelperText>
-                          Remember to set the Content-Type Header below!
-                        </FormHelperText>
-                        <FormErrorMessage>
-                          {errors.http_parameters?.body?.message}
-                        </FormErrorMessage>
-                      </FormControl>
-                    )}
-                  />
-                  <Controller
-                    control={control}
-                    name="http_parameters.follow_redirects"
-                    render={({ field }) => (
-                      <FormControl mb="1.5em">
-                        <Checkbox
-                          {...field}
-                          isChecked={watchFollowRedirects}
-                          value="follow redirects"
+                  >
+                    <Heading size="md">HTTP Settings</Heading>
+                    <AccordionIcon boxSize="8" />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <Controller
+                      name="http_parameters.method"
+                      defaultValue="GET"
+                      control={control}
+                      rules={{
+                        required: "HTTP method is required.",
+                      }}
+                      render={({ field }) => (
+                        <FormControl
+                          isInvalid={
+                            errors.http_parameters?.method
+                              ? touchedFields.http_parameters?.method
+                              : false
+                          }
+                          isRequired
+                          mb="1.5em"
                         >
-                          Follow redirects
-                        </Checkbox>
-                      </FormControl>
-                    )}
-                  />
-                  <HttpHeaderFormField
-                    fields={controlledHttpHeaderFields}
-                    touchedFields={touchedFields as any}
-                    append={append}
-                    remove={remove}
-                    errors={errors as any}
-                    productId={product_id}
-                    setValue={setValue}
-                    control={control}
-                  />
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          </Box>
-          {/* <Box
+                          <FormLabel htmlFor="http_parameters.method">
+                            HTTP Method
+                          </FormLabel>
+                          <ReactSelect
+                            options={createHttpMethodOptions()}
+                            placeholder="Select HTTP Method"
+                            field={field as any}
+                            setValue={setValue}
+                          />
+                          <FormErrorMessage>
+                            {errors.http_parameters?.method?.message}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    />
+                    <Controller
+                      name="http_parameters.body"
+                      control={control}
+                      rules={{}}
+                      render={({ field }) => (
+                        <FormControl
+                          isInvalid={
+                            errors.http_parameters?.body
+                              ? touchedFields.http_parameters?.body
+                              : false
+                          }
+                          mb="1.5em"
+                        >
+                          <FormLabel htmlFor="http_parameters.body">
+                            HTTP Body
+                          </FormLabel>
+                          <Textarea
+                            {...field}
+                            id="http_parameters.body"
+                            placeholder="HTTP Body"
+                          />
+                          <FormHelperText>
+                            Remember to set the Content-Type Header below!
+                          </FormHelperText>
+                          <FormErrorMessage>
+                            {errors.http_parameters?.body?.message}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    />
+                    <Controller
+                      control={control}
+                      name="http_parameters.follow_redirects"
+                      render={({ field }) => (
+                        <FormControl mb="1.5em">
+                          <Checkbox
+                            {...field}
+                            isChecked={watchFollowRedirects}
+                            value="follow redirects"
+                          >
+                            Follow redirects
+                          </Checkbox>
+                        </FormControl>
+                      )}
+                    />
+                    <HttpHeaderFormField
+                      fields={controlledHttpHeaderFields}
+                      touchedFields={touchedFields as any}
+                      append={append}
+                      remove={remove}
+                      errors={errors as any}
+                      productId={product_id}
+                      setValue={setValue}
+                      control={control}
+                    />
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </Box>
+            <Box
+              p="2em"
+              borderRadius="md"
+              shadow="md"
+              mb="1.5em"
+              bg={useColorModeValue("white", "#0f131a")}
+            >
+              <Accordion allowToggle>
+                <AccordionItem border="none">
+                  <AccordionButton
+                    borderRadius="md"
+                    _hover={{
+                      bgColor: useColorModeValue("gray.50", "gray.500"),
+                    }}
+                  >
+                    <Heading size="md">Up Condition Checks</Heading>
+                    <AccordionIcon boxSize="8" />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <UpConditionCheckFields
+                      fields={upConditionFields}
+                      append={appendUpCondition}
+                      remove={removeUpCondition}
+                    />
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </Box>
+            {/* <Box
             p="2em"
             borderRadius="md"
             shadow="md"
@@ -709,35 +764,36 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               </AccordionItem>
             </Accordion>
           </Box> */}
-          <Button
-            size="lg"
-            colorScheme="gray"
-            bg="gray.400"
-            color="white"
-            shadow="md"
-            fontSize="lg"
-            fontWeight="medium"
-            onClick={closeForm}
-            _hover={{ bg: "gray.500" }}
-            mr="1.4em"
-          >
-            Cancel
-          </Button>
-          <Button
-            isLoading={isSubmitting}
-            type="submit"
-            size="lg"
-            colorScheme="blue"
-            color="white"
-            bg="blue.400"
-            shadow="md"
-            fontSize="lg"
-            fontWeight="medium"
-            _hover={{ bg: "blue.600" }}
-          >
-            {createNewMonitor ? "Create" : "Update"}
-          </Button>
-        </chakra.form>
+            <Button
+              size="lg"
+              colorScheme="gray"
+              bg="gray.400"
+              color="white"
+              shadow="md"
+              fontSize="lg"
+              fontWeight="medium"
+              onClick={closeForm}
+              _hover={{ bg: "gray.500" }}
+              mr="1.4em"
+            >
+              Cancel
+            </Button>
+            <Button
+              isLoading={isSubmitting}
+              type="submit"
+              size="lg"
+              colorScheme="blue"
+              color="white"
+              bg="blue.400"
+              shadow="md"
+              fontSize="lg"
+              fontWeight="medium"
+              _hover={{ bg: "blue.600" }}
+            >
+              {createNewMonitor ? "Create" : "Update"}
+            </Button>
+          </chakra.form>
+        </FormProvider>
       </Container>
     </>
   );

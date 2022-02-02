@@ -282,6 +282,7 @@ function createCoreMonitorFromFormData(formData: Inputs) {
           : undefined,
       follow_redirects: formData.http_parameters.follow_redirects,
     },
+    up_condition_checks: formData.up_condition_checks,
   };
   return monitor;
 }

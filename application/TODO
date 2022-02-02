@@ -2,6 +2,8 @@
 Uptime Assertions:
     ☐ form changes, if no checks default to 200 OK and make it clear to user
     ✔ implement uptime monitor first -> if no assertions -> default -> else -> run assertion @done(22-02-01 15:30)
+    ☐ landing page and pricing changes
+    ☐  docs + links in form
 
 Uptime HTTP:
     ☐  design dashboard to show HTTP settings + alerts
@@ -62,6 +64,10 @@ Webhooks:
 ☐ increase data retention and view for free plan to 90 days
 
 ☐ pricing page
+
+☐ pause button confirmation when pausing
+
+☐ email after sign up with guides
 
 
 ------------------------------------------------------------------------------------------
