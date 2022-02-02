@@ -37,8 +37,12 @@ function TableRows(borderColor: string, data: (string | Function)[][]) {
   const color = useColorModeValue("blue.500", "blue.300");
   return data.map((row) => (
     <Tr key={uuidv4()}>
-      {row.map((cell) => (
-        <Td key={uuidv4()} borderColor={borderColor}>
+      {row.map((cell, index) => (
+        <Td
+          key={uuidv4()}
+          borderColor={borderColor}
+          fontWeight={index === 0 ? "bold" : "regular"}
+        >
           {typeof cell === "string" ? cell : cell(color)}
         </Td>
       ))}
@@ -55,7 +59,7 @@ function CheckIcon(color: string) {
         mr={2}
         color={color}
         viewBox="0 0 20 20"
-        fill="currentColor"
+        fill="green.500"
       >
         <path
           fillRule="evenodd"
@@ -70,9 +74,11 @@ function CheckIcon(color: string) {
 const monitorSectionData = [
   ["Projects", "10", "unlimited", "unlimited"],
   ["Uptime", "80 Monitors", "500 Monitors", "2500 Monitors"],
-  ["HTTP API Uptime", CheckIcon, CheckIcon, CheckIcon],
+  ["HTTP API Uptime Monitoring", CheckIcon, CheckIcon, CheckIcon],
   ["Uptime Check Frequency", "5 minutes", "1 minute", "1 minute"],
-  ["Webhook updates", "-", CheckIcon, CheckIcon],
+  ["Latency Monitoring", CheckIcon, CheckIcon, CheckIcon],
+  ["HTML Content Monitoring", CheckIcon, CheckIcon, CheckIcon],
+  ["JSON Response Monitoring", CheckIcon, CheckIcon, CheckIcon],
   ["Regions", "16", "16", "16"],
 ];
 

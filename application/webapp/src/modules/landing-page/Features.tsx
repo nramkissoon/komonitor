@@ -140,6 +140,13 @@ export function Features() {
         image: "/alert-dashboard.jpg",
         reverse: true,
       })}
+      {Feature({
+        header: Copy.Features.Customize.Header,
+        subheader: Copy.Features.Customize.Subheader,
+        list: Copy.Features.Customize.List,
+        image: "/cond.png",
+        reverse: false,
+      })}
     </Flex>
   );
 }

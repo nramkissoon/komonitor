@@ -30,15 +30,18 @@ const planFeatureList: { [productId: string]: string[] } = {
     "Try out our monitoring solutions at no cost",
     "Monitor simple applications with room to scale later",
     "Alerting + integrations with your favorite tools",
+    "Monitor website latency, API responses, and more",
     "7-day data retention",
   ],
   FREELANCER: [
+    "5x faster uptime checks",
     "Monitor several websites and API's in production",
     "Alerting + integrations with your favorite tools",
     "Priority support and onboarding",
     "365-day data retention",
   ],
   BUSINESS: [
+    "5x faster uptime checks",
     "Scale to thousands of monitors in production",
     "Advanced alerting + integrations with your favorite tools",
     "Highest priority support and onboarding",
@@ -52,12 +55,12 @@ function Feature(feature: string, key: string) {
     <Flex align="center" key={key}>
       <Flex shrink={0}>
         <Icon
-          boxSize={5}
+          boxSize={7}
           mt={1}
           mr={2}
           color={useColorModeValue("blue.500", "blue.300")}
           viewBox="0 0 20 20"
-          fill="currentColor"
+          fill="green.500"
         >
           <path
             fillRule="evenodd"
@@ -67,7 +70,11 @@ function Feature(feature: string, key: string) {
         </Icon>
       </Flex>
       <Box ml={4}>
-        <chakra.span mt={2} color={useColorModeValue("gray.700", "gray.400")}>
+        <chakra.span
+          mt={2}
+          color={useColorModeValue("gray.700", "gray.400")}
+          fontSize="lg"
+        >
           {feature}
         </chakra.span>
       </Box>

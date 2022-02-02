@@ -1,8 +1,9 @@
 
 Uptime Assertions:
-    ☐ form changes, if no checks default to 200 OK and make it clear to user
+    ✔ form changes, if no checks default to 200 OK and make it clear to user @done(22-02-02 14:59)
     ✔ implement uptime monitor first -> if no assertions -> default -> else -> run assertion @done(22-02-01 15:30)
     ☐ landing page and pricing changes
+    ✔ alert lambda messaging @done(22-02-02 15:25)
     ☐  docs + links in form
 
 Uptime HTTP:
