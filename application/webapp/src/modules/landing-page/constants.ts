@@ -17,7 +17,7 @@ export const Copy = {
       ],
     },
     Alert: {
-      Header: "Configurable Alerts + Weekly Reports",
+      Header: "Alerts and Reporting",
       Subheader:
         "We let you know something's wrong so you have better peace of mind.",
       List: [
@@ -25,6 +25,17 @@ export const Copy = {
         "Alerts are actionable and let you know exactly what went wrong.",
         "Customize alerts for each of your monitors.",
         "Get a weekly monitor and alert performance report in your inbox.",
+      ],
+    },
+    Customize: {
+      Header: "Define Downtime Exactly",
+      Subheader:
+        "Define how Komonitor determines if your website is up by looking directly at the response object.",
+      List: [
+        "Check for specific response codes.",
+        "Ensure your users are not experiencing long response times.",
+        "Check for correctness in your API's JSON responses.",
+        "Verify the correct HTML content is being sent to your users.",
       ],
     },
   },

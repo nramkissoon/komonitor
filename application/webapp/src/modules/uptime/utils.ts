@@ -33,6 +33,7 @@ export function createNewMonitorFromCore(
     webhook_url: !core.webhook_url ? undefined : core.webhook_url,
     alert: core.alert ?? undefined,
     http_parameters: core.http_parameters,
+    up_condition_checks: core.up_condition_checks,
   };
   return monitor;
 }

@@ -93,7 +93,11 @@ function createRowPropsFromMonitorData(
     lastChecked: mostRecentStatus
       ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
       : "N/A",
-    status: mostRecentStatus ? mostRecentStatus.status : "No Data",
+    status: data.paused
+      ? "paused"
+      : mostRecentStatus
+      ? mostRecentStatus.status
+      : "Pending Data",
     uptime: calculateUptimeString(data.statuses),
     actions: {
       monitorId: data.monitor_id,

@@ -37,7 +37,7 @@ export function getProjectAllowanceFromProductId(id: string | undefined) {
 export function getStatusHistoryAccessFromProductId(id: string | undefined) {
   switch (id) {
     case PLAN_PRODUCT_IDS.FREELANCER:
-      return 30 * 24 * 60 * 60 * 1000;
+      return 365 * 24 * 60 * 60 * 1000;
     case PLAN_PRODUCT_IDS.BUSINESS:
       return 365 * 24 * 60 * 60 * 1000;
     default:
