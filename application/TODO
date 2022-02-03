@@ -4,47 +4,13 @@ Uptime Assertions:
     ✔ implement uptime monitor first -> if no assertions -> default -> else -> run assertion @done(22-02-01 15:30)
     ✔ landing page and pricing changes @done(22-02-02 18:47)
     ✔ alert lambda messaging @done(22-02-02 15:25)
-    ☐  docs + links in form
+    ✔    + links in form @done(22-02-03 11:46)
 
 Uptime HTTP:
     ☐  design dashboard to show HTTP settings + alerts
     ✔  follow http redirects @done(22-01-31 13:20)
     ✔  pause function @done(22-01-31 13:58)
 
-API service:
-    ✔  set up repo and deploy @done(22-02-01 12:31)
-
-
-Projects:
-    CDK:
-        ✔ create project dbs, ownerId pk, proj id sk @done(22-01-25 14:39)
-        ✔ create LSI on monitors,  sk = proj id @done(22-01-24 13:25)
-    WebApp: 
-        api:
-            ✔ create project API @done(22-01-24 13:25)
-            ✔ update project settings @done(22-01-24 13:25)
-            ✔ delete project @done(22-01-24 13:25)
-            ✔ get user projects @done(22-01-24 13:25)
-        monitor:
-            ✔ assign to project in create update form using hook @done(22-01-26 12:25)
-            ✔ implement permissions checks @done(22-01-26 12:25)
-            ✔ transfer monitor from project @done(22-01-26 10:18)
-            ✔ edit monitor @done(22-01-26 14:42)
-        SideBar:
-                ✔  indicate personal account @done(22-01-25 14:39)
-                ✔  project selection @done(22-01-24 13:26)
-        ✔ get user projects @done(22-01-24 13:27)
-        ✔ get monitors for project @done(22-01-24 13:27)
-        ✔  slack must work @done(22-01-30 14:56)
-        ✔  design project index page and tabs @done(22-01-31 11:47)
-        ✔  fix the header size @done(22-01-25 10:08)
-        ✔ header add links to proiject and monitor @done(22-01-29 13:31)
-        ✔ delete projects for user when user deleted @done(22-01-30 14:06)
-        ✔ update pricing and landing page + limiters @done(22-01-30 13:50)
-        ✔ rewrite docs @done(22-02-01 10:37)
-        ✔ limit project creation on free accounts @done(22-01-30 15:39)
-        ✘ view sample status in landing @cancelled(22-01-30 15:39)
-        ✔ weekly report emails -> cdk changes if necc @done(22-02-01 11:37)
 
 ------------------------------------------------------------------------------------------
 
@@ -58,9 +24,17 @@ Webhooks:
 
 ✘ pause function graph weirdness @cancelled(22-02-01 12:29)
 
-☐ scope demo page
+✔ scope demo page @done(22-02-02 22:38)
+
+Demo:
+    ☐  set up demo route
+    ☐  create demo project, monitors, and api for getting resources
 
 ☐ scope status pages
+Status Pages:
+    ☐ status page table
+    ☐ scope private, public
+    ☐ define core fields, 
 
 ☐ increase data retention and view for free plan to 90 days
 
@@ -82,6 +56,9 @@ Onboarding:
         ☐ use case - Monitoring a production app/website, monitoring an API, Just looking a around
     ☐ implement form
     ☐ update user obj with form data
+
+Sign up email:
+    ☐ simplify like uptime robot
 
 Stripe:
     ☐ change freelancer plan to startup

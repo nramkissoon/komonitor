@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import {
   Alert,
@@ -50,6 +51,23 @@ export const MDXComponents = {
       >
         {props.children}
       </chakra.a>
+    </NextLink>
+  ),
+  externalLink: (props: any) => (
+    <NextLink href={props.href} passHref>
+      <Button
+        rightIcon={<ExternalLinkIcon boxSize="5" ml="-4px" />}
+        colorScheme="blue"
+        variant="unstyled"
+        as="a"
+        target="_blank"
+        color={useColorModeValue("blue.400", "blue.500")}
+        _hover={{ cursor: "pointer", color: "gray.500" }}
+        fontWeight="medium"
+        fontSize="xl"
+      >
+        {props.children}
+      </Button>
     </NextLink>
   ),
   li: (props: any) => <chakra.li fontSize="xl" mt=".2em" ml="1em" {...props} />,

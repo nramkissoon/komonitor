@@ -1,4 +1,8 @@
-import { DeleteIcon, QuestionOutlineIcon } from "@chakra-ui/icons";
+import {
+  DeleteIcon,
+  ExternalLinkIcon,
+  QuestionOutlineIcon,
+} from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -18,6 +22,7 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { JsonOperators, UpConditionCheck } from "project-types";
 import {
   Controller,
@@ -643,21 +648,43 @@ export const UpConditionCheckFields = ({
           htmlFor="up_condition_checks"
           display="flex"
           alignItems="center"
+          justifyContent="space-between"
         >
-          Checks
-          <chakra.span
-            color={fields.length === limit ? "red.500" : "inherit"}
-            mr="5px"
-            ml="3px"
-          >
-            ({`${fields.length}/10`})
-          </chakra.span>
-          <Tooltip
-            aria-label="Up condition information"
-            label="Up condition checks if a website is up or not. If no checks are specified, the monitor will check for a 200 OK response."
-          >
-            <QuestionOutlineIcon boxSize={5} />
-          </Tooltip>
+          <Box>
+            Checks
+            <chakra.span
+              color={fields.length === limit ? "red.500" : "inherit"}
+              mr="5px"
+              ml="3px"
+            >
+              ({`${fields.length}/10`})
+            </chakra.span>
+            <Tooltip
+              aria-label="Up condition information"
+              label="Up condition checks if a website is up or not. If no checks are specified, the monitor will check for a 200 OK response."
+            >
+              <QuestionOutlineIcon boxSize={5} />
+            </Tooltip>
+          </Box>
+          <Box>
+            <Link href="/docs/uptime-monitor/up-condition-checks" passHref>
+              <Button
+                rightIcon={<ExternalLinkIcon />}
+                colorScheme="blue"
+                variant="unstyled"
+                as="a"
+                target="_blank"
+                color="blue.300"
+                _hover={{
+                  cursor: "pointer",
+                  color: "blue.600",
+                }}
+                fontWeight="normal"
+              >
+                Learn more about checks
+              </Button>
+            </Link>
+          </Box>
         </FormLabel>
         {fields.map((item, index) => {
           return (

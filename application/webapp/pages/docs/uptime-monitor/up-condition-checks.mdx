@@ -8,10 +8,64 @@ that check various parts of a website's or API's response. Currently, you
 can define up condition checks to check for specific **HTTP status codes**,
 **request latencies**, **JSON response bodies**, and **HTML response bodies**.
 
+You can define up to **10** up condition checks per uptime monitor. If any check fails, the check is considered "down".
+
+## Default Behavior
+
+If no up conditions are specified by the user, Komonitor's uptime monitoring logic will default to checking if a
+website or API returns a **200 OK** status code to determine uptime. This default behavior is sufficient for ensuring simple web pages are
+up.
+
 ## HTTP Status Code Checks
+
+HTTP status code checks verify a specific HTTP status code or range of status codes is returned before determining if a website is up.
+
+Each status code check requires 2 fields:
+
+- **Code** - the expected code to be compared against
+- **Comparison** - a numerical comparison operator (equal, not equals, greater, less, etc.)
+
+## HTML Response Checks
+
+For websites that return HTML, HTML checks can be used to verify specific content is being returned to the user.
+
+Each HTML response check requires 2 fields:
+
+- **Value** - the expected content to be compared against
+- **Comparison** - either "contains" or "not contains" that will check whether the returned HTML contains or does not contain the expected value, respectively.
 
 ## Latency Checks
 
+Latency checks can be run on the different **timing phases** of the request sent to websites. These checks can be used to get a better understanding of what kind of
+latencies your users are experiencing and alert when latency times are too long.
+
+Latency checks requires 3 fields:
+
+- **Value** - the expected value to be compared against in **milliseconds**
+- **Comparison** - a numerical comparison operator (equal, not equals, greater, less, etc.)
+- **Timing Phase** - the timing phase of the request, more on this below
+
+### Request Timing Phases
+
+Komonitor uses the [got library](https://www.npmjs.com/package/got) to send HTTP request to your websites and API's during an uptime check. The library allows us to
+measure and record timing phases of each request that you can then use in your uptime monitors and alerting logic.
+
+Request timing phases are defined here: [https://github.com/szmarczak/http-timer#api](https://github.com/szmarczak/http-timer#api)
+
 ## JSON Response Checks
 
-## HTML Response Checks
+JSON response checks verify specific fields in a JSON response are correct. This check is useful for verifying API's are sending correct information.
+
+JSON checks consists of 3 fields:
+
+- **Value** - required based on the selected comparison, the expected value to be compared against
+- **Comparison** - a JSON value comparison operator, includes numerical operators as well as JSON specific operators such as "is null" and "contains"
+- **JSONPath** - the JSONPath used to find the key in the JSON response you want to check, more on JSONPath below
+
+### JSONPath
+
+JSONPath is a declarative syntax used to query for keys in a JSON object.
+
+You can learn the syntax here: [https://goessner.net/articles/JsonPath/index.html#e2](https://goessner.net/articles/JsonPath/index.html#e2)
+
+There is an online evaluator for testing JSONPath expressions against JSON here: [https://jsonpath.com/](https://jsonpath.com/)
