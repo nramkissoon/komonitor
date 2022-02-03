@@ -127,7 +127,7 @@ export function Footer() {
           ]}
         />
         <LinkColumn
-          header="Socials"
+          header="Company"
           links={[
             <HeaderLink
               text="Contact"

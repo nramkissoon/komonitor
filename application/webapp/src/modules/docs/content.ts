@@ -34,8 +34,12 @@ export const SidebarRoutes: SidebarRouteSection[] = [
     heading: true,
     routes: [
       {
-        title: "What is an Uptime Monitor?",
-        path: "/docs/uptime-monitor/what-is-it",
+        title: "Uptime Monitor Intro",
+        path: "/docs/uptime-monitor/intro",
+      },
+      {
+        title: "Up Condition Checks",
+        path: "/docs/uptime-monitor/up-condition-checks",
       },
     ],
   },

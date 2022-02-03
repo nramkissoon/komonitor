@@ -1,6 +1,6 @@
 ---
-title: What is an Uptime Monitor?
-description: Uptime monitors regularly check URL's and determines if websites are down.
+title: Uptime Monitor Introduction
+description: Uptime monitors regularly check URL's and determines if websites are down. This page covers what properties define an uptime monitor and it's behavior.
 ---
 
 Komonitor's uptime monitors are a piece of software that regularly checks a given website and
@@ -37,6 +37,13 @@ or editing an uptime monitor, you define these properties to adjust the monitor'
 - `Body` - the request body sent during the uptime check
 - `Follow Redirects` - indicates whether or not to follow redirects during HTTP request
 
+### Up Condition Checks
+
+Up Condition Checks are run on every uptime check to determine whether or not to consider a website or API "up." They are powerful, user-defined assertions
+that check various parts of a website's or API's response.
+
+For more information and a guide on using them, read the [dedicated documentation](docs/uptime-monitor/up-condition-checks).
+
 ### Uptime Monitor Status Properties
 
 Uptime monitor status are a record of a _specific_ uptime check at a particular point in time.
@@ -48,7 +55,7 @@ Uptime monitor status are a record of a _specific_ uptime check at a particular 
 - `response` - the response object returned from the website, contains data such as response times
 - `monitor_snapshot` - a copy of the uptime monitor during the time of uptime check corresponding to this status
 
-## Uptime Monitor Supported Regions
+## Supported Regions
 
 Here is a list of currently supported regions where uptime monitors can be deployed:
 

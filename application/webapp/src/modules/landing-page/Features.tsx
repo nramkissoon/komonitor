@@ -134,17 +134,17 @@ export function Features() {
         reverse: false,
       })}
       {Feature({
-        header: Copy.Features.Alert.Header,
-        subheader: Copy.Features.Alert.Subheader,
-        list: Copy.Features.Alert.List,
-        image: "/alert-dashboard.jpg",
-        reverse: true,
-      })}
-      {Feature({
         header: Copy.Features.Customize.Header,
         subheader: Copy.Features.Customize.Subheader,
         list: Copy.Features.Customize.List,
         image: "/cond.png",
+        reverse: true,
+      })}
+      {Feature({
+        header: Copy.Features.Alert.Header,
+        subheader: Copy.Features.Alert.Subheader,
+        list: Copy.Features.Alert.List,
+        image: "/alert-dashboard.jpg",
         reverse: false,
       })}
     </Flex>

@@ -28,7 +28,7 @@ export const Copy = {
       ],
     },
     Customize: {
-      Header: 'Control Over What "Uptime Monitoring" Means',
+      Header: "Define Downtime Exactly",
       Subheader:
         "Define how Komonitor determines if your website is up by looking directly at the response object.",
       List: [

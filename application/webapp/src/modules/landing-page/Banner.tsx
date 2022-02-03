@@ -91,8 +91,8 @@ export function Banner() {
         </HStack>
         <Image
           borderRadius="lg"
-          src={"/app-dashboard2.jpg"}
-          width="1000px"
+          src={"/banner.png"}
+          height="700px"
           css={{
             imageRendering: "-webkit-optimize-contrast",
           }}

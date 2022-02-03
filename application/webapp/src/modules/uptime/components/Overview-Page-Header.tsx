@@ -14,6 +14,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -96,11 +97,9 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
         <Button
           leftIcon={<ArrowBackIcon />}
           colorScheme="gray"
-          color="white"
-          bgColor="gray.500"
-          shadow="sm"
+          variant="ghost"
           _hover={{
-            bg: "gray.600",
+            color: useColorModeValue("blue.600", "blue.300"),
           }}
           fontWeight="normal"
           onClick={() => {
