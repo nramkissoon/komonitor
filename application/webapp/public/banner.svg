@@ -1,0 +1,24 @@
+<svg id="a47ac8c7-2ad8-4f21-b5c1-cd9d759e2651" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1366.5 769">
+    <defs>
+        <style>.edfc0d4a-1596-496c-b1ca-3fdab724eb93{fill:#63b3ed;}.e7e75b72-426e-4a20-87f9-160e0a49138f{fill:#fff;stroke:#000;stroke-miterlimit:10;}.fd9e06c1-1a14-47a5-9441-18d51e3c9465{fill:url(#f9432671-bb54-4ddb-a6ba-7c8e2c658a1e);}.f89b17a1-d324-4e5c-b84a-a2a02a21b6a2{fill:url(#a1a88dff-fe40-4f4f-85f6-a15bc34deb41);}.ab0e6fc6-12ed-4563-babf-e95a5de1a975{opacity:0.56;fill:url(#ed377d65-9587-4f58-9d64-527eff96597b);}</style>
+        <linearGradient id="f9432671-bb54-4ddb-a6ba-7c8e2c658a1e" x1="486.65" y1="300.38" x2="1336.65" y2="662.38" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#3182ce" />
+            <stop offset="1" stop-color="#2c5282" />
+        </linearGradient>
+        <linearGradient id="a1a88dff-fe40-4f4f-85f6-a15bc34deb41" x1="354.4" y1="-315.97" x2="523.4" y2="180.03" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#447dff" />
+            <stop offset="1" stop-color="#4299e1" />
+        </linearGradient>
+        <radialGradient id="ed377d65-9587-4f58-9d64-527eff96597b" cx="1094.5" cy="537" r="1261.41" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#005dbb" />
+            <stop offset="1" stop-color="#7bc7fd" />
+        </radialGradient>
+    </defs>
+    <rect class="edfc0d4a-1596-496c-b1ca-3fdab724eb93" y="0.5" width="1366" height="768" />
+    <path class="e7e75b72-426e-4a20-87f9-160e0a49138f" d="M0,136.86" transform="translate(0.5 1)" />
+    <path class="e7e75b72-426e-4a20-87f9-160e0a49138f" d="M0,123.76" transform="translate(0.5 1)" />
+    <path class="e7e75b72-426e-4a20-87f9-160e0a49138f" d="M0,706.33" transform="translate(0.5 1)" />
+    <path class="fd9e06c1-1a14-47a5-9441-18d51e3c9465" d="M0,671.67c228.5-1.17,295.5,42.83,403.5,44.83s173-413,259-320,88,341,253,203S1176.67,0,1176.67,0H1366V768H0Z" transform="translate(0.5 1)" />
+    <path class="f89b17a1-d324-4e5c-b84a-a2a02a21b6a2" d="M0,93C108,235.48,237.44,375.34,320,344.93c44.86-16.52,35.72-68.48,82.48-121.43,148.87-168.6,552,6.4,592-79,8.85-18.9,3-57.19-89.5-144.5H0Z" transform="translate(0.5 1)" />
+    <rect class="ab0e6fc6-12ed-4563-babf-e95a5de1a975" x="0.5" width="1366" height="769" />
+</svg>
