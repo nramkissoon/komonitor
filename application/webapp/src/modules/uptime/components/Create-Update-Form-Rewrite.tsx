@@ -289,7 +289,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               p="2em"
               borderRadius="md"
               shadow="md"
-              bg={useColorModeValue("white", "#0f131a")}
+              bg={useColorModeValue("white", "gray.950")}
               mb="1.5em"
             >
               <Heading size="md" mb="15px">
@@ -428,7 +428,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               borderRadius="md"
               shadow="md"
               mb="1.5em"
-              bg={useColorModeValue("white", "#0f131a")}
+              bg={useColorModeValue("white", "gray.950")}
             >
               <Flex justifyContent="space-between">
                 <Heading size="md">Alert Settings</Heading>
@@ -577,7 +577,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               p="2em"
               borderRadius="md"
               shadow="md"
-              bg={useColorModeValue("white", "#0f131a")}
+              bg={useColorModeValue("white", "gray.950")}
               mb="1.5em"
             >
               <Accordion allowToggle>
@@ -688,7 +688,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               borderRadius="md"
               shadow="md"
               mb="1.5em"
-              bg={useColorModeValue("white", "#0f131a")}
+              bg={useColorModeValue("white", "gray.950")}
             >
               <Accordion allowToggle>
                 <AccordionItem border="none">
@@ -716,7 +716,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
             borderRadius="md"
             shadow="md"
             mb="1.5em"
-            bg={useColorModeValue("white", "#0f131a")}
+            bg={useColorModeValue("white", "gray.950")}
           >
             <Accordion allowToggle>
               <AccordionItem border="none">

@@ -16,7 +16,7 @@ export function BillingTab() {
 
   return (
     <Box
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
       rounded="md"
       shadow="md"
       pt="20px"

@@ -79,7 +79,7 @@ function PageContainer(props: PageContainerProps) {
                   px="4em"
                   mt="10"
                   py="1.5em"
-                  bg={useColorModeValue("white", "#0f131a")}
+                  bg={useColorModeValue("white", "gray.950")}
                   shadow="sm"
                   rounded="xl"
                 >

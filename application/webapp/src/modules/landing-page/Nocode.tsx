@@ -34,7 +34,7 @@ function Feature(props: FeatureProps) {
       flexDir="column"
       alignItems={["center", "start"]}
       justifyContent={["center", "start"]}
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
       p="2em"
       shadow="lg"
       borderRadius="xl"

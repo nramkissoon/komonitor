@@ -93,7 +93,7 @@ export function OverviewPageDataCards(props: OverviewPageDataCardsProps) {
   return (
     <ScaleFade in={statuses !== undefined} initialScale={0.8}>
       <Box
-        bg={useColorModeValue("white", "#0f131a")}
+        bg={useColorModeValue("white", "gray.950")}
         shadow="md"
         mb="2em"
         borderRadius="xl"

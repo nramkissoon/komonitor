@@ -32,7 +32,7 @@ export function CTA() {
       mb="5em"
       flexDir="column"
       alignItems="center"
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
       borderRadius="3xl"
       shadow="xl"
       pt="2.5em"

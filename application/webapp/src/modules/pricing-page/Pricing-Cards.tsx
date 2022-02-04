@@ -28,14 +28,14 @@ interface PricingCardProps {
 const planFeatureList: { [productId: string]: string[] } = {
   FREE: [
     "Try out our monitoring solutions at no cost",
-    "Monitor simple applications with room to scale later",
+    "Monitor websites and API's",
     "Alerting + integrations with your favorite tools",
     "Monitor website latency, API responses, and more",
     "7-day data retention",
   ],
   FREELANCER: [
     "5x faster uptime checks",
-    "Monitor several websites and API's in production",
+    "Monitor hundreds websites and API's in production",
     "Alerting + integrations with your favorite tools",
     "Priority support and onboarding",
     "365-day data retention",
@@ -95,7 +95,7 @@ function PricingCard(props: PricingCardProps) {
       rounded="lg"
       shadow="md"
       pt={10}
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
     >
       <Flex direction="column">
         <Box px={10} pb={5}>
