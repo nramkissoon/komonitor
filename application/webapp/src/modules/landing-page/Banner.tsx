@@ -78,26 +78,28 @@ export function Banner() {
       </chakra.h3>
 
       <Box
-        bg={useColorModeValue("gray.700", "gray.600")}
-        borderRadius="2xl"
-        shadow={useColorModeValue(["dark-lg"], ["dark-lg"])}
-        px={["1em", null, "1.5em"]}
+        bg={useColorModeValue("gray.700", "gray.200")}
+        borderRadius="xl"
+        shadow={useColorModeValue(["lg"], ["lg"])}
         pt="5px"
-        pb={["1em", null, "1.5em"]}
+        pb="10px"
+        px="10px"
       >
-        <HStack mb="5px">
-          {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
-          {CircleIcon("red.400")}
-        </HStack>
-        <Image
-          borderRadius="lg"
-          src={"/banner.png"}
-          height="700px"
-          css={{
-            imageRendering: "-webkit-optimize-contrast",
-          }}
-          alt="Komonitor App Dashboard"
-        />
+        <Box>
+          <HStack mb="5px" ml="5px">
+            {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
+            {CircleIcon("red.400")}
+          </HStack>
+          <Image
+            rounded="md"
+            src={"/banner.png"}
+            width="1100px"
+            css={{
+              imageRendering: "-webkit-optimize-contrast",
+            }}
+            alt="Komonitor App Dashboard"
+          />
+        </Box>
       </Box>
     </Flex>
   );

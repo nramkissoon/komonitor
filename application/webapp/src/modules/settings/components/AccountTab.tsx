@@ -73,7 +73,7 @@ export function AccountTab() {
         onError={postErrorToast}
       />
       <Box
-        bg={useColorModeValue("white", "#0f131a")}
+        bg={useColorModeValue("white", "gray.950")}
         rounded="md"
         shadow="md"
         pt="20px"
@@ -114,7 +114,7 @@ export function AccountTab() {
         <SignOutButton />
       </Box>
       <Box
-        bg={useColorModeValue("white", "#0f131a")}
+        bg={useColorModeValue("white", "gray.950")}
         rounded="md"
         shadow="md"
         pb="20px"

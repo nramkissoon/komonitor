@@ -122,7 +122,7 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
     <Box
       w="100%"
       shadow="lg"
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
       borderRadius="xl"
       p="1.5em"
       mb="2em"

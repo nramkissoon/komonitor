@@ -48,7 +48,7 @@ function Feature(props: FeatureProps) {
       mt="4em"
       flexDir={[column, column, column, row as any]}
       alignItems="center"
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
       p="1.5em"
       px="2em"
       shadow="xl"
@@ -74,7 +74,7 @@ function Feature(props: FeatureProps) {
         {listElements}
       </Box>
       <Box
-        bg={useColorModeValue("gray.600", "gray.600")}
+        bg={useColorModeValue("gray.700", "gray.200")}
         borderRadius="2xl"
         shadow={"xl"}
         mr={["inherit", null, null, reverse ? "2em" : ""]}

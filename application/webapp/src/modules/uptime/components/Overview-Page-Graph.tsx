@@ -277,7 +277,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
     <ScaleFade in={statuses !== undefined} initialScale={0.8}>
       <Box
         h="xl"
-        bg={useColorModeValue("white", "#0f131a")}
+        bg={useColorModeValue("white", "gray.950")}
         borderRadius="xl"
         p="1.5em"
         mb="3em"

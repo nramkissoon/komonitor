@@ -121,7 +121,7 @@ export function ComparisonTable({
       <Box
         w="100%"
         shadow="lg"
-        bg={useColorModeValue("white", "#0f131a")}
+        bg={useColorModeValue("white", "gray.950")}
         borderRadius="lg"
         p="1.5em"
         mb="10px"

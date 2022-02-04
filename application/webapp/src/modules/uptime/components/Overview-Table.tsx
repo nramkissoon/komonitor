@@ -264,7 +264,7 @@ export function OverviewTable(props: TableProps) {
     <Box
       w="100%"
       shadow="md"
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
       borderRadius="md"
       p="1.5em"
       mb="2em"

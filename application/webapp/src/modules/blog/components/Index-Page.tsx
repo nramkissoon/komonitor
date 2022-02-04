@@ -12,7 +12,7 @@ function BlogPostPanel(props: { frontMatter: FrontMatter }) {
   const { frontMatter } = props;
   return (
     <Flex
-      bg={useColorModeValue("white", "#0f131a")}
+      bg={useColorModeValue("white", "gray.950")}
       borderRadius="lg"
       shadow="lg"
       flexDir="column"
