@@ -29,7 +29,6 @@ const CtaButton = () => {
 export function CTA() {
   return (
     <Flex
-      mb="5em"
       flexDir="column"
       alignItems="center"
       bg={useColorModeValue("white", "gray.950")}
@@ -38,8 +37,8 @@ export function CTA() {
       pt="2.5em"
       pb="1em"
       px="2em"
-      maxW="5xl"
-      mx="auto"
+      m="auto"
+      mb="5em"
     >
       <Box>
         <chakra.h1

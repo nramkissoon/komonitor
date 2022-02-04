@@ -9,6 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import SVG from "../../../public/banner.svg";
 import { Copy } from "./constants";
 
 const CircleIcon = (color: string) => (
@@ -44,21 +45,34 @@ const CtaButton = () => {
 
 export function Banner() {
   return (
-    <Flex flexDir="column" alignItems="center">
-      <Box>
+    <Flex
+      flexDir={["column", null, null, null, null, "row"]}
+      alignItems="center"
+      as="section"
+      mt="3em"
+      justifyContent="center"
+    >
+      <Flex
+        flexDir="column"
+        alignItems="center"
+        justifyContent="center"
+        flexBasis={"50%"}
+        px="20px"
+        mb="30px"
+      >
         <chakra.h1
           textAlign="center"
-          fontSize="7xl"
+          fontSize={["4xl", null, "5xl", null, "6xl", "7xl"]}
           fontWeight="extrabold"
           color={useColorModeValue("gray.800", "gray.100")}
           lineHeight="shorter"
           mb=".3em"
         >
-          {Copy.MainBanner.Header}
+          Simple and Reliable Website Monitoring.
         </chakra.h1>
 
         <chakra.h2
-          fontSize="3xl"
+          fontSize={["2xl", null, "3xl", null, "3xl", "4xl"]}
           fontWeight="bold"
           textAlign="center"
           lineHeight="shorter"
@@ -67,39 +81,62 @@ export function Banner() {
           color={useColorModeValue("gray.600", "gray.400")}
           mb=".8em"
         >
-          {Copy.MainBanner.Subheader}
+          Monitoring and alerting for your websites when user experience is
+          nonnegotiable. Set up and deploy in minutes.
         </chakra.h2>
-      </Box>
-
-      {CtaButton()}
-
-      <chakra.h3 color="gray.500" textAlign="center" mb="2em">
-        {Copy.MainBanner.CtaButtonHelperText}
-      </chakra.h3>
+        <CtaButton />
+      </Flex>
 
       <Box
-        bg={useColorModeValue("gray.700", "gray.200")}
-        borderRadius="xl"
-        shadow={useColorModeValue(["lg"], ["lg"])}
-        pt="5px"
-        pb="10px"
-        px="10px"
+        position="relative"
+        overflow="hidden"
+        w={["100%", null, null, null, null, "1500px"]}
+        roundedLeft={["none", null, null, null, null, "2xl"]}
+        flexGrow={1}
       >
-        <Box>
-          <HStack mb="5px" ml="5px">
-            {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
-            {CircleIcon("red.400")}
-          </HStack>
-          <Image
-            rounded="md"
-            src={"/banner.png"}
-            width="1100px"
-            css={{
-              imageRendering: "-webkit-optimize-contrast",
-            }}
-            alt="Komonitor App Dashboard"
-          />
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          w={["100%", null, null, null, null, "1600px"]}
+        >
+          <SVG />
         </Box>
+        <Flex
+          justifyContent="center"
+          position="relative"
+          py={["0", null, null, null, null, "60px"]}
+          pl={["0", null, null, null, null, "40px"]}
+          pr={["0", null, null, null, null, "5vw"]}
+        >
+          <Box
+            bg={useColorModeValue("gray.700", "gray.200")}
+            borderRadius="xl"
+            shadow={"lg"}
+            pt="5px"
+            pb="10px"
+            px="10px"
+            w={["3xl", null, "4xl", null, "5xl", "inherit"]}
+            mt={["40px", null, null, null, null, "inherit"]}
+            mx="2em"
+          >
+            <Box>
+              <HStack mb="5px" ml="5px">
+                {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
+                {CircleIcon("red.400")}
+              </HStack>
+              <Image
+                rounded="md"
+                src={"/banner.png"}
+                width="1100px"
+                css={{
+                  imageRendering: "-webkit-optimize-contrast",
+                }}
+                alt="Komonitor App Dashboard"
+              />
+            </Box>
+          </Box>
+        </Flex>
       </Box>
     </Flex>
   );

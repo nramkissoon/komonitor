@@ -1,4 +1,4 @@
-import { Divider, useColorModeValue } from "@chakra-ui/react";
+import { Box, Divider, useColorModeValue } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { Advanced } from "../src/modules/landing-page/Advanced";
@@ -22,6 +22,7 @@ const SectionDivider = () => (
 const Home: NextPage = () => {
   return (
     <PageLayout
+      full
       isAppPage={false}
       seoProps={{
         title: "Website Monitoring and Alerting",
@@ -30,15 +31,22 @@ const Home: NextPage = () => {
       }}
     >
       <Banner />
-      <SectionDivider />
-      <Features />
-      <SectionDivider />
-      <NoCode />
-      <SectionDivider />
-      <Advanced />
-      <SectionDivider />
-      <ComingSoon />
-      <CTA />
+      <Box
+        maxW={["sm", "xl", "3xl", "5xl", "6xl", "1600px"]}
+        display="flex"
+        flexDir="column"
+        m="auto"
+      >
+        <SectionDivider />
+        <Features />
+        <SectionDivider />
+        <NoCode />
+        <SectionDivider />
+        <Advanced />
+        <SectionDivider />
+        <ComingSoon />
+        <CTA />
+      </Box>
     </PageLayout>
   );
 };
