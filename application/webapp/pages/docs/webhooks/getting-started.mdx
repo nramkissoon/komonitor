@@ -1,0 +1,60 @@
+---
+title: Getting Started With Webhooks
+description: Komonitor webhooks allow users to receive alerts and monitor status updates via a webhook endpoint.
+---
+
+Webhooks allow your services to receive requests about specific Komonitor resources such as uptime monitor statuses and alerts.
+
+## Headers
+
+All webhooks contain the following set of request headers:
+
+```json
+{
+  "Content-Type": "application/json",
+  "Request-ID": "<request_uuid>",
+  "Komonitor-Hook-Type": "<resource>",
+  "Komonitor-Hook-Timestamp": "<timestamp>",
+  "Komonitor-Hook-Signature": "<generated_signature>"
+}
+```
+
+### Komonitor-Hook-Type
+
+This is the type of resource that triggered the webhook request.
+
+**Possible values**
+
+- alert
+- uptime-monitor-status
+
+### Komonitor-Hook-Signature
+
+A hash generated using your webhook secret and the request itself -- used to verify the authenticity of the request.
+
+## Request JSON Structure
+
+All webhooks share the following common elements.
+
+- **type** - same as `Komonitor-Hook-Type` header, indicates the type of resource that triggered the request and what data the payload contains
+
+- **data** - an object containing information about the resource, content differs based on **type**, documentation for each data type is listed below
+
+Docs for specific data types:
+
+- [Uptime Monitor Status Webhooks](/docs/webhooks/uptime-monitor-status)
+- [Alert Webhooks](/docs/webhooks/alert)
+
+## Webhook Secrets
+
+To verify requests hitting you service's webhook endpoint are coming from Komonitor, you will need a **webhook secret** to verify the signature sent in each request.
+
+### Creating a webhook secret
+
+Creating a webhook secret for you personal account can be done on the Settings page [here](/app/settings).
+Personal accounts are limited to **1** secret per account. If you need to create a new secret, you have to delete the old one and
+update your applications accordingly.
+
+Treat webhook secrets as you would any other secret or API key. Do not expose them and follow security best practices.
+
+### Using the secret to verify a webhook request

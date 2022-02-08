@@ -8,6 +8,7 @@ export const userTzApiUrl = env.BASE_URL + "api/user/tz";
 export const userApiUrl = env.BASE_URL + "api/user";
 export const userSlackInstallationApiUrl =
   env.BASE_URL + "api/user/slack-installations";
+export const userWebhookSecretApiUrl = env.BASE_URL + "/api/user/webhooks";
 
 export function useUserServicePlanProductId() {
   const fetcher = (url: string) =>
@@ -44,6 +45,20 @@ export function useUser() {
     userIsLoading: !error && !data,
     userIsError: error,
     userMutate: mutate,
+  };
+}
+
+export function useUserWebhookSecret() {
+  const fetcher = (url: string) =>
+    fetch(url, { method: "GET" }).then((r) => r.json());
+
+  const { data, error, mutate } = useSWR(userApiUrl, fetcher);
+
+  return {
+    secret: data ? (data as User).webhook_secret : undefined,
+    secretIsLoading: !error && !data,
+    secretIsError: error,
+    secretMutate: mutate,
   };
 }
 
@@ -105,6 +120,30 @@ export async function deleteUser(onError: (message: string) => void) {
     onError(errorMessage);
     return false;
     // ye mum was here
+  }
+  return true;
+}
+
+export async function createWebhookSecret() {
+  return true;
+}
+
+export async function deleteWebhookSecret(onError?: (message: string) => void) {
+  const response = await fetch(userWebhookSecretApiUrl, { method: "DELETE" });
+  if (response.ok) {
+    router.push("/");
+  } else {
+    let errorMessage;
+    switch (response.status) {
+      case 500:
+        errorMessage =
+          "Internal server error. Please try again later or contact us.";
+        break;
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError ? onError(errorMessage) : undefined;
+    return false;
   }
   return true;
 }
