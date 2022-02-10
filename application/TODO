@@ -35,15 +35,12 @@ Webhooks (Individual):
         ✔ Developer tab @done(22-02-08 12:18)
         ✔ view age, create new -> modal if exists, delete @done(22-02-08 12:18)
         ✔ view button to reveal webhook secret @done(22-02-08 12:18)
-    
-    Testing:
-        ☐ setup test nextjs server and deploy
-        ☐ route webhooks to server and test
+
 
 
 ------------------------------------------------------------------------------------------
 
-☐ space hosting tools
+☐ tw space hosting tools
 
 
 Usage Tab:
