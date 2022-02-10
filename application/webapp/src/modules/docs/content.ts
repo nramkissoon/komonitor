@@ -30,7 +30,7 @@ export const SidebarRoutes: SidebarRouteSection[] = [
   },
   {
     title: "Uptime Monitors",
-    path: "/docs/uptime-monitors",
+    path: "/docs/uptime-monitor",
     heading: true,
     routes: [
       {
@@ -51,6 +51,14 @@ export const SidebarRoutes: SidebarRouteSection[] = [
       {
         title: "Getting Started",
         path: "/docs/webhooks/getting-started",
+      },
+      {
+        title: "Uptime Monitor Statuses",
+        path: "/docs/webhooks/uptime-monitor-status",
+      },
+      {
+        title: "Alerts",
+        path: "/docs/webhooks/alerts",
       },
     ],
   },

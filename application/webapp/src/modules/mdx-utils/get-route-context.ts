@@ -39,16 +39,19 @@ export interface RouteContext {
   route?: RouteItem;
 }
 
-export const getAllRoutes = (routes: any) => {
+export const getAllRoutes = (routes: any, targetPath: string) => {
   const allRoutes: RouteItem[] = [];
-
-  routes[0].routes.forEach((route: RouteItem) => {
-    if (route.routes) {
-      route.routes.forEach((item) => {
-        allRoutes.push(item);
+  (routes as RouteItem[]).forEach((route, i) => {
+    if (routes[i].path === targetPath) {
+      routes[i].routes.forEach((route: RouteItem) => {
+        if (route.routes) {
+          route.routes.forEach((item) => {
+            allRoutes.push(item);
+          });
+        } else {
+          allRoutes.push(route);
+        }
       });
-    } else {
-      allRoutes.push(route);
     }
   });
 
@@ -65,7 +68,11 @@ export const getRouteContext = (
   if (!_route) return ctx;
 
   const { path } = _route;
-  const allRoutes = getAllRoutes(routes);
+
+  const allRoutes = getAllRoutes(
+    routes,
+    (path as string).split("/").slice(0, 3).join("/")
+  );
 
   for (let i = 0; i < allRoutes.length; i += 1) {
     const route = allRoutes[i];

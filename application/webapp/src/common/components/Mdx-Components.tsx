@@ -11,6 +11,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula as theme } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 export const MDXComponents = {
   ...Chakra,
@@ -165,5 +167,15 @@ export const MDXComponents = {
         </chakra.h3>
       </Flex>
     </Box>
+  ),
+  code: (props: any) => (
+    <SyntaxHighlighter
+      style={theme}
+      showLineNumbers
+      {...props}
+      language={"javascript"}
+      // eslint-disable-next-line react/no-children-prop
+      children={(props.children as string).slice(0, -1)}
+    />
   ),
 };

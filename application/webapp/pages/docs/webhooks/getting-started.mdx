@@ -40,7 +40,7 @@ All webhooks share the following common elements.
 
 - **data** - an object containing information about the resource, content differs based on **type**, documentation for each data type is listed below
 
-Docs for specific data types:
+Documentation for specific data types and how to set up webhook requests for each:
 
 - [Uptime Monitor Status Webhooks](/docs/webhooks/uptime-monitor-status)
 - [Alert Webhooks](/docs/webhooks/alert)
@@ -58,3 +58,16 @@ update your applications accordingly.
 Treat webhook secrets as you would any other secret or API key. Do not expose them and follow security best practices.
 
 ### Using the secret to verify a webhook request
+
+Below is a JavaScript code snippet showing how to verify the webhook request signature is from Komonitor.
+
+```typescript
+const crypto = require("crypto");
+
+function verifySignature(request, secret = "") {
+  const hmac = crypto.createHmac("sha256", secret);
+  hmac.update(JSON.stringify(request.body), "utf8");
+  const digest = hmac.digest("hex");
+  return digest === request.headers["komonitor-hook-signature"];
+}
+```

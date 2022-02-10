@@ -82,6 +82,7 @@ export async function getUserWebhookSecret(userId: string) {
       return;
     }
   } catch (err) {
+    console.error(err);
     return;
   }
 }

@@ -18,17 +18,17 @@ Webhooks (Individual):
             ✘ decrypt on retrieval ? @cancelled(22-02-09 11:43)
     
     Uptime Lambda:
-        ☐ if webhook enabled, get the user webhook secret and add sig to header
-        ☐ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/
+        ✔ if webhook enabled, get the user webhook secret and add sig to header @done(22-02-09 22:07)
+        ✔ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/ @done(22-02-09 22:07)
     
     Alert Lambda:
         ☐ webhook alert handler -> get user webhook secret, add sig to header
         ☐ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/
     
     Docs:
-        ☐ docs for verifying sig
-        ☐ create secret docs
-        ☐ uptime status webhook docs -> json structure,etc
+        ✔ docs for verifying sig @done(22-02-10 11:51)
+        ✔ create secret docs @done(22-02-10 11:51)
+        ✔ uptime status webhook docs -> json structure,etc @done(22-02-10 13:44)
         ☐ alert webhook docs
 
     UI:

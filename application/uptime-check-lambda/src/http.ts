@@ -28,7 +28,7 @@ const buildUptimeStatusRequestOptions = (
 const buildUptimeStatusResponse = (
   response: Response
 ): UptimeStatusResponse => {
-  const {
+  let {
     timings,
     body,
     headers,
@@ -43,6 +43,10 @@ const buildUptimeStatusResponse = (
     aborted,
     complete,
   } = response;
+
+  if (typeof body === "string" && body.length > 2000) {
+    body = "Body content over 2000 characters...";
+  }
 
   return {
     timings,
@@ -151,6 +155,7 @@ export const webhookRequest = async (
       "komonitor-hook-type": "uptime-monitor-status",
       "komonitor-hook-timestamp": new Date().getTime().toString(),
       "komonitor-hook-signature": createUptimeStatusSignature(status, secret),
+      "user-agent": "komonitor",
     },
     retry: {
       limit: 1,
@@ -165,7 +170,6 @@ export const webhookRequest = async (
       resolve(true);
     });
   });
-  console.log(sent);
   try {
   } catch (err) {
     console.log(err);
