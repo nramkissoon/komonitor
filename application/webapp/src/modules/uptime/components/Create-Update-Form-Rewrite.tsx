@@ -26,6 +26,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import {
   Alert,
@@ -100,8 +101,11 @@ function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   const placeholders: any = {
     ...rest,
   };
-  if (placeholders.webhook_url)
+  if (placeholders.webhook_url) {
     placeholders.webhook_url = placeholders.webhook_url.replace("https://", "");
+  } else {
+    placeholders.webhook_url = "";
+  }
   placeholders.url = placeholders.url.replace("https://", "");
   placeholders.frequency = placeholders.frequency.toString();
   placeholders.up_condition_checks = monitor.up_condition_checks;
@@ -399,7 +403,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       errors.frequency ? touchedFields.frequency : false
                     }
                     isRequired
-                    mb=".5em"
+                    mb="1.5em"
                   >
                     <FormLabel htmlFor="region">
                       <Tooltip
@@ -419,6 +423,74 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                     <FormErrorMessage>
                       {errors.frequency?.message}
                     </FormErrorMessage>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="webhook_url"
+                control={control}
+                rules={{
+                  maxLength: {
+                    value: 400,
+                    message: "URL must be 400 characters or under in length",
+                  },
+                }}
+                render={({ field }) => (
+                  <FormControl
+                    isInvalid={
+                      errors.webhook_url ? touchedFields.webhook_url : false
+                    }
+                    isDisabled={product_id === PLAN_PRODUCT_IDS.FREE}
+                    mb=".5em"
+                  >
+                    <FormLabel htmlFor="webhookUrl">Webhook URL</FormLabel>
+                    <InputGroup id="webhookUrl">
+                      <InputLeftAddon children="https://" />
+                      <Input {...field} placeholder="your-webhook-url.com" />
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {errors.webhook_url?.message}
+                    </FormErrorMessage>
+                    <Flex mt="5px" justifyContent="space-between">
+                      {product_id === PLAN_PRODUCT_IDS.FREE && (
+                        <Box>
+                          Webhooks are a paid feature.{" "}
+                          <Link href="/pricing" passHref>
+                            <Button
+                              as="a"
+                              target="_blank"
+                              variant="unstyled"
+                              color="blue.400"
+                              _hover={{
+                                color: "blue.600",
+                              }}
+                              fontWeight="normal"
+                            >
+                              Upgrade now.
+                            </Button>
+                          </Link>
+                        </Box>
+                      )}
+                      <Box>
+                        <Link
+                          href="/docs/webhooks/uptime-monitor-status"
+                          passHref
+                        >
+                          <Button
+                            as="a"
+                            target="_blank"
+                            variant="unstyled"
+                            color="blue.400"
+                            _hover={{
+                              color: "blue.600",
+                            }}
+                            fontWeight="normal"
+                          >
+                            Learn more about webhooks
+                          </Button>
+                        </Link>
+                      </Box>
+                    </Flex>
                   </FormControl>
                 )}
               />
@@ -706,65 +778,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       fields={upConditionFields}
                       append={appendUpCondition}
                       remove={removeUpCondition}
-                    />
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-            </Box>
-            <Box
-              p="2em"
-              borderRadius="md"
-              shadow="md"
-              mb="1.5em"
-              bg={useColorModeValue("white", "gray.950")}
-            >
-              <Accordion allowToggle>
-                <AccordionItem border="none">
-                  <AccordionButton
-                    borderRadius="md"
-                    _hover={{
-                      bgColor: useColorModeValue("gray.50", "gray.500"),
-                    }}
-                  >
-                    <Heading size="md">Advanced Settings</Heading>
-                    <AccordionIcon boxSize="8" />
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    <Controller
-                      name="webhook_url"
-                      control={control}
-                      rules={{
-                        maxLength: {
-                          value: 250,
-                          message:
-                            "URL must be 250 characters or under in length",
-                        },
-                      }}
-                      render={({ field }) => (
-                        <FormControl
-                          isInvalid={
-                            errors.webhook_url
-                              ? touchedFields.webhook_url
-                              : false
-                          }
-                          isDisabled={product_id === PLAN_PRODUCT_IDS.FREE}
-                          mb="1.5em"
-                        >
-                          <FormLabel htmlFor="webhookUrl">
-                            Webhook URL
-                          </FormLabel>
-                          <InputGroup id="webhookUrl">
-                            <InputLeftAddon children="https://" />
-                            <Input
-                              {...field}
-                              placeholder="your-webhook-url.com"
-                            />
-                          </InputGroup>
-                          <FormErrorMessage>
-                            {errors.webhook_url?.message}
-                          </FormErrorMessage>
-                        </FormControl>
-                      )}
                     />
                   </AccordionPanel>
                 </AccordionItem>
