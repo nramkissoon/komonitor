@@ -87,8 +87,6 @@ export function DevelopersTab() {
   const ref = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  secret = { created_at: 423342234, value: "poop" };
-
   return (
     <>
       <SecretDeleteDialog
@@ -143,6 +141,7 @@ export function DevelopersTab() {
 
         {data?.productId !== PLAN_PRODUCT_IDS.FREE && secret && (
           <Box>
+            <Box ml="2px">Webhook Secret: </Box>
             <Flex>
               <Input
                 type={showSecret ? "text" : "password"}
@@ -201,7 +200,9 @@ export function DevelopersTab() {
                 />
               </Flex>
             </Flex>
-            <Box>Created {timeAgo.format(secret.created_at)}</Box>
+            <Box mt="5px" ml="2px">
+              Created {timeAgo.format(secret.created_at)}
+            </Box>
           </Box>
         )}
         {data?.productId !== PLAN_PRODUCT_IDS.FREE &&

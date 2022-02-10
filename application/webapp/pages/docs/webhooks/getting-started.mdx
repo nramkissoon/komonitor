@@ -11,15 +11,15 @@ All webhooks contain the following set of request headers:
 
 ```json
 {
-  "Content-Type": "application/json",
-  "Request-ID": "<request_uuid>",
-  "Komonitor-Hook-Type": "<resource>",
-  "Komonitor-Hook-Timestamp": "<timestamp>",
-  "Komonitor-Hook-Signature": "<generated_signature>"
+  "content-type": "application/json",
+  "request-id": "<request_uuid>",
+  "komonitor-hook-type": "<resource>",
+  "komonitor-hook-timestamp": "<timestamp>",
+  "komonitor-hook-signature": "<generated_signature>"
 }
 ```
 
-### Komonitor-Hook-Type
+### komonitor-hook-type
 
 This is the type of resource that triggered the webhook request.
 
@@ -28,7 +28,7 @@ This is the type of resource that triggered the webhook request.
 - alert
 - uptime-monitor-status
 
-### Komonitor-Hook-Signature
+### komonitor-hook-signature
 
 A hash generated using your webhook secret and the request itself -- used to verify the authenticity of the request.
 

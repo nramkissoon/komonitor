@@ -18,6 +18,7 @@ class UptimeCheckLambda extends cdk.Construct {
       alertLambda: AlertLambda;
       region: string;
       alertInvocationTable: dynamodb.Table;
+      userTable: dynamodb.Table;
     }
   ) {
     super(scope, id);
@@ -32,6 +33,7 @@ class UptimeCheckLambda extends cdk.Construct {
         MONITOR_STATUS_TABLE_NAME: props.monitorStatusTable.tableName,
         ALERT_LAMBDA_NAME: props.alertLambda.lambda.functionName,
         ALERT_INVOCATION_TABLE_NAME: props.alertInvocationTable.tableName,
+        USER_TABLE_NAME: props.userTable.tableName,
       },
       timeout: cdk.Duration.seconds(60),
       memorySize: 140,
@@ -58,6 +60,7 @@ class UptimeCheckLambda extends cdk.Construct {
 
     props.alertLambda.lambda.grantInvoke(this.lambda);
     props.alertInvocationTable.grantReadWriteData(this.lambda);
+    props.userTable.grantReadData(this.lambda);
   }
 }
 
@@ -260,6 +263,7 @@ export class DevStackLambdas extends cdk.Construct {
         region: props.region,
         alertLambda: this.alertLambda,
         alertInvocationTable: props.alertInvocationTable,
+        userTable: props.userTable,
       }
     );
 

@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import jsonpath from "jsonpath";
 import {
   CodeCheck,
@@ -8,7 +9,9 @@ import {
   NumericalOperators,
   UpConditionCheck,
   UptimeMonitor,
+  UptimeMonitorStatus,
   UptimeStatusResponse,
+  WebhookSecret,
 } from "project-types";
 
 // reads event object for any valid jobs
@@ -176,4 +179,13 @@ export const codeCheckPassed = (
   response: UptimeStatusResponse
 ) => {
   return numericComparison(response.statusCode, comparison, expected);
+};
+
+export const createUptimeStatusSignature = (
+  status: UptimeMonitorStatus,
+  secret: WebhookSecret
+) => {
+  const hmac = crypto.createHmac("sha256", secret.value);
+  hmac.update(JSON.stringify(status), "utf-8");
+  return hmac.digest("hex");
 };

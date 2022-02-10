@@ -711,59 +711,65 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 </AccordionItem>
               </Accordion>
             </Box>
-            {/* <Box
-            p="2em"
-            borderRadius="md"
-            shadow="md"
-            mb="1.5em"
-            bg={useColorModeValue("white", "gray.950")}
-          >
-            <Accordion allowToggle>
-              <AccordionItem border="none">
-                <AccordionButton
-                  borderRadius="md"
-                  _hover={{ bgColor: useColorModeValue("gray.50", "gray.500") }}
-                >
-                  <Heading size="md">Advanced Settings</Heading>
-                  <AccordionIcon boxSize="8" />
-                </AccordionButton>
-                <AccordionPanel pb={4}>
-                  <Controller
-                    name="webhook_url"
-                    control={control}
-                    rules={{
-                      maxLength: {
-                        value: 250,
-                        message:
-                          "URL must be 250 characters or under in length",
-                      },
+            <Box
+              p="2em"
+              borderRadius="md"
+              shadow="md"
+              mb="1.5em"
+              bg={useColorModeValue("white", "gray.950")}
+            >
+              <Accordion allowToggle>
+                <AccordionItem border="none">
+                  <AccordionButton
+                    borderRadius="md"
+                    _hover={{
+                      bgColor: useColorModeValue("gray.50", "gray.500"),
                     }}
-                    render={({ field }) => (
-                      <FormControl
-                        isInvalid={
-                          errors.webhook_url ? touchedFields.webhook_url : false
-                        }
-                        isDisabled={product_id === PLAN_PRODUCT_IDS.FREE}
-                        mb="1.5em"
-                      >
-                        <FormLabel htmlFor="webhookUrl">Webhook URL</FormLabel>
-                        <InputGroup id="webhookUrl">
-                          <InputLeftAddon children="https://" />
-                          <Input
-                            {...field}
-                            placeholder="your-webhook-url.com"
-                          />
-                        </InputGroup>
-                        <FormErrorMessage>
-                          {errors.webhook_url?.message}
-                        </FormErrorMessage>
-                      </FormControl>
-                    )}
-                  />
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          </Box> */}
+                  >
+                    <Heading size="md">Advanced Settings</Heading>
+                    <AccordionIcon boxSize="8" />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <Controller
+                      name="webhook_url"
+                      control={control}
+                      rules={{
+                        maxLength: {
+                          value: 250,
+                          message:
+                            "URL must be 250 characters or under in length",
+                        },
+                      }}
+                      render={({ field }) => (
+                        <FormControl
+                          isInvalid={
+                            errors.webhook_url
+                              ? touchedFields.webhook_url
+                              : false
+                          }
+                          isDisabled={product_id === PLAN_PRODUCT_IDS.FREE}
+                          mb="1.5em"
+                        >
+                          <FormLabel htmlFor="webhookUrl">
+                            Webhook URL
+                          </FormLabel>
+                          <InputGroup id="webhookUrl">
+                            <InputLeftAddon children="https://" />
+                            <Input
+                              {...field}
+                              placeholder="your-webhook-url.com"
+                            />
+                          </InputGroup>
+                          <FormErrorMessage>
+                            {errors.webhook_url?.message}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    />
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </Box>
             <Button
               size="lg"
               colorScheme="gray"

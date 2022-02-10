@@ -1,10 +1,13 @@
+import crypto from "crypto";
 import got, { Options, OptionsOfUnknownResponseBody, Response } from "got";
 import {
   HttpMethods,
   UptimeMonitorStatus,
   UptimeStatusRequest,
   UptimeStatusResponse,
+  WebhookSecret,
 } from "project-types";
+import { createUptimeStatusSignature } from "./utils";
 
 const buildUptimeStatusRequestOptions = (
   options: Options
@@ -132,5 +135,39 @@ export const request = async (
         retryCount: 0,
       },
     };
+  }
+};
+
+export const webhookRequest = async (
+  url: string,
+  status: UptimeMonitorStatus,
+  secret: WebhookSecret
+) => {
+  const requestId = crypto.randomUUID();
+  const options: OptionsOfUnknownResponseBody = {
+    headers: {
+      "content-type": "application/json",
+      "request-id": requestId,
+      "komonitor-hook-type": "uptime-monitor-status",
+      "komonitor-hook-timestamp": new Date().getTime().toString(),
+      "komonitor-hook-signature": createUptimeStatusSignature(status, secret),
+    },
+    retry: {
+      limit: 1,
+      maxRetryAfter: undefined,
+    },
+    timeout: { response: 3000 },
+    method: "POST",
+    body: JSON.stringify({ type: "uptime-monitor-status", data: status }),
+  };
+  const sent = await new Promise<boolean>(async (resolve, reject) => {
+    (await got.post(url, options)).once("end", () => {
+      resolve(true);
+    });
+  });
+  console.log(sent);
+  try {
+  } catch (err) {
+    console.log(err);
   }
 };
