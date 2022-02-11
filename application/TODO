@@ -22,14 +22,14 @@ Webhooks (Individual):
         ✔ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/ @done(22-02-09 22:07)
     
     Alert Lambda:
-        ☐ webhook alert handler -> get user webhook secret, add sig to header
-        ☐ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/
+        ✔ webhook alert handler -> get user webhook secret, add sig to header @done(22-02-11 12:44)
+        ✔ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/ @done(22-02-11 12:44)
     
     Docs:
         ✔ docs for verifying sig @done(22-02-10 11:51)
         ✔ create secret docs @done(22-02-10 11:51)
         ✔ uptime status webhook docs -> json structure,etc @done(22-02-10 13:44)
-        ☐ alert webhook docs
+        ✔ alert webhook docs @done(22-02-11 15:06)
 
     UI:
         ✔ Developer tab @done(22-02-08 12:18)

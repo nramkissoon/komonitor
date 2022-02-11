@@ -63,7 +63,7 @@ function TableOfContent(props: TableOfContentProps) {
       fontSize="sm"
       alignSelf="start"
       maxHeight="calc(100vh - 8rem)"
-      overflowY="auto"
+      overflowY="hidden"
       pl="1em"
       sx={{ overscrollBehavior: "contain" }}
       _after={{

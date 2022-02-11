@@ -40,9 +40,13 @@ export const webhookRequestAlert = async (
       body: JSON.stringify(data),
     };
     const sent = await new Promise<boolean>(async (resolve, reject) => {
-      (await got.post(url, options)).once("end", () => {
+      try {
+        const res = await got.post(url, options);
         resolve(true);
-      });
+      } catch (err) {
+        console.error(err);
+        resolve(false);
+      }
     });
     return sent;
   } catch (err) {
