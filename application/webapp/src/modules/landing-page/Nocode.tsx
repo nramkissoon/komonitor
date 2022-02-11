@@ -68,7 +68,7 @@ function Feature(props: FeatureProps) {
 
 export function NoCode() {
   return (
-    <Flex flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center" as="section">
       <chakra.h1
         textAlign="center"
         fontSize="5xl"

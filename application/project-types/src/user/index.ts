@@ -3,6 +3,11 @@ import { Installation } from "@slack/oauth";
 
 export { Installation as SlackInstallation } from "@slack/oauth";
 
+export interface WebhookSecret {
+  value: string;
+  created_at: number;
+}
+
 export interface NextAuthUserAttributes {
   pk: string;
   sk: string;
@@ -35,5 +40,6 @@ export interface User
     StripeAttributes,
     SlackAttributes {
   tz?: string; // timezone preference
+  webhook_secret?: WebhookSecret;
   emailOptIn: boolean;
 }

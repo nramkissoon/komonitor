@@ -36,7 +36,7 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
       );
     } catch (err) {
       console.error(
-        `Webhook signature verification failed.`,
+        `Webhook signature verification failed. Make sure webhooks are listened for locally.`,
         (err as Error).message
       );
       return res.status(400);

@@ -8,8 +8,9 @@ import {
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { SlackInstallation, User } from "project-types";
+import { SlackInstallation, User, WebhookSecret } from "project-types";
 import Stripe from "stripe";
+import { ddbClient, env } from "../../common/server-utils";
 import { createStripeCustomer, getStripeCustomer } from "../billing/customer";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
@@ -128,6 +129,64 @@ export async function setTimezonePreferenceForUser(
     throw new Error(response.$metadata.requestId);
   } catch (err) {
     console.log(err);
+    throw err;
+  }
+}
+
+export async function setUserWebhookSecret(
+  userId: string,
+  secret: WebhookSecret
+) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: env.USER_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      ExpressionAttributeValues: {
+        ":p": { M: marshall(secret) },
+      },
+      UpdateExpression: "SET webhook_secret = :p",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+export async function deleteUserWebhook(userId: string) {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: env.USER_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + userId },
+        sk: { S: "USER#" + userId },
+      },
+      UpdateExpression: "REMOVE webhook_secret",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    // TODO log
     throw err;
   }
 }

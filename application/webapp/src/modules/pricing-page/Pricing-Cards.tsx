@@ -28,14 +28,14 @@ interface PricingCardProps {
 const planFeatureList: { [productId: string]: string[] } = {
   FREE: [
     "Try out our monitoring solutions at no cost",
-    "Monitor websites and API's",
+    "Monitor websites and APIs",
     "Alerting + integrations with your favorite tools",
     "Monitor website latency, API responses, and more",
     "7-day data retention",
   ],
   FREELANCER: [
     "5x faster uptime checks",
-    "Monitor hundreds websites and API's in production",
+    "Monitor hundreds websites and APIs in production",
     "Alerting + integrations with your favorite tools",
     "Priority support and onboarding",
     "365-day data retention",

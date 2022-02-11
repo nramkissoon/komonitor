@@ -6,7 +6,6 @@ const CtaButton = () => {
   return (
     <Link href={"/auth/signin"} passHref>
       <Button
-        size="lg"
         colorScheme="blue"
         bgColor="blue.300"
         fontSize="2xl"
@@ -17,10 +16,10 @@ const CtaButton = () => {
         }}
         shadow="lg"
         mb=".5em"
+        w={["80%", null, "60%", null, "50%"]}
         py="1em"
-        px="1em"
       >
-        {Copy.Cta.CtaButtonText}
+        Start monitoring
       </Button>
     </Link>
   );
@@ -29,6 +28,7 @@ const CtaButton = () => {
 export function CTA() {
   return (
     <Flex
+      as="section"
       flexDir="column"
       alignItems="center"
       bg={useColorModeValue("white", "gray.950")}

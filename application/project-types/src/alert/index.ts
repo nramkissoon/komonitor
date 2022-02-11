@@ -1,10 +1,11 @@
-export type ChannelType = "Email" | "Slack";
+export type ChannelType = "Email" | "Slack" | "Webhook";
 
 export interface Alert {
   description: string;
   recipients: {
     Slack?: string[];
     Email?: string[];
+    Webhook?: string[];
   };
   channels: ChannelType[];
 }

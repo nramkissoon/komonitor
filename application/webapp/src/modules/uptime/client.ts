@@ -251,6 +251,13 @@ function createCoreMonitorFromFormData(formData: Inputs) {
     }
   });
 
+  const handleWebhookAlertUrl = (inputs: Inputs) => {
+    if (inputs.alert && inputs.alert.recipients.Webhook !== undefined) {
+      return ["https://" + inputs.alert.recipients.Webhook[0]];
+    }
+    return undefined;
+  };
+
   const monitor: CoreUptimeMonitor = {
     url: "https://" + formData.url,
     name: formData.name,
@@ -269,6 +276,7 @@ function createCoreMonitorFromFormData(formData: Inputs) {
           recipients: {
             Email: formData.alert?.recipients.Email ?? undefined,
             Slack: formData.alert?.recipients.Slack ?? undefined,
+            Webhook: handleWebhookAlertUrl(formData),
           },
           description: formData.alert?.description ?? "",
         }

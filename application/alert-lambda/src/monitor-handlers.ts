@@ -5,10 +5,12 @@ import {
   getStatusesForUptimeMonitor,
   getUptimeMonitorForUserByMonitorId,
   getUserById,
+  getUserWebhookSecret,
   writeAlertInvocation,
 } from "./dynamo-db";
 import { sendUptimeMonitorAlertEmail } from "./email-alert-handlers";
 import { sendUptimeMonitorSlackAlert } from "./slack-alert-handler";
+import { webhookRequestAlert } from "./webhook-alert-handler";
 
 function wasStatusTriggeredPreviousAlert(
   status: { id: string; timestamp: number },
@@ -144,6 +146,24 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
       const slackSent = await sendUptimeMonitorSlackAlert(monitor, alert, user);
       if (!slackSent) {
         alertTriggered = false;
+      }
+    }
+    if (channelType === "Webhook") {
+      const secret = await getUserWebhookSecret(user.id);
+      if (!secret) {
+        alertTriggered = false;
+        console.log("no user secret, but webhook channel type provided");
+      } else {
+        if (alert.recipients.Webhook && alert.recipients.Webhook.length > 0) {
+          const webhookSent = await webhookRequestAlert(
+            alert.recipients.Webhook[0],
+            invocation,
+            secret
+          );
+          if (!webhookSent) {
+            alertTriggered = false;
+          }
+        }
       }
     }
   }

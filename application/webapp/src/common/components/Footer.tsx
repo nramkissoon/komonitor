@@ -93,7 +93,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <Flex {...containerBoxStyles}>
+    <Flex {...containerBoxStyles} as="footer">
       <SimpleGrid
         columns={[1, 1, 2, 3]}
         spacingX={[6, 40]}

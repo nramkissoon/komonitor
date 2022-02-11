@@ -1,0 +1,73 @@
+---
+title: Getting Started With Webhooks
+description: Komonitor webhooks allow users to receive alerts and monitor status updates via a webhook endpoint.
+---
+
+Webhooks allow your services to receive requests about specific Komonitor resources such as uptime monitor statuses and alerts.
+
+## Headers
+
+All webhooks contain the following set of request headers:
+
+```json
+{
+  "content-type": "application/json",
+  "request-id": "<request_uuid>",
+  "komonitor-hook-type": "<resource>",
+  "komonitor-hook-timestamp": "<timestamp>",
+  "komonitor-hook-signature": "<generated_signature>"
+}
+```
+
+### komonitor-hook-type
+
+This is the type of resource that triggered the webhook request.
+
+**Possible values**
+
+- alert
+- uptime-monitor-status
+
+### komonitor-hook-signature
+
+A hash generated using your webhook secret and the request itself -- used to verify the authenticity of the request.
+
+## Request JSON Structure
+
+All webhooks share the following common elements.
+
+- **type** - same as `Komonitor-Hook-Type` header, indicates the type of resource that triggered the request and what data the payload contains
+
+- **data** - an object containing information about the resource, content differs based on **type**, documentation for each data type is listed below
+
+Documentation for specific data types and how to set up webhook requests for each:
+
+- [Uptime Monitor Status Webhooks](/docs/webhooks/uptime-monitor-status)
+- [Alert Webhooks](/docs/webhooks/alert)
+
+## Webhook Secrets
+
+To verify requests hitting you service's webhook endpoint are coming from Komonitor, you will need a **webhook secret** to verify the signature sent in each request.
+
+### Creating a webhook secret
+
+Creating a webhook secret for you personal account can be done on the Settings page [here](/app/settings).
+Personal accounts are limited to **1** secret per account. If you need to create a new secret, you have to delete the old one and
+update your applications accordingly.
+
+Treat webhook secrets as you would any other secret or API key. Do not expose them and follow security best practices.
+
+### Using the secret to verify a webhook request
+
+Below is a JavaScript code snippet showing how to verify the webhook request signature is from Komonitor.
+
+```typescript
+const crypto = require("crypto");
+
+function verifySignature(request, secret = "") {
+  const hmac = crypto.createHmac("sha256", secret);
+  hmac.update(JSON.stringify(request.body), "utf8");
+  const digest = hmac.digest("hex");
+  return digest === request.headers["komonitor-hook-signature"];
+}
+```

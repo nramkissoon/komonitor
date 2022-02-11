@@ -127,7 +127,7 @@ const responseSectionData = [
 export const Advanced = () => {
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
   return (
-    <Flex flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center" as="section">
       <chakra.h1
         textAlign="center"
         fontSize="5xl"

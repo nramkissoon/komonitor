@@ -1,10 +1,13 @@
+import crypto from "crypto";
 import got, { Options, OptionsOfUnknownResponseBody, Response } from "got";
 import {
   HttpMethods,
   UptimeMonitorStatus,
   UptimeStatusRequest,
   UptimeStatusResponse,
+  WebhookSecret,
 } from "project-types";
+import { createUptimeStatusSignature } from "./utils";
 
 const buildUptimeStatusRequestOptions = (
   options: Options
@@ -25,7 +28,7 @@ const buildUptimeStatusRequestOptions = (
 const buildUptimeStatusResponse = (
   response: Response
 ): UptimeStatusResponse => {
-  const {
+  let {
     timings,
     body,
     headers,
@@ -40,6 +43,10 @@ const buildUptimeStatusResponse = (
     aborted,
     complete,
   } = response;
+
+  if (typeof body === "string" && body.length > 2000) {
+    body = "Body content over 2000 characters...";
+  }
 
   return {
     timings,
@@ -132,5 +139,40 @@ export const request = async (
         retryCount: 0,
       },
     };
+  }
+};
+
+export const webhookRequest = async (
+  url: string,
+  status: UptimeMonitorStatus,
+  secret: WebhookSecret
+) => {
+  try {
+    const requestId = crypto.randomUUID();
+    const data = { type: "uptime-monitor-status", data: status };
+    const options: OptionsOfUnknownResponseBody = {
+      headers: {
+        "content-type": "application/json",
+        "request-id": requestId,
+        "komonitor-hook-type": "uptime-monitor-status",
+        "komonitor-hook-timestamp": new Date().getTime().toString(),
+        "komonitor-hook-signature": createUptimeStatusSignature(data, secret),
+        "user-agent": "komonitor",
+      },
+      retry: {
+        limit: 1,
+        maxRetryAfter: undefined,
+      },
+      timeout: { response: 3000 },
+      method: "POST",
+      body: JSON.stringify(data),
+    };
+    const sent = await new Promise<boolean>(async (resolve, reject) => {
+      (await got.post(url, options)).once("end", () => {
+        resolve(true);
+      });
+    });
+  } catch (err) {
+    console.log(err);
   }
 };

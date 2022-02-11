@@ -13,6 +13,7 @@ import {
   UptimeMonitorStatus,
   User,
 } from "project-types";
+import { config, ddbClient } from "./config";
 
 export async function getUptimeMonitorForUserByMonitorId(
   ddbClient: DynamoDBClient,
@@ -36,6 +37,31 @@ export async function getUptimeMonitorForUserByMonitorId(
     }
   } catch (err) {
     return null;
+  }
+}
+
+export async function getUserWebhookSecret(userId: string) {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: config.userTableName,
+      KeyConditionExpression: "pk = :partitionkeyval AND sk = :sortkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: "USER#" + userId },
+        ":sortkeyval": { S: "USER#" + userId },
+      },
+    };
+    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
+    if (response.Count && response.Count > 0 && response.Items) {
+      const user = unmarshall(response.Items[0]) as User;
+      if (user.product_id && user.product_id !== "FREE") {
+        // must be paid plan
+        return user.webhook_secret;
+      }
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+    return;
   }
 }
 

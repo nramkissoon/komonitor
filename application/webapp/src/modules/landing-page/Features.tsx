@@ -99,7 +99,7 @@ function Feature(props: FeatureProps) {
 export function Features() {
   const { domRef: headerRef, isVisible: headerIsVisible } = useFadeInView();
   return (
-    <Flex flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center" as="section">
       <chakra.h1
         ref={headerRef as RefObject<HTMLHeadingElement>}
         textAlign="center"

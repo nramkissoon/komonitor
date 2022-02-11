@@ -3,42 +3,8 @@ Uptime HTTP:
     ☐  design dashboard to show HTTP settings + alerts
     ✔  follow http redirects @done(22-01-31 13:20)
     ✔  pause function @done(22-01-31 13:58)
-------------------------------------------------------------------------------------------
 
-Webhooks (Individual):
-    ✔ design + scope @done(22-02-03 13:17)
-    Secrets:
-        ☐ each user has at most one webhook secret for inidiviudal account
-        Webhook secret creation:
-            ☐ determine method for creating string
-            ☐ api setup
-            ☐ if one already exists for user, replace 
-            ☐ encrypt on writing to db ?
-        secret retrieval:
-            ☐ decrypt on retrieval ?
-    
-    Uptime Lambda:
-        ☐ if webhook enabled, get the user webhook secret and add sig to header
-        ☐ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/
-    
-    Alert Lambda:
-        ☐ webhook alert handler -> get user webhook secret, add sig to header
-        ☐ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/
-    
-    Docs:
-        ☐ docs for verifying sig
-        ☐ create secret docs
-        ☐ uptime status webhook docs -> json structure,etc
-        ☐ alert webhook docs
-
-    UI:
-        ☐ Developer tab
-        ☐ view age, create new -> modal if exists, delete
-        ☐ view button to reveal webhook secret
-
-
-------------------------------------------------------------------------------------------
-
+☐ tw space hosting tools
 
 
 Usage Tab:
@@ -49,7 +15,7 @@ Usage Tab:
 Teams:
     ☐ create new team in app header
     auth:
-        ☐  team obj in db is source of truth for members -> implement an auth when accessing all routes on teams/{teamId} (middleware?????)
+        ☐  team obj in db is source of truth for members -> implement an auth when accessing all routes on teams/{teamId} (middleware?????) ->  updgrade nextauth
     creation:
         ☐ /teams/new
         ☐ form for team name (id), purpose, submit writes new team to db set user as admin, check if name exists first, make clear that need to pay
@@ -211,5 +177,7 @@ Bugs:
     ☐  consolidate useUser hooks to one api call
     ☐  consolidate db logic into one package
     ☐  color mode does not persits from docs to any other page -> check provider
+    ☐ encrypt decrpyt webhook secrets in db
+   
 
 ☐ product gif generation

@@ -8,15 +8,15 @@ import {
   MonitorTypes,
   UptimeMonitor,
   UptimeMonitorStatus,
-  UptimeMonitorWebhookNotification,
 } from "project-types";
 import { config } from "./config";
 import {
   getPreviousAlertInvocationForMonitor,
+  getUserWebhookSecret,
   writeAlertInvocation,
   writeStatusToDB,
 } from "./db";
-import { request } from "./http";
+import { request, webhookRequest } from "./http";
 import { runUpConditionChecks } from "./utils";
 
 const asyncInvokeLambda = async (event: {
@@ -39,28 +39,6 @@ const fetchTimeout = setTimeout(() => {
   controller.abort();
 }, 5000);
 
-const webhookNotifyCall = async (
-  url: string,
-  webhookNotification: UptimeMonitorWebhookNotification
-) => {
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "User-Agent": "Komonitor",
-        "Content-Type": "application/json",
-      },
-      signal: controller.signal,
-      body: JSON.stringify(webhookNotification),
-    });
-
-    return response;
-  } finally {
-    clearTimeout(fetchTimeout);
-  }
-};
-
 const buildMonitorStatus = (
   fetchResult: Pick<UptimeMonitorStatus, "request" | "response">,
   isUp: boolean,
@@ -76,21 +54,6 @@ const buildMonitorStatus = (
   };
 };
 
-// const buildWebhook = (
-//   monitorStatus: UptimeMonitorStatus,
-//   url: string,
-//   name: string
-// ): UptimeMonitorWebhookNotification => {
-//   return {
-//     trigger: monitorStatus.status,
-//     monitor_type: "uptime",
-//     latency: monitorStatus.response.latency,
-//     region: monitorStatus.monitor_snapshot.region,
-//     url: url,
-//     name: name,
-//   };
-// };
-
 export const runJob = async (job: UptimeMonitor) => {
   const {
     url,
@@ -99,6 +62,7 @@ export const runJob = async (job: UptimeMonitor) => {
     http_parameters,
     alert,
     up_condition_checks,
+    webhook_url,
   } = job;
 
   try {
@@ -122,14 +86,16 @@ export const runJob = async (job: UptimeMonitor) => {
     }
 
     const status = buildMonitorStatus(fetchResult as any, isUp, job);
-    console.log(status);
     const dbWriteResponse = await writeStatusToDB(status);
 
-    // if (webhook_url) {
-    //   const webhook = buildWebhook(status, url, name);
+    if (webhook_url) {
+      const secret = await getUserWebhookSecret(owner_id);
 
-    //   await webhookNotifyCall(webhook_url, webhook);
-    // }
+      if (secret !== undefined) {
+        console.log("sending webhook...");
+        await webhookRequest(webhook_url, status, secret);
+      }
+    }
 
     if (status.status === "up" && alert) {
       const lastAlertForMonitor = await getPreviousAlertInvocationForMonitor(

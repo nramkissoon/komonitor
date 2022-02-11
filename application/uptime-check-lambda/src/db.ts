@@ -5,8 +5,8 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { AlertInvocation, UptimeMonitorStatus } from "project-types";
-import { ddbClient } from "./config";
+import { AlertInvocation, UptimeMonitorStatus, User } from "project-types";
+import { config, ddbClient } from "./config";
 
 export const writeStatusToDB = async (
   status: UptimeMonitorStatus
@@ -56,6 +56,31 @@ export async function getPreviousAlertInvocationForMonitor(
       return invocation;
     }
     return;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+}
+
+export async function getUserWebhookSecret(userId: string) {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: config.userTableName,
+      KeyConditionExpression: "pk = :partitionkeyval AND sk = :sortkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: "USER#" + userId },
+        ":sortkeyval": { S: "USER#" + userId },
+      },
+    };
+    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
+    if (response.Count && response.Count > 0 && response.Items) {
+      const user = unmarshall(response.Items[0]) as User;
+      if (user.product_id && user.product_id !== "FREE") {
+        // must be paid plan
+        return user.webhook_secret;
+      }
+      return;
+    }
   } catch (err) {
     console.error(err);
     return;

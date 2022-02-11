@@ -63,7 +63,7 @@ export function AppFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <Flex {...containerBoxStyles}>
+    <Flex {...containerBoxStyles} as="footer">
       <HStack {...defaultLinksHstackContainerStyles} mb="1em">
         <HeaderLink text="Docs" href="/docs" />
         <HeaderLink text="Blog" href="/blog" />
