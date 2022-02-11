@@ -36,6 +36,7 @@ const Home: NextPage = () => {
         display="flex"
         flexDir="column"
         m="auto"
+        px={["10px", null, null, null, null, "20px"]}
       >
         <SectionDivider />
         <Features />

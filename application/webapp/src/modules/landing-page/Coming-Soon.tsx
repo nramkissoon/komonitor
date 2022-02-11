@@ -74,7 +74,7 @@ const RoadmapLink = () => {
 export function ComingSoon() {
   const features = Copy.ComingSoon.List;
   return (
-    <Flex mb="4em" flexDir="column" alignItems="center">
+    <Flex mb="4em" flexDir="column" alignItems="center" as="section">
       <chakra.h1
         textAlign="center"
         fontSize="5xl"

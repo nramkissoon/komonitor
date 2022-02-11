@@ -70,7 +70,7 @@ export type Inputs = {
   region: string;
   frequency: string;
   failures_before_alert?: number;
-  webhook_url: string;
+  webhook_url?: string;
   http_parameters: {
     method: HttpMethods;
     body: string;
@@ -115,6 +115,15 @@ function createFormPlaceholdersFromMonitor(monitor: UptimeMonitor | undefined) {
   placeholders.http_parameters["method"] = monitor.http_parameters.method;
   placeholders.http_parameters["follow_redirects"] =
     monitor.http_parameters.follow_redirects;
+
+  // set webhook alert url if it exists
+  if (monitor.alert && monitor.alert.recipients.Webhook !== undefined) {
+    if (monitor.alert.recipients.Webhook.length > 0) {
+      placeholders.alert.recipients.Webhook = [
+        monitor.alert.recipients.Webhook[0].replace("https://", ""),
+      ];
+    }
+  }
   return placeholders as Inputs;
 }
 
@@ -230,7 +239,11 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
             const recipientList = (
               data.alert?.recipients as { [key: string]: string[] | undefined }
             )[key];
-            if (recipientList && recipientList.length > 0) {
+            if (
+              recipientList &&
+              recipientList.length > 0 &&
+              key !== "Webhook"
+            ) {
               hasARecipient = true;
               if (!data.alert.channels) data.alert.channels = [];
               data.alert.channels.push(key as ChannelType);
@@ -240,6 +253,42 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 const s = new Set(data.alert.channels);
                 s.delete(key as ChannelType);
                 data.alert.channels = Array.from(s);
+              }
+            }
+
+            if (key === "Webhook") {
+              if (recipientList && recipientList?.length > 0) {
+                // delete if empty -> workaround for default value
+                if (recipientList[0] === "") {
+                  if (data.alert.channels) {
+                    const s = new Set(data.alert.channels);
+                    s.delete(key as ChannelType);
+                    data.alert.channels = Array.from(s);
+                  }
+                  data.alert.recipients.Webhook = undefined;
+                  console.log("erer");
+                } else if (recipientList[0].length > 400) {
+                  setError("alert.recipients.Webhook", {
+                    type: "maxLength",
+                    message:
+                      "Webhook URL must be 400 characters or less in length.",
+                  });
+                  hasARecipient = true;
+                  if (!data.alert.channels) data.alert.channels = [];
+                  data.alert.channels.push(key as ChannelType);
+                  data.alert.channels = Array.from(
+                    new Set(data.alert.channels)
+                  );
+                } else {
+                  hasARecipient = true;
+                  if (!data.alert.channels) data.alert.channels = [];
+                  data.alert.channels.push(key as ChannelType);
+                  data.alert.channels = Array.from(
+                    new Set(data.alert.channels)
+                  );
+                }
+              } else if (recipientList && recipientList.length === 0) {
+                data.alert.recipients.Webhook = undefined;
               }
             }
           }
@@ -257,6 +306,8 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       data.failures_before_alert = undefined;
       data.alert = undefined;
     }
+
+    if (data.webhook_url === "") data.webhook_url = undefined;
 
     if (createNewMonitor && Object.keys(errors).length === 0) {
       await createMonitor(
@@ -352,6 +403,10 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       <InputLeftAddon children="https://" />
                       <Input {...field} placeholder="your-website.com" />
                     </InputGroup>
+                    <FormHelperText>
+                      Note: "https://" is already included in URL. HTTP is not
+                      supported.
+                    </FormHelperText>
                     <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
                   </FormControl>
                 )}
@@ -428,6 +483,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
               />
               <Controller
                 name="webhook_url"
+                defaultValue=""
                 control={control}
                 rules={{
                   maxLength: {
@@ -448,6 +504,10 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       <InputLeftAddon children="https://" />
                       <Input {...field} placeholder="your-webhook-url.com" />
                     </InputGroup>
+                    <FormHelperText>
+                      Note: "https://" is already included in URL. HTTP is not
+                      supported.
+                    </FormHelperText>
                     <FormErrorMessage>
                       {errors.webhook_url?.message}
                     </FormErrorMessage>

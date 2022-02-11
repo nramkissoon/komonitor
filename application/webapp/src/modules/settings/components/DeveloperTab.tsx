@@ -115,6 +115,7 @@ export function DevelopersTab() {
                   _hover={{
                     color: "blue.600",
                   }}
+                  target="_blank"
                 >
                   Upgrade your account now.
                 </chakra.a>

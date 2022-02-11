@@ -147,30 +147,31 @@ export const webhookRequest = async (
   status: UptimeMonitorStatus,
   secret: WebhookSecret
 ) => {
-  const requestId = crypto.randomUUID();
-  const options: OptionsOfUnknownResponseBody = {
-    headers: {
-      "content-type": "application/json",
-      "request-id": requestId,
-      "komonitor-hook-type": "uptime-monitor-status",
-      "komonitor-hook-timestamp": new Date().getTime().toString(),
-      "komonitor-hook-signature": createUptimeStatusSignature(status, secret),
-      "user-agent": "komonitor",
-    },
-    retry: {
-      limit: 1,
-      maxRetryAfter: undefined,
-    },
-    timeout: { response: 3000 },
-    method: "POST",
-    body: JSON.stringify({ type: "uptime-monitor-status", data: status }),
-  };
-  const sent = await new Promise<boolean>(async (resolve, reject) => {
-    (await got.post(url, options)).once("end", () => {
-      resolve(true);
-    });
-  });
   try {
+    const requestId = crypto.randomUUID();
+    const data = { type: "uptime-monitor-status", data: status };
+    const options: OptionsOfUnknownResponseBody = {
+      headers: {
+        "content-type": "application/json",
+        "request-id": requestId,
+        "komonitor-hook-type": "uptime-monitor-status",
+        "komonitor-hook-timestamp": new Date().getTime().toString(),
+        "komonitor-hook-signature": createUptimeStatusSignature(data, secret),
+        "user-agent": "komonitor",
+      },
+      retry: {
+        limit: 1,
+        maxRetryAfter: undefined,
+      },
+      timeout: { response: 3000 },
+      method: "POST",
+      body: JSON.stringify(data),
+    };
+    const sent = await new Promise<boolean>(async (resolve, reject) => {
+      (await got.post(url, options)).once("end", () => {
+        resolve(true);
+      });
+    });
   } catch (err) {
     console.log(err);
   }

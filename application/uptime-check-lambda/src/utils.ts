@@ -182,10 +182,10 @@ export const codeCheckPassed = (
 };
 
 export const createUptimeStatusSignature = (
-  status: UptimeMonitorStatus,
+  data: { type: string; data: UptimeMonitorStatus },
   secret: WebhookSecret
 ) => {
   const hmac = crypto.createHmac("sha256", secret.value);
-  hmac.update(JSON.stringify(status), "utf-8");
+  hmac.update(JSON.stringify(data), "utf-8");
   return hmac.digest("hex");
 };

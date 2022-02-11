@@ -19,7 +19,7 @@ const Page: NextPage = () => {
         </chakra.span>
       </Heading>
       <chakra.section>
-        We check on your websites and API's and instantly alert you when
+        We check on your websites and APIs and instantly alert you when
         something is wrong.
       </chakra.section>
     </PageLayout>
