@@ -3,42 +3,6 @@ Uptime HTTP:
     ☐  design dashboard to show HTTP settings + alerts
     ✔  follow http redirects @done(22-01-31 13:20)
     ✔  pause function @done(22-01-31 13:58)
-------------------------------------------------------------------------------------------
-
-Webhooks (Individual):
-    ✔ design + scope @done(22-02-03 13:17)
-    Secrets:
-        ✔ each user has at most one webhook secret for inidiviudal account @done(22-02-09 11:43)
-        Webhook secret creation:
-            ✔ determine method for creating string @done(22-02-09 11:43)
-            ✔ api setup @done(22-02-09 11:43)
-            ✔ if one already exists for user, replace @done(22-02-09 11:43)
-            ✘ encrypt on writing to db ? @cancelled(22-02-09 11:43)
-        secret retrieval:
-            ✘ decrypt on retrieval ? @cancelled(22-02-09 11:43)
-    
-    Uptime Lambda:
-        ✔ if webhook enabled, get the user webhook secret and add sig to header @done(22-02-09 22:07)
-        ✔ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/ @done(22-02-09 22:07)
-    
-    Alert Lambda:
-        ✔ webhook alert handler -> get user webhook secret, add sig to header @done(22-02-11 12:44)
-        ✔ define headers -> see sentry https://docs.sentry.io/product/integrations/integration-platform/webhooks/ @done(22-02-11 12:44)
-    
-    Docs:
-        ✔ docs for verifying sig @done(22-02-10 11:51)
-        ✔ create secret docs @done(22-02-10 11:51)
-        ✔ uptime status webhook docs -> json structure,etc @done(22-02-10 13:44)
-        ✔ alert webhook docs @done(22-02-11 15:06)
-
-    UI:
-        ✔ Developer tab @done(22-02-08 12:18)
-        ✔ view age, create new -> modal if exists, delete @done(22-02-08 12:18)
-        ✔ view button to reveal webhook secret @done(22-02-08 12:18)
-
-
-
-------------------------------------------------------------------------------------------
 
 ☐ tw space hosting tools
 

@@ -21,7 +21,7 @@ export const Copy = {
       Subheader:
         "We let you know something's wrong so you have better peace of mind.",
       List: [
-        "Receive alerts via email or Slack.",
+        "Receive alerts via email, webhooks, and Slack.",
         "Alerts are actionable and let you know exactly what went wrong.",
         "Customize alerts for each of your monitors.",
         "Get a weekly monitor and alert performance report in your inbox.",
