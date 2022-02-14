@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --emitDeclarationOnly --declaration",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,8 +18,8 @@
   },
   "devDependencies": { 
     "@types/node": "^16.7.3",
-    "typescript": "^4.4.2"
-    
+    "typescript": "^4.4.2",
+    "@types/lodash": "^4.14.178"
     
   }
 }

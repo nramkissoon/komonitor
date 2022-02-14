@@ -131,7 +131,7 @@ export function StatusObjectCell({
   return (
     <Button
       aria-label="view monitor status JSON object"
-      icon={<AiOutlineInfoCircle />}
+      rightIcon={<AiOutlineInfoCircle />}
       variant="ghost"
       colorScheme="blue"
       onClick={() => {

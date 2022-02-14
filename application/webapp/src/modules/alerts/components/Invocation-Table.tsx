@@ -122,7 +122,7 @@ const InvocationObjectCell = ({
   return (
     <Button
       aria-label="view alert invocation JSON object"
-      icon={<AiOutlineInfoCircle />}
+      rightIcon={<AiOutlineInfoCircle />}
       variant="ghost"
       colorScheme="blue"
       onClick={() => {

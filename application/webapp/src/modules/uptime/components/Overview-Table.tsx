@@ -91,7 +91,7 @@ function createRowPropsFromMonitorData(
       region: regionToLocationStringMap[data.region],
     },
     lastChecked: mostRecentStatus
-      ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
+      ? (timeAgo.format(now - (now - mostRecentStatus.timestamp)) as string)
       : "N/A",
     status: data.paused
       ? "paused"

@@ -88,7 +88,7 @@ const createUptimeMostRecentStatusTableRows = (
         region: regionToLocationStringMap[monitor.region],
       },
       lastChecked: mostRecentStatus
-        ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
+        ? (timeAgo.format(now - (now - mostRecentStatus.timestamp)) as string)
         : "N/A",
       status: monitor.paused
         ? "paused"

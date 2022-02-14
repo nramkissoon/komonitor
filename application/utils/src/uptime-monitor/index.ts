@@ -1,5 +1,6 @@
 import { Options, Response } from "got";
 import { Alert } from "../alert/index";
+import _ from "../lodash";
 
 export type HttpMethods = "GET" | "POST" | "PATCH" | "PUT" | "HEAD" | "DELETE";
 
@@ -143,3 +144,17 @@ export interface UptimeMonitorWebhookNotification {
 export interface UptimeMonitorWithStatuses extends UptimeMonitor {
   statuses?: UptimeMonitorStatus[];
 }
+
+// converts all keys to snake case
+export const toExternalUptimeMonitorObject = (m: UptimeMonitor) => {
+  return _.deeply(_.mapKeys)(m, (value: unknown, key: string | undefined) =>
+    _.snakeCase(key)
+  );
+};
+
+// converts all keys to snake case
+export const toExternalUptimeStatusObject = (s: UptimeMonitorStatus) => {
+  return _.deeply(_.mapKeys)(s, (value: unknown, key: string | undefined) =>
+    _.snakeCase(key)
+  );
+};
