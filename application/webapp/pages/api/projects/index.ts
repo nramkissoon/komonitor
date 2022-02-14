@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
-import { Project } from "project-types";
+import { Project } from "utils";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
   getProjectAllowanceFromProductId,

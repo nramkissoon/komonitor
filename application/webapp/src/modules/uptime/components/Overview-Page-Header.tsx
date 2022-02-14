@@ -18,9 +18,9 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { UptimeMonitor } from "project-types";
 import React from "react";
 import { AiOutlinePause, AiOutlinePlaySquare } from "react-icons/ai";
+import { UptimeMonitor } from "utils";
 import { timeAgo } from "../../../common/client-utils";
 import { togglePauseMonitor } from "../client";
 

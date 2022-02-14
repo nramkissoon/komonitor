@@ -1,5 +1,5 @@
 {
-  "name": "project-types",
+  "name": "utils",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.d.ts",
@@ -13,7 +13,8 @@
   "dependencies": {
     "@slack/oauth": "^2.3.0",
     "@szmarczak/http-timer": "^5.0.1",
-    "got": "11.8.3"
+    "got": "11.8.3",
+    "lodash": "^4.17.21"
   },
   "devDependencies": { 
     "@types/node": "^16.7.3",

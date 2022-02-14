@@ -7,9 +7,9 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { UptimeMonitorWithStatuses } from "project-types";
 import React from "react";
 import { Column } from "react-table";
+import { UptimeMonitorWithStatuses } from "utils";
 import {
   regionToLocationStringMap,
   timeAgo,

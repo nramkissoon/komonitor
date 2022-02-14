@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { UptimeMonitorStatus } from "utils";
 import { getTimeString } from "../../../common/client-utils";
 
 interface DescriptionCellProps {

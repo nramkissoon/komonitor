@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import got, { OptionsOfUnknownResponseBody } from "got";
-import { AlertInvocation, WebhookSecret } from "project-types";
+import { AlertInvocation, WebhookSecret } from "utils";
 
 export const createAlertInvocationSignature = (
   data: { type: string; data: AlertInvocation },

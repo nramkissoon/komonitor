@@ -1,7 +1,7 @@
 import { Fade } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { UptimeMonitor } from "project-types";
 import React from "react";
+import { UptimeMonitor } from "utils";
 import { LoadingSpinner } from "../../../../../../src/common/components/Loading-Spinner";
 import { PageLayout } from "../../../../../../src/common/components/Page-Layout";
 import { useUptimeMonitorsForProject } from "../../../../../../src/modules/uptime/client";

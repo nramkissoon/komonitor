@@ -8,8 +8,8 @@ import {
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { SlackInstallation, User, WebhookSecret } from "project-types";
 import Stripe from "stripe";
+import { SlackInstallation, User, WebhookSecret } from "utils";
 import { ddbClient, env } from "../../common/server-utils";
 import { createStripeCustomer, getStripeCustomer } from "../billing/customer";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";

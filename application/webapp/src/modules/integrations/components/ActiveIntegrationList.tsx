@@ -7,8 +7,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import { SlackInstallation } from "project-types";
 import React from "react";
+import { SlackInstallation } from "utils";
 import { v4 as uuidv4 } from "uuid";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { useTeam } from "../../../common/components/TeamProvider";

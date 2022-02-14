@@ -4,11 +4,7 @@ import {
   InvokeCommandInput,
 } from "@aws-sdk/client-lambda";
 import AbortController from "abort-controller";
-import {
-  MonitorTypes,
-  UptimeMonitor,
-  UptimeMonitorStatus,
-} from "project-types";
+import { MonitorTypes, UptimeMonitor, UptimeMonitorStatus } from "utils";
 import { config } from "./config";
 import {
   getPreviousAlertInvocationForMonitor,

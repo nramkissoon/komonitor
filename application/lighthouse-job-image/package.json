@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "npx lerna run build --scope=project-types && rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript",
+    "build": "npx lerna run build --scope=utils && rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,6 +22,6 @@
     "@aws-sdk/client-dynamodb": "^3.27.0",
     "@aws-sdk/util-dynamodb": "^3.27.0",
     "request": "^2.88.2",
-    "project-types": "^1.0.0"
+    "utils": "^1.0.0"
   }
 }

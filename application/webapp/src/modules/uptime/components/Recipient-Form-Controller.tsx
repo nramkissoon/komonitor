@@ -14,7 +14,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { SlackInstallation } from "project-types";
 import React from "react";
 import {
   Control,
@@ -23,6 +22,7 @@ import {
   UseFormClearErrors,
   UseFormSetValue,
 } from "react-hook-form";
+import { SlackInstallation } from "utils";
 import {
   MultiSelectTextInput,
   ReactSelect,

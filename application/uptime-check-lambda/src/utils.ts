@@ -12,7 +12,7 @@ import {
   UptimeMonitorStatus,
   UptimeStatusResponse,
   WebhookSecret,
-} from "project-types";
+} from "utils";
 
 // reads event object for any valid jobs
 export const getJobs = (event: any): UptimeMonitor[] => {

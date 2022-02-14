@@ -6,7 +6,7 @@ import {
   UptimeStatusRequest,
   UptimeStatusResponse,
   WebhookSecret,
-} from "project-types";
+} from "utils";
 import { createUptimeStatusSignature } from "./utils";
 
 const buildUptimeStatusRequestOptions = (

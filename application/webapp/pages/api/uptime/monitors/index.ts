@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
-import { UptimeMonitor } from "project-types";
+import { UptimeMonitor } from "utils";
 import { ddbClient, env } from "../../../../src/common/server-utils";
 import {
   getPreviousAlertInvocationForMonitor,

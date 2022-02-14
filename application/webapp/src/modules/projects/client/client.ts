@@ -1,5 +1,5 @@
-import { Project } from "project-types";
 import useSWR from "swr";
+import { Project } from "utils";
 import { env } from "../../../common/client-utils";
 import { useTeam } from "../../../common/components/TeamProvider";
 

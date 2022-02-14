@@ -1,5 +1,5 @@
 import Email from "email-templates";
-import { UptimeMonitor, UptimeMonitorStatus, User } from "project-types";
+import { UptimeMonitor, UptimeMonitorStatus, User } from "utils";
 import {
   config,
   ddbClient,

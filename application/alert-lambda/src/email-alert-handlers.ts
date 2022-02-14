@@ -1,5 +1,5 @@
 import Email from "email-templates";
-import { Alert, UptimeMonitor, UptimeMonitorStatus, User } from "project-types";
+import { Alert, UptimeMonitor, UptimeMonitorStatus, User } from "utils";
 import {
   convertUptimeMonitorStatusesToStatusesWithReadableTimeStampAndStatusCode,
   emailTransporter,

@@ -12,10 +12,10 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Alert, AlertInvocation } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Column } from "react-table";
+import { Alert, AlertInvocation } from "utils";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import { SimpleTimestampCell } from "../../../common/components/Table-Cell";

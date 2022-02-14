@@ -29,7 +29,6 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import {
   Column,
@@ -39,6 +38,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { UptimeMonitorStatus } from "utils";
 import { getTimeString } from "../../../common/client-utils";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";

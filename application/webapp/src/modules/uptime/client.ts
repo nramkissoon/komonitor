@@ -1,10 +1,10 @@
+import useSWR from "swr";
 import {
   CoreUptimeMonitor,
   UptimeCheckSupportedFrequenciesInMinutes,
   UptimeMonitor,
-  UptimeMonitorStatus,
-} from "project-types";
-import useSWR from "swr";
+  UptimeMonitorStatus
+} from "utils";
 import { env } from "../../common/client-utils";
 import { useProjects } from "../projects/client/client";
 import { Inputs } from "./components/Create-Update-Form-Rewrite";

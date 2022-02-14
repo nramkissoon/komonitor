@@ -1,6 +1,6 @@
 import router from "next/router";
-import { SlackInstallation, User } from "project-types";
 import useSWR from "swr";
+import { SlackInstallation, User } from "utils";
 import { env } from "../../common/client-utils";
 
 const userPlanApiUrl = env.BASE_URL + "api/user/plan";

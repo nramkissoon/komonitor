@@ -1,4 +1,4 @@
-import { CoreUptimeMonitor, UptimeMonitor } from "project-types";
+import { CoreUptimeMonitor, UptimeMonitor } from "utils";
 import { REGIONS } from "../../common/server-utils";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 
