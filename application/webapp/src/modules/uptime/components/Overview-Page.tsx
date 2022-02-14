@@ -18,11 +18,7 @@ import {
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
-import {
-  AlertInvocation,
-  toExternalUptimeMonitorObject,
-  UptimeMonitor,
-} from "utils";
+import { AlertInvocation, UptimeMonitor } from "utils";
 import { regionToLocationStringMap } from "../../../common/client-utils";
 import {
   DeleteDialog,
@@ -87,7 +83,6 @@ export function OverviewPage(props: OverviewPageProps) {
   const [monitorStatusSince, setMonitorStatusSince] = React.useState<string>(
     yesterday.toString()
   );
-  console.log(toExternalUptimeMonitorObject(props.monitor));
   const { isOpen: isEditFormOpen, onOpen, onClose } = useDisclosure();
 
   const {

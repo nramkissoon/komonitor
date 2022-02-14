@@ -147,14 +147,16 @@ export interface UptimeMonitorWithStatuses extends UptimeMonitor {
 
 // converts all keys to snake case
 export const toExternalUptimeMonitorObject = (m: UptimeMonitor) => {
-  return _.deeply(_.mapKeys)(m, (value: unknown, key: string | undefined) =>
-    _.snakeCase(key)
+  return _.deeplyOmitHeaders(_.mapKeys)(
+    m,
+    (value: unknown, key: string | undefined) => _.snakeCase(key)
   );
 };
 
 // converts all keys to snake case
 export const toExternalUptimeStatusObject = (s: UptimeMonitorStatus) => {
-  return _.deeply(_.mapKeys)(s, (value: unknown, key: string | undefined) =>
-    _.snakeCase(key)
+  return _.deeplyOmitHeaders(_.mapKeys)(
+    s,
+    (value: unknown, key: string | undefined) => _.snakeCase(key)
   );
 };
