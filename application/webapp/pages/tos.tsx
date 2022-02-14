@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { InferGetStaticPropsType } from "next";
 import { MDXRemote } from "next-mdx-remote";
 import MDXLayout from "../src/common/components/Mdx";
@@ -11,12 +12,10 @@ export default function Page({
   frontMatter,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <MDXLayout
-      isAppPage={false}
-      frontmatter={frontMatter}
-      maxW={["sm", "xl", "3xl", "4xl", "4xl", "4xl"]}
-    >
-      <MDXRemote {...mdxSource} components={MDXComponents} />
+    <MDXLayout isAppPage={false} frontmatter={frontMatter}>
+      <Box maxW="4xl" m="auto">
+        <MDXRemote {...mdxSource} components={MDXComponents} />
+      </Box>
     </MDXLayout>
   );
 }
