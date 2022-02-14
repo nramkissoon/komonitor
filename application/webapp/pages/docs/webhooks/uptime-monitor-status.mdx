@@ -26,11 +26,50 @@ interface Payload {
     status: "up" | "down"; // status determined from monitor's configured condition checks
     request: {
         // see https://github.com/sindresorhus/got/blob/main/source/core/options.ts
+        headers: { [header_name: string]: string };
+        method: string;
+        prefix_url: string;
+        is_stream: boolean;
+        url: object // url components
+        timeout: object // timeout configuration
+        response_type: string;
+        follow_redirect: boolean
         ...
     };
     response: {
         // see https://github.com/sindresorhus/got/blob/main/source/core/response.ts#L97
-        ...
+        headers: { [header_name: string]: string };
+        retry_count: number;
+        aborted: boolean;
+        ip: string;
+        body: string;
+        redirect_urls: string[];
+        url: string;
+        status_message: string;
+        request_url: string;
+        is_from_cache: boolean;
+        timings: {
+          lookup: number;
+          secure_connect: number;
+          upload: number;
+          response: number;
+          start: number;
+          end: number;
+          socket: number;
+          connect: number;
+          phases: {
+            tcp: number;
+            request: number;
+            wait: number;
+            download: number;
+            total: number;
+            dns: number;
+            tls: number;
+            first_byte: number;
+          }
+        };
+        complete: boolean;
+        status_code: number;
     };
     monitor_snapshot: {
       // snapshot of the monitor configuration at the time the status was created
