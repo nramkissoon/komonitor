@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { UptimeMonitorStatus } from "utils";
+import { toExternalUptimeStatusObject, UptimeMonitorStatus } from "utils";
 import { getTimeString } from "../../../common/client-utils";
 
 interface DescriptionCellProps {
@@ -123,9 +123,7 @@ export function StatusObjectCell({
   onOpen,
 }: {
   status: UptimeMonitorStatus;
-  setStatusToView: React.Dispatch<
-    React.SetStateAction<UptimeMonitorStatus | undefined>
-  >;
+  setStatusToView: React.Dispatch<React.SetStateAction<object | undefined>>;
   onOpen: () => void;
 }) {
   return (
@@ -135,7 +133,7 @@ export function StatusObjectCell({
       variant="ghost"
       colorScheme="blue"
       onClick={() => {
-        setStatusToView(status);
+        setStatusToView(toExternalUptimeStatusObject(status));
         onOpen();
       }}
       fontWeight="normal"

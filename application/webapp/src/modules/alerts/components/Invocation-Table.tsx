@@ -16,6 +16,7 @@ import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Column } from "react-table";
 import { Alert, AlertInvocation } from "utils";
+import { toExternalAlertInvocation } from "utils/src/alert";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import { SimpleTimestampCell } from "../../../common/components/Table-Cell";
@@ -27,7 +28,7 @@ function InvocationObjectModal({
   isOpen,
   onClose,
 }: {
-  invocation?: AlertInvocation;
+  invocation?: object;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -114,9 +115,7 @@ const InvocationObjectCell = ({
   onOpen,
 }: {
   invocation: AlertInvocation;
-  setInvocationToView: React.Dispatch<
-    React.SetStateAction<AlertInvocation | undefined>
-  >;
+  setInvocationToView: React.Dispatch<React.SetStateAction<object | undefined>>;
   onOpen: () => void;
 }) => {
   return (
@@ -126,7 +125,7 @@ const InvocationObjectCell = ({
       variant="ghost"
       colorScheme="blue"
       onClick={() => {
-        setInvocationToView(invocation);
+        setInvocationToView(toExternalAlertInvocation(invocation));
         onOpen();
       }}
       fontWeight="normal"
@@ -145,7 +144,7 @@ export function InvocationTable(props: InvocationTableProps) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [invocationToView, setInvocationToView] = React.useState<
-    AlertInvocation | undefined
+    object | undefined
   >(undefined);
 
   const {
@@ -200,7 +199,10 @@ export function InvocationTable(props: InvocationTableProps) {
         columns: columns,
         itemType: "Alert Invocations",
         jsonDownLoad: (
-          <JSONDownloadButton data={invocations} filename={"alerts.json"} />
+          <JSONDownloadButton
+            data={invocations?.map((i) => toExternalAlertInvocation(i))}
+            filename={"alerts.json"}
+          />
         ),
       })}
     </>
