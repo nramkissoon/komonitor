@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import got, { OptionsOfUnknownResponseBody } from "got";
 import { AlertInvocation, WebhookSecret } from "utils";
+import { toExternalAlertInvocation } from "utils/src/alert";
 
 export const createAlertInvocationSignature = (
   data: { type: string; data: AlertInvocation },
@@ -18,7 +19,10 @@ export const webhookRequestAlert = async (
 ) => {
   try {
     const requestId = crypto.randomUUID();
-    const data = { type: "uptime-monitor-status", data: invocation };
+    const data = {
+      type: "uptime-monitor-status",
+      data: toExternalAlertInvocation(invocation),
+    };
     const options: OptionsOfUnknownResponseBody = {
       headers: {
         "content-type": "application/json",

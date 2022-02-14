@@ -1,3 +1,5 @@
+import _ from "../lodash";
+
 export type ChannelType = "Email" | "Slack" | "Webhook";
 
 export interface Alert {
@@ -21,3 +23,11 @@ export interface AlertInvocation {
   }[];
   ongoing: boolean; // indicates if the alert is still ongoing (no up statuses since last invocation)
 }
+
+// converts all keys to snake case
+export const toExternalAlertInvocation = (a: AlertInvocation) => {
+  return _.deeplyOmitHeaders(_.mapKeys)(
+    a,
+    (value: unknown, key: string | undefined) => _.snakeCase(key)
+  );
+};

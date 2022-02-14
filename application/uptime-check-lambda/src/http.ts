@@ -2,6 +2,7 @@ import crypto from "crypto";
 import got, { Options, OptionsOfUnknownResponseBody, Response } from "got";
 import {
   HttpMethods,
+  toExternalUptimeStatusObject,
   UptimeMonitorStatus,
   UptimeStatusRequest,
   UptimeStatusResponse,
@@ -149,7 +150,10 @@ export const webhookRequest = async (
 ) => {
   try {
     const requestId = crypto.randomUUID();
-    const data = { type: "uptime-monitor-status", data: status };
+    const data = {
+      type: "uptime-monitor-status",
+      data: toExternalUptimeStatusObject(status),
+    };
     const options: OptionsOfUnknownResponseBody = {
       headers: {
         "content-type": "application/json",
