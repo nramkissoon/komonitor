@@ -6,11 +6,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "@fontsource/roboto/900.css";
 import { NextComponentType, NextPage, NextPageContext } from "next";
-import {
-  Provider as SessionProvider,
-  signIn,
-  useSession,
-} from "next-auth/client";
+import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import React from "react";
 import { TeamProvider } from "../src/common/components/TeamProvider";
@@ -76,13 +72,13 @@ export default function App({
 }
 
 const Auth = ({ children }: { children: React.ReactNode }) => {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
   const isUser = session && session?.user; // get user if it exists on the session object
 
   React.useEffect(() => {
-    if (loading) return;
+    if (status === "loading") return;
     if (!isUser) signIn();
-  }, [isUser, loading]);
+  }, [isUser, status]);
 
   if (isUser) {
     return <React.Fragment>{children}</React.Fragment>;

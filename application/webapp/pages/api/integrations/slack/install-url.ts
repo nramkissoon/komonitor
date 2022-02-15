@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { env } from "../../../../src/common/server-utils";
 import { slackInstaller } from "../../../../src/modules/integrations/slack/server";
 

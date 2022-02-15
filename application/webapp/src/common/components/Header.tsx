@@ -20,7 +20,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -139,7 +139,7 @@ const MobileNavHeader = (props: {
 export const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [session, loading] = useSession();
+  const { data: session } = useSession();
   const authed = session?.user !== undefined;
 
   const { toggleColorMode: toggleMode } = useColorMode();

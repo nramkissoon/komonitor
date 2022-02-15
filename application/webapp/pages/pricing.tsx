@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { ComparisonTable } from "../src/modules/pricing-page/Comparison-Table";
@@ -9,7 +9,7 @@ import { PricingHeader } from "../src/modules/pricing-page/Pricing-Header";
 import { useUserServicePlanProductId } from "../src/modules/user/client";
 
 const Pricing: NextPage = () => {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
   const {
     data,
     isLoading: userServicePlanIsLoading,
