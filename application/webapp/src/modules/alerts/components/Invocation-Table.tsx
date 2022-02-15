@@ -15,8 +15,7 @@ import {
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Column } from "react-table";
-import { Alert, AlertInvocation } from "utils";
-import { toExternalAlertInvocation } from "utils/src/alert";
+import { Alert, AlertInvocation, toExternalAlertInvocation } from "utils";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import { SimpleTimestampCell } from "../../../common/components/Table-Cell";
