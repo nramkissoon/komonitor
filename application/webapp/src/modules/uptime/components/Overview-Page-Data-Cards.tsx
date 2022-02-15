@@ -11,8 +11,8 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { UptimeMonitorStatus } from "project-types";
 import React from "react";
+import { UptimeMonitorStatus } from "utils";
 import { percentile } from "../../../common/utils";
 import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "../utils";
 

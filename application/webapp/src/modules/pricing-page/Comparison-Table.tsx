@@ -86,6 +86,7 @@ const alertSectionData = [
   ["Email Alerts", CheckIcon, CheckIcon, CheckIcon],
   ["Slack Alerts", CheckIcon, CheckIcon, CheckIcon],
   ["Email Recipients per Alert", "1", "5", "10"],
+  ["Webhook Alerts", "-", CheckIcon, CheckIcon],
 ];
 
 const dataSectionData = [["Data Retention", "7 days", "365 days", "365 days"]];

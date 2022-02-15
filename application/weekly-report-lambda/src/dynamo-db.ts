@@ -11,7 +11,7 @@ import {
   UptimeMonitor,
   UptimeMonitorStatus,
   User,
-} from "project-types";
+} from "utils";
 import { oneWeekAndOneDayAgo, yesterday } from "./config";
 
 export async function getEmailOptedInUsers(

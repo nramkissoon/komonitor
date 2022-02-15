@@ -24,35 +24,35 @@ import {
   Textarea,
   Tooltip,
   useColorModeValue,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  Alert,
-  ChannelType,
-  HttpMethods,
-  UpConditionCheck,
-  UptimeMonitor,
-} from "project-types";
 import React from "react";
 import {
   Controller,
   FormProvider,
   SubmitHandler,
   useFieldArray,
-  useForm,
+  useForm
 } from "react-hook-form";
 import {
+  Alert,
+  ChannelType,
+  HttpMethods,
+  UpConditionCheck,
+  UptimeMonitor
+} from "utils";
+import {
   minutesToString,
-  regionToLocationStringMap,
+  regionToLocationStringMap
 } from "../../../common/client-utils";
 import { ReactSelect } from "../../../common/components/React-Select";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import {
   createMonitor,
   updateMonitor,
-  useUptimeMonitorsForProject,
+  useUptimeMonitorsForProject
 } from "../client";
 import { HttpHeaderFormField } from "./Http-Header-Form-Field";
 import { RecipientFormController } from "./Recipient-Form-Controller";

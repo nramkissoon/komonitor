@@ -65,7 +65,7 @@ function PageContainer(props: PageContainerProps) {
         as="main"
         className="main-content"
         w="full"
-        maxW="6xl"
+        maxW="5xl"
         mx="auto"
         mb="4em"
       >

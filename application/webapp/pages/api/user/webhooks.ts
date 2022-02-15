@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
-import { WebhookSecret } from "project-types";
+import { WebhookSecret } from "utils";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
   deleteUserWebhook,

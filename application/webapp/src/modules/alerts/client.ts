@@ -1,5 +1,5 @@
-import { AlertInvocation } from "project-types";
 import useSWR from "swr";
+import { AlertInvocation } from "utils";
 import { env } from "../../common/client-utils";
 
 export const alertApiUrl = env.BASE_URL + "api/alerts";

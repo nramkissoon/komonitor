@@ -1,5 +1,5 @@
 import fetch from "isomorphic-fetch";
-import { Alert, UptimeMonitor, User } from "project-types";
+import { Alert, UptimeMonitor, User } from "utils";
 import { regionToLocationStringMap } from "./config";
 
 const createUptimeMonitorSlackAlertMessage = (

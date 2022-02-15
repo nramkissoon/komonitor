@@ -2,8 +2,8 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { SendRawEmailCommand, SES } from "@aws-sdk/client-ses";
 import { DateTime } from "luxon";
 import nodemailer from "nodemailer";
-import { UptimeMonitorStatus } from "project-types";
 import spacetime from "spacetime";
+import { UptimeMonitorStatus } from "utils";
 
 interface Config {
   region: string;

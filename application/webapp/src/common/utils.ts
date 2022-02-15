@@ -1,4 +1,4 @@
-import { ItemTypes } from "project-types";
+import { ItemTypes } from "utils";
 import { PLAN_PRODUCT_IDS } from "../modules/billing/plans";
 
 export function percentile(values: number[], perc: number) {

@@ -10,8 +10,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Router from "next/router";
-import { Project } from "project-types";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Project } from "utils";
 import { createProject, useProjects } from "../client";
 
 export type Inputs = Project;

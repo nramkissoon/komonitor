@@ -5,7 +5,7 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { AlertInvocation, UptimeMonitorStatus, User } from "project-types";
+import { AlertInvocation, UptimeMonitorStatus, User } from "utils";
 import { config, ddbClient } from "./config";
 
 export const writeStatusToDB = async (

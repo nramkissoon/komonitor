@@ -10,8 +10,8 @@ import {
   LambdaClient,
 } from "@aws-sdk/client-lambda";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { UptimeMonitor } from "project-types";
 import { Config } from "src/config";
+import { UptimeMonitor } from "utils";
 
 const asyncInvokeLambda = async (
   lambdaClient: LambdaClient,

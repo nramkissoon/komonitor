@@ -12,7 +12,7 @@ import {
   UptimeMonitor,
   UptimeMonitorStatus,
   User,
-} from "project-types";
+} from "utils";
 import { config, ddbClient } from "./config";
 
 export async function getUptimeMonitorForUserByMonitorId(

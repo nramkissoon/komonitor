@@ -11,7 +11,7 @@ import {
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { Project } from "project-types";
+import { Project } from "utils";
 import {
   deleteMonitor,
   getMonitorsForProjectForOwner,

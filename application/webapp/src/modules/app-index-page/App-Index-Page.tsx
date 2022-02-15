@@ -16,8 +16,8 @@ import {
 } from "@chakra-ui/react";
 import Fuse from "fuse.js";
 import Link from "next/link";
-import { Project, UptimeMonitor } from "project-types";
 import React from "react";
+import { Project, UptimeMonitor } from "utils";
 import { timeAgo } from "../../common/client-utils";
 import { AppSubNav } from "../../common/components/App-Sub-Nav";
 import { LoadingSpinner } from "../../common/components/Loading-Spinner";

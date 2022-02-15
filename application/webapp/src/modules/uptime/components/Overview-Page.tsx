@@ -17,8 +17,8 @@ import {
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { AlertInvocation, UptimeMonitor } from "project-types";
 import React from "react";
+import { AlertInvocation, UptimeMonitor } from "utils";
 import { regionToLocationStringMap } from "../../../common/client-utils";
 import {
   DeleteDialog,
@@ -83,7 +83,6 @@ export function OverviewPage(props: OverviewPageProps) {
   const [monitorStatusSince, setMonitorStatusSince] = React.useState<string>(
     yesterday.toString()
   );
-
   const { isOpen: isEditFormOpen, onOpen, onClose } = useDisclosure();
 
   const {

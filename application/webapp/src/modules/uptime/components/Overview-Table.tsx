@@ -18,11 +18,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Pagination from "@choc-ui/paginator";
-import {
-  UptimeMonitor,
-  UptimeMonitorStatus,
-  UptimeMonitorWithStatuses,
-} from "project-types";
 import React, { forwardRef, LegacyRef } from "react";
 import {
   Column,
@@ -33,6 +28,11 @@ import {
   useTable,
 } from "react-table";
 import { useSWRConfig } from "swr";
+import {
+  UptimeMonitor,
+  UptimeMonitorStatus,
+  UptimeMonitorWithStatuses,
+} from "utils";
 import {
   regionToLocationStringMap,
   timeAgo,
@@ -91,7 +91,7 @@ function createRowPropsFromMonitorData(
       region: regionToLocationStringMap[data.region],
     },
     lastChecked: mostRecentStatus
-      ? timeAgo.format(now - (now - mostRecentStatus.timestamp))
+      ? (timeAgo.format(now - (now - mostRecentStatus.timestamp)) as string)
       : "N/A",
     status: data.paused
       ? "paused"

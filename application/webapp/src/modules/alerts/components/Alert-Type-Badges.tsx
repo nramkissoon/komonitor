@@ -1,8 +1,8 @@
 import { EmailIcon } from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
-import { ChannelType } from "project-types";
 import React from "react";
 import { AiOutlineSlack } from "react-icons/ai";
+import { ChannelType } from "utils";
 
 export function alertTypeToBadge(type: ChannelType) {
   switch (type) {

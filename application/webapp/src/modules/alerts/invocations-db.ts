@@ -7,7 +7,7 @@ import {
   QueryCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { AlertInvocation } from "project-types";
+import { AlertInvocation } from "utils";
 import { createMonitorIdToInvocationArrayMap } from "./utils";
 
 export async function getInvocationsByMonitorId(

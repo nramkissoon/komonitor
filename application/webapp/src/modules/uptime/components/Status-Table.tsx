@@ -29,7 +29,6 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import {
   Column,
@@ -39,6 +38,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { toExternalUptimeStatusObject, UptimeMonitorStatus } from "utils";
 import { getTimeString } from "../../../common/client-utils";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
@@ -99,7 +99,7 @@ function StatusObjectModal({
   isOpen,
   onClose,
 }: {
-  status?: UptimeMonitorStatus;
+  status?: object;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -172,9 +172,9 @@ function GlobalFilter(props: {
 export default function StatusTable(props: TableProps) {
   const { monitorId, statuses, offset } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [statusToView, setStatusToView] = React.useState<
-    UptimeMonitorStatus | undefined
-  >(undefined);
+  const [statusToView, setStatusToView] = React.useState<object | undefined>(
+    undefined
+  );
 
   const data = React.useMemo(() => {
     return statuses
@@ -278,7 +278,9 @@ export default function StatusTable(props: TableProps) {
       <Flex flexDir="row" justifyContent="space-between">
         {GlobalFilter({ globalFilter, setGlobalFilter })}
         <JSONDownloadButton
-          data={statuses ? statuses : {}}
+          data={
+            statuses ? statuses.map((s) => toExternalUptimeStatusObject(s)) : {}
+          }
           filename={"monitor-statuses.json"}
         />
       </Flex>

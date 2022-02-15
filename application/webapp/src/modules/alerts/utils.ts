@@ -1,4 +1,4 @@
-import { AlertInvocation } from "project-types";
+import { AlertInvocation } from "utils";
 import { v4 as uuidv4 } from "uuid";
 
 function createAlertId() {

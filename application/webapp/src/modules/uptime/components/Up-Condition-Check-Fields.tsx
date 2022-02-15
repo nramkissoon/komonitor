@@ -23,7 +23,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { JsonOperators, UpConditionCheck } from "project-types";
 import {
   Controller,
   FieldArrayMethodProps,
@@ -31,6 +30,7 @@ import {
   useFormContext,
   UseFormReturn,
 } from "react-hook-form";
+import { JsonOperators, UpConditionCheck } from "utils";
 import { ReactSelect } from "../../../common/components/React-Select";
 import { Inputs } from "./Create-Update-Form-Rewrite";
 

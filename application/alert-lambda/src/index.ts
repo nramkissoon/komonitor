@@ -1,5 +1,5 @@
 import { performance } from "perf_hooks";
-import { MonitorTypes } from "project-types";
+import { MonitorTypes } from "utils";
 import { handleUptimeMonitor } from "./monitor-handlers";
 
 export const handler = async (event: any) => {

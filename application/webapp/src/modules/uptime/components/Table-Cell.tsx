@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { UptimeMonitorStatus } from "project-types";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { toExternalUptimeStatusObject, UptimeMonitorStatus } from "utils";
 import { getTimeString } from "../../../common/client-utils";
 
 interface DescriptionCellProps {
@@ -123,19 +123,17 @@ export function StatusObjectCell({
   onOpen,
 }: {
   status: UptimeMonitorStatus;
-  setStatusToView: React.Dispatch<
-    React.SetStateAction<UptimeMonitorStatus | undefined>
-  >;
+  setStatusToView: React.Dispatch<React.SetStateAction<object | undefined>>;
   onOpen: () => void;
 }) {
   return (
     <Button
       aria-label="view monitor status JSON object"
-      icon={<AiOutlineInfoCircle />}
+      rightIcon={<AiOutlineInfoCircle />}
       variant="ghost"
       colorScheme="blue"
       onClick={() => {
-        setStatusToView(status);
+        setStatusToView(toExternalUptimeStatusObject(status));
         onOpen();
       }}
       fontWeight="normal"

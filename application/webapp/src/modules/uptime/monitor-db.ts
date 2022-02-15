@@ -11,7 +11,7 @@ import {
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { UptimeMonitor } from "project-types";
+import { UptimeMonitor } from "utils";
 import { createProjectIdToMonitorArrayMap } from "./utils";
 
 export async function getMonitorsForOwner(

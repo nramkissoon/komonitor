@@ -1,4 +1,4 @@
-import { AlertInvocation, UptimeMonitorStatus } from "project-types";
+import { AlertInvocation, UptimeMonitorStatus } from "utils";
 import { config, ddbClient } from "./config";
 import {
   getPreviousAlertInvocationForMonitor,
