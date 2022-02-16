@@ -6,8 +6,12 @@ import {
   UpdateItemCommand,
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
+import {
+  TransactWriteCommand,
+  TransactWriteCommandInput,
+} from "@aws-sdk/lib-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { createNewInvite, Team, TeamMember } from "utils";
+import { createNewInvite, Team, TeamPermissionLevel, User } from "utils";
 import { ddbClient, env } from "../../../common/server-utils";
 
 const TEAM_TABLE_NAME = env.USER_TABLE_NAME; // renaming for readability
@@ -51,29 +55,61 @@ export const deleteUserById = async (id: string) => {
   }
 };
 
-export const addTeamMember = async (teamMember: TeamMember, team: Team) => {
+export const addTeamMember = async (
+  user: User,
+  team: Team,
+  permission: TeamPermissionLevel
+) => {
   try {
     for (let member of team.members) {
-      if (member.user_id === teamMember.user_id) {
+      if (member.user_id === user.id) {
         throw new Error("user is already member");
       }
     }
-    team.members.push(teamMember);
-    const updateCommandInput: UpdateItemCommandInput = {
-      TableName: TEAM_TABLE_NAME,
-      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
-      Key: {
-        pk: { S: team.pk },
-        sk: { S: team.sk },
-      },
-      ExpressionAttributeValues: {
-        ":val": { L: team.members.map((m) => ({ M: marshall(m) })) },
-      },
-      UpdateExpression: "SET members = val",
+    team.members.push({ user_id: user.id, permission_level: permission });
+
+    if (!user.teams) {
+      user.teams = [];
+    }
+    user.teams.push(team.id);
+
+    const transactWriteInput: TransactWriteCommandInput = {
+      TransactItems: [
+        {
+          Update: {
+            TableName: TEAM_TABLE_NAME,
+            ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+            Key: {
+              pk: { S: team.pk },
+              sk: { S: team.sk },
+            },
+            ExpressionAttributeValues: {
+              ":val": { L: team.members.map((m) => ({ M: marshall(m) })) },
+            },
+            UpdateExpression: "SET members = val",
+          },
+        },
+        {
+          Update: {
+            TableName: env.USER_TABLE_NAME,
+            ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+            Key: {
+              pk: { S: "USER#" + user.id },
+              sk: { S: "USER#" + user.id },
+            },
+            ExpressionAttributeValues: {
+              ":i": {
+                L: user.teams.map((t) => ({ M: marshall(t) })),
+              },
+            },
+            UpdateExpression: "SET teams = :i",
+          },
+        },
+      ],
     };
 
     const response = await ddbClient.send(
-      new UpdateItemCommand(updateCommandInput)
+      new TransactWriteCommand(transactWriteInput)
     );
     const statusCode = response.$metadata.httpStatusCode as number;
     if (statusCode >= 200 && statusCode < 300) return true;
@@ -86,28 +122,56 @@ export const addTeamMember = async (teamMember: TeamMember, team: Team) => {
   }
 };
 
-export const removeTeamMember = async (teamMemberId: string, team: Team) => {
+export const removeTeamMember = async (teamMember: User, team: Team) => {
   try {
     const ids = team.members.map((m) => m.user_id);
-    if (!ids.includes(teamMemberId)) throw new Error("user is not team member");
+    if (!ids.includes(teamMember.id))
+      throw new Error("user is not team member");
     const newMemberList = team.members.filter(
-      (m) => m.user_id !== teamMemberId
+      (m) => m.user_id !== teamMember.id
     );
-    const updateCommandInput: UpdateItemCommandInput = {
-      TableName: TEAM_TABLE_NAME,
-      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
-      Key: {
-        pk: { S: team.pk },
-        sk: { S: team.sk },
-      },
-      ExpressionAttributeValues: {
-        ":val": { L: newMemberList.map((m) => ({ M: marshall(m) })) },
-      },
-      UpdateExpression: "SET members = val",
+
+    if (!teamMember.teams) throw new Error("no teams this should never happen");
+
+    const newTeamList = teamMember.teams.filter((t) => t !== team.id);
+
+    const transactWriteInput: TransactWriteCommandInput = {
+      TransactItems: [
+        {
+          Update: {
+            TableName: TEAM_TABLE_NAME,
+            ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+            Key: {
+              pk: { S: team.pk },
+              sk: { S: team.sk },
+            },
+            ExpressionAttributeValues: {
+              ":val": { L: newMemberList.map((m) => ({ M: marshall(m) })) },
+            },
+            UpdateExpression: "SET members = val",
+          },
+        },
+        {
+          Update: {
+            TableName: env.USER_TABLE_NAME,
+            ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+            Key: {
+              pk: { S: "USER#" + teamMember.id },
+              sk: { S: "USER#" + teamMember.id },
+            },
+            ExpressionAttributeValues: {
+              ":i": {
+                L: newTeamList.map((t) => ({ M: marshall(t) })),
+              },
+            },
+            UpdateExpression: "SET teams = :i",
+          },
+        },
+      ],
     };
 
     const response = await ddbClient.send(
-      new UpdateItemCommand(updateCommandInput)
+      new TransactWriteCommand(transactWriteInput)
     );
     const statusCode = response.$metadata.httpStatusCode as number;
     if (statusCode >= 200 && statusCode < 300) return true;
