@@ -1,5 +1,5 @@
-import crypto from "crypto";
-import jsonpath from "jsonpath";
+import * as crypto from "crypto";
+import * as jsonpath from "jsonpath";
 import {
   CodeCheck,
   HtmlBodyCheck,

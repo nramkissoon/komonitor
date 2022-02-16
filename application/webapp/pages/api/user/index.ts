@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import { PLAN_PRODUCT_IDS } from "../../../src/modules/billing/plans";
 import { deleteAllProjectsAndAssociatedAssetsForOwner } from "../../../src/modules/projects/server/db";

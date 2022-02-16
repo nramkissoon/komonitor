@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { UptimeMonitor } from "utils";
 import { ddbClient, env } from "../../../../src/common/server-utils";
 import {

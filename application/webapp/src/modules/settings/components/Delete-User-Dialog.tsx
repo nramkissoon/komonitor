@@ -10,7 +10,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { signOut } from "next-auth/client";
+import { signOut } from "next-auth/react";
 import React, { RefObject } from "react";
 import { deleteUser } from "../../user/client";
 

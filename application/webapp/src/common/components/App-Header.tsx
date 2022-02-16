@@ -29,7 +29,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -120,7 +120,10 @@ const TeamSelection = () => {
                     ? useColorModeValue("blue.100", "gray.700")
                     : "inherit"
                 }
-                _hover={{ cursor: "pointer" }}
+                _hover={{
+                  cursor: "pointer",
+                  bg: useColorModeValue("blue.200", "blue.700"),
+                }}
               >
                 <Box fontSize="lg">Personal Account</Box>
 
@@ -154,7 +157,7 @@ const TeamSelection = () => {
 export const AppHeader = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
   const authed = session?.user !== undefined;
 
   const router = useRouter();
@@ -243,6 +246,7 @@ export const AppHeader = () => {
               <Link href={team ? "/" + team : "/app"} passHref>
                 <Button
                   p="0"
+                  px="5px"
                   bg="none"
                   color={useColorModeValue("gray.900", "gray.400")}
                   _hover={{ color: useColorModeValue("gray.500", "white") }}
@@ -251,7 +255,7 @@ export const AppHeader = () => {
                   alignItems="center"
                   fontWeight="medium"
                 >
-                  <ArrowBackIcon /> Return to projects
+                  <ArrowBackIcon /> Return to project page
                 </Button>
               </Link>
             )}

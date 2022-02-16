@@ -14,7 +14,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { signIn, useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -36,7 +36,7 @@ const Signin: ExtendedNextPage = () => {
       "We sent an email with a sign in link to you. Click on it to complete sign in.";
   }
 
-  const [session] = useSession();
+  const { data: session } = useSession();
   if (session?.user) {
     router.push("/app");
   }

@@ -37,7 +37,7 @@ class UptimeMonitorLambda extends cdk.Construct {
         USER_TABLE_NAME: props.userTable.tableName,
       },
       timeout: cdk.Duration.seconds(60),
-      memorySize: 140,
+      memorySize: 176,
     });
 
     const monitorStatusDbWritePolicyStatement = new iam.PolicyStatement({

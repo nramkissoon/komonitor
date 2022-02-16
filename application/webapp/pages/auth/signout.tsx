@@ -1,5 +1,5 @@
 import { Button, Container, Heading } from "@chakra-ui/react";
-import { signOut } from "next-auth/client";
+import { signOut } from "next-auth/react";
 import React from "react";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import { ExtendedNextPage } from "../_app";

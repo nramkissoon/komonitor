@@ -5,9 +5,15 @@ import {
   ExternalLinkIcon,
 } from "@chakra-ui/icons";
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
   Badge,
   Box,
   Button,
+  chakra,
   Flex,
   Heading,
   Link,
@@ -15,10 +21,12 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { noop } from "lodash";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { RefObject } from "react";
 import { AiOutlinePause, AiOutlinePlaySquare } from "react-icons/ai";
 import { UptimeMonitor } from "utils";
 import { timeAgo } from "../../../common/client-utils";
@@ -37,6 +45,80 @@ interface OverviewPageHeaderProps {
   mutate: any;
 }
 
+interface MonitorPauseDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  leastDestructiveRef: RefObject<any>;
+  mutate: any;
+  monitor: UptimeMonitor;
+  setIsPaused: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+}
+
+export function MonitorPauseDialog({
+  isOpen,
+  onClose,
+  leastDestructiveRef,
+  monitor,
+  mutate,
+  setIsPaused,
+}: MonitorPauseDialogProps) {
+  return (
+    <AlertDialog
+      leastDestructiveRef={leastDestructiveRef}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <AlertDialogContent>
+        <AlertDialogHeader fontSize="2xl" fontWeight="normal">
+          Pause Uptime Monitor
+        </AlertDialogHeader>
+        <AlertDialogBody>
+          Are you sure?{" "}
+          <chakra.span color="blue.400" fontSize="lg" fontWeight="semibold">
+            {monitor.name}
+          </chakra.span>{" "}
+          monitor will be paused. You will not receive any alerts while this
+          monitor is paused.
+        </AlertDialogBody>
+        <AlertDialogFooter>
+          <Button
+            ref={leastDestructiveRef}
+            onClick={onClose}
+            mr="1.5em"
+            fontWeight="normal"
+          >
+            Cancel
+          </Button>
+          <Button
+            leftIcon={<AiOutlinePause />}
+            colorScheme="gray"
+            color="white"
+            bgColor="gray.500"
+            shadow="sm"
+            _hover={{
+              bg: "gray.600",
+            }}
+            fontWeight="normal"
+            onClick={async () => {
+              await togglePauseMonitor(
+                monitor,
+                () => {
+                  setIsPaused(true);
+                },
+                () => {}
+              );
+              await mutate();
+              onClose();
+            }}
+          >
+            {"Pause"}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
 // Header that contains the name of the monitor + other attributes + some actions
 export function OverviewPageHeader(props: OverviewPageHeaderProps) {
   const {
@@ -52,15 +134,26 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
     mutate,
   } = props;
   const router = useRouter();
+  const [paused, setIsPaused] = React.useState(monitor.paused);
+  const cancelRef = React.useRef(true);
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const { projectId } = router.query;
   let color = "gray";
-  const [paused, setIsPaused] = React.useState(monitor.paused);
+
   if (currentStatus === "up") color = "green";
   if (currentStatus === "down") color = "red";
   if (paused) color = "gray";
   const now = Date.now();
   return (
     <Flex mb="1em">
+      <MonitorPauseDialog
+        onClose={onClose}
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        setIsPaused={setIsPaused}
+        monitor={monitor}
+        mutate={mutate}
+      />
       <Box w="fit-content">
         <Heading>{monitorName}</Heading>
         <Link as={NextLink} href={monitorUrl} isExternal>
@@ -119,14 +212,18 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
           }}
           fontWeight="normal"
           onClick={async () => {
-            await togglePauseMonitor(
-              monitor,
-              () => {
-                setIsPaused(!paused);
-              },
-              () => {}
-            );
-            await mutate();
+            if (paused) {
+              await togglePauseMonitor(
+                monitor,
+                () => {
+                  setIsPaused(false);
+                },
+                noop
+              );
+              await mutate();
+            } else {
+              onOpen();
+            }
           }}
         >
           {paused ? "Resume" : "Pause"}
