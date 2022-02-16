@@ -8,9 +8,12 @@ import "@fontsource/roboto/900.css";
 import { NextComponentType, NextPage, NextPageContext } from "next";
 import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
+import { useRouter } from "next/router";
 import React from "react";
 import { TeamProvider } from "../src/common/components/TeamProvider";
 import theme from "../src/common/components/theme";
+
+export interface ExtendedPageContext extends NextPageContext {}
 
 type Extensions = {
   requiresAuth?: boolean;
@@ -18,10 +21,10 @@ type Extensions = {
 
 type ExtendedAppProps = {
   pageProps: any;
-  Component: NextComponentType<NextPageContext, any, {}> & Extensions;
+  Component: NextComponentType<ExtendedPageContext, any, {}> & Extensions;
 };
 
-export type ExtendedNextPage = NextPage & Extensions;
+export type ExtendedNextPage = NextPage<{ isDemo?: boolean }, {}> & Extensions;
 
 export default function App({
   Component,
@@ -59,7 +62,7 @@ export default function App({
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
           <Auth>
-            <TeamProvider value={undefined}>
+            <TeamProvider>
               <Component {...pageProps} />
             </TeamProvider>
           </Auth>
@@ -75,12 +78,14 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
   const isUser = session && session?.user; // get user if it exists on the session object
 
+  const router = useRouter();
+
   React.useEffect(() => {
     if (status === "loading") return;
     if (!isUser) signIn();
   }, [isUser, status]);
 
-  if (isUser) {
+  if (isUser || router.pathname.startsWith("/demo")) {
     return <React.Fragment>{children}</React.Fragment>;
   }
 
