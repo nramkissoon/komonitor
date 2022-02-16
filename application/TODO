@@ -168,7 +168,7 @@ Bugs:
     ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
     ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link
     ☐  Remove aws-cdk package by rewriting nextauth ddb client
-    ☐  upgrade nextauth
+    ✔  upgrade nextauth @done(22-02-15 15:40)
     ☐  get rid of hypernext
     ☐  keyed mutates
      ☐ make monitor url unchangeable, it messes up stats 

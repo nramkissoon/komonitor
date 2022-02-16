@@ -2,7 +2,7 @@
     "compilerOptions": {
         "types": ["node"],
       "target": "es2017",
-      "module": "ESNext",
+      "module": "commonjs",
       "outDir": "./dist",
       "strict": true,
       "baseUrl": "./",

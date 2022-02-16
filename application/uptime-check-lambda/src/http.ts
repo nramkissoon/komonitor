@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import * as crypto from "crypto";
 import got, { Options, OptionsOfUnknownResponseBody, Response } from "got";
 import {
   HttpMethods,

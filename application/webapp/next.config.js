@@ -3,10 +3,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const withTM = require("next-transpile-modules")(['utils'])
-
 const withImages = require('next-images')
-module.exports = withTM(withImages(
+module.exports = (withImages(
   withBundleAnalyzer(
     {
       reactStrictMode: true,

@@ -30,7 +30,7 @@
     "@aws-sdk/client-ses": "^3.37.0",
     "email-templates": "^8.0.8",
     "nodemailer": "^6.7.0",
-    "utils": "^1.0.0",
+    "utils": "*",
     "isomorphic-fetch": "^3.0.0",
     "pug": "^3.0.2",
     "luxon": "^2.2.0",
