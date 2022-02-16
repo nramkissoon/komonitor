@@ -2,7 +2,7 @@ import React from "react";
 
 export interface TeamContextType {
   team?: string;
-  setTeam: (team: string) => void;
+  setTeam: (team: string | undefined) => void;
 }
 
 export const TeamContext = React.createContext({} as TeamContextType);
@@ -21,9 +21,13 @@ export const TeamProvider = ({ children }: { children?: React.ReactNode }) => {
     localStorage.getItem("team") ?? undefined
   );
 
-  const setTeam = React.useCallback((value: string) => {
+  const setTeam = React.useCallback((value: string | undefined) => {
     rawSetTeam(value);
-    localStorage.setItem("team", value);
+    if (value === undefined) {
+      localStorage.removeItem("team");
+    } else {
+      localStorage.setItem("team", value);
+    }
   }, []);
 
   const context = React.useMemo(

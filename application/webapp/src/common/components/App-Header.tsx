@@ -30,9 +30,11 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import Fuse from "fuse.js";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { useUptimeMonitorsForProject } from "../../modules/uptime/client";
 import { useUser } from "../../modules/user/client";
@@ -70,11 +72,59 @@ const HeaderLink = (props: {
   );
 };
 
+const TeamSelector = ({
+  isCurrent,
+  team,
+  setTeam,
+}: {
+  isCurrent: boolean;
+  team: string;
+  setTeam: (team: string) => void;
+}) => {
+  const router = useRouter();
+  return (
+    <Flex
+      as="button"
+      mx="2"
+      px="4"
+      my="1"
+      py="1"
+      rounded="lg"
+      alignItems="center"
+      justifyContent="space-between"
+      bg={isCurrent ? useColorModeValue("blue.100", "gray.700") : "inherit"}
+      _hover={{
+        cursor: "pointer",
+        bg: useColorModeValue("blue.200", "blue.700"),
+      }}
+      onClick={() => {
+        setTeam(team);
+        router.push(`/teams/${team}`);
+      }}
+    >
+      <Box fontSize="lg">{team}</Box>
+
+      {isCurrent ? (
+        <Box>
+          <CheckIcon boxSize="5" />
+        </Box>
+      ) : null}
+    </Flex>
+  );
+};
+
 const TeamSelection = () => {
   const { setTeam, team } = useTeam();
   const { user } = useUser();
+  const router = useRouter();
+
+  const teams = user && user.teams ? user.teams : [];
 
   const isPersonal = team === undefined;
+
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const fuse = new Fuse(teams);
+  const results = fuse.search(searchQuery);
 
   return (
     <Popover placement="bottom-start">
@@ -105,37 +155,43 @@ const TeamSelection = () => {
                 size="md"
                 placeholder="Search..."
                 background={useColorModeValue("white", "gray.950")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </InputGroup>
             <Divider />
-            <Link href="/app" passHref>
-              <Flex
-                mx="2"
-                px="4"
-                my="2"
-                py="1"
-                rounded="lg"
-                alignItems="center"
-                justifyContent="space-between"
-                bg={
-                  isPersonal
-                    ? useColorModeValue("blue.100", "gray.700")
-                    : "inherit"
-                }
-                _hover={{
-                  cursor: "pointer",
-                  bg: useColorModeValue("blue.200", "blue.700"),
-                }}
-              >
-                <Box fontSize="lg">Personal Account</Box>
 
-                {isPersonal ? (
-                  <Box>
-                    <CheckIcon boxSize="5" />
-                  </Box>
-                ) : null}
-              </Flex>
-            </Link>
+            <Flex
+              as="button"
+              mx="2"
+              px="4"
+              my="2"
+              py="1"
+              rounded="lg"
+              alignItems="center"
+              justifyContent="space-between"
+              bg={
+                isPersonal
+                  ? useColorModeValue("blue.100", "gray.700")
+                  : "inherit"
+              }
+              _hover={{
+                cursor: "pointer",
+                bg: useColorModeValue("blue.200", "blue.700"),
+              }}
+              onClick={() => {
+                setTeam(undefined);
+                router.push(`/app`);
+              }}
+            >
+              <Box fontSize="lg">Personal Account</Box>
+
+              {isPersonal ? (
+                <Box>
+                  <CheckIcon boxSize="5" />
+                </Box>
+              ) : null}
+            </Flex>
           </Flex>
           <Divider />
           <Flex my="2" py="1" flexDir="column">
@@ -149,6 +205,24 @@ const TeamSelection = () => {
             >
               Teams
             </Heading>
+
+            {searchQuery
+              ? results.map((t) => (
+                  <TeamSelector
+                    key={t.item}
+                    team={t.item}
+                    setTeam={setTeam}
+                    isCurrent={t.item === team}
+                  />
+                ))
+              : teams.map((t) => (
+                  <TeamSelector
+                    key={t}
+                    team={t}
+                    setTeam={setTeam}
+                    isCurrent={t === team}
+                  />
+                ))}
             <Link href="/teams/new" passHref>
               <Button
                 as="a"
