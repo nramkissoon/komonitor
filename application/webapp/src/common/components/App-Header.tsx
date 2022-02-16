@@ -1,4 +1,5 @@
 import {
+  AddIcon,
   ArrowBackIcon,
   CheckIcon,
   SearchIcon,
@@ -32,9 +33,9 @@ import {
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { useUptimeMonitorsForProject } from "../../modules/uptime/client";
+import { useUser } from "../../modules/user/client";
 import { HeaderLogo } from "./Header-Logo";
 import { useTeam } from "./TeamProvider";
 
@@ -71,6 +72,7 @@ const HeaderLink = (props: {
 
 const TeamSelection = () => {
   const { setTeam, team } = useTeam();
+  const { user } = useUser();
 
   const isPersonal = team === undefined;
 
@@ -90,7 +92,7 @@ const TeamSelection = () => {
         </Button>
       </PopoverTrigger>
       <PopoverContent backgroundColor={useColorModeValue("white", "gray.950")}>
-        <PopoverBody p="0">
+        <PopoverBody px="2" py="0">
           <Flex flexDir="column">
             <InputGroup mr="1em">
               <InputLeftElement
@@ -136,8 +138,9 @@ const TeamSelection = () => {
             </Link>
           </Flex>
           <Divider />
-          <Flex mx="2" px="4" my="2" py="1" flexDir="column">
+          <Flex my="2" py="1" flexDir="column">
             <Heading
+              mx="2"
               as="h3"
               fontSize="sm"
               fontWeight="normal"
@@ -146,7 +149,24 @@ const TeamSelection = () => {
             >
               Teams
             </Heading>
-            <Box fontSize="lg">Coming soon</Box>
+            <Link href="/teams/new" passHref>
+              <Button
+                as="a"
+                mx="2"
+                px="4"
+                my="2"
+                py="1"
+                rounded="full"
+                size="md"
+                fontWeight="normal"
+                leftIcon={<AddIcon />}
+                bg="none"
+                justifyContent="left"
+                _hover={{ bg: useColorModeValue("blue.100", "gray.700") }}
+              >
+                Create Team
+              </Button>
+            </Link>
           </Flex>
         </PopoverBody>
       </PopoverContent>
