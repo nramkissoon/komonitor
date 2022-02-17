@@ -92,7 +92,7 @@ export function HttpHeaderFormField(props: HttpHeaderFormFieldProps) {
   return (
     <>
       <FormControl
-      //isDisabled={productId === PLAN_PRODUCT_IDS.FREE}
+      //isDisabled={productId === PLAN_PRODUCT_IDS.STARTER}
       >
         <FormLabel htmlFor="http_headers">
           HTTP Headers{" "}

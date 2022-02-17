@@ -50,7 +50,7 @@ async function deleteHandler(
       userId
     );
     // Cannot delete if user is on a paid plan
-    if (productId !== PLAN_PRODUCT_IDS.FREE) {
+    if (productId !== PLAN_PRODUCT_IDS.STARTER) {
       res.status(403);
       return;
     }

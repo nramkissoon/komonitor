@@ -6,7 +6,6 @@ import {
   Stack,
   Tooltip,
 } from "@chakra-ui/react";
-import React from "react";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "../utils";
 
@@ -37,10 +36,10 @@ export function SelectStatusHistoryRadioButtons(
           </Radio>
           <Radio
             value={thirtyDaysAgo}
-            isDisabled={productId === PLAN_PRODUCT_IDS.FREE}
+            isDisabled={productId === PLAN_PRODUCT_IDS.STARTER}
             _hover={{ cursor: "pointer" }}
           >
-            {productId === PLAN_PRODUCT_IDS.FREE ? (
+            {productId === PLAN_PRODUCT_IDS.STARTER ? (
               <Tooltip label="Upgrade to a paid plan to view older monitor statuses.">
                 30 days
               </Tooltip>

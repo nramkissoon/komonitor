@@ -39,7 +39,7 @@ export function isValidRegion(region: string) {
 }
 
 export function isValidFrequency(freq: number, product_id: string) {
-  if (product_id === PLAN_PRODUCT_IDS.FREE)
+  if (product_id === PLAN_PRODUCT_IDS.STARTER)
     return [5, 15, 30, 60, 180, 360, 720, 1440].includes(freq);
   return [1, 5, 15, 30, 60, 180, 360, 720, 1440].includes(freq);
 }
@@ -54,7 +54,7 @@ export function isValidUrl(url: string) {
 
 export function isValidWebhookUrl(product_id: string, url?: string) {
   if (!url) return true;
-  if (product_id === PLAN_PRODUCT_IDS.FREE) return !url;
+  if (product_id === PLAN_PRODUCT_IDS.STARTER) return !url;
   return isValidUrl(url);
 }
 
