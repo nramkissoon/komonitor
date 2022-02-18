@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import { ddbClient, env, stripeClient } from "../../../src/common/server-utils";
+import { getTeamById, userIsAdmin } from "../../../src/modules/teams/server/db";
 import { getOrCreateStripeCustomerIdForUserId } from "../../../src/modules/user/user-db";
 
 async function postHandler(
@@ -10,6 +11,7 @@ async function postHandler(
   session: Session
 ) {
   try {
+    // This API is called when a user wishes to purchase a team subscription plan
     const userId = session.uid as string;
     const stripeCustomerId: string | undefined =
       await getOrCreateStripeCustomerIdForUserId(
@@ -21,12 +23,25 @@ async function postHandler(
     if (stripeCustomerId === undefined)
       throw new Error("undefined Stripe Customer Id");
 
-    const priceId = JSON.parse(req.body);
+    const { priceId, teamId } = req.body;
 
     const validPrice = await stripeClient.prices.retrieve(priceId);
 
     if (!validPrice.active) {
       res.status(400);
+      return;
+    }
+
+    // verify userId is admin of this team
+    const team = await getTeamById(teamId);
+
+    if (team === undefined) {
+      res.status(400);
+      return;
+    }
+
+    if (!userIsAdmin(userId, team)) {
+      res.status(403);
       return;
     }
 
@@ -40,11 +55,16 @@ async function postHandler(
         },
       ],
       mode: "subscription",
-      success_url:
-        env.BASE_URL + "/app?upgraded=true&session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: env.BASE_URL + "/pricing?checkout_canceled=true",
+      subscription_data: {
+        trial_period_days: 14,
+      },
+      success_url: env.BASE_URL + "/teams/" + teamId,
+      cancel_url: env.BASE_URL + "/app?checkout_canceled=true",
       customer: stripeCustomerId,
       client_reference_id: userId,
+      metadata: {
+        team_id: teamId,
+      },
     });
 
     res.json({ url: stripeSession.url as string });

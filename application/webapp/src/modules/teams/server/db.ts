@@ -249,3 +249,12 @@ export const removeInvite = async (team: Team, email: string) => {
     throw err;
   }
 };
+
+export const userIsAdmin = (userId: string, team: Team) => {
+  for (let member of team.members) {
+    if (member.user_id === userId && member.permission_level === "admin") {
+      return true;
+    }
+  }
+  return false;
+};
