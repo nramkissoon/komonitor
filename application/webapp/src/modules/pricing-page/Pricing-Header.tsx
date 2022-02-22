@@ -1,10 +1,9 @@
 import { Box, Heading, Text, useColorModeValue } from "@chakra-ui/react";
-import React from "react";
 
 export function PricingHeader() {
   return (
     <Box textAlign="center" pt="1em">
-      <Heading fontSize="7xl" fontWeight="extrabold" mb="4">
+      <Heading fontSize="7xl" fontWeight="extrabold" mb="4" as="h1">
         Plans & Pricing
       </Heading>
       <Text

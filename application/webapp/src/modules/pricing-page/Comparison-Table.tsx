@@ -15,6 +15,7 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
+import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import { PLAN_PRICE_IDS, PLAN_PRODUCT_IDS } from "../billing/plans";
 import { CtaButton, ctaButtonCharacteristics } from "./Pricing-Cards";
@@ -116,6 +117,11 @@ export function ComparisonTable({
   user: any;
 }) {
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
+
+  const [createNewTeamIsOpen, setCreateNewTeamIsOpen] = React.useState(false);
+  const [planPricingId, setPlanPricingId] = React.useState(
+    PLAN_PRICE_IDS.MONTHLY.PRO
+  );
   return (
     <Fade in={true}>
       <Box
@@ -194,9 +200,11 @@ export function ComparisonTable({
                       user,
                       productId,
                       PLAN_PRODUCT_IDS.STARTER,
+                      setPlanPricingId,
                       showAnnualPricing
                         ? PLAN_PRICE_IDS.ANNUAL.STARTER
-                        : PLAN_PRICE_IDS.MONTHLY.STARTER
+                        : PLAN_PRICE_IDS.MONTHLY.STARTER,
+                      setCreateNewTeamIsOpen
                     )}
                   />
                 </Td>
@@ -207,9 +215,11 @@ export function ComparisonTable({
                       user,
                       productId,
                       PLAN_PRODUCT_IDS.PRO,
+                      setPlanPricingId,
                       showAnnualPricing
                         ? PLAN_PRICE_IDS.ANNUAL.PRO
-                        : PLAN_PRICE_IDS.MONTHLY.PRO
+                        : PLAN_PRICE_IDS.MONTHLY.PRO,
+                      setCreateNewTeamIsOpen
                     )}
                   />
                 </Td>
@@ -220,9 +230,11 @@ export function ComparisonTable({
                       user,
                       productId,
                       PLAN_PRODUCT_IDS.BUSINESS,
+                      setPlanPricingId,
                       showAnnualPricing
                         ? PLAN_PRICE_IDS.ANNUAL.BUSINESS
-                        : PLAN_PRICE_IDS.MONTHLY.BUSINESS
+                        : PLAN_PRICE_IDS.MONTHLY.BUSINESS,
+                      setCreateNewTeamIsOpen
                     )}
                   />
                 </Td>
