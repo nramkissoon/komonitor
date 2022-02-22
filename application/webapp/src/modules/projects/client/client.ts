@@ -1,20 +1,21 @@
+import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Project } from "utils";
 import { env } from "../../../common/client-utils";
-import { useTeam } from "../../../common/components/TeamProvider";
 
 export const projectsApiUrl = env.BASE_URL + "api/projects";
 
 const projectFetcher = (url: string, team: string | undefined) => {
-  const urlWithParams = url + (team ? "?team=" + team : "");
+  const urlWithParams = url + (team ? "?teamId=" + team : "");
   return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
 };
 
 export const useProjects = () => {
   // team determines what projects to get
-  const { team } = useTeam();
+  const router = useRouter();
+  const { teamId } = router.query;
   const { data, error, mutate } = useSWR(
-    [projectsApiUrl, team],
+    [projectsApiUrl, teamId],
     projectFetcher
   );
 
@@ -43,16 +44,21 @@ export const deleteProject = async (
 
 export const createProject = async (
   formData: any,
+
   onSuccess?: () => void,
-  onError?: (message: string) => void
+  onError?: (message: string) => void,
+  teamId?: string
 ) => {
-  const response = await fetch(projectsApiUrl, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(formData),
-  });
+  const response = await fetch(
+    projectsApiUrl + (teamId ? `?teamId=${teamId}` : ""),
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(formData),
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {

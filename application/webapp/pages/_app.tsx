@@ -96,5 +96,5 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
     return <React.Fragment>{children}</React.Fragment>;
   }
 
-  return <div></div>;
+  return <div>You do not have access to this page.</div>;
 };

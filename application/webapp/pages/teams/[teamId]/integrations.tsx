@@ -11,12 +11,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { AppSubNav } from "../../src/common/components/App-Sub-Nav";
-import { PageLayout } from "../../src/common/components/Page-Layout";
-import { useUserIntegrations } from "../../src/modules/integrations/client";
-import { ActiveIntegrationList } from "../../src/modules/integrations/components/ActiveIntegrationList";
-import { NewIntegrationsList } from "../../src/modules/integrations/components/NewIntegrationsList";
-import { ExtendedNextPage } from "../_app";
+import { useAppBaseRoute } from "../../../src/common/client-utils";
+import { AppSubNav } from "../../../src/common/components/App-Sub-Nav";
+import { PageLayout } from "../../../src/common/components/Page-Layout";
+import { useTeamIntegrations } from "../../../src/modules/integrations/client";
+import { ActiveIntegrationList } from "../../../src/modules/integrations/components/ActiveIntegrationList";
+import { NewIntegrationsList } from "../../../src/modules/integrations/components/NewIntegrationsList";
+import { ExtendedNextPage } from "../../_app";
 
 const App: ExtendedNextPage = () => {
   const router = useRouter();
@@ -25,20 +26,25 @@ const App: ExtendedNextPage = () => {
     slackIntegrationSuccess,
     slackIntegrationCanceled,
   } = router.query;
+  const baseRoute = useAppBaseRoute();
 
-  const { integrations, isLoading } = useUserIntegrations();
+  const { integrations, teamIsLoading } = useTeamIntegrations();
 
   return (
     <PageLayout isAppPage maxW={["sm", "xl", "3xl", "5xl", "6xl"]}>
       <AppSubNav
         links={[
-          { isSelected: false, href: "/app", text: "Projects" },
+          { isSelected: false, href: baseRoute, text: "Projects" },
           {
             isSelected: true,
-            href: "/app/integrations",
+            href: baseRoute + "/integrations",
             text: "Integrations",
           },
-          { isSelected: false, href: "/app/settings", text: "Settings" },
+          {
+            isSelected: false,
+            href: baseRoute + "/settings",
+            text: "Settings",
+          },
         ]}
       />
       <Heading textAlign="left" fontWeight="medium" mb=".2em" fontSize="3xl">
@@ -51,8 +57,7 @@ const App: ExtendedNextPage = () => {
         fontSize="xl"
         color="gray.500"
       >
-        These integrations are available in any project in your personal
-        account.
+        These integrations are available in any project in your team.
       </Heading>
       {slackAlreadyInstalled === "true" && (
         <Alert status="warning" mt="-.2em" mb=".5em" variant="left-accent">
@@ -101,7 +106,7 @@ const App: ExtendedNextPage = () => {
           <TabPanel>
             <ActiveIntegrationList
               integrations={integrations}
-              isLoading={isLoading}
+              isLoading={teamIsLoading}
             />
           </TabPanel>
           <TabPanel>

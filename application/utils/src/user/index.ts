@@ -54,7 +54,7 @@ export interface TeamMember {
 }
 
 export interface TeamIntegration {
-  type: "slack";
+  type: "Slack";
   data: Installation;
 }
 export interface TeamInvite {

@@ -1,6 +1,5 @@
 import { chakra, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
 import { AppSubNav } from "../../../src/common/components/App-Sub-Nav";
 import { PageLayout } from "../../../src/common/components/Page-Layout";
 import { SettingsTabs } from "../../../src/modules/settings/components/SettingsTabs";

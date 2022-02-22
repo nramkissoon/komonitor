@@ -17,7 +17,7 @@ async function getHandler(
     const { teamId } = req.query;
 
     if (!teamId || teamId === "") {
-      res.status(400);
+      res.json(undefined);
       return;
     }
 

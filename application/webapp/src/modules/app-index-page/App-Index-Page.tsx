@@ -18,7 +18,7 @@ import Fuse from "fuse.js";
 import Link from "next/link";
 import React from "react";
 import { Project, UptimeMonitor } from "utils";
-import { timeAgo } from "../../common/client-utils";
+import { timeAgo, useAppBaseRoute } from "../../common/client-utils";
 import { AppSubNav } from "../../common/components/App-Sub-Nav";
 import { LoadingSpinner } from "../../common/components/Loading-Spinner";
 import { useProjects } from "../projects/client/client";
@@ -198,17 +198,22 @@ const ProjectsTab = () => {
 };
 
 export function AppIndexPage() {
+  const baseRoute = useAppBaseRoute();
   return (
     <>
       <AppSubNav
         links={[
-          { isSelected: true, href: "/app", text: "Projects" },
+          { isSelected: true, href: baseRoute, text: "Projects" },
           {
             isSelected: false,
-            href: "/app/integrations",
+            href: baseRoute + "/integrations",
             text: "Integrations",
           },
-          { isSelected: false, href: "/app/settings", text: "Settings" },
+          {
+            isSelected: false,
+            href: baseRoute + "/settings",
+            text: "Settings",
+          },
         ]}
       />
 

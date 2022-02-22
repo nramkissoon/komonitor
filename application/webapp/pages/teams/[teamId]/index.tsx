@@ -1,14 +1,11 @@
-import { useRouter } from "next/router";
 import { PageLayout } from "../../../src/common/components/Page-Layout";
+import { AppIndexPage } from "../../../src/modules/app-index-page/App-Index-Page";
 import { ExtendedNextPage } from "../../_app";
 
 const Page: ExtendedNextPage = () => {
-  const router = useRouter();
-  const { teamId } = router.query;
-  console.log(teamId);
   return (
     <PageLayout isAppPage maxW={["sm", "xl", "3xl", "5xl", "6xl"]}>
-      This is the {teamId} Team
+      <AppIndexPage />
     </PageLayout>
   );
 };

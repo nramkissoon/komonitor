@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Team } from "utils";
 import { env } from "../../../common/client-utils";
@@ -68,4 +69,21 @@ export const createTeam = async ({
     }
     onError(errorMessage);
   }
+};
+
+export const useTeamIntegrations = () => {
+  const { teamId } = useRouter().query;
+
+  const { team, teamFetchError, teamIsLoading, mutateTeams } = useTeam(
+    teamId as string
+  );
+
+  let integrations = team ? team.integrations : [];
+
+  return {
+    integrations,
+    teamFetchError,
+    teamIsLoading,
+    mutateTeams,
+  };
 };
