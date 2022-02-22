@@ -48,6 +48,8 @@ export const teamCreationInputSchema = z.object({
         return [
           PLAN_PRICE_IDS.MONTHLY.PRO,
           PLAN_PRICE_IDS.MONTHLY.BUSINESS,
+          PLAN_PRICE_IDS.ANNUAL.BUSINESS,
+          PLAN_PRICE_IDS.MONTHLY.PRO,
         ].includes(s);
       },
       { message: "Invalid plan." }

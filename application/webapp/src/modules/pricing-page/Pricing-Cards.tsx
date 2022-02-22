@@ -430,8 +430,11 @@ export function PricingCards(props: {
 }) {
   const { showAnnualPricing, setShowAnnualPricing, productId, user } = props;
   const [createNewTeamIsOpen, setCreateNewTeamIsOpen] = React.useState(false);
-  const [planPricingId, setPlanPricingId] = React.useState("");
+  const [planPricingId, setPlanPricingId] = React.useState(
+    PLAN_PRICE_IDS.MONTHLY.PRO
+  );
 
+  console.log();
   return (
     <>
       <NewTeamDialog

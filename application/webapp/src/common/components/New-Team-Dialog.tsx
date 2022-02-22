@@ -48,10 +48,13 @@ export const NewTeamDialog = ({
     setError,
     control,
     setValue,
+    reset,
   } = useForm<TeamCreationInputs>({
     resolver: zodResolver(teamCreationInputSchema),
     defaultValues: { plan: defaultPlanValue },
   });
+
+  if (defaultPlanValue) setValue("plan", defaultPlanValue);
 
   const router = useRouter();
 
@@ -65,14 +68,17 @@ export const NewTeamDialog = ({
 
     await createTeam({
       id: data.id,
-      plan: data.plan,
+      plan: defaultPlanValue ?? data.plan,
       onSuccess: async (plan: string, id: string) => {
         const res = await fetch("/api/billing/checkout-session", {
           method: "POST",
           headers: {
             "Content-type": "application/json; charset=UTF-8",
           },
-          body: JSON.stringify({ priceId: plan, teamId: id }),
+          body: JSON.stringify({
+            priceId: defaultPlanValue ?? plan,
+            teamId: id,
+          }),
         });
         const stripeUrl = (await res.json()).url;
         router.push(stripeUrl);
@@ -125,28 +131,30 @@ export const NewTeamDialog = ({
               <chakra.div color="red.400" mt="6px" fontSize={"md"}>
                 {errors.id?.message}
               </chakra.div>
-              <Controller
-                name="plan"
-                control={control}
-                render={({ field: { onChange, value }, fieldState }) => (
-                  <RadioGroup
-                    onChange={(e) => {
-                      setValue("plan", e);
-                    }}
-                    value={value}
-                  >
-                    <Stack direction="row">
-                      <Radio value={PLAN_PRICE_IDS.MONTHLY.PRO}>Pro</Radio>
-                      <Radio value={PLAN_PRICE_IDS.MONTHLY.BUSINESS}>
-                        Business
-                      </Radio>
-                    </Stack>
-                    <chakra.div color="red.400" mt="6px" fontSize={"md"}>
-                      {errors.plan?.message}
-                    </chakra.div>
-                  </RadioGroup>
-                )}
-              />
+              {defaultPlanValue === undefined && (
+                <Controller
+                  name="plan"
+                  control={control}
+                  render={({ field: { onChange, value }, fieldState }) => (
+                    <RadioGroup
+                      onChange={(e) => {
+                        setValue("plan", e);
+                      }}
+                      value={value}
+                    >
+                      <Stack direction="row">
+                        <Radio value={PLAN_PRICE_IDS.MONTHLY.PRO}>Pro</Radio>
+                        <Radio value={PLAN_PRICE_IDS.MONTHLY.BUSINESS}>
+                          Business
+                        </Radio>
+                      </Stack>
+                      <chakra.div color="red.400" mt="6px" fontSize={"md"}>
+                        {errors.plan?.message}
+                      </chakra.div>
+                    </RadioGroup>
+                  )}
+                />
+              )}
             </chakra.form>
           </Box>
           <Box
@@ -174,7 +182,9 @@ export const NewTeamDialog = ({
             _hover={{ bg: "gray.600" }}
             px="5"
             mr={3}
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+            }}
           >
             Close
           </Button>
