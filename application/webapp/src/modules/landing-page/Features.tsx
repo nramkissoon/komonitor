@@ -109,7 +109,7 @@ export function Features() {
         lineHeight="shorter"
         mb=".1em"
       >
-        Modern Features and Tools
+        Modern Monitoring and Alerting
       </chakra.h1>
       <chakra.h2
         fontSize="2xl"
@@ -120,11 +120,7 @@ export function Features() {
         mx="auto"
         color={useColorModeValue("gray.600", "gray.400")}
       >
-        Know when things go wrong,{" "}
-        <chakra.span color="red.500" fontWeight="extrabold">
-          before
-        </chakra.span>{" "}
-        your users do.
+        Downtime happens. Know when things go wrong, before your users do.
       </chakra.h2>
       {Feature({
         header: Copy.Features.Uptime.Header,

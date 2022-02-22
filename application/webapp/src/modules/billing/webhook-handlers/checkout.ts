@@ -1,8 +1,6 @@
 import Stripe from "stripe";
-import { ddbClient, env } from "../../../common/server-utils";
 import { convertStripeTimestampToAppTimestampWithBuffer } from "../../../common/utils";
-import { provisionSubscriptionProductForUser } from "../../user/user-db";
-import { getStripeCustomer } from "../customer";
+import { provisionSubscriptionForTeam } from "../../teams/server/db";
 import { getStripeSubscription } from "../subscriptions";
 
 export async function handleCheckoutSessionCompleted(
@@ -10,25 +8,22 @@ export async function handleCheckoutSessionCompleted(
 ) {
   try {
     const customerId = session.customer as string;
-    const userId = ((await getStripeCustomer(customerId)) as Stripe.Customer)
-      .metadata["user_id"];
 
     const subscriptionId = session.subscription as string;
     const subscription = await getStripeSubscription(subscriptionId);
 
-    const teamId = subscription.metadata["team_id"];
+    const teamId = session.metadata!["team_id"];
 
-    await provisionSubscriptionProductForUser(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId,
+    await provisionSubscriptionForTeam({
+      teamId,
       subscriptionId,
-      subscription.status,
-      convertStripeTimestampToAppTimestampWithBuffer(
+      subscriptionStatus: subscription.status,
+      productId: subscription.items.data[0].price.product as string,
+      currentPeriodEnd: convertStripeTimestampToAppTimestampWithBuffer(
         subscription.current_period_end
       ),
-      subscription.items.data[0].price.product as string
-    );
+      customerId,
+    });
   } catch (err) {
     console.log(err);
     throw err;

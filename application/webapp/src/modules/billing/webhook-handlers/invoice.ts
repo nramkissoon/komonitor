@@ -1,7 +1,6 @@
 import Stripe from "stripe";
-import { ddbClient, env } from "../../../common/server-utils";
 import { convertStripeTimestampToAppTimestampWithBuffer } from "../../../common/utils";
-import { provisionSubscriptionProductForUser } from "../../user/user-db";
+import { provisionSubscriptionForTeam } from "../../teams/server/db";
 import { getStripeCustomer } from "../customer";
 import { getStripeSubscription } from "../subscriptions";
 
@@ -14,18 +13,19 @@ export async function handleInvoicePaid(invoice: Stripe.Invoice) {
     const subscriptionId = invoice.subscription as string;
     const subscription = await getStripeSubscription(subscriptionId);
 
+    const teamId = subscription.metadata["team_id"];
+
     // continue provisioning subscription
-    await provisionSubscriptionProductForUser(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId,
+    await provisionSubscriptionForTeam({
+      teamId,
       subscriptionId,
-      subscription.status,
-      convertStripeTimestampToAppTimestampWithBuffer(
+      subscriptionStatus: subscription.status,
+      productId: subscription.items.data[0].price.product as string,
+      currentPeriodEnd: convertStripeTimestampToAppTimestampWithBuffer(
         subscription.current_period_end
       ),
-      subscription.items.data[0].price.product as string
-    );
+      customerId,
+    });
   } catch (err) {
     console.error(err);
     throw err;

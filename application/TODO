@@ -19,11 +19,13 @@ Teams:
         ☐ eval need for team provider
         
     creation:
-        ☐ /teams/new
-        ☐ form for team name (id), purpose, submit writes new team to db set user as admin, check if name exists first, make clear that need to pay
-        ☐ after successful creation redirect to strip checkout page for 14 day free trial of team subscription
-        ☐ create checkout api for teams
-        ☐ redirect to teams/{new team} after successful checkout
+        ✘ /teams/new @cancelled(22-02-21 21:09)
+        ✔ form for team name (id), submit writes new team to db set user as admin, check if name exists first, make clear that need to pay @done(22-02-21 17:23)
+        ✔ after successful creation , create stripe subscription with trial @done(22-02-21 21:09)
+        ✔ create checkout api for teams @done(22-02-21 10:56)
+        ✔ redirect to teams/{new team} after successful checkout @done(22-02-20 19:35)
+        ☐ subscription must be valid to use team
+        ✘ create team on checkout complete, provision on invoice paid @cancelled(22-02-21 20:32)
     invites:
         ☐ api setup
         create and send invite:

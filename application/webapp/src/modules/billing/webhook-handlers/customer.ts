@@ -1,10 +1,9 @@
 import Stripe from "stripe";
-import { ddbClient, env } from "../../../common/server-utils";
 import { convertStripeTimestampToAppTimestampWithBuffer } from "../../../common/utils";
 import {
-  downgradeUserToFreePlan,
-  provisionSubscriptionProductForUser,
-} from "../../user/user-db";
+  deleteTeamAndAssociatedAssets,
+  provisionSubscriptionForTeam,
+} from "../../teams/server/db";
 import { getStripeCustomer } from "../customer";
 
 export async function handleCustomerSubscriptionDeleted(
@@ -15,7 +14,14 @@ export async function handleCustomerSubscriptionDeleted(
     const userId = ((await getStripeCustomer(customerId)) as Stripe.Customer)
       .metadata["user_id"];
 
-    await downgradeUserToFreePlan(ddbClient, env.USER_TABLE_NAME, userId);
+    const teamId = subscription.metadata["team_id"];
+
+    // delete team and associated assets
+
+    const deleted = await deleteTeamAndAssociatedAssets(teamId);
+
+    // TODO do some logging
+    // TODO mark for deletion
   } catch (err) {
     console.error(err);
     throw err;
@@ -30,17 +36,18 @@ export async function handleCustomerSubscriptionUpdated(
     const userId = ((await getStripeCustomer(customerId)) as Stripe.Customer)
       .metadata["user_id"];
 
-    await provisionSubscriptionProductForUser(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId,
-      subscription.id,
-      subscription.status,
-      convertStripeTimestampToAppTimestampWithBuffer(
+    const teamId = subscription.metadata["team_id"];
+
+    await provisionSubscriptionForTeam({
+      teamId,
+      subscriptionId: subscription.id,
+      subscriptionStatus: subscription.status,
+      productId: subscription.items.data[0].price.product as string,
+      currentPeriodEnd: convertStripeTimestampToAppTimestampWithBuffer(
         subscription.current_period_end
       ),
-      subscription.items.data[0].price.product as string
-    );
+      customerId,
+    });
   } catch (err) {
     console.error(err);
     throw err;

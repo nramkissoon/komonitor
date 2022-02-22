@@ -15,6 +15,7 @@ import {
 import { noop } from "lodash";
 import router from "next/router";
 import React from "react";
+import { NewTeamDialog } from "../../common/components/New-Team-Dialog";
 import { PLAN_PRICE_IDS, PLAN_PRODUCT_IDS } from "../billing/plans";
 
 interface PricingCardProps {
@@ -83,63 +84,6 @@ function Feature(feature: string, key: string) {
         </chakra.span>
       </Box>
     </Flex>
-  );
-}
-
-function PricingCard(props: PricingCardProps) {
-  const { price, planName, ctaButtonProps, featureList, showAnnual } = props;
-
-  let perString = "/month";
-  if (planName === "Starter") {
-    perString = " Forever";
-  }
-
-  return (
-    <Box
-      rounded="lg"
-      shadow="md"
-      pt={10}
-      bg={useColorModeValue("white", "gray.950")}
-    >
-      <Flex direction="column">
-        <Box px={10} pb={5}>
-          <Badge
-            mb={2}
-            fontSize="sm"
-            letterSpacing="wide"
-            colorScheme="gray"
-            fontWeight="medium"
-            rounded="full"
-            px={4}
-            py={1}
-          >
-            {planName}
-          </Badge>
-          <Text
-            mb={2}
-            fontSize="5xl"
-            fontWeight={["bold", "extrabold"]}
-            color={useColorModeValue("gray.900", "gray.50")}
-            lineHeight="tight"
-          >
-            ${showAnnual ? price - price * 0.3 : price}
-            <chakra.span
-              fontSize="2xl"
-              fontWeight="medium"
-              color={useColorModeValue("gray.600", "gray.400")}
-            >
-              {perString}
-            </chakra.span>
-          </Text>
-          <CtaButton {...ctaButtonProps} />
-        </Box>
-        <Flex px={10} pt={5} pb={10} direction="column">
-          <Stack mb={5} spacing={4}>
-            {featureList.map((feature) => Feature(feature, planName + feature))}
-          </Stack>
-        </Flex>
-      </Flex>
-    </Box>
   );
 }
 
@@ -443,7 +387,9 @@ export function ctaButtonCharacteristics(
   user: any,
   userProductId: any,
   productId: string,
-  priceId: string
+  setPriceId: React.Dispatch<React.SetStateAction<string>>,
+  priceId: string,
+  onOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   const isCurrentPlan = userProductId === productId;
   const isSignedIn = user !== undefined && user !== null;
@@ -452,7 +398,7 @@ export function ctaButtonCharacteristics(
     if (PLAN_PRODUCT_IDS.STARTER === productId) {
       text = "Go to Dashboard";
     } else {
-      text = "Create a Team";
+      text = "Try Free for 14 Days";
     }
   } else {
     text = "Get Started";
@@ -465,7 +411,10 @@ export function ctaButtonCharacteristics(
   } else if (!isSignedIn) {
     onClickFunc = () => router.push("/auth/signin");
   } else {
-    onClickFunc = () => router.push("/teams/new");
+    onClickFunc = () => {
+      setPriceId(priceId);
+      onOpen(true);
+    };
   }
   return {
     text: text,
@@ -480,9 +429,16 @@ export function PricingCards(props: {
   user: any;
 }) {
   const { showAnnualPricing, setShowAnnualPricing, productId, user } = props;
+  const [createNewTeamIsOpen, setCreateNewTeamIsOpen] = React.useState(false);
+  const [planPricingId, setPlanPricingId] = React.useState("");
 
   return (
     <>
+      <NewTeamDialog
+        isOpen={createNewTeamIsOpen}
+        onClose={() => setCreateNewTeamIsOpen(false)}
+        defaultPlanValue={planPricingId}
+      />
       <Flex
         mb="1.7em"
         justifyContent="center"
@@ -520,9 +476,11 @@ export function PricingCards(props: {
               user,
               productId,
               PLAN_PRODUCT_IDS.STARTER,
+              setPlanPricingId,
               showAnnualPricing
                 ? PLAN_PRICE_IDS.ANNUAL.STARTER
-                : PLAN_PRICE_IDS.MONTHLY.STARTER
+                : PLAN_PRICE_IDS.MONTHLY.STARTER,
+              setCreateNewTeamIsOpen
             )}
           />
           <ProPricingCard
@@ -530,9 +488,11 @@ export function PricingCards(props: {
               user,
               productId,
               PLAN_PRODUCT_IDS.PRO,
+              setPlanPricingId,
               showAnnualPricing
                 ? PLAN_PRICE_IDS.ANNUAL.PRO
-                : PLAN_PRICE_IDS.MONTHLY.PRO
+                : PLAN_PRICE_IDS.MONTHLY.PRO,
+              setCreateNewTeamIsOpen
             )}
             showAnnual={showAnnualPricing}
           />
@@ -541,9 +501,11 @@ export function PricingCards(props: {
               user,
               productId,
               PLAN_PRODUCT_IDS.BUSINESS,
+              setPlanPricingId,
               showAnnualPricing
                 ? PLAN_PRICE_IDS.ANNUAL.BUSINESS
-                : PLAN_PRICE_IDS.MONTHLY.BUSINESS
+                : PLAN_PRICE_IDS.MONTHLY.BUSINESS,
+              setCreateNewTeamIsOpen
             )}
             showAnnual={showAnnualPricing}
           />

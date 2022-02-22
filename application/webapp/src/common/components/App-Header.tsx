@@ -39,6 +39,7 @@ import { HiMoon, HiSun } from "react-icons/hi";
 import { useUptimeMonitorsForProject } from "../../modules/uptime/client";
 import { useUser } from "../../modules/user/client";
 import { HeaderLogo } from "./Header-Logo";
+import { NewTeamDialog } from "./New-Team-Dialog";
 import { useTeam } from "./TeamProvider";
 
 const HeaderLink = (props: {
@@ -75,11 +76,9 @@ const HeaderLink = (props: {
 const TeamSelector = ({
   isCurrent,
   team,
-  setTeam,
 }: {
   isCurrent: boolean;
   team: string;
-  setTeam: (team: string) => void;
 }) => {
   const router = useRouter();
   return (
@@ -98,7 +97,6 @@ const TeamSelector = ({
         bg: useColorModeValue("blue.200", "blue.700"),
       }}
       onClick={() => {
-        setTeam(team);
         router.push(`/teams/${team}`);
       }}
     >
@@ -114,13 +112,15 @@ const TeamSelector = ({
 };
 
 const TeamSelection = () => {
-  const { setTeam, team } = useTeam();
   const { user } = useUser();
   const router = useRouter();
+  const { teamId } = router.query;
+
+  const [createNewTeamIsOpen, setCreateNewTeamIsOpen] = React.useState(false);
 
   const teams = user && user.teams ? user.teams : [];
 
-  const isPersonal = team === undefined;
+  const isPersonal = teamId === undefined;
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const fuse = new Fuse(teams);
@@ -128,6 +128,10 @@ const TeamSelection = () => {
 
   return (
     <Popover placement="bottom-start">
+      <NewTeamDialog
+        isOpen={createNewTeamIsOpen}
+        onClose={() => setCreateNewTeamIsOpen(false)}
+      />
       <PopoverTrigger>
         <Button
           rightIcon={<TriangleDownIcon />}
@@ -138,7 +142,7 @@ const TeamSelection = () => {
           fontWeight="normal"
           letterSpacing="wider"
         >
-          {isPersonal ? "Personal Account" : team}
+          {isPersonal ? "Personal Account" : teamId}
         </Button>
       </PopoverTrigger>
       <PopoverContent backgroundColor={useColorModeValue("white", "gray.950")}>
@@ -180,7 +184,6 @@ const TeamSelection = () => {
                 bg: useColorModeValue("blue.200", "blue.700"),
               }}
               onClick={() => {
-                setTeam(undefined);
                 router.push(`/app`);
               }}
             >
@@ -211,36 +214,29 @@ const TeamSelection = () => {
                   <TeamSelector
                     key={t.item}
                     team={t.item}
-                    setTeam={setTeam}
-                    isCurrent={t.item === team}
+                    isCurrent={t.item === teamId}
                   />
                 ))
               : teams.map((t) => (
-                  <TeamSelector
-                    key={t}
-                    team={t}
-                    setTeam={setTeam}
-                    isCurrent={t === team}
-                  />
+                  <TeamSelector key={t} team={t} isCurrent={t === teamId} />
                 ))}
-            <Link href="/teams/new" passHref>
-              <Button
-                as="a"
-                mx="2"
-                px="4"
-                my="2"
-                py="1"
-                rounded="full"
-                size="md"
-                fontWeight="normal"
-                leftIcon={<AddIcon />}
-                bg="none"
-                justifyContent="left"
-                _hover={{ bg: useColorModeValue("blue.100", "gray.700") }}
-              >
-                Create Team
-              </Button>
-            </Link>
+            <Button
+              as="a"
+              mx="2"
+              px="4"
+              my="2"
+              py="1"
+              rounded="full"
+              size="md"
+              fontWeight="normal"
+              leftIcon={<AddIcon />}
+              bg="none"
+              justifyContent="left"
+              _hover={{ bg: useColorModeValue("blue.100", "gray.700") }}
+              onClick={() => setCreateNewTeamIsOpen(true)}
+            >
+              Create Team
+            </Button>
           </Flex>
         </PopoverBody>
       </PopoverContent>

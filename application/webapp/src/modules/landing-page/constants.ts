@@ -9,7 +9,7 @@ export const Copy = {
   Features: {
     Uptime: {
       Header: "Uptime Monitoring",
-      Subheader: "Know when your websites are down before customers do.",
+      Subheader: "Know how your websites and services are performing.",
       List: [
         "Automated checkups from every minute to every 24 hours.",
         "Monitor from different regions in the world most relevant to your visitors.",
@@ -28,7 +28,7 @@ export const Copy = {
       ],
     },
     Customize: {
-      Header: "Define Downtime Exactly",
+      Header: "Define Downtime",
       Subheader:
         "Define how Komonitor determines if your website is up by looking directly at the response object.",
       List: [
@@ -40,7 +40,7 @@ export const Copy = {
     },
   },
   NoCode: {
-    Header: "Built With No-Code Setup In Mind",
+    Header: "Easy Setup With No Code",
     Subheader:
       "Less code means less barriers to entry. No coding experience required.",
     Intuitive: {
