@@ -6,7 +6,6 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React from "react";
 import { getDisplayStringFromPlanProductId } from "../../../common/utils";
 import { useUserServicePlanProductId } from "../../user/client";
 import { createAndRedirectToCustomerPortal } from "../client";
@@ -40,7 +39,7 @@ export function BillingTab() {
       </Badge>
       <Divider mb="1em" />
       <Text fontSize="lg" color="gray.500" mb=".7em">
-        Update/Cancel your subscription and payment methods:
+        Update your subscription and payment methods:
       </Text>
       <Button
         fontWeight="normal"

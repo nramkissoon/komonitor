@@ -89,9 +89,11 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   // auth for teams
   if (teamId && !teamIsLoading && !teamFetchError && team) {
     return <React.Fragment>{children}</React.Fragment>;
-  } else if (teamId && !team) {
+  } else if (teamId && !team && !teamIsLoading) {
     // not authed for team
     return <div>You do not have access to this team.</div>;
+  } else if (teamIsLoading) {
+    return <div></div>;
   } else if (isUser || router.pathname.startsWith("/demo")) {
     return <React.Fragment>{children}</React.Fragment>;
   }
