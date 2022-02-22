@@ -41,7 +41,7 @@ export function CTA() {
       mb="5em"
     >
       <Box>
-        <chakra.h1
+        <chakra.h2
           textAlign="center"
           fontSize="5xl"
           fontWeight="extrabold"
@@ -50,9 +50,9 @@ export function CTA() {
           mb=".2em"
         >
           {Copy.Cta.Header}
-        </chakra.h1>
+        </chakra.h2>
 
-        <chakra.h2
+        <chakra.h3
           fontSize="3xl"
           fontWeight="bold"
           textAlign="center"
@@ -63,7 +63,7 @@ export function CTA() {
           mb="1.2em"
         >
           {Copy.Cta.Subheader}
-        </chakra.h2>
+        </chakra.h3>
       </Box>
 
       {CtaButton()}
