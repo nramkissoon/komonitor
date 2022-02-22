@@ -10,8 +10,8 @@ import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import { useRouter } from "next/router";
 import React from "react";
-import { TeamProvider } from "../src/common/components/TeamProvider";
 import theme from "../src/common/components/theme";
+import { useTeam } from "../src/modules/teams/client";
 
 export interface ExtendedPageContext extends NextPageContext {}
 
@@ -62,9 +62,7 @@ export default function App({
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
           <Auth>
-            <TeamProvider>
-              <Component {...pageProps} />
-            </TeamProvider>
+            <Component {...pageProps} />
           </Auth>
         ) : (
           <Component {...pageProps} />
@@ -79,13 +77,22 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   const isUser = session && session?.user; // get user if it exists on the session object
 
   const router = useRouter();
+  const { teamId } = router.query;
+
+  const { team, teamFetchError, teamIsLoading } = useTeam(teamId as string);
 
   React.useEffect(() => {
     if (status === "loading") return;
     if (!isUser) signIn();
   }, [isUser, status]);
 
-  if (isUser || router.pathname.startsWith("/demo")) {
+  // auth for teams
+  if (teamId && !teamIsLoading && !teamFetchError && team) {
+    return <React.Fragment>{children}</React.Fragment>;
+  } else if (teamId && !team) {
+    // not authed for team
+    return <div>You do not have access to this team.</div>;
+  } else if (isUser || router.pathname.startsWith("/demo")) {
     return <React.Fragment>{children}</React.Fragment>;
   }
 

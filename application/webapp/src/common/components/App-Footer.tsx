@@ -63,7 +63,7 @@ export function AppFooter() {
 
   return (
     <Flex {...containerBoxStyles} as="footer">
-      <HStack {...defaultLinksHstackContainerStyles} mb="1em">
+      <HStack {...defaultLinksHstackContainerStyles}>
         <HeaderLink text="Docs" href="/docs" />
         <HeaderLink text="Blog" href="/blog" />
       </HStack>

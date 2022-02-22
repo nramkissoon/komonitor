@@ -16,7 +16,7 @@ Teams:
     ✔ create new team in app header @done(22-02-16 15:25)
     auth:
         ✘  team obj in db is source of truth for members -> implement an auth when accessing all routes on teams/{teamId} (middleware?????) ->  updgrade nextauth @cancelled(22-02-16 23:53)
-        ☐ eval need for team provider
+        ✔ eval need for team provider @done(22-02-22 09:54)
         
     creation:
         ✘ /teams/new @cancelled(22-02-21 21:09)

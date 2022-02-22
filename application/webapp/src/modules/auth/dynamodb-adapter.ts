@@ -7,6 +7,7 @@ import {
   AdapterUser,
   VerificationToken,
 } from "next-auth/adapters";
+import { env } from "../../common/server-utils";
 
 const isoDateRE =
   /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/;
@@ -162,6 +163,31 @@ export const DynamoDBAdapter = (
       }
 
       await client.put({ TableName, Item: item });
+      try {
+        await fetch(env.SLACK_NEW_USER_NOTIFICATION_BOT_WEBHOOK, {
+          method: "POST",
+          headers: new Headers({ "content-type": "application/json" }),
+          body: JSON.stringify({
+            text: "[NEW USER] - " + process.env.NODE_ENV,
+            attachments: [
+              {
+                color: "#E53E3E",
+                blocks: [
+                  {
+                    type: "section",
+                    text: {
+                      type: "mrkdwn",
+                      text: `Email: *${profile.email}*\nName: *${profile.name}*`,
+                    },
+                  },
+                ],
+              },
+            ],
+          }),
+        });
+      } catch (err) {
+        // pass
+      }
       return item;
     },
     async getUser(id) {
