@@ -241,7 +241,7 @@ async function createHandler(
       ownerId
     );
 
-    if (productId === PLAN_PRODUCT_IDS.FREE) {
+    if (productId === PLAN_PRODUCT_IDS.STARTER) {
       const projects = await getProjectsForOwner(
         ddbClient,
         env.PROJECTS_TABLE_NAME,

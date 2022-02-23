@@ -190,7 +190,7 @@ export function OverviewPage(props: OverviewPageProps) {
         value={Number.parseInt(monitorStatusSince)}
         productId={
           productIdIsError || productIdIsLoading
-            ? PLAN_PRODUCT_IDS.FREE
+            ? PLAN_PRODUCT_IDS.STARTER
             : (data.productId as string)
         }
       />

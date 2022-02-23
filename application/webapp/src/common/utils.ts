@@ -73,10 +73,10 @@ export function convertStripeTimestampToAppTimestampWithBuffer(
 
 export function getDisplayStringFromPlanProductId(id: string) {
   switch (id) {
-    case PLAN_PRODUCT_IDS.FREE:
-      return "Free Plan";
-    case PLAN_PRODUCT_IDS.FREELANCER:
-      return "Freelancer Plan";
+    case PLAN_PRODUCT_IDS.STARTER:
+      return "Starter Plan";
+    case PLAN_PRODUCT_IDS.PRO:
+      return "Pro Plan";
     case PLAN_PRODUCT_IDS.BUSINESS:
       return "Business Plan";
     default:

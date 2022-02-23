@@ -29,7 +29,7 @@ async function postHandler(
     );
 
     //redirect to pricing page if free plan
-    if (productId === PLAN_PRODUCT_IDS.FREE) {
+    if (productId === PLAN_PRODUCT_IDS.STARTER) {
       res.status(200);
       res.json({ url: env.BASE_URL + "pricing" });
       return;

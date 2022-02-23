@@ -15,7 +15,6 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import { PLAN_PRICE_IDS, PLAN_PRODUCT_IDS } from "../billing/plans";
 import { CtaButton, ctaButtonCharacteristics } from "./Pricing-Cards";
@@ -89,7 +88,7 @@ const alertSectionData = [
   ["Webhook Alerts", "-", CheckIcon, CheckIcon],
 ];
 
-const dataSectionData = [["Data Retention", "7 days", "365 days", "365 days"]];
+const dataSectionData = [["Data Retention", "90 days", "365 days", "365 days"]];
 
 const supportSectionData = [
   [
@@ -159,14 +158,14 @@ export function ComparisonTable({
                   fontWeight="medium"
                   borderColor={tableBorderColor}
                 >
-                  Free
+                  Starter
                 </Th>
                 <Th
                   fontSize="sm"
                   fontWeight="medium"
                   borderColor={tableBorderColor}
                 >
-                  Freelancer
+                  Pro
                 </Th>
                 <Th
                   fontSize="sm"
@@ -194,10 +193,10 @@ export function ComparisonTable({
                     {...ctaButtonCharacteristics(
                       user,
                       productId,
-                      PLAN_PRODUCT_IDS.FREE,
+                      PLAN_PRODUCT_IDS.STARTER,
                       showAnnualPricing
-                        ? PLAN_PRICE_IDS.ANNUAL.FREE
-                        : PLAN_PRICE_IDS.MONTHLY.FREE
+                        ? PLAN_PRICE_IDS.ANNUAL.STARTER
+                        : PLAN_PRICE_IDS.MONTHLY.STARTER
                     )}
                   />
                 </Td>
@@ -207,10 +206,10 @@ export function ComparisonTable({
                     {...ctaButtonCharacteristics(
                       user,
                       productId,
-                      PLAN_PRODUCT_IDS.FREELANCER,
+                      PLAN_PRODUCT_IDS.PRO,
                       showAnnualPricing
-                        ? PLAN_PRICE_IDS.ANNUAL.FREELANCER
-                        : PLAN_PRICE_IDS.MONTHLY.FREELANCER
+                        ? PLAN_PRICE_IDS.ANNUAL.PRO
+                        : PLAN_PRICE_IDS.MONTHLY.PRO
                     )}
                   />
                 </Td>

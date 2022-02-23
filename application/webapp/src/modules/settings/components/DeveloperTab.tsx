@@ -105,7 +105,7 @@ export function DevelopersTab() {
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Webhooks:
         </Text>
-        {data?.productId === PLAN_PRODUCT_IDS.FREE && (
+        {data?.productId === PLAN_PRODUCT_IDS.STARTER && (
           <Flex justifyContent="space-between" alignItems="center">
             <Box>
               Webhooks are a paid feature.{" "}
@@ -140,7 +140,7 @@ export function DevelopersTab() {
           </Flex>
         )}
 
-        {data?.productId !== PLAN_PRODUCT_IDS.FREE && secret && (
+        {data?.productId !== PLAN_PRODUCT_IDS.STARTER && secret && (
           <Box>
             <Box ml="2px">Webhook Secret: </Box>
             <Flex>
@@ -206,7 +206,7 @@ export function DevelopersTab() {
             </Box>
           </Box>
         )}
-        {data?.productId !== PLAN_PRODUCT_IDS.FREE &&
+        {data?.productId !== PLAN_PRODUCT_IDS.STARTER &&
           !secretIsLoading &&
           !secret && (
             <Button

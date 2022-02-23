@@ -16,6 +16,8 @@ export async function handleCheckoutSessionCompleted(
     const subscriptionId = session.subscription as string;
     const subscription = await getStripeSubscription(subscriptionId);
 
+    const teamId = subscription.metadata["team_id"];
+
     await provisionSubscriptionProductForUser(
       ddbClient,
       env.USER_TABLE_NAME,

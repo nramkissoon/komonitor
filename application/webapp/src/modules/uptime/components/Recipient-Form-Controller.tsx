@@ -87,7 +87,7 @@ const WebhookController = ({
         <Box>
           <Switch
             isChecked={addWebhook}
-            isDisabled={!hasAlert || productId === PLAN_PRODUCT_IDS.FREE}
+            isDisabled={!hasAlert || productId === PLAN_PRODUCT_IDS.STARTER}
             onChange={(e) => {
               toggleAddWebhook(e.target.checked);
               clearErrors("alert.recipients.Webhook");
@@ -103,7 +103,7 @@ const WebhookController = ({
             Add Webhook Alert
           </chakra.span>
         </Box>
-        {productId === PLAN_PRODUCT_IDS.FREE && (
+        {productId === PLAN_PRODUCT_IDS.STARTER && (
           <Box>
             <Link href="/pricing" passHref>
               <Button
@@ -121,7 +121,7 @@ const WebhookController = ({
             </Link>
           </Box>
         )}
-        {productId !== PLAN_PRODUCT_IDS.FREE && (
+        {productId !== PLAN_PRODUCT_IDS.STARTER && (
           <Box>
             <Link href="/docs/webhooks/alerts" passHref>
               <Button
@@ -140,7 +140,7 @@ const WebhookController = ({
           </Box>
         )}
       </Flex>
-      {addWebhook && productId !== PLAN_PRODUCT_IDS.FREE && (
+      {addWebhook && productId !== PLAN_PRODUCT_IDS.STARTER && (
         <Controller
           name="alert.recipients.Webhook"
           control={control}

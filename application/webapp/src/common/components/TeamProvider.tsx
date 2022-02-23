@@ -2,7 +2,7 @@ import React from "react";
 
 export interface TeamContextType {
   team?: string;
-  setTeam: (team: string) => void;
+  setTeam: (team: string | undefined) => void;
 }
 
 export const TeamContext = React.createContext({} as TeamContextType);
@@ -16,17 +16,18 @@ export const useTeam = () => {
   return context;
 };
 
-export const TeamProvider = ({
-  value,
-  children,
-}: {
-  value: string | undefined;
-  children?: React.ReactNode;
-}) => {
-  const [team, rawSetTeam] = React.useState<string | undefined>(value);
+export const TeamProvider = ({ children }: { children?: React.ReactNode }) => {
+  const [team, rawSetTeam] = React.useState<string | undefined>(
+    localStorage.getItem("team") ?? undefined
+  );
 
-  const setTeam = React.useCallback((value: string) => {
+  const setTeam = React.useCallback((value: string | undefined) => {
     rawSetTeam(value);
+    if (value === undefined) {
+      localStorage.removeItem("team");
+    } else {
+      localStorage.setItem("team", value);
+    }
   }, []);
 
   const context = React.useMemo(

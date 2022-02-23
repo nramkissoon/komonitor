@@ -236,7 +236,7 @@ export async function getServicePlanProductIdForUser(
       throw new Error("undefined user");
     }
     if (user.product_id && user.product_id !== null) return user.product_id;
-    return PLAN_PRODUCT_IDS.FREE;
+    return PLAN_PRODUCT_IDS.STARTER;
   } catch (err) {
     throw err;
   }
@@ -255,7 +255,7 @@ export async function getUserSubscriptionIsValid(
     if (
       user.product_id &&
       user.product_id !== null &&
-      user.product_id !== PLAN_PRODUCT_IDS.FREE &&
+      user.product_id !== PLAN_PRODUCT_IDS.STARTER &&
       user.current_period_end
     ) {
       const now = Date.now();
@@ -264,7 +264,7 @@ export async function getUserSubscriptionIsValid(
         productId: user.product_id,
       };
     }
-    return { valid: true, productId: PLAN_PRODUCT_IDS.FREE };
+    return { valid: true, productId: PLAN_PRODUCT_IDS.STARTER };
   } catch (err) {
     throw err;
   }
@@ -388,7 +388,7 @@ export async function downgradeUserToFreePlan(
         sk: { S: "USER#" + userId },
       },
       ExpressionAttributeValues: {
-        ":p": { S: PLAN_PRODUCT_IDS.FREE },
+        ":p": { S: PLAN_PRODUCT_IDS.STARTER },
       },
       UpdateExpression:
         "SET product_id = :p REMOVE subscription_status, current_period_end, subscription_id",

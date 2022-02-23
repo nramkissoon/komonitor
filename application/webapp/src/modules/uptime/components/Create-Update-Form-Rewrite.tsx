@@ -24,7 +24,7 @@ import {
   Textarea,
   Tooltip,
   useColorModeValue,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -34,25 +34,25 @@ import {
   FormProvider,
   SubmitHandler,
   useFieldArray,
-  useForm
+  useForm,
 } from "react-hook-form";
 import {
   Alert,
   ChannelType,
   HttpMethods,
   UpConditionCheck,
-  UptimeMonitor
+  UptimeMonitor,
 } from "utils";
 import {
   minutesToString,
-  regionToLocationStringMap
+  regionToLocationStringMap,
 } from "../../../common/client-utils";
 import { ReactSelect } from "../../../common/components/React-Select";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import {
   createMonitor,
   updateMonitor,
-  useUptimeMonitorsForProject
+  useUptimeMonitorsForProject,
 } from "../client";
 import { HttpHeaderFormField } from "./Http-Header-Form-Field";
 import { RecipientFormController } from "./Recipient-Form-Controller";
@@ -131,7 +131,7 @@ function createFrequencySelectOptionsReactSelect(productId: string) {
   return Object.getOwnPropertyNames(minutesToString).map((minutes) => ({
     value: Number.parseInt(minutes).toString(),
     label: minutesToString[Number.parseInt(minutes)],
-    isDisabled: productId === PLAN_PRODUCT_IDS.FREE && minutes === "1",
+    isDisabled: productId === PLAN_PRODUCT_IDS.STARTER && minutes === "1",
   }));
 }
 
@@ -496,7 +496,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                     isInvalid={
                       errors.webhook_url ? touchedFields.webhook_url : false
                     }
-                    isDisabled={product_id === PLAN_PRODUCT_IDS.FREE}
+                    isDisabled={product_id === PLAN_PRODUCT_IDS.STARTER}
                     mb=".5em"
                   >
                     <FormLabel htmlFor="webhookUrl">Webhook URL</FormLabel>
@@ -512,7 +512,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                       {errors.webhook_url?.message}
                     </FormErrorMessage>
                     <Flex mt="5px" justifyContent="space-between">
-                      {product_id === PLAN_PRODUCT_IDS.FREE && (
+                      {product_id === PLAN_PRODUCT_IDS.STARTER && (
                         <Box>
                           Webhooks are a paid feature.{" "}
                           <Link href="/pricing" passHref>
