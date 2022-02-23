@@ -10,7 +10,13 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Installation } from "@slack/oauth";
-import { createNewInvite, Team, TeamPermissionLevel, User } from "utils";
+import {
+  createNewInvite,
+  SlackInstallation,
+  Team,
+  TeamPermissionLevel,
+  User,
+} from "utils";
 import { ddbClient, env } from "../../../common/server-utils";
 import { deleteAllProjectsAndAssociatedAssetsForOwner } from "../../projects/server/db";
 import { getUserById } from "../../user/user-db";
@@ -432,6 +438,10 @@ export const userCanEdit = (userId: string, team: Team) => {
 export const getTeamSlackInstallations = async (id: string) => {
   const team = await getTeamById(id);
   if (!team) return [];
+  return getTeamSlackInstallationsFromTeamObj(team);
+};
+
+export const getTeamSlackInstallationsFromTeamObj = (team: Team) => {
   return team.integrations
     .filter((integration) => integration.type === "Slack")
     .map((integration) => integration.data);
@@ -472,5 +482,107 @@ export const addTeamSlackIntegration = async (
   } catch (err) {
     console.log(err);
     return false;
+  }
+};
+
+export const updateTeamSlackInstallation = async (
+  oldInstallation: SlackInstallation,
+  newInstallation: SlackInstallation,
+  team: Team
+) => {
+  try {
+    const currentIntegrations = team.integrations;
+    const updatedIntegrations = currentIntegrations.map((i) => {
+      if (i.type === "Slack") {
+        if (
+          i.data.team?.id === oldInstallation.team?.id &&
+          i.data.incomingWebhook?.channelId ===
+            oldInstallation.incomingWebhook?.channelId
+        ) {
+          i.data = newInstallation;
+        }
+        return i;
+      }
+      return i;
+    });
+    const marshalledInstallations = updatedIntegrations.map((installation) => ({
+      M: marshall(installation, { removeUndefinedValues: true }),
+    }));
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: TEAM_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: team.pk },
+        sk: { S: team.sk },
+      },
+      ExpressionAttributeValues: {
+        ":val": {
+          L: marshalledInstallations,
+        },
+      },
+      UpdateExpression: "SET integrations = :val",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const deleteTeamSlackInstallation = async ({
+  team,
+  slackChannel,
+  slackTeam,
+}: {
+  team: Team;
+  slackTeam: string;
+  slackChannel: string;
+}) => {
+  try {
+    const currentIntegrations = team.integrations;
+    const updatedIntegrations = currentIntegrations.filter((i) => {
+      if (i.type === "Slack") {
+        return !(
+          i.data.team?.id === slackTeam &&
+          i.data.incomingWebhook?.channelId === slackChannel
+        );
+      }
+      return true;
+    });
+    const marshalledInstallations = updatedIntegrations.map((installation) => ({
+      M: marshall(installation, { removeUndefinedValues: true }),
+    }));
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: TEAM_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: team.pk },
+        sk: { S: team.sk },
+      },
+      ExpressionAttributeValues: {
+        ":val": {
+          L: marshalledInstallations,
+        },
+      },
+      UpdateExpression: "SET integrations = :val",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
   }
 };

@@ -47,7 +47,10 @@ Teams:
     uptime monitors:
         ☐ make sure creation works like projects
     integrations:
-        ☐ adding slack integrations work
+        ✔ adding slack integrations work @done(22-02-23 12:24)
+        ☐ removing integ works for both teams and user
+        ☐ loading when add slack button press
+        ✔  test updating channel slack @done(22-02-23 12:20)
     alert and uptime lambda:
         ☐ make sure we get correct webhook -> check if owner is a team
     delete:

@@ -148,35 +148,3 @@ export async function deleteWebhookSecret(onError?: (message: string) => void) {
   }
   return true;
 }
-
-export async function deleteSlackIntegration(
-  channelId: string,
-  teamId: string,
-  onSuccess: () => void,
-  onError: (message: string) => void
-) {
-  const response = await fetch(userSlackInstallationApiUrl, {
-    method: "DELETE",
-    body: JSON.stringify({ channelId: channelId, teamId: teamId }),
-  });
-  if (response.ok) {
-    onSuccess();
-    return true;
-  } else {
-    let errorMessage;
-    switch (response.status) {
-      case 403:
-        errorMessage =
-          "An error occurred while deleting existing Slack alerts.";
-        break;
-      case 500:
-        errorMessage =
-          "Internal server error. Please try again later or contact us.";
-        break;
-      default:
-        errorMessage = "An unknown error occurred. Please try again later.";
-    }
-    onError(errorMessage);
-    return false;
-  }
-}

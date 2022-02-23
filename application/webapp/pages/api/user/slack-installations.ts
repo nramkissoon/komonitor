@@ -4,11 +4,6 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import {
-  getMonitorsForOwner,
-  putMonitor,
-} from "../../../src/modules/uptime/monitor-db";
-import {
-  deleteUserSlackInstallation,
   getUserSlackInstallations,
   updateUserSlackInstallation,
 } from "../../../src/modules/user/user-db";
@@ -88,104 +83,6 @@ async function getHandler(
   }
 }
 
-async function deleteHandler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  session: Session
-) {
-  try {
-    const teamChannelId = JSON.parse(req.body); // ???????????????????
-    const teamId = teamChannelId.teamId;
-    const channelId = teamChannelId.channelId;
-
-    if (!teamId || !channelId) {
-      res.status(400);
-      return;
-    }
-
-    const userId = session.uid as string;
-
-    const slackInstallations = await getUserSlackInstallations(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId
-    );
-
-    if (slackInstallations.length === 0)
-      throw new Error("no slack installation to delete");
-
-    const uptimeMonitors = await getMonitorsForOwner(
-      ddbClient,
-      env.UPTIME_MONITOR_TABLE_NAME,
-      userId
-    );
-    const monitorsWithSlackAlerts = uptimeMonitors
-      ? uptimeMonitors.filter((monitor) => {
-          if (monitor.alert) {
-            for (let channel of monitor.alert.channels) {
-              if (channel === "Slack") {
-                const compoundKey = monitor.alert.recipients.Slack![0];
-                const components = getTeamChannelIdFromCompoundKey(compoundKey);
-                if (
-                  components.channel === channelId &&
-                  components.team === teamId
-                ) {
-                  return true;
-                }
-              }
-            }
-          }
-          return false;
-        })
-      : [];
-
-    const detachSlackAlertFromMonitorPromises: Promise<boolean>[] = [];
-
-    for (let monitor of monitorsWithSlackAlerts) {
-      if (monitor.alert) {
-        monitor.alert.channels = monitor.alert.channels.filter(
-          (channel) => channel !== "Slack"
-        );
-        monitor.alert.recipients.Slack = undefined;
-        detachSlackAlertFromMonitorPromises.push(
-          putMonitor(ddbClient, env.UPTIME_MONITOR_TABLE_NAME, monitor, true)
-        );
-      }
-    }
-
-    let monitorsDetached = true;
-
-    if (detachSlackAlertFromMonitorPromises.length > 0) {
-      monitorsDetached = (
-        await Promise.all(detachSlackAlertFromMonitorPromises)
-      ).reduce((prev, next) => prev && next);
-    }
-
-    if (!monitorsDetached) {
-      res.status(403);
-      return;
-    }
-
-    const deleted = await deleteUserSlackInstallation(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId,
-      teamId,
-      channelId
-    );
-
-    if (!deleted) {
-      throw new Error("slack installation deletion failure");
-    }
-
-    res.status(200);
-  } catch (err) {
-    console.log(err);
-    res.status(500);
-    return;
-  }
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -194,9 +91,6 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       await getHandler(req, res, session);
-      break;
-    case "DELETE":
-      await deleteHandler(req, res, session);
       break;
     default:
       res.status(405);
