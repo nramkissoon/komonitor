@@ -38,6 +38,18 @@ Teams:
         remove user from team:
             ☐ admin permission
             ☐ delete user id from team db, delete team from user 
+    settings:
+        ☐ add, remove invites
+        ☐ add, remove teammates
+        ☐ customer portal only available to admin
+        ☐ webhook secret
+        ☐ delete team cancels subscription and then deletes team
+    uptime monitors:
+        ☐ make sure creation works like projects
+    integrations:
+        ☐ adding slack integrations work
+    alert and uptime lambda:
+        ☐ make sure we get correct webhook -> check if owner is a team
     delete:
         ☐  admin role
         ☐  delete team from users
@@ -58,6 +70,8 @@ Status Pages:
     ☐ status page table
     ☐ scope private, public
     ☐ define core fields, 
+
+☐  axiom logging
 
 ☐ increase data retention and view for free plan to 90 days
 

@@ -3,6 +3,15 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import { env } from "../../../../src/common/server-utils";
 import { slackInstaller } from "../../../../src/modules/integrations/slack/server";
+import {
+  getTeamById,
+  userIsMember,
+} from "../../../../src/modules/teams/server/db";
+
+const createOwnerIdCompoundKey = (id: string, isTeam: boolean) => {
+  if (isTeam) return "TEAM#" + id;
+  return "USER#" + id;
+};
 
 async function getHandler(
   req: NextApiRequest,
@@ -11,11 +20,29 @@ async function getHandler(
 ) {
   try {
     const userId = session.uid as string;
+    const { teamId } = req.query;
+    const id = teamId ? (teamId as string) : userId;
+
+    // verify user is member of team if specified
+    if (teamId) {
+      const team = await getTeamById(teamId as string);
+      if (!team) {
+        res.status(400);
+        return;
+      }
+      if (!userIsMember(userId, team)) {
+        res.status(403);
+        return;
+      }
+    }
+
     const url = await slackInstaller.generateInstallUrl(
       {
         scopes: ["incoming-webhook", "team:read", "channels:read"],
         redirectUri: env.SLACK_REDIRECT,
-        metadata: userId, // pass in the userId in order to link the installation with the user object in DB in the callback
+        // pass in compound key as metadata in order to add integ to db in callback
+        // compound key needed to specify user vs team
+        metadata: createOwnerIdCompoundKey(id, teamId !== undefined),
       },
       true
     );

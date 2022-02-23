@@ -4,6 +4,10 @@ import { env as clientEnv } from "../../../src/common/client-utils";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import { slackInstaller } from "../../../src/modules/integrations/slack/server";
 import {
+  addTeamSlackIntegration,
+  getTeamSlackInstallations,
+} from "../../../src/modules/teams/server/db";
+import {
   addUserSlackInstallation,
   getUserSlackInstallations,
 } from "../../../src/modules/user/user-db";
@@ -12,42 +16,58 @@ export default function Callback() {
   return <></>; // this page contains no content and is just meant as a redirect
 }
 
+const isOwnerIdTeam = (id: string) => {
+  return id.split("#")[0] === "TEAM";
+};
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const request = context.req;
   const response = context.res;
 
   const props: any = { props: {} };
   let slackInstallation: Installation<"v1" | "v2", boolean> | undefined;
-  let userId;
+  let ownerId;
   let slackError;
 
   await slackInstaller.handleCallback(request, response, {
-    success: (installation, metadata, request, response) => {
-      userId = metadata.metadata;
+    success: (installation, options, request, response) => {
+      ownerId = options.metadata as string;
       slackInstallation = installation;
     },
-    failure: (error) => {
+    failure: (error, options) => {
+      ownerId = options.metadata as string;
       slackError = error;
       props.redirect = {
         permanent: false,
         destination:
           clientEnv.BASE_URL +
-          `app/settings?tab=2&slackIntegrationCanceled=true`,
+          `${
+            isOwnerIdTeam(ownerId) ? "teams/" + ownerId : "app"
+          }/settings?tab=2&slackIntegrationCanceled=true`,
       };
     },
   });
+
+  const isTeam = isOwnerIdTeam(ownerId ?? "");
+  const id = (ownerId as unknown as string).split("#")[1];
 
   if (slackError) {
     return props;
   }
 
   // get all the current slack installation and check if an installation already exists for wrkspc + channel
-  if (userId && slackInstallation !== undefined) {
-    const installations = await getUserSlackInstallations(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId
-    );
+  if (ownerId && slackInstallation !== undefined) {
+    let installations = [];
+
+    if (!isTeam) {
+      installations = await getUserSlackInstallations(
+        ddbClient,
+        env.USER_TABLE_NAME,
+        id
+      );
+    } else {
+      installations = await getTeamSlackInstallations(id);
+    }
     const alreadyInstalled =
       installations.find(
         (installation) =>
@@ -60,7 +80,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props.redirect = {
         permanent: false,
         destination:
-          clientEnv.BASE_URL + `app/integrations?slackAlreadyInstalled=true`,
+          clientEnv.BASE_URL +
+          `${
+            isTeam ? "teams/" + id : "app"
+          }/integrations?slackAlreadyInstalled=true`,
       };
 
       return props;
@@ -68,26 +91,40 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   // update the user then redirect back to settings page
-  if (userId && slackInstallation) {
-    const saved = await addUserSlackInstallation(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId,
-      slackInstallation
-    );
+  if (ownerId && slackInstallation) {
+    let saved = false;
+    if (!isTeam) {
+      saved = await addUserSlackInstallation(
+        ddbClient,
+        env.USER_TABLE_NAME,
+        id,
+        slackInstallation
+      );
+    } else {
+      saved = await addTeamSlackIntegration(id, slackInstallation);
+    }
+
     if (saved) {
       props.redirect = {
         permanent: false,
         destination:
-          env.BASE_URL + `app/integrations?slackIntegrationSuccess=true`,
+          env.BASE_URL +
+          `${
+            isTeam ? "teams/" + id : "app"
+          }/integrations?slackIntegrationSuccess=true`,
       };
     }
-  } else {
+  } else if (ownerId) {
     props.redirect = {
       permanent: false,
       destination:
-        clientEnv.BASE_URL + `app/integrations?slackIntegrationSuccess=false`,
+        clientEnv.BASE_URL +
+        `${
+          isTeam ? "teams/" + id : "app"
+        }/integrations?slackIntegrationSuccess=false`,
     };
+  } else {
+    // bruh shit broke no ownerId passed??????
   }
   return props;
 };

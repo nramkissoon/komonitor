@@ -104,7 +104,7 @@ const App: ExtendedNextPage = () => {
               isLoading={isLoading}
             />
           </TabPanel>
-          <TabPanel>
+          <TabPanel px="0">
             <NewIntegrationsList />
           </TabPanel>
         </TabPanels>

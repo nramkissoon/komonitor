@@ -10,12 +10,16 @@ export const slackInstallationTestApi =
 const getFetcher = (url: string) =>
   fetch(url, { method: "GET" }).then((r) => r.json());
 
-export function useSlackInstallUrl() {
+export function useSlackInstallUrl(teamId?: string) {
   // use a custom install URL for every integration
   const fetcher = getFetcher;
-  const { data, error } = useSWR(slackInstallUrlApi, fetcher, {
-    revalidateOnReconnect: true,
-  });
+  const { data, error } = useSWR(
+    slackInstallUrlApi + (teamId ? "?teamId=" + teamId : ""),
+    fetcher,
+    {
+      revalidateOnReconnect: true,
+    }
+  );
   return { url: data, isLoading: !error && !data, isError: error };
 }
 

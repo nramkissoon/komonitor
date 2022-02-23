@@ -7,11 +7,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useSlackInstallUrl } from "../slack/client";
 import { SlackSvg } from "./Icons";
 
 const SlackIntegrationButton = () => {
-  const { url, isError, isLoading } = useSlackInstallUrl();
+  const { teamId } = useRouter().query;
+  const { url, isError, isLoading } = useSlackInstallUrl(teamId as string);
   return (
     <Link href={url ? url.url : ""} passHref>
       <Button

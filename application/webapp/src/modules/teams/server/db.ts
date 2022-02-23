@@ -9,6 +9,7 @@ import {
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { Installation } from "@slack/oauth";
 import { createNewInvite, Team, TeamPermissionLevel, User } from "utils";
 import { ddbClient, env } from "../../../common/server-utils";
 import { deleteAllProjectsAndAssociatedAssetsForOwner } from "../../projects/server/db";
@@ -426,4 +427,50 @@ export const userCanEdit = (userId: string, team: Team) => {
     }
   }
   return false;
+};
+
+export const getTeamSlackInstallations = async (id: string) => {
+  const team = await getTeamById(id);
+  if (!team) return [];
+  return team.integrations
+    .filter((integration) => integration.type === "Slack")
+    .map((integration) => integration.data);
+};
+
+export const addTeamSlackIntegration = async (
+  id: string,
+  installation: Installation
+) => {
+  try {
+    const team = await getTeamById(id);
+    if (!team) return false;
+    team.integrations.push({ data: installation, type: "Slack" });
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: TEAM_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: team.pk },
+        sk: { S: team.sk },
+      },
+      ExpressionAttributeValues: {
+        ":val": {
+          L: team.integrations.map((m) => ({
+            M: marshall(m, { removeUndefinedValues: true }),
+          })),
+        },
+      },
+      UpdateExpression: "SET integrations = :val",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
