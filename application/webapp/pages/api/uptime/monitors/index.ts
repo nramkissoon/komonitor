@@ -9,6 +9,10 @@ import {
 } from "../../../../src/modules/alerts/invocations-db";
 import { getUptimeMonitorAllowanceFromProductId } from "../../../../src/modules/billing/plans";
 import {
+  getTeamById,
+  userIsMember,
+} from "../../../../src/modules/teams/server/db";
+import {
   deleteMonitor,
   getMonitorForUserByMonitorId,
   getMonitorsForMultipleProjectsForOwner,
@@ -28,20 +32,36 @@ import {
   getUserSubscriptionIsValid,
 } from "../../../../src/modules/user/user-db";
 
+const getOwnerIdAndTeam = async (req: NextApiRequest, session: Session) => {
+  const userId = session.uid as string;
+  const { teamId } = req.query;
+
+  // if team is defined it should be taken over userId since we are working in a team
+  const ownerId = teamId ? (teamId as string) : userId;
+
+  if (ownerId === teamId) {
+    // check if userId in team members
+    // throw if not valid
+    const team = await getTeamById(teamId);
+    if (!team) throw new Error(`team: ${teamId} not found in db`);
+    if (!userIsMember(userId, team)) {
+      throw new Error(`user is not member of team`);
+    }
+    return { ownerId, team };
+  }
+  return { ownerId };
+};
+
 async function getHandler(
   req: NextApiRequest,
   res: NextApiResponse,
   session: Session
 ) {
   try {
-    const { projectId: projectIds, team } = req.query;
+    const { projectId: projectIds } = req.query;
 
-    let ownerId = session.uid as string;
-
-    if (typeof team === "string") {
-      // verify get permissions for individual userId on team
-      //ownerId = teamId;
-    }
+    const ownerIdTeam = await getOwnerIdAndTeam(req, session);
+    const ownerId = ownerIdTeam.ownerId;
 
     const projectIdsAsList =
       typeof projectIds === "string" ? [projectIds] : projectIds;

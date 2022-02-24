@@ -22,6 +22,8 @@ const SlackIntegrationButton = () => {
         color="white"
         w="160px"
         _hover={{ bg: "blue.600" }}
+        isLoading={isLoading}
+        loadingText={"Redirecting"}
       >
         Add to Slack
       </Button>

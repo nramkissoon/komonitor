@@ -1,9 +1,10 @@
+import { useRouter } from "next/router";
 import useSWR from "swr";
 import {
   CoreUptimeMonitor,
   UptimeCheckSupportedFrequenciesInMinutes,
   UptimeMonitor,
-  UptimeMonitorStatus
+  UptimeMonitorStatus,
 } from "utils";
 import { env } from "../../common/client-utils";
 import { useProjects } from "../projects/client/client";
@@ -27,8 +28,14 @@ export function useUptimeMonitors() {
 }
 
 export function useUptimeMonitorsForProject(projectId: string) {
+  const { teamId } = useRouter().query;
   const fetcher = (url: string, projectId: string) => {
-    const urlWithParams = url + "?" + "projectId=" + projectId;
+    const urlWithParams =
+      url +
+      "?" +
+      "projectId=" +
+      projectId +
+      (teamId ? `&teamId=${teamId}` : "");
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 
@@ -46,9 +53,13 @@ export function useUptimeMonitorsForProject(projectId: string) {
 }
 
 export function useUptimeMonitorsForMultipleProjects(projectIds: string[]) {
+  const { teamId } = useRouter().query;
   const fetcher = (url: string, ...ids: string[]) => {
     const urlWithParams =
-      url + "?" + ids.map((id) => "projectId=" + id).join("&");
+      url +
+      "?" +
+      ids.map((id) => "projectId=" + id).join("&") +
+      (teamId ? `&teamId=${teamId}` : "");
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 

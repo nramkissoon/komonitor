@@ -48,11 +48,12 @@ Teams:
         ☐ make sure creation works like projects
     integrations:
         ✔ adding slack integrations work @done(22-02-23 12:24)
-        ☐ removing integ works for both teams and user
-        ☐ loading when add slack button press
+        ✔ removing integ works for both teams and user @done(22-02-23 13:08)
+        ✔ loading when add slack button press @done(22-02-23 13:10)
         ✔  test updating channel slack @done(22-02-23 12:20)
     alert and uptime lambda:
-        ☐ make sure we get correct webhook -> check if owner is a team
+        ✔ make sure we get correct webhook -> check if owner is a team @done(22-02-24 13:52)
+        ☐ test
     delete:
         ☐  admin role
         ☐  delete team from users
