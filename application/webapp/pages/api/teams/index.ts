@@ -3,10 +3,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import { SlackInstallation, Team } from "utils";
+import { stripeClient } from "../../../src/common/server-utils";
 import {
   createTeam,
+  deleteTeamAndAssociatedAssets,
+  deleteTeamById,
   getTeamById,
   updateTeamSlackInstallation,
+  userIsAdmin,
   userIsMember,
 } from "../../../src/modules/teams/server/db";
 import { teamIdIsAvailable } from "../../../src/modules/teams/server/validation";
@@ -121,7 +125,7 @@ async function createHandler(
       res.status(200);
       return;
     }
-    res.status(500);
+    res.status(200);
     return;
   } catch (err) {
     res.status(500);
@@ -129,7 +133,48 @@ async function createHandler(
   }
 }
 
-// TODO delete handler?
+async function deleteHandler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session: Session
+) {
+  try {
+    const userId = session.uid as string;
+
+    const { teamId } = req.body;
+
+    const team = await getTeamById(teamId as string);
+
+    if (!team) {
+      res.status(404);
+      return;
+    }
+
+    if (!userIsAdmin(userId, team)) {
+      res.status(403);
+      return;
+    }
+
+    if (!team.subscription_id) {
+      await deleteTeamAndAssociatedAssets(team.id);
+    } else {
+      // delete the subscription
+      const stripeRes = await stripeClient.subscriptions.del(
+        team.subscription_id,
+        { prorate: true }
+      );
+      if (stripeRes.status === "canceled") {
+        await deleteTeamById(team.id);
+      }
+    }
+
+    res.status(200);
+    return;
+  } catch (err) {
+    res.status(500);
+    return;
+  }
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -143,6 +188,9 @@ export default async function handler(
         break;
       case "POST":
         await createHandler(req, res, session);
+        break;
+      case "DELETE":
+        await deleteHandler(req, res, session);
         break;
       default:
         res.status(405);

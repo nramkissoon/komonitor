@@ -87,3 +87,13 @@ export const useTeamIntegrations = () => {
     mutateTeams,
   };
 };
+
+export const deleteTeam = async ({ id }: { id: string }) => {
+  const response = await fetch(teamsApiUrl, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify({ teamId: id }),
+  });
+};

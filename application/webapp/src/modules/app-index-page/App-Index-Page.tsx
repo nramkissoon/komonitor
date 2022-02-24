@@ -162,11 +162,7 @@ const ProjectsTab = () => {
       {!projectsIsLoading && projects && projects.length === 0 && (
         <Box textAlign="center" fontWeight="medium" p="2em" fontSize="3xl">
           <chakra.p>No projects have been created.</chakra.p>
-          <chakra.span
-            fontWeight="normal"
-            fontSize="2xl"
-            color={useColorModeValue("blue.400", "blue.300")}
-          >
+          <chakra.span fontWeight="normal" fontSize="2xl" color="blue.400">
             Create a new project to get started.
           </chakra.span>
         </Box>

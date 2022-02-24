@@ -6,6 +6,7 @@ import {
   TriangleDownIcon,
 } from "@chakra-ui/icons";
 import {
+  Badge,
   Box,
   Button,
   ButtonProps,
@@ -36,11 +37,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi";
+import { PLAN_PRODUCT_IDS } from "../../modules/billing/plans";
+import { useTeam } from "../../modules/teams/client";
 import { useUptimeMonitorsForProject } from "../../modules/uptime/client";
 import { useUser } from "../../modules/user/client";
 import { HeaderLogo } from "./Header-Logo";
 import { NewTeamDialog } from "./New-Team-Dialog";
-import { useTeam } from "./TeamProvider";
 
 const HeaderLink = (props: {
   text: string;
@@ -115,6 +117,14 @@ const TeamSelection = () => {
   const { user } = useUser();
   const router = useRouter();
   const { teamId } = router.query;
+  const { team } = useTeam(teamId as string);
+
+  let plan;
+  if (team && team.product_id === PLAN_PRODUCT_IDS.PRO) {
+    plan = "pro";
+  } else if (team && team.product_id === PLAN_PRODUCT_IDS.BUSINESS) {
+    plan = "business";
+  }
 
   const [createNewTeamIsOpen, setCreateNewTeamIsOpen] = React.useState(false);
 
@@ -133,17 +143,24 @@ const TeamSelection = () => {
         onClose={() => setCreateNewTeamIsOpen(false)}
       />
       <PopoverTrigger>
-        <Button
-          rightIcon={<TriangleDownIcon />}
-          variant="outline"
-          bg={useColorModeValue("white", "gray.950")}
-          borderColor={useColorModeValue("black", "gray.600")}
-          px="5"
-          fontWeight="normal"
-          letterSpacing="wider"
-        >
-          {isPersonal ? "Personal Account" : teamId}
-        </Button>
+        <Flex>
+          <Button
+            rightIcon={<TriangleDownIcon />}
+            variant="outline"
+            bg={useColorModeValue("white", "gray.950")}
+            borderColor={useColorModeValue("black", "gray.600")}
+            px="5"
+            fontWeight="normal"
+            letterSpacing="wider"
+          >
+            {isPersonal ? "Personal Account" : teamId}
+            {plan && (
+              <Badge ml="15px" p="2px" px="4px" colorScheme={"blue"}>
+                {plan}
+              </Badge>
+            )}
+          </Button>
+        </Flex>
       </PopoverTrigger>
       <PopoverContent backgroundColor={useColorModeValue("white", "gray.950")}>
         <PopoverBody px="2" py="0">
@@ -252,7 +269,7 @@ export const AppHeader = () => {
 
   const router = useRouter();
   const { projectId, monitorId } = router.query;
-  const { team } = useTeam();
+  const { teamId } = router.query;
 
   const { monitors } = useUptimeMonitorsForProject(projectId as string);
 
@@ -333,7 +350,7 @@ export const AppHeader = () => {
           <Spacer />
           <Flex justify="flex-end" align="center" color="gray.400">
             {projectId && (
-              <Link href={team ? "/" + team : "/app"} passHref>
+              <Link href={teamId ? "/teams/" + teamId : "/app"} passHref>
                 <Button
                   p="0"
                   px="5px"
