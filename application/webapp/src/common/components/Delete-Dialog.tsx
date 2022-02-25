@@ -7,6 +7,7 @@ import {
   Button,
   chakra,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { RefObject } from "react";
 import { useSWRConfig } from "swr";
 
@@ -59,6 +60,8 @@ export function DeleteDialog(props: DeleteDialogProps) {
     onError,
   } = props;
 
+  const { teamId } = useRouter().query;
+
   return (
     <AlertDialog
       leastDestructiveRef={leastDestructiveRef}
@@ -93,6 +96,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
             onClick={async () => {
               const deleted = await deleteApiFunc(
                 itemId,
+                teamId,
                 onSuccess ?? undefined,
                 onError ?? undefined
               );

@@ -231,12 +231,18 @@ export function useMonitorStatusHistory(monitorId: string, since: number) {
 
 export async function deleteMonitor(
   monitorId: string,
+  teamId?: string,
   onSuccess?: () => void,
   onError?: () => void
 ) {
-  const response = await fetch(monitorApiUrl + `?monitorId=${monitorId}`, {
-    method: "DELETE",
-  });
+  const response = await fetch(
+    monitorApiUrl +
+      `?monitorId=${monitorId}` +
+      (teamId ? `&teamId=${teamId}` : ""),
+    {
+      method: "DELETE",
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
     return true;

@@ -29,7 +29,7 @@ import { useRouter } from "next/router";
 import React, { RefObject } from "react";
 import { AiOutlinePause, AiOutlinePlaySquare } from "react-icons/ai";
 import { UptimeMonitor } from "utils";
-import { timeAgo } from "../../../common/client-utils";
+import { timeAgo, useAppBaseRoute } from "../../../common/client-utils";
 import { togglePauseMonitor } from "../client";
 
 interface OverviewPageHeaderProps {
@@ -134,6 +134,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
     mutate,
   } = props;
   const router = useRouter();
+  const baseRoute = useAppBaseRoute();
   const [paused, setIsPaused] = React.useState(monitor.paused);
   const cancelRef = React.useRef(true);
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -196,7 +197,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
           }}
           fontWeight="normal"
           onClick={() => {
-            router.push("/app/projects/" + projectId + "/uptime");
+            router.push(baseRoute + "/projects/" + projectId + "/uptime");
           }}
         >
           Back to all monitors

@@ -43,6 +43,7 @@ const getOwnerIdAndTeam = async (req: NextApiRequest, session: Session) => {
     // check if userId in team members
     // throw if not valid
     const team = await getTeamById(teamId);
+
     if (!team) throw new Error(`team: ${teamId} not found in db`);
     if (!userIsMember(userId, team)) {
       throw new Error(`user is not member of team`);
@@ -293,8 +294,10 @@ async function deleteHandler(
       monitorId as string,
       ownerId
     );
+
     deleted ? res.status(200) : res.status(500);
   } catch (err) {
+    console.log(err);
     res.status(500);
   }
 }
