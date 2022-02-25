@@ -308,18 +308,22 @@ function createCoreMonitorFromFormData(formData: Inputs) {
 
 export async function createMonitor(
   formData: any,
+  teamId?: string,
   onSuccess?: () => void,
   onError?: (message: string) => void
 ) {
   const monitor = createCoreMonitorFromFormData(formData);
 
-  const response = await fetch(monitorApiUrl, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(monitor),
-  });
+  const response = await fetch(
+    monitorApiUrl + (teamId ? `?teamId=${teamId}` : ""),
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(monitor),
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {
@@ -355,17 +359,21 @@ function createUpdatedMonitorFromFormData(formData: any) {
 
 export async function updateMonitor(
   formData: any,
+  teamId?: string,
   onSuccess?: () => void,
   onError?: (message: string) => void
 ) {
   const monitor = createUpdatedMonitorFromFormData(formData);
-  const response = await fetch(monitorApiUrl, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(monitor),
-  });
+  const response = await fetch(
+    monitorApiUrl + (teamId ? `?teamId=${teamId}` : ""),
+    {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(monitor),
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {

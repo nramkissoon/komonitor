@@ -13,6 +13,7 @@ import { UptimeMonitorWithStatuses } from "utils";
 import {
   regionToLocationStringMap,
   timeAgo,
+  useAppBaseRoute,
 } from "../../../../../src/common/client-utils";
 import { AppSubNav } from "../../../../../src/common/components/App-Sub-Nav";
 import { LoadingSpinner } from "../../../../../src/common/components/Loading-Spinner";
@@ -160,6 +161,7 @@ const Overview: ExtendedNextPage = () => {
   const { projectId } = router.query;
   const { projects, projectsIsLoading, projectsFetchError } = useProjects();
   const { team } = useTeam();
+  const baseRoute = useAppBaseRoute();
 
   if (projects) {
     if (!projects.find((project) => project.project_id === projectId)) {
@@ -179,7 +181,7 @@ const Overview: ExtendedNextPage = () => {
   let totalDownMonitors = 0;
   if (statuses) {
     for (let id of Object.keys(statuses)) {
-      if (statuses[id][0].status === "down") {
+      if (statuses[id].length > 0 && statuses[id][0].status === "down") {
         totalDownMonitors = totalDownMonitors + 1;
       }
     }
@@ -203,17 +205,17 @@ const Overview: ExtendedNextPage = () => {
         links={[
           {
             isSelected: true,
-            href: "/app/projects/" + projectId,
+            href: baseRoute + "/projects/" + projectId,
             text: "Overview",
           },
           {
             isSelected: false,
-            href: "/app/projects/" + projectId + "/uptime",
+            href: baseRoute + "/projects/" + projectId + "/uptime",
             text: "Uptime Monitors",
           },
           {
             isSelected: false,
-            href: "/app/projects/" + projectId + "/settings",
+            href: baseRoute + "/projects/" + projectId + "/settings",
             text: "Project Settings",
           },
         ]}
