@@ -4,11 +4,14 @@ import { env } from "../../common/client-utils";
 const userTzApiUrl = env.BASE_URL + "api/user/tz";
 const emailOptInApiUrl = env.BASE_URL + "api/user/email-opt-in";
 
-export async function createAndRedirectToCustomerPortal() {
-  const response = await fetch("/api/billing/customer-portal", {
-    method: "POST",
-    body: "",
-  });
+export async function createAndRedirectToCustomerPortal(teamId?: string) {
+  const response = await fetch(
+    "/api/billing/customer-portal" + (teamId ? `?teamId=${teamId}` : ""),
+    {
+      method: "POST",
+      body: "",
+    }
+  );
   const stripeUrl = (await response.json()).url;
   router.push(stripeUrl);
 }

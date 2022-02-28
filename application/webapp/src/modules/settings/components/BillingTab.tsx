@@ -6,12 +6,14 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { getDisplayStringFromPlanProductId } from "../../../common/utils";
 import { useUserServicePlanProductId } from "../../user/client";
 import { createAndRedirectToCustomerPortal } from "../client";
 
 export function BillingTab() {
   const { data, isLoading, isError } = useUserServicePlanProductId();
+  const { teamId } = useRouter().query;
 
   return (
     <Box
@@ -47,7 +49,7 @@ export function BillingTab() {
         color="white"
         bgColor="blue.500"
         shadow="sm"
-        onClick={() => createAndRedirectToCustomerPortal()}
+        onClick={() => createAndRedirectToCustomerPortal(teamId as string)}
         _hover={{
           bg: "blue.600",
         }}
