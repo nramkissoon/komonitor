@@ -44,8 +44,9 @@ Teams:
         ☐ customer portal only available to admin
         ☐ webhook secret
         ☐ delete team cancels subscription and then deletes team
+        ✔ project settings - rename and delete @done(22-02-28 10:15)
     uptime monitors:
-        ☐ make sure creation works like projects
+        ✔ make sure creation works like projects @done(22-02-24 22:54)
     integrations:
         ✔ adding slack integrations work @done(22-02-23 12:24)
         ✔ removing integ works for both teams and user @done(22-02-23 13:08)

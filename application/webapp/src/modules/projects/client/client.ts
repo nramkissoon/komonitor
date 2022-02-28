@@ -30,11 +30,17 @@ export const useProjects = () => {
 export const deleteProject = async (
   projectId: string,
   onSuccess: () => void,
-  onError: () => void
+  onError: () => void,
+  teamId?: string
 ) => {
-  const response = await fetch(projectsApiUrl + `?projectId=${projectId}`, {
-    method: "DELETE",
-  });
+  const response = await fetch(
+    projectsApiUrl +
+      `?projectId=${projectId}` +
+      (teamId ? `&teamId=${teamId}` : ""),
+    {
+      method: "DELETE",
+    }
+  );
   if (response.ok) {
     onSuccess();
   } else {
@@ -88,15 +94,19 @@ export const updateProject = async (
     originalId: string;
   },
   onSuccess?: () => void,
-  onError?: (message: string) => void
+  onError?: (message: string) => void,
+  teamId?: string
 ) => {
-  const response = await fetch(projectsApiUrl, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(formData),
-  });
+  const response = await fetch(
+    projectsApiUrl + (teamId ? `?teamId=${teamId}` : ""),
+    {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(formData),
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {
