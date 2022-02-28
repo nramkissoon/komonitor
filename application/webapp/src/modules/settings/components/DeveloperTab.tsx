@@ -17,15 +17,16 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { RefObject } from "react";
 import { timeAgo } from "../../../common/client-utils";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
 import {
   createWebhookSecret,
   deleteWebhookSecret,
-  useUserServicePlanProductId,
-  useUserWebhookSecret,
-} from "../../user/client";
+  useProductId,
+  useWebhookSecret,
+} from "../client";
 
 interface DeleteSecretDialogProps {
   isOpen: boolean;
@@ -36,7 +37,10 @@ interface DeleteSecretDialogProps {
 export function SecretDeleteDialog(props: DeleteSecretDialogProps) {
   const { isOpen, onClose, leastDestructiveRef } = props;
 
-  let { secretMutate } = useUserWebhookSecret();
+  const { teamId } = useRouter().query;
+  let { secret, secretIsLoading, secretMutate } = useWebhookSecret(
+    teamId as string
+  );
   return (
     <AlertDialog
       leastDestructiveRef={leastDestructiveRef}
@@ -66,7 +70,7 @@ export function SecretDeleteDialog(props: DeleteSecretDialogProps) {
             bgColor="red.500"
             fontWeight="normal"
             onClick={async () => {
-              const deleted = await deleteWebhookSecret();
+              const deleted = await deleteWebhookSecret(teamId as string);
               if (deleted) await secretMutate();
               onClose();
             }}
@@ -80,9 +84,14 @@ export function SecretDeleteDialog(props: DeleteSecretDialogProps) {
 }
 
 export function DevelopersTab() {
-  const { data, isLoading, isError } = useUserServicePlanProductId();
   const [showSecret, setShowSecret] = React.useState(false);
-  let { secret, secretIsLoading, secretMutate } = useUserWebhookSecret();
+  const { teamId } = useRouter().query;
+  const { productId, productIdIsLoading, productIdIsError } = useProductId(
+    teamId as string
+  );
+  let { secret, secretIsLoading, secretMutate } = useWebhookSecret(
+    teamId as string
+  );
   const toast = useToast();
   const ref = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -105,7 +114,7 @@ export function DevelopersTab() {
         <Text fontSize="lg" color="gray.500" mb=".7em">
           Webhooks:
         </Text>
-        {data?.productId === PLAN_PRODUCT_IDS.STARTER && (
+        {productId === PLAN_PRODUCT_IDS.STARTER && (
           <Flex justifyContent="space-between" alignItems="center">
             <Box>
               Webhooks are a paid feature.{" "}
@@ -140,7 +149,7 @@ export function DevelopersTab() {
           </Flex>
         )}
 
-        {data?.productId !== PLAN_PRODUCT_IDS.STARTER && secret && (
+        {productId !== PLAN_PRODUCT_IDS.STARTER && secret && (
           <Box>
             <Box ml="2px">Webhook Secret: </Box>
             <Flex>
@@ -206,29 +215,27 @@ export function DevelopersTab() {
             </Box>
           </Box>
         )}
-        {data?.productId !== PLAN_PRODUCT_IDS.STARTER &&
-          !secretIsLoading &&
-          !secret && (
-            <Button
-              size="md"
-              fontSize="md"
-              fontWeight="medium"
-              px="1em"
-              shadow="md"
-              colorScheme="blue"
-              bgColor="blue.400"
-              color="white"
-              _hover={{
-                bg: "blue.600",
-              }}
-              onClick={async () => {
-                const created = await createWebhookSecret();
-                if (created) await secretMutate();
-              }}
-            >
-              Create Webhook Secret
-            </Button>
-          )}
+        {productId !== PLAN_PRODUCT_IDS.STARTER && !secretIsLoading && !secret && (
+          <Button
+            size="md"
+            fontSize="md"
+            fontWeight="medium"
+            px="1em"
+            shadow="md"
+            colorScheme="blue"
+            bgColor="blue.400"
+            color="white"
+            _hover={{
+              bg: "blue.600",
+            }}
+            onClick={async () => {
+              const created = await createWebhookSecret(teamId as string);
+              if (created) await secretMutate();
+            }}
+          >
+            Create Webhook Secret
+          </Button>
+        )}
       </Box>
     </>
   );

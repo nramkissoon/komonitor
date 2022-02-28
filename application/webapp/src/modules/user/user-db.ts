@@ -186,7 +186,7 @@ export async function deleteUserWebhook(userId: string) {
     // throw an error with the requestId for debugging
     throw new Error(response.$metadata.requestId);
   } catch (err) {
-    // TODO log
+    console.log(err);
     throw err;
   }
 }

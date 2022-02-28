@@ -123,28 +123,3 @@ export async function deleteUser(onError: (message: string) => void) {
   }
   return true;
 }
-
-export async function createWebhookSecret() {
-  const response = await fetch(userWebhookSecretApiUrl, { method: "POST" });
-  if (response.ok) return true;
-  return false;
-}
-
-export async function deleteWebhookSecret(onError?: (message: string) => void) {
-  const response = await fetch(userWebhookSecretApiUrl, { method: "DELETE" });
-  if (response.ok) {
-  } else {
-    let errorMessage;
-    switch (response.status) {
-      case 500:
-        errorMessage =
-          "Internal server error. Please try again later or contact us.";
-        break;
-      default:
-        errorMessage = "An unknown error occurred. Please try again later.";
-    }
-    onError ? onError(errorMessage) : undefined;
-    return false;
-  }
-  return true;
-}

@@ -16,6 +16,7 @@ import {
   Team,
   TeamPermissionLevel,
   User,
+  WebhookSecret,
 } from "utils";
 import { ddbClient, env } from "../../../common/server-utils";
 import { deleteAllProjectsAndAssociatedAssetsForOwner } from "../../projects/server/db";
@@ -573,6 +574,64 @@ export const deleteTeamSlackInstallation = async ({
       },
       UpdateExpression: "SET integrations = :val",
     };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const deleteTeamWebhook = async (teamId: string) => {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: env.USER_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: teamId },
+        sk: { S: teamId },
+      },
+      UpdateExpression: "REMOVE webhook_secret",
+    };
+
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const setTeamWebhookSecret = async (
+  teamId: string,
+  secret: WebhookSecret
+) => {
+  try {
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: env.USER_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: teamId },
+        sk: { S: teamId },
+      },
+      ExpressionAttributeValues: {
+        ":p": { M: marshall(secret) },
+      },
+      UpdateExpression: "SET webhook_secret = :p",
+    };
+
     const response = await ddbClient.send(
       new UpdateItemCommand(updateCommandInput)
     );

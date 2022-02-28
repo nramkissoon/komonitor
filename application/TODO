@@ -41,8 +41,8 @@ Teams:
     settings:
         ☐ add, remove invites
         ☐ add, remove teammates
-        ☐ customer portal only available to admin
-        ☐ webhook secret
+        ✔ customer portal only available to admin @done(22-02-28 13:38)
+        ✔ webhook secret @done(22-02-28 13:38)
         ☐ delete team cancels subscription and then deletes team
         ✔ project settings - rename and delete @done(22-02-28 10:15)
     uptime monitors:
