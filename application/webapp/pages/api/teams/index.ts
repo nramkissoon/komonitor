@@ -140,7 +140,7 @@ async function deleteHandler(
   try {
     const userId = session.uid as string;
 
-    const { teamId } = req.body;
+    const { teamId } = req.query;
 
     const team = await getTeamById(teamId as string);
 

@@ -8,6 +8,7 @@ import { useUser } from "../user/client";
 const userTzApiUrl = env.BASE_URL + "api/user/tz";
 const emailOptInApiUrl = env.BASE_URL + "api/user/email-opt-in";
 const webhookSecretApiUrl = env.BASE_URL + "api/webhooks";
+const teamApiUrl = env.BASE_URL + "api/teams";
 
 export async function createAndRedirectToCustomerPortal(teamId?: string) {
   const response = await fetch(
@@ -157,3 +158,27 @@ export async function deleteWebhookSecret(
   }
   return true;
 }
+
+export const deleteTeam = async (
+  teamId: string,
+  onError?: (message: string) => void
+) => {
+  const response = await fetch(teamApiUrl + `?teamId=${teamId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+  } else {
+    let errorMessage;
+    switch (response.status) {
+      case 500:
+        errorMessage =
+          "Internal server error. Please try again later or contact us.";
+        break;
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError ? onError(errorMessage) : undefined;
+    return false;
+  }
+  return true;
+};

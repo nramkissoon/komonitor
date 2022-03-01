@@ -1,22 +1,164 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
   Badge,
   Box,
   Button,
+  chakra,
   Divider,
+  Input,
   Text,
   useColorModeValue,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
+import React, { RefObject } from "react";
 import { getDisplayStringFromPlanProductId } from "../../../common/utils";
-import { useUserServicePlanProductId } from "../../user/client";
-import { createAndRedirectToCustomerPortal } from "../client";
+import {
+  createAndRedirectToCustomerPortal,
+  deleteTeam,
+  useProductId,
+} from "../client";
+
+function useDeleteTeamDialog() {
+  const cancelRef = React.useRef(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return {
+    cancelRef,
+    isOpen,
+    onClose,
+    onOpen,
+  };
+}
+
+interface DeleteTeamDialogProps {
+  teamId: string;
+  isOpen: boolean;
+  onClose: () => void;
+  leastDestructiveRef: RefObject<any>;
+  onError: (message: string) => void;
+}
+
+function DeleteTeamDialog(props: DeleteTeamDialogProps) {
+  const { isOpen, onClose, leastDestructiveRef, onError, teamId } = props;
+  const [inputVal, setInputVal] = React.useState("");
+  const [inputIsError, setInputIsError] = React.useState("");
+  const handleInputChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => setInputVal(event.target.value);
+
+  const handleOnSubmit = async () => {
+    if (inputVal && inputVal !== "delete") {
+      setInputIsError(
+        "Enter 'delete' in the input above to cancel subscription and delete team."
+      );
+      return;
+    } else if (inputVal === "delete") {
+      const deleted = await deleteTeam(teamId, onError);
+      if (deleted) {
+        router.push("/app?teamDeleted=true");
+      }
+    }
+  };
+
+  const resetOnClose = () => {
+    setInputVal("");
+    setInputIsError("");
+    onClose();
+  };
+
+  return (
+    <AlertDialog
+      leastDestructiveRef={leastDestructiveRef}
+      isOpen={isOpen}
+      onClose={resetOnClose}
+      size="2xl"
+    >
+      <AlertDialogContent>
+        <AlertDialogHeader fontSize="2xl" fontWeight="normal">
+          Delete Team
+        </AlertDialogHeader>
+        <AlertDialogBody>
+          <Text mb="1em">
+            Are you sure? Your team and associated projects/monitors will be{" "}
+            <chakra.span color="red.500" fontSize="lg" fontWeight="semibold">
+              permanently
+            </chakra.span>{" "}
+            deleted. You cannot undo this action afterwards.
+          </Text>
+          <Text mb="1em">
+            Note: This will cancel your subscription plan as well.
+          </Text>
+          <Text>
+            Enter{" "}
+            <chakra.span color="red.500" fontSize="lg">
+              delete
+            </chakra.span>{" "}
+            below to confirm:
+          </Text>
+          <Input
+            value={inputVal}
+            onChange={handleInputChange}
+            placeholder="delete"
+            mb="1"
+            shadow="sm"
+          />
+          <Text color="red.500">{inputIsError}</Text>
+        </AlertDialogBody>
+        <AlertDialogFooter>
+          <Button
+            ref={leastDestructiveRef}
+            onClick={resetOnClose}
+            mr="1.5em"
+            fontWeight="normal"
+          >
+            Cancel
+          </Button>
+          <Button
+            colorScheme="red"
+            color="white"
+            bgColor="red.500"
+            fontWeight="normal"
+            onClick={handleOnSubmit}
+          >
+            Delete
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
 
 export function BillingTab() {
-  const { data, isLoading, isError } = useUserServicePlanProductId();
   const { teamId } = useRouter().query;
+  const { productId, productIdIsLoading } = useProductId(teamId as string);
+  const errorToast = useToast();
+  const postErrorToast = (message: string) =>
+    errorToast({
+      title: "Unable to perform action",
+      description: message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      variant: "solid",
+      position: "top",
+    });
+  const { cancelRef, isOpen, onClose, onOpen } = useDeleteTeamDialog();
 
   return (
     <>
+      <DeleteTeamDialog
+        teamId={teamId as string}
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onClose}
+        onError={postErrorToast}
+      />
       <Box
         bg={useColorModeValue("white", "gray.950")}
         rounded="md"
@@ -38,7 +180,9 @@ export function BillingTab() {
           borderRadius="lg"
           variant="subtle"
         >
-          {getDisplayStringFromPlanProductId(data ? data.productId : "")}
+          {getDisplayStringFromPlanProductId(
+            productId ? productId : "Loading..."
+          )}
         </Badge>
         <Divider mb="1em" />
         <Text fontSize="lg" color="gray.500" mb=".7em">
@@ -81,7 +225,9 @@ export function BillingTab() {
           color="white"
           bgColor="red.500"
           shadow="sm"
-          onClick={() => {}}
+          onClick={() => {
+            onOpen();
+          }}
           _hover={{
             bg: "red.600",
           }}
