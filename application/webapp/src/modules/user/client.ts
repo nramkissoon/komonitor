@@ -108,7 +108,7 @@ export async function deleteUser(onError: (message: string) => void) {
     switch (response.status) {
       case 403:
         errorMessage =
-          "You must cancel your subscription before deleting your account.";
+          "You must cancel all of your  team subscriptions before deleting your account.";
         break;
       case 500:
         errorMessage =

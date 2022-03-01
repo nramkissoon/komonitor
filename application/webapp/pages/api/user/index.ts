@@ -1,9 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
+import { Team } from "utils";
 import { ddbClient, env } from "../../../src/common/server-utils";
 import { PLAN_PRODUCT_IDS } from "../../../src/modules/billing/plans";
 import { deleteAllProjectsAndAssociatedAssetsForOwner } from "../../../src/modules/projects/server/db";
+import { getTeamById, userIsAdmin } from "../../../src/modules/teams/server/db";
 import {
   deleteUserById,
   getServicePlanProductIdForUser,
@@ -49,10 +51,34 @@ async function deleteHandler(
       env.USER_TABLE_NAME,
       userId
     );
-    // Cannot delete if user is on a paid plan
-    if (productId !== PLAN_PRODUCT_IDS.STARTER) {
-      res.status(403);
+
+    const user = await getUserById(ddbClient, env.USER_TABLE_NAME, userId);
+
+    if (!user) {
+      res.status(401);
       return;
+    }
+
+    // Cannot delete if user is on a paid plan or has teams
+    if (productId !== PLAN_PRODUCT_IDS.STARTER) {
+    }
+
+    if (user.teams && user.teams.length > 0) {
+      // find teams where user is admin
+      const teamFetches = [];
+      for (let teamId of user.teams) {
+        teamFetches.push(getTeamById(teamId));
+      }
+
+      const teams = (await Promise.all(teamFetches)).filter(
+        (t) => t !== undefined
+      ) as Team[];
+      for (let team of teams) {
+        if (userIsAdmin(userId, team)) {
+          res.status(403);
+          return;
+        }
+      }
     }
 
     const projectsDeleted = await deleteAllProjectsAndAssociatedAssetsForOwner(

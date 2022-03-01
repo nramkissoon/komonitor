@@ -7,7 +7,6 @@ import { stripeClient } from "../../../src/common/server-utils";
 import {
   createTeam,
   deleteTeamAndAssociatedAssets,
-  deleteTeamById,
   getTeamById,
   updateTeamSlackInstallation,
   userIsAdmin,
@@ -164,7 +163,10 @@ async function deleteHandler(
         { prorate: true }
       );
       if (stripeRes.status === "canceled") {
-        await deleteTeamById(team.id);
+        //await deleteTeamById(team.id);
+        /**
+         * deletion occurs after stripe has sent the subscription canceled event, check event handlers
+         */
       }
     }
 
