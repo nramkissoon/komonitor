@@ -2,6 +2,8 @@ import { z } from "zod";
 import { PLAN_PRICE_IDS } from "../../billing/plans";
 import { getTeamById } from "./db";
 
+export const emailSchema = z.string().email();
+
 export const teamNameSchema = z
   .string({
     required_error: "Name is required.",

@@ -62,3 +62,8 @@ export function getAlertRecipientLimitFromProductId(id: string | undefined) {
       return 1;
   }
 }
+
+export const TEAM_MEMBER_LIMITS = {
+  PRO: 10,
+  BUSINESS: 20,
+};

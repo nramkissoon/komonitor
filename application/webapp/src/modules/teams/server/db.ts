@@ -11,9 +11,9 @@ import {
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Installation } from "@slack/oauth";
 import {
-  createNewInvite,
   SlackInstallation,
   Team,
+  TeamInvite,
   TeamPermissionLevel,
   User,
   WebhookSecret,
@@ -238,7 +238,8 @@ export const removeTeamMember = async (teamMember: User, team: Team) => {
       (m) => m.user_id !== teamMember.id
     );
 
-    if (!teamMember.teams) throw new Error("no teams this should never happen");
+    if (!teamMember.teams)
+      throw new Error("no teams: this should never happen");
 
     const newTeamList = teamMember.teams.filter((t) => t !== team.id);
 
@@ -291,13 +292,9 @@ export const removeTeamMember = async (teamMember: User, team: Team) => {
   }
 };
 
-export const createInvite = async (team: Team, email: string) => {
+export const saveInvite = async (team: Team, invite: TeamInvite) => {
   try {
-    for (let invite of team.invites) {
-      if (invite.email === email)
-        throw new Error("invite for email already exists");
-    }
-    team.invites.push(createNewInvite(email, team.id));
+    team.invites.push(invite);
     const updateCommandInput: UpdateItemCommandInput = {
       TableName: TEAM_TABLE_NAME,
       ConditionExpression: "attribute_exists(pk)", // asserts that the user exists

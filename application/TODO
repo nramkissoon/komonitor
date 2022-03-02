@@ -27,17 +27,17 @@ Teams:
         ☐ subscription must be valid to use team
         ✘ create team on checkout complete, provision on invoice paid @cancelled(22-02-21 20:32)
     invites:
-        ☐ api setup
+        ✔ api setup @done(22-03-02 11:52)
         create and send invite:
-            ☐ create unique code and associate input email in team db with role -> set expiration
+            ✔ create unique code and associate input email in team db with role -> set expiration @done(22-03-02 11:52)
             ☐ send email with link to invite api to add user if account created
         add invited user api:
             ☐ if user logged in (user in session) -> add user to team if expiration valid
             ☐ if user not logged in -> redirect to sign in page -> prompt them to click link again
             ☐ if user successfully added -> delete invite and code in team db
         remove user from team:
-            ☐ admin permission
-            ☐ delete user id from team db, delete team from user 
+            ✔ admin permission @done(22-03-02 11:53)
+            ✔ delete user id from team db, delete team from user @done(22-03-02 11:53)
     settings:
         ☐ add, remove invites
         ☐ add, remove teammates

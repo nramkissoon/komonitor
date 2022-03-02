@@ -9,6 +9,8 @@ const userTzApiUrl = env.BASE_URL + "api/user/tz";
 const emailOptInApiUrl = env.BASE_URL + "api/user/email-opt-in";
 const webhookSecretApiUrl = env.BASE_URL + "api/webhooks";
 const teamApiUrl = env.BASE_URL + "api/teams";
+const teamInviteApiUrl = env.BASE_URL + "api/teams/invites";
+const teamMemberApiUrl = env.BASE_URL + "api/teams/members";
 
 export async function createAndRedirectToCustomerPortal(teamId?: string) {
   const response = await fetch(
@@ -181,4 +183,111 @@ export const deleteTeam = async (
     return false;
   }
   return true;
+};
+
+export const createInvite = async (
+  teamId: string,
+  email: string,
+  onSuccess: () => void,
+  onError: (message: string) => void
+) => {
+  const response = await fetch(teamInviteApiUrl + `?teamId=${teamId}`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (response.ok) {
+    onSuccess();
+    return true;
+  } else {
+    let errorMessage;
+    switch (response.status) {
+      case 400:
+        errorMessage = "Invalid request.";
+      case 403:
+        errorMessage = "You are not authorized to perform this action.";
+      case 500:
+        errorMessage =
+          "Internal server error. Please try again later or contact us.";
+        break;
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError(errorMessage);
+    return false;
+  }
+};
+
+export const deleteInvite = async (
+  teamId: string,
+  email: string,
+  onSuccess: () => void,
+  onError: (message: string) => void
+) => {
+  const response = await fetch(teamInviteApiUrl + `?teamId=${teamId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (response.ok) {
+    onSuccess();
+    return true;
+  } else {
+    let errorMessage;
+    switch (response.status) {
+      case 400:
+        errorMessage = "Invalid request.";
+      case 403:
+        errorMessage = "You are not authorized to perform this action.";
+      case 500:
+        errorMessage =
+          "Internal server error. Please try again later or contact us.";
+        break;
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError(errorMessage);
+    return false;
+  }
+};
+
+export const deleteMember = async (
+  teamId: string,
+  userToDelete: string,
+  onSuccess: () => void,
+  onError: (message: string) => void
+) => {
+  const response = await fetch(teamMemberApiUrl + `?teamId=${teamId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify({ userToDelete }),
+  });
+  if (response.ok) {
+    onSuccess();
+    return true;
+  } else {
+    let errorMessage;
+    switch (response.status) {
+      case 400:
+        errorMessage = "Invalid request.";
+      case 403:
+        errorMessage = "You are not authorized to perform this action.";
+      case 500:
+        errorMessage =
+          "Internal server error. Please try again later or contact us.";
+        break;
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+    }
+    onError(errorMessage);
+    return false;
+  }
 };

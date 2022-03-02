@@ -38,7 +38,7 @@ const planFeatureList: { [productId: string]: string[] } = {
     "90-day data retention",
   ],
   PRO: [
-    "For individuals and teams",
+    "Invite to 10 team members",
     "5x faster uptime checks",
     "Monitor hundreds websites and APIs in production",
     "Alerting + integrations with your favorite tools",
@@ -46,7 +46,7 @@ const planFeatureList: { [productId: string]: string[] } = {
     "365-day data retention",
   ],
   BUSINESS: [
-    "5x faster uptime checks",
+    "Invite to 20 team members",
     "Scale to thousands of monitors in production",
     "Advanced alerting + integrations with your favorite tools",
     "Highest priority support and onboarding",
