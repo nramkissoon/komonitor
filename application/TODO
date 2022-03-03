@@ -38,8 +38,9 @@ Teams:
         remove user from team:
             ✔ admin permission @done(22-03-02 11:53)
             ✔ delete user id from team db, delete team from user @done(22-03-02 11:53)
+            ☐ leave team if not admin
     settings:
-        ☐ add, remove invites
+        ✔ add, remove invites @done(22-03-03 12:40)
         ☐ add, remove teammates
         ☐ disbale billing and deelte buttons if not admin
         ✔ customer portal only available to admin @done(22-02-28 13:38)

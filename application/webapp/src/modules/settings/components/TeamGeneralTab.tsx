@@ -1,6 +1,7 @@
 import { Box, Divider, Text, useColorModeValue } from "@chakra-ui/react";
 import { SimpleLoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { useUserTimezoneAndOffset } from "../../user/client";
+import { SignOutButton } from "./AccountTab";
 import { ColorModeToggle } from "./ColorModeToggle";
 import { TimezoneSelector } from "./Timezone-Selector";
 
@@ -38,6 +39,8 @@ export function TeamGeneralTab() {
         ) : (
           <SimpleLoadingSpinner />
         )}
+        <Divider mb="1em" />
+        <SignOutButton />
       </Box>
     </>
   );

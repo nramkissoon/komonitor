@@ -8,9 +8,9 @@ import {
   useColorModeValue,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { BillingTab } from "./BillingTab";
 import { DevelopersTab } from "./DeveloperTab";
 import { TeamGeneralTab } from "./TeamGeneralTab";
+import { TeamTab } from "./TeamTab";
 
 interface SettingsTabsProps {
   initialTab: number;
@@ -53,7 +53,7 @@ export function TeamSettingsTabs(props: SettingsTabsProps) {
             <TeamGeneralTab />
           </TabPanel>
           <TabPanel p="0">
-            <BillingTab />
+            <TeamTab />
           </TabPanel>
           <TabPanel p="0">
             <DevelopersTab />

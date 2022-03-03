@@ -45,11 +45,18 @@ export const getTeamById = async (id: string) => {
   }
 };
 
-export const createTeam = async (id: string, adminId: string) => {
+export const createTeam = async (id: string, admin: User) => {
   try {
     const team: Team = {
       type: "TEAM",
-      members: [{ user_id: adminId, permission_level: "admin" }],
+      members: [
+        {
+          user_id: admin.id,
+          permission_level: "admin",
+          email: admin.email ?? "",
+          name: admin.name,
+        },
+      ],
       integrations: [],
       invites: [],
       pk: id,
@@ -57,7 +64,7 @@ export const createTeam = async (id: string, adminId: string) => {
       id: id,
     };
 
-    const user = await getUserById(ddbClient, env.USER_TABLE_NAME, adminId);
+    const user = admin;
 
     if (!user) throw new Error("user id not valid");
 
@@ -164,6 +171,7 @@ export const deleteTeamById = async (id: string) => {
 
 export const addTeamMember = async (
   user: User,
+  email: string,
   team: Team,
   permission: TeamPermissionLevel
 ) => {
@@ -173,7 +181,12 @@ export const addTeamMember = async (
         throw new Error("user is already member");
       }
     }
-    team.members.push({ user_id: user.id, permission_level: permission });
+    team.members.push({
+      user_id: user.id,
+      permission_level: permission,
+      email,
+      name: user.name,
+    });
 
     if (!user.teams) {
       user.teams = [];

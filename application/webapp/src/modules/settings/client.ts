@@ -1,5 +1,5 @@
 import router from "next/router";
-import { WebhookSecret } from "utils";
+import { TeamPermissionLevel, WebhookSecret } from "utils";
 import { env } from "../../common/client-utils";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 import { useTeam } from "../teams/client";
@@ -188,7 +188,8 @@ export const deleteTeam = async (
 export const createInvite = async (
   teamId: string,
   email: string,
-  onSuccess: () => void,
+  permission: TeamPermissionLevel,
+  onSuccess: (message: string) => void,
   onError: (message: string) => void
 ) => {
   const response = await fetch(teamInviteApiUrl + `?teamId=${teamId}`, {
@@ -196,19 +197,21 @@ export const createInvite = async (
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, permission }),
   });
 
   if (response.ok) {
-    onSuccess();
+    onSuccess("Invite sent!");
     return true;
   } else {
     let errorMessage;
     switch (response.status) {
       case 400:
         errorMessage = "Invalid request.";
+        break;
       case 403:
         errorMessage = "You are not authorized to perform this action.";
+        break;
       case 500:
         errorMessage =
           "Internal server error. Please try again later or contact us.";
@@ -224,7 +227,7 @@ export const createInvite = async (
 export const deleteInvite = async (
   teamId: string,
   email: string,
-  onSuccess: () => void,
+  onSuccess: (message: string) => void,
   onError: (message: string) => void
 ) => {
   const response = await fetch(teamInviteApiUrl + `?teamId=${teamId}`, {
@@ -236,7 +239,7 @@ export const deleteInvite = async (
   });
 
   if (response.ok) {
-    onSuccess();
+    onSuccess("Invite deleted.");
     return true;
   } else {
     let errorMessage;
@@ -260,7 +263,7 @@ export const deleteInvite = async (
 export const deleteMember = async (
   teamId: string,
   userToDelete: string,
-  onSuccess: () => void,
+  onSuccess: (message: string) => void,
   onError: (message: string) => void
 ) => {
   const response = await fetch(teamMemberApiUrl + `?teamId=${teamId}`, {
@@ -271,7 +274,7 @@ export const deleteMember = async (
     body: JSON.stringify({ userToDelete }),
   });
   if (response.ok) {
-    onSuccess();
+    onSuccess("Member removed.");
     return true;
   } else {
     let errorMessage;

@@ -17,7 +17,6 @@ import {
   Heading,
   HStack,
   HTMLChakraProps,
-  IconButton,
   IconButtonProps,
   Input,
   InputGroup,
@@ -370,7 +369,6 @@ export const AppHeader = () => {
               text: "Docs",
               href: "/docs/getting-started/introduction",
             })}
-            <IconButton {...defaultColorModeToggleStyles} />
           </Flex>
         </Flex>
       </chakra.header>

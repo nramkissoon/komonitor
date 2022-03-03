@@ -7,7 +7,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { signOut } from "next-auth/react";
-import React from "react";
 import { SimpleLoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { useUser, useUserTimezoneAndOffset } from "../../user/client";
 import { ColorModeToggle } from "./ColorModeToggle";
@@ -18,7 +17,7 @@ import {
 import { EmailOptInSelector } from "./EmailOptInSelector";
 import { TimezoneSelector } from "./Timezone-Selector";
 
-const SignOutButton = () => {
+export const SignOutButton = () => {
   return (
     <Button
       color={useColorModeValue("gray.900", "red.400")}

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import nodemailer from "nodemailer";
-import { createNewInvite } from "utils";
+import { createNewInvite, TeamPermissionLevel } from "utils";
 import { env } from "../../../src/common/server-utils";
 import {
   PLAN_PRODUCT_IDS,
@@ -12,9 +12,9 @@ import {
   getTeamById,
   removeInvite,
   saveInvite,
-  userIsAdmin,
+  userIsMember,
 } from "../../../src/modules/teams/server/db";
-import { emailSchema } from "../../../src/modules/teams/server/validation";
+import { teamInvitationInputSchema } from "../../../src/modules/teams/server/validation";
 
 const html = ({ code, teamId }: { code: string; teamId: string }) => {
   return `
@@ -71,7 +71,7 @@ async function createHandler(
     const userId = session.uid as string;
 
     const { teamId } = req.query;
-    const { email } = req.body;
+    const { email, permission } = req.body;
 
     // check if admin, if not res.status(403)
 
@@ -82,15 +82,15 @@ async function createHandler(
       return;
     }
 
-    if (!userIsAdmin(userId, team)) {
+    if (!userIsMember(userId, team)) {
       res.status(403);
       return;
     }
 
     // validate email and check if email does not exist in team invite list already
 
-    if (!emailSchema.safeParse(email).success) {
-      console.log("invalid email for invite:", email);
+    if (!teamInvitationInputSchema.safeParse({ email, permission }).success) {
+      console.log("invalid inputs for invitation:", email, permission);
       res.status(400);
       return;
     }
@@ -124,7 +124,11 @@ async function createHandler(
 
     // create new invite
 
-    const invite = createNewInvite(email, teamId as string);
+    const invite = createNewInvite(
+      email,
+      teamId as string,
+      permission as TeamPermissionLevel
+    );
 
     // send invite, if error -> throw
     const transport = nodemailer.createTransport({
@@ -139,7 +143,7 @@ async function createHandler(
     await transport.sendMail({
       to: email,
       from: process.env.EMAIL_FROM,
-      subject: `Invitation for ${teamId} on Komonitor`,
+      subject: `You have been invited to join Komonitor`,
       text: "Komonitor team invitation",
       html: html({
         code: invite.team_id_invite_code_composite_key,
@@ -179,7 +183,7 @@ async function deleteHandler(
       return;
     }
 
-    if (!userIsAdmin(userId, team)) {
+    if (!userIsMember(userId, team)) {
       res.status(403);
       return;
     }

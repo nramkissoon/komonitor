@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import { SlackInstallation, Team } from "utils";
-import { stripeClient } from "../../../src/common/server-utils";
+import { ddbClient, env, stripeClient } from "../../../src/common/server-utils";
 import {
   createTeam,
   deleteTeamAndAssociatedAssets,
@@ -13,6 +13,7 @@ import {
   userIsMember,
 } from "../../../src/modules/teams/server/db";
 import { teamIdIsAvailable } from "../../../src/modules/teams/server/validation";
+import { getUserById } from "../../../src/modules/user/user-db";
 
 const updateSlackInstallations = async (KoTeam: Team) => {
   const slackInstallations = KoTeam.integrations
@@ -118,7 +119,13 @@ async function createHandler(
       return;
     }
 
-    const created = await createTeam(teamId, userId);
+    const user = await getUserById(ddbClient, env.USER_TABLE_NAME, userId);
+    if (!user) {
+      res.status(403);
+      return;
+    }
+
+    const created = await createTeam(teamId, user);
 
     if (created) {
       res.status(200);
@@ -158,15 +165,19 @@ async function deleteHandler(
       await deleteTeamAndAssociatedAssets(team.id);
     } else {
       // delete the subscription
-      const stripeRes = await stripeClient.subscriptions.del(
-        team.subscription_id,
-        { prorate: true }
-      );
-      if (stripeRes.status === "canceled") {
-        //await deleteTeamById(team.id);
-        /**
-         * deletion occurs after stripe has sent the subscription canceled event, check event handlers
-         */
+      try {
+        const stripeRes = await stripeClient.subscriptions.del(
+          team.subscription_id,
+          { prorate: true }
+        );
+        if (stripeRes.status === "canceled") {
+          //await deleteTeamById(team.id);
+          /**
+           * deletion occurs after stripe has sent the subscription canceled event, check event handlers
+           */
+        }
+      } catch (err) {
+        await deleteTeamAndAssociatedAssets(team.id);
       }
     }
 

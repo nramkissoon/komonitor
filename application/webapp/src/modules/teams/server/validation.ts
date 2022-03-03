@@ -57,3 +57,15 @@ export const teamCreationInputSchema = z.object({
       { message: "Invalid plan." }
     ),
 });
+
+export const teamInvitationInputSchema = z.object({
+  permission: z
+    .string({ required_error: "Permission level is required." })
+    .refine(
+      (s) => {
+        return ["edit"].includes(s);
+      },
+      { message: "Invalid permission level." }
+    ),
+  email: emailSchema,
+});
