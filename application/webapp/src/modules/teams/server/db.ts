@@ -204,7 +204,11 @@ export const addTeamMember = async (
               sk: { S: team.sk },
             },
             ExpressionAttributeValues: {
-              ":val": { L: team.members.map((m) => ({ M: marshall(m) })) },
+              ":val": {
+                L: team.members.map((m) => ({
+                  M: marshall(m, { removeUndefinedValues: true }),
+                })),
+              },
             },
             UpdateExpression: "SET members = :val",
           },

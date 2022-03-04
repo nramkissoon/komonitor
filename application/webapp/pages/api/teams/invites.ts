@@ -17,6 +17,7 @@ import {
 import { teamInvitationInputSchema } from "../../../src/modules/teams/server/validation";
 
 const html = ({ code, teamId }: { code: string; teamId: string }) => {
+  code = code.replace("#", "%23");
   return `
   <body style="padding: 20px; border-radius: 20px;">
   <table width="100%" border="0" cellspacing="20" cellpadding="0" style=" max-width: 600px; margin: auto; border-radius: 10px;">
@@ -29,7 +30,7 @@ const html = ({ code, teamId }: { code: string; teamId: string }) => {
       <td align="center" style="padding: 10px 0px 0px 0px; font-size: 18px; font-family: Helvetica, Arial, sans-serif;">
         You need to be signed in to Komonitor in order to use the team invite link below. <a href="${
           env.BASE_URL
-        }/auth/signin" target="_blank">Sign in now.</a>
+        }auth/signin" target="_blank">Sign in now.</a>
       </td>
     </tr>
     <tr>
@@ -37,15 +38,15 @@ const html = ({ code, teamId }: { code: string; teamId: string }) => {
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td align="center" style="border-radius: 5px;"><a href="${
-              env.BASE_URL + "/teams/new-member?code=" + code
+              env.BASE_URL + "teams/new-member?code=" + code
             }" target="_blank" style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight: bold;">Join Team!</a></td>
           </tr>
           <tr>
             <td align="center" style="border-radius: 5px;">
             You can also copy and paste this invite link into a new browser tab. <a href="${
-              env.BASE_URL + "/teams/new-member?code=" + code
+              env.BASE_URL + "teams/new-member?code=" + code
             }" target="_blank"  font-family: Helvetica, Arial, sans-serif; font-weight: bold;">
-              ${env.BASE_URL + "/teams/new-member?code=" + code}
+              ${env.BASE_URL + "teams/new-member?code=" + code}
               </a>
             </td>
           </tr>

@@ -41,7 +41,7 @@ import router, { useRouter } from "next/router";
 import React, { RefObject } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { KeyedMutator } from "swr";
-import { Team, TeamPermissionLevel } from "utils";
+import { Team, TeamMember, TeamPermissionLevel } from "utils";
 import { timeAgo } from "../../../common/client-utils";
 import { getDisplayStringFromPlanProductId } from "../../../common/utils";
 import { PLAN_PRODUCT_IDS, TEAM_MEMBER_LIMITS } from "../../billing/plans";
@@ -52,7 +52,9 @@ import {
   createAndRedirectToCustomerPortal,
   createInvite,
   deleteInvite,
+  deleteMember,
   deleteTeam,
+  getUserPermissionLevel,
   useProductId,
 } from "../client";
 
@@ -190,6 +192,124 @@ const DeleteInviteDialog = ({
   );
 };
 
+function useLeaveTeamDialog() {
+  const cancelRef = React.useRef(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return {
+    leaveTeamCancelRef: cancelRef,
+    leaveTeamIsOpen: isOpen,
+    leaveTeamOnClose: onClose,
+    leaveTeamOnOpen: onOpen,
+  };
+}
+
+interface LeaveTeamDialogProps {
+  teamId: string;
+  isOpen: boolean;
+  onClose: () => void;
+  leastDestructiveRef: RefObject<any>;
+  onError: (message: string) => void;
+}
+
+const LeaveTeamDialog = ({
+  isOpen,
+  onClose,
+  leastDestructiveRef,
+  onError,
+  teamId,
+}: LeaveTeamDialogProps) => {
+  const { user, userMutate } = useUser();
+
+  return (
+    <AlertDialog
+      leastDestructiveRef={leastDestructiveRef}
+      isOpen={isOpen}
+      onClose={onClose}
+      size="2xl"
+      isCentered
+    >
+      <AlertDialogOverlay />
+      <AlertDialogContent
+        bg={useColorModeValue("white", "gray.950")}
+        border="2px"
+        borderColor={useColorModeValue("gray.500", "whiteAlpha.400")}
+      >
+        <AlertDialogHeader
+          textAlign="center"
+          fontSize={"2xl"}
+          bg={useColorModeValue("white", "black")}
+          borderBottom="1px"
+          borderColor={useColorModeValue("gray.500", "whiteAlpha.400")}
+        >
+          Leave {teamId} team?
+        </AlertDialogHeader>
+        <AlertDialogBody
+          pt="20px"
+          fontSize={"lg"}
+          px="2em"
+          pb="0"
+          textAlign={"center"}
+        >
+          <Text mb="1em">This action will remove you from the team.</Text>
+          <Text mb="1em">
+            You will not be able to access any projects or monitors going
+            forward.
+          </Text>
+        </AlertDialogBody>
+        <AlertDialogFooter
+          bg={useColorModeValue("white", "black")}
+          justifyContent="center"
+        >
+          <Button
+            ref={leastDestructiveRef}
+            onClick={onClose}
+            size="md"
+            colorScheme="gray"
+            color="white"
+            bg="gray.500"
+            fontSize="md"
+            shadow="sm"
+            fontWeight="normal"
+            mr={3}
+            _hover={{ bg: "gray.600" }}
+            px="10"
+          >
+            Cancel
+          </Button>
+          <Button
+            size="md"
+            colorScheme="red"
+            color="white"
+            bg="red.500"
+            fontSize="md"
+            shadow="sm"
+            fontWeight="normal"
+            _hover={{ bg: "red.600" }}
+            px="10"
+            onClick={async () => {
+              await deleteMember(
+                teamId,
+                user.id,
+                (message: string) => {
+                  userMutate();
+                  router.push("/app?leftTeam=true");
+                },
+                (message: string) => {
+                  onClose();
+                  onError(message);
+                }
+              );
+            }}
+          >
+            Leave Team
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
 function useRemoveMemberDialog() {
   const cancelRef = React.useRef(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -201,6 +321,119 @@ function useRemoveMemberDialog() {
     removeMemberOnOpen: onOpen,
   };
 }
+
+interface RemoveMemberDialogProps {
+  teamId: string;
+  member: TeamMember | null;
+  mutate: KeyedMutator<any>;
+  isOpen: boolean;
+  onClose: () => void;
+  leastDestructiveRef: RefObject<any>;
+  onError: (message: string) => void;
+  onSuccess: (message: string) => void;
+}
+
+const RemoveMemberDialog = ({
+  member,
+  isOpen,
+  onClose,
+  leastDestructiveRef,
+  onError,
+  mutate,
+  onSuccess,
+  teamId,
+}: RemoveMemberDialogProps) => {
+  return (
+    <AlertDialog
+      leastDestructiveRef={leastDestructiveRef}
+      isOpen={isOpen}
+      onClose={onClose}
+      size="2xl"
+      isCentered
+    >
+      <AlertDialogOverlay />
+      <AlertDialogContent
+        bg={useColorModeValue("white", "gray.950")}
+        border="2px"
+        borderColor={useColorModeValue("gray.500", "whiteAlpha.400")}
+      >
+        <AlertDialogHeader
+          textAlign="center"
+          fontSize={"2xl"}
+          bg={useColorModeValue("white", "black")}
+          borderBottom="1px"
+          borderColor={useColorModeValue("gray.500", "whiteAlpha.400")}
+        >
+          Remove {member?.name ?? member?.email} from team?
+        </AlertDialogHeader>
+        <AlertDialogBody
+          pt="20px"
+          fontSize={"lg"}
+          px="2em"
+          pb="0"
+          textAlign={"center"}
+        >
+          <Text mb="1em">
+            This action will remove team member and their ability to access any
+            projects and monitors owned by the team.
+          </Text>
+          <Text mb="1em">
+            You can always reinvite the removed member later.
+          </Text>
+        </AlertDialogBody>
+        <AlertDialogFooter
+          bg={useColorModeValue("white", "black")}
+          justifyContent="center"
+        >
+          <Button
+            ref={leastDestructiveRef}
+            onClick={onClose}
+            size="md"
+            colorScheme="gray"
+            color="white"
+            bg="gray.500"
+            fontSize="md"
+            shadow="sm"
+            fontWeight="normal"
+            mr={3}
+            _hover={{ bg: "gray.600" }}
+            px="10"
+          >
+            Cancel
+          </Button>
+          <Button
+            size="md"
+            colorScheme="red"
+            color="white"
+            bg="red.500"
+            fontSize="md"
+            shadow="sm"
+            fontWeight="normal"
+            _hover={{ bg: "red.600" }}
+            px="10"
+            onClick={async () => {
+              await deleteMember(
+                teamId,
+                member?.user_id ?? "",
+                (message: string) => {
+                  mutate();
+                  onClose();
+                  onSuccess(message);
+                },
+                (message: string) => {
+                  onClose();
+                  onError(message);
+                }
+              );
+            }}
+          >
+            Remove
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
 
 function useDeleteTeamDialog() {
   const cancelRef = React.useRef(true);
@@ -471,6 +704,7 @@ const AddTeamInviteForm = ({
 };
 
 export function TeamTab() {
+  const { user, userIsLoading } = useUser();
   const { teamId } = useRouter().query;
   const { productId, productIdIsLoading } = useProductId(teamId as string);
   const toast = useToast();
@@ -511,10 +745,29 @@ export function TeamTab() {
     deleteInviteOnOpen,
   } = useDeleteInviteDialog();
 
+  const [userToRemove, setUserToRemove] = React.useState<TeamMember | null>(
+    null
+  );
+  const {
+    removeMemberCancelRef,
+    removeMemberIsOpen,
+    removeMemberOnClose,
+    removeMemberOnOpen,
+  } = useRemoveMemberDialog();
+
+  const {
+    leaveTeamCancelRef,
+    leaveTeamIsOpen,
+    leaveTeamOnClose,
+    leaveTeamOnOpen,
+  } = useLeaveTeamDialog();
+
   function teamMemberLimit(team: Team) {
     if (team.product_id === PLAN_PRODUCT_IDS.PRO) return TEAM_MEMBER_LIMITS.PRO;
     return TEAM_MEMBER_LIMITS.BUSINESS;
   }
+
+  const userPermissionLevel = getUserPermissionLevel(user, team);
 
   return (
     <>
@@ -532,6 +785,13 @@ export function TeamTab() {
         isOpen={inviteFormIsOpen}
         onClose={inviteFormOnClose}
       />
+      <LeaveTeamDialog
+        isOpen={leaveTeamIsOpen}
+        onClose={leaveTeamOnClose}
+        leastDestructiveRef={leaveTeamCancelRef}
+        teamId={teamId as string}
+        onError={postErrorToast}
+      />
       <DeleteInviteDialog
         mutate={mutateTeams}
         onClose={deleteInviteOnClose}
@@ -541,6 +801,16 @@ export function TeamTab() {
         email={inviteToDelete}
         onSuccess={postSuccessToast}
         leastDestructiveRef={deleteInviteCancelRef}
+      />
+      <RemoveMemberDialog
+        mutate={mutateTeams}
+        onClose={removeMemberOnClose}
+        isOpen={removeMemberIsOpen}
+        leastDestructiveRef={removeMemberCancelRef}
+        onSuccess={postSuccessToast}
+        onError={postErrorToast}
+        teamId={teamId as string}
+        member={userToRemove}
       />
       <Box
         bg={useColorModeValue("white", "gray.950")}
@@ -554,7 +824,6 @@ export function TeamTab() {
           Current subscription plan:
         </Text>
         <Badge
-          mb="1.2em"
           colorScheme="gray"
           fontSize="md"
           fontWeight="normal"
@@ -567,23 +836,30 @@ export function TeamTab() {
             productId ? productId : "Loading..."
           )}
         </Badge>
-        <Divider mb="1em" />
-        <Text fontSize="lg" color="gray.500" mb=".7em">
-          Update your subscription and payment methods with Stripe (admin only):
-        </Text>
-        <Button
-          fontWeight="normal"
-          colorScheme="blue"
-          color="white"
-          bgColor="blue.500"
-          shadow="sm"
-          onClick={() => createAndRedirectToCustomerPortal(teamId as string)}
-          _hover={{
-            bg: "blue.600",
-          }}
-        >
-          Manage Subscription
-        </Button>
+        {userPermissionLevel === "admin" && (
+          <>
+            <Divider mb="1em" mt="1.2em" />
+            <Text fontSize="lg" color="gray.500" mb=".7em">
+              Update your subscription and payment methods with Stripe (admin
+              only):
+            </Text>
+            <Button
+              fontWeight="normal"
+              colorScheme="blue"
+              color="white"
+              bgColor="blue.500"
+              shadow="sm"
+              onClick={() =>
+                createAndRedirectToCustomerPortal(teamId as string)
+              }
+              _hover={{
+                bg: "blue.600",
+              }}
+            >
+              Manage Subscription
+            </Button>
+          </>
+        )}
       </Box>
       {!teamIsLoading && (
         <Box
@@ -615,7 +891,61 @@ export function TeamTab() {
                   <Td>
                     <RoleBadge role={member.permission_level} />
                   </Td>
-                  <Td>{member.permission_level === "admin" ? <></> : <></>}</Td>
+                  <Td>
+                    {member.permission_level === "admin" &&
+                    userPermissionLevel === "admin" ? (
+                      <Tooltip label={"Admin cannot be removed from team."}>
+                        <IconButton
+                          size={"sm"}
+                          icon={<DeleteIcon />}
+                          fontWeight="normal"
+                          colorScheme="red"
+                          color="white"
+                          bgColor="red.500"
+                          shadow="sm"
+                          onClick={() => {}}
+                          _hover={{
+                            bg: "red.600",
+                          }}
+                          aria-label={"remove team member"}
+                          isDisabled
+                        ></IconButton>
+                      </Tooltip>
+                    ) : (
+                      <>
+                        <Tooltip
+                          label={
+                            userPermissionLevel === "admin"
+                              ? `Remove ${
+                                  member.name ?? member.email
+                                } from team`
+                              : "Admin permission required."
+                          }
+                        >
+                          <IconButton
+                            size={"sm"}
+                            icon={<DeleteIcon />}
+                            fontWeight="normal"
+                            colorScheme="red"
+                            color="white"
+                            bgColor="red.500"
+                            shadow="sm"
+                            onClick={() => {
+                              setUserToRemove(member);
+                              removeMemberOnOpen();
+                            }}
+                            _hover={{
+                              bg: "red.600",
+                            }}
+                            aria-label={"remove team member"}
+                            isDisabled={userPermissionLevel !== "admin"}
+                          >
+                            Remove Team Member
+                          </IconButton>
+                        </Tooltip>
+                      </>
+                    )}
+                  </Td>
                 </Tr>
               ))}
             </Tbody>
@@ -709,24 +1039,43 @@ export function TeamTab() {
           color={useColorModeValue("red.500", "red.400")}
           mb=".7em"
         >
-          Danger Zone (admin only):
+          Danger Zone:
         </Text>
 
-        <Button
-          fontWeight="normal"
-          colorScheme="red"
-          color="white"
-          bgColor="red.500"
-          shadow="sm"
-          onClick={() => {
-            onOpen();
-          }}
-          _hover={{
-            bg: "red.600",
-          }}
-        >
-          Delete Team
-        </Button>
+        {userPermissionLevel === "admin" && (
+          <Button
+            fontWeight="normal"
+            colorScheme="red"
+            color="white"
+            bgColor="red.500"
+            shadow="sm"
+            onClick={() => {
+              onOpen();
+            }}
+            _hover={{
+              bg: "red.600",
+            }}
+          >
+            Delete Team
+          </Button>
+        )}
+        {userPermissionLevel !== "admin" && (
+          <Button
+            fontWeight="normal"
+            colorScheme="red"
+            color="white"
+            bgColor="red.500"
+            shadow="sm"
+            onClick={() => {
+              leaveTeamOnOpen();
+            }}
+            _hover={{
+              bg: "red.600",
+            }}
+          >
+            Leave Team
+          </Button>
+        )}
       </Box>
     </>
   );

@@ -30,19 +30,19 @@ Teams:
         ✔ api setup @done(22-03-02 11:52)
         create and send invite:
             ✔ create unique code and associate input email in team db with role -> set expiration @done(22-03-02 11:52)
-            ☐ send email with link to invite api to add user if account created
+            ✔ send email with link to invite api to add user if account created @done(22-03-03 17:25)
         add invited user api:
-            ☐ if user logged in (user in session) -> add user to team if expiration valid
-            ☐ if user not logged in -> redirect to sign in page -> prompt them to click link again
-            ☐ if user successfully added -> delete invite and code in team db
+            ✔ if user logged in (user in session) -> add user to team if expiration valid @done(22-03-03 17:25)
+            ✔ if user not logged in -> redirect to sign in page -> prompt them to click link again @done(22-03-03 17:25)
+            ✔ if user successfully added -> delete invite and code in team db @done(22-03-03 17:25)
         remove user from team:
             ✔ admin permission @done(22-03-02 11:53)
             ✔ delete user id from team db, delete team from user @done(22-03-02 11:53)
-            ☐ leave team if not admin
+            ✔ leave team if not admin @done(22-03-04 17:23)
     settings:
         ✔ add, remove invites @done(22-03-03 12:40)
-        ☐ add, remove teammates
-        ☐ disbale billing and deelte buttons if not admin
+        ✔ add, remove teammates @done(22-03-04 17:23)
+        ✔ disbale billing and deelte buttons if not admin @done(22-03-04 17:23)
         ✔ customer portal only available to admin @done(22-02-28 13:38)
         ✔ webhook secret @done(22-02-28 13:38)
         ✔ delete team cancels subscription and then deletes team @done(22-03-01 11:39)
@@ -59,10 +59,10 @@ Teams:
         ✔ make sure we get correct webhook -> check if owner is a team @done(22-02-24 13:52)
         ☐ test
     delete:
-        ☐  admin role
-        ☐  delete team from users
-        ☐  delete projects and assets
-        ☐  delete stripe sub
+        ✔  admin role @done(22-03-04 17:23)
+        ✔  delete team from users @done(22-03-04 17:23)
+        ✔  delete projects and assets @done(22-03-04 17:23)
+        ✔  delete stripe sub @done(22-03-04 17:24)
     
 
 ✘ pause function graph weirdness @cancelled(22-02-01 12:29)

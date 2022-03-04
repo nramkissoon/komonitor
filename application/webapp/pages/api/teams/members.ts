@@ -6,7 +6,6 @@ import {
   getTeamById,
   removeTeamMember,
   userIsAdmin,
-  userIsMember,
 } from "../../../src/modules/teams/server/db";
 import { getUserById } from "../../../src/modules/user/user-db";
 
@@ -48,9 +47,9 @@ async function deleteHandler(
       return;
     }
 
-    // verify user is member
+    // verify user is admin or removing self
 
-    if (!userIsMember(userId, team)) {
+    if (!userIsAdmin(userId, team) && userToDelete !== userId) {
       res.status(403);
       return;
     }

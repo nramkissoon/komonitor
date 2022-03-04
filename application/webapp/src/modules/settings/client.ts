@@ -1,5 +1,5 @@
 import router from "next/router";
-import { TeamPermissionLevel, WebhookSecret } from "utils";
+import { Team, TeamPermissionLevel, User, WebhookSecret } from "utils";
 import { env } from "../../common/client-utils";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
 import { useTeam } from "../teams/client";
@@ -293,4 +293,17 @@ export const deleteMember = async (
     onError(errorMessage);
     return false;
   }
+};
+
+export const getUserPermissionLevel = (
+  user: User,
+  team: Team
+): TeamPermissionLevel | null => {
+  if (!user || !team) return null;
+  for (let member of team.members) {
+    if (member.user_id === user.id) {
+      return member.permission_level;
+    }
+  }
+  return null;
 };
