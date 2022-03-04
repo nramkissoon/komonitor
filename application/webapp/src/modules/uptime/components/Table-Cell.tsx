@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { toExternalUptimeStatusObject, UptimeMonitorStatus } from "utils";
-import { getTimeString } from "../../../common/client-utils";
+import { getTimeString, useAppBaseRoute } from "../../../common/client-utils";
 
 interface DescriptionCellProps {
   monitorId: string;
@@ -25,6 +25,7 @@ interface DescriptionCellProps {
 
 export function DescriptionCell(props: DescriptionCellProps) {
   const router = useRouter();
+  const baseRoute = useAppBaseRoute();
   const { projectId } = router.query;
   return (
     <Box>
@@ -32,7 +33,7 @@ export function DescriptionCell(props: DescriptionCellProps) {
         <Box w="fit-content">
           <Link
             passHref
-            href={`/app/projects/${projectId}/uptime/${props.monitorId}`}
+            href={`${baseRoute}/projects/${projectId}/uptime/${props.monitorId}`}
           >
             <Box
               _hover={{
@@ -153,6 +154,7 @@ interface ActionsCellProps {
 
 export function ActionsCell(props: ActionsCellProps) {
   const router = useRouter();
+  const baseRoute = useAppBaseRoute();
   const { projectId } = router.query;
   return (
     <Flex justifyContent="flex-start">
@@ -166,7 +168,8 @@ export function ActionsCell(props: ActionsCellProps) {
           mr="1.3em"
           onClick={() => {
             router.push(
-              `/app/projects/${projectId}/uptime/` + props.cellValues.monitorId
+              `${baseRoute}/projects/${projectId}/uptime/` +
+                props.cellValues.monitorId
             );
           }}
           _hover={{

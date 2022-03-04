@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
 
 const HeaderLink = (props: {
   text: string;
@@ -64,11 +63,10 @@ export function AppFooter() {
 
   return (
     <Flex {...containerBoxStyles} as="footer">
-      <HStack {...defaultLinksHstackContainerStyles} mb="1em">
+      <HStack {...defaultLinksHstackContainerStyles}>
         <HeaderLink text="Docs" href="/docs" />
         <HeaderLink text="Blog" href="/blog" />
       </HStack>
-      © {year} Nicholas Ramkissoon. All rights reserved.
     </Flex>
   );
 }

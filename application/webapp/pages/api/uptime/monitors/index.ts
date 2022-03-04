@@ -1,13 +1,20 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
-import { UptimeMonitor } from "utils";
+import { Team, UptimeMonitor } from "utils";
 import { ddbClient, env } from "../../../../src/common/server-utils";
 import {
   getPreviousAlertInvocationForMonitor,
   setInvocationOngoingToFalse,
 } from "../../../../src/modules/alerts/invocations-db";
-import { getUptimeMonitorAllowanceFromProductId } from "../../../../src/modules/billing/plans";
+import {
+  getUptimeMonitorAllowanceFromProductId,
+  PLAN_PRODUCT_IDS,
+} from "../../../../src/modules/billing/plans";
+import {
+  getTeamById,
+  userIsMember,
+} from "../../../../src/modules/teams/server/db";
 import {
   deleteMonitor,
   getMonitorForUserByMonitorId,
@@ -23,10 +30,68 @@ import {
   isValidCoreUptimeMonitor,
   isValidUptimeMonitor,
 } from "../../../../src/modules/uptime/validation";
-import {
-  getServicePlanProductIdForUser,
-  getUserSubscriptionIsValid,
-} from "../../../../src/modules/user/user-db";
+import { getUserById } from "../../../../src/modules/user/user-db";
+
+const getOwnerIdAndTeam = async (req: NextApiRequest, session: Session) => {
+  const userId = session.uid as string;
+  const { teamId } = req.query;
+
+  // if team is defined it should be taken over userId since we are working in a team
+  const ownerId = teamId ? (teamId as string) : userId;
+
+  if (ownerId === teamId) {
+    // check if userId in team members
+    // throw if not valid
+    const team = await getTeamById(teamId);
+
+    if (!team) throw new Error(`team: ${teamId} not found in db`);
+    if (!userIsMember(userId, team)) {
+      throw new Error(`user is not member of team`);
+    }
+    return { ownerId, team };
+  }
+  return { ownerId };
+};
+
+const getProductPlanIdAndValidSubscription = async (
+  ownerId: string,
+  team?: Team
+): Promise<{ productId: string | null; valid: boolean }> => {
+  if (team) {
+    if (!team.product_id) {
+      return {
+        productId: null,
+        valid: false,
+      };
+    }
+    return {
+      productId: team.product_id,
+      valid:
+        team.subscription_status === "active" ||
+        team.subscription_status === "trialing",
+    };
+  } else {
+    const user = await getUserById(ddbClient, env.USER_TABLE_NAME, ownerId);
+
+    if (!user) return { valid: false, productId: null };
+
+    const productId = user?.product_id ?? PLAN_PRODUCT_IDS.STARTER;
+
+    if (productId === PLAN_PRODUCT_IDS.STARTER) {
+      return {
+        productId,
+        valid: true,
+      };
+    } else {
+      return {
+        productId,
+        valid:
+          user.subscription_status === "active" ||
+          user.subscription_status === "trialing",
+      };
+    }
+  }
+};
 
 async function getHandler(
   req: NextApiRequest,
@@ -34,14 +99,10 @@ async function getHandler(
   session: Session
 ) {
   try {
-    const { projectId: projectIds, team } = req.query;
+    const { projectId: projectIds } = req.query;
 
-    let ownerId = session.uid as string;
-
-    if (typeof team === "string") {
-      // verify get permissions for individual userId on team
-      //ownerId = teamId;
-    }
+    const ownerIdTeam = await getOwnerIdAndTeam(req, session);
+    const ownerId = ownerIdTeam.ownerId;
 
     const projectIdsAsList =
       typeof projectIds === "string" ? [projectIds] : projectIds;
@@ -81,14 +142,19 @@ async function updateHandler(
   session: Session
 ) {
   try {
-    const userId = session.uid as string;
-    const product_id = await getServicePlanProductIdForUser(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId
+    const { ownerId, team } = await getOwnerIdAndTeam(req, session);
+    const { valid, productId } = await getProductPlanIdAndValidSubscription(
+      ownerId,
+      team
     );
+
+    if (!productId || !valid) {
+      res.status(403);
+      return;
+    }
+
     const monitor = req.body;
-    if (!monitor || !isValidUptimeMonitor(monitor, product_id)) {
+    if (!monitor || !isValidUptimeMonitor(monitor, productId)) {
       res.status(400);
       return;
     }
@@ -96,7 +162,7 @@ async function updateHandler(
     const monitorExistsForUser = await getMonitorForUserByMonitorId(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
-      userId,
+      ownerId,
       monitor.monitor_id
     );
     // check created_at and owner_id as a extra check against tampering with the request
@@ -156,18 +222,23 @@ async function createHandler(
 ) {
   try {
     // check if user is allowed to create a new monitor
-    const userId = session.uid as string;
-    const { productId, valid } = await getUserSubscriptionIsValid(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      session.uid as string
+    const { ownerId, team } = await getOwnerIdAndTeam(req, session);
+    const { valid, productId } = await getProductPlanIdAndValidSubscription(
+      ownerId,
+      team
     );
+
+    if (!productId || !valid) {
+      res.status(403);
+      return;
+    }
+
     const allowance = getUptimeMonitorAllowanceFromProductId(productId);
     const currentMonitorsTotal = (
       await getMonitorsForOwner(
         ddbClient,
         env.UPTIME_MONITOR_TABLE_NAME,
-        userId
+        ownerId
       )
     ).length;
 
@@ -184,7 +255,7 @@ async function createHandler(
     }
 
     // user is allowed to create monitor
-    const newMonitor = createNewMonitorFromCore(monitor, userId);
+    const newMonitor = createNewMonitorFromCore(monitor, ownerId);
     const created = await putMonitor(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
@@ -215,15 +286,18 @@ async function deleteHandler(
       return;
     }
 
-    const userId = session.uid as string;
+    const { ownerId, team } = await getOwnerIdAndTeam(req, session);
+
     const deleted = await deleteMonitor(
       ddbClient,
       env.UPTIME_MONITOR_TABLE_NAME,
       monitorId as string,
-      userId
+      ownerId
     );
+
     deleted ? res.status(200) : res.status(500);
   } catch (err) {
+    console.log(err);
     res.status(500);
   }
 }

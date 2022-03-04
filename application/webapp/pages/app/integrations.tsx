@@ -11,9 +11,9 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
 import { AppSubNav } from "../../src/common/components/App-Sub-Nav";
 import { PageLayout } from "../../src/common/components/Page-Layout";
+import { useUserIntegrations } from "../../src/modules/integrations/client";
 import { ActiveIntegrationList } from "../../src/modules/integrations/components/ActiveIntegrationList";
 import { NewIntegrationsList } from "../../src/modules/integrations/components/NewIntegrationsList";
 import { ExtendedNextPage } from "../_app";
@@ -25,6 +25,8 @@ const App: ExtendedNextPage = () => {
     slackIntegrationSuccess,
     slackIntegrationCanceled,
   } = router.query;
+
+  const { integrations, isLoading } = useUserIntegrations();
 
   return (
     <PageLayout isAppPage maxW={["sm", "xl", "3xl", "5xl", "6xl"]}>
@@ -97,9 +99,12 @@ const App: ExtendedNextPage = () => {
         </TabList>
         <TabPanels p={0}>
           <TabPanel>
-            <ActiveIntegrationList />
+            <ActiveIntegrationList
+              integrations={integrations}
+              isLoading={isLoading}
+            />
           </TabPanel>
-          <TabPanel>
+          <TabPanel px="0">
             <NewIntegrationsList />
           </TabPanel>
         </TabPanels>

@@ -98,7 +98,7 @@ export function Footer() {
         columns={[1, 1, 2, 3]}
         spacingX={[6, 40]}
         spacingY={[20]}
-        mb="2em"
+        pb="2em"
       >
         <LinkColumn
           header="Product"
@@ -139,7 +139,6 @@ export function Footer() {
           ]}
         />
       </SimpleGrid>
-      <p>© {year} Nicholas Ramkissoon. All rights reserved.</p>
     </Flex>
   );
 }

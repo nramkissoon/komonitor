@@ -9,8 +9,9 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { RefObject } from "react";
-import { deleteSlackIntegration } from "../../user/client";
+import { deleteSlackIntegration } from "../slack/client";
 
 export interface RemoveSlackInstallationDialogProps {
   leastDestructiveRef: RefObject<any>;
@@ -36,6 +37,8 @@ export const RemoveSlackInstallationDialog = (
     teamId,
     mutate,
   } = props;
+
+  const { teamId: komonitorTeamId } = useRouter().query;
 
   const toast = useToast();
   const postErrorToast = (message: string) => {
@@ -94,15 +97,16 @@ export const RemoveSlackInstallationDialog = (
             bgColor="red.500"
             fontWeight="normal"
             onClick={async () => {
-              const removed = await deleteSlackIntegration(
-                channelId,
-                teamId,
-                () => {
+              const removed = await deleteSlackIntegration({
+                slackChannel: channelId,
+                slackTeam: teamId,
+                onError: postErrorToast,
+                onSuccess: () => {
                   mutate();
                   onClose();
                 },
-                postErrorToast
-              );
+                teamId: komonitorTeamId as string,
+              });
 
               if (removed) {
                 toast({

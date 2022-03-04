@@ -11,8 +11,7 @@ import React from "react";
 import { SlackInstallation } from "utils";
 import { v4 as uuidv4 } from "uuid";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
-import { useTeam } from "../../../common/components/TeamProvider";
-import { Integrations, useUserIntegrations } from "../../user/client";
+import { Integrations } from "../../user/client";
 import { SlackSvg } from "./Icons";
 import { RemoveSlackInstallationDialogProps } from "./RemoveDialogs";
 
@@ -128,11 +127,13 @@ const getIntegrationInfoBars = (integrations: Integrations) => {
   });
 };
 
-export const ActiveIntegrationList = () => {
-  const { team } = useTeam();
-
-  const { integrations, isError, isLoading } = useUserIntegrations();
-
+export const ActiveIntegrationList = ({
+  integrations,
+  isLoading,
+}: {
+  integrations: Integrations;
+  isLoading: boolean;
+}) => {
   // add filtering and sorting integrations
 
   return integrations && !isLoading ? (

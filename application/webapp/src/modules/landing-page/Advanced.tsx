@@ -128,7 +128,7 @@ export const Advanced = () => {
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
   return (
     <Flex flexDir="column" alignItems="center" as="section">
-      <chakra.h1
+      <chakra.h2
         textAlign="center"
         fontSize="5xl"
         fontWeight="extrabold"
@@ -137,8 +137,8 @@ export const Advanced = () => {
         mb="10px"
       >
         Need To Monitor API Responses? No Problem.
-      </chakra.h1>
-      <chakra.h2
+      </chakra.h2>
+      <chakra.h3
         fontSize="2xl"
         fontWeight="bold"
         textAlign="center"
@@ -150,7 +150,7 @@ export const Advanced = () => {
       >
         Customize your monitor's HTTP requests to match your use case and
         analyze the response.
-      </chakra.h2>
+      </chakra.h3>
 
       <Box
         w="100%"

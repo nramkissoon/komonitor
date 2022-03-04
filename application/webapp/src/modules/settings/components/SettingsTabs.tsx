@@ -8,9 +8,7 @@ import {
   useColorModeValue,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
 import { AccountTab } from "./AccountTab";
-import { BillingTab } from "./BillingTab";
 import { DevelopersTab } from "./DeveloperTab";
 
 interface SettingsTabsProps {
@@ -46,15 +44,11 @@ export function SettingsTabs(props: SettingsTabsProps) {
       >
         <TabList w="225px" mr="10px" mt="20px">
           <Tab {...tabStyles}>Account</Tab>
-          <Tab {...tabStyles}>Billing</Tab>
           <Tab {...tabStyles}>Developers</Tab>
         </TabList>
         <TabPanels>
           <TabPanel p="0">
             <AccountTab />
-          </TabPanel>
-          <TabPanel p="0">
-            <BillingTab />
           </TabPanel>
           <TabPanel p="0">
             <DevelopersTab />

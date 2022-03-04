@@ -69,7 +69,7 @@ function Feature(props: FeatureProps) {
 export function NoCode() {
   return (
     <Flex flexDir="column" alignItems="center" as="section">
-      <chakra.h1
+      <chakra.h2
         textAlign="center"
         fontSize="5xl"
         fontWeight="extrabold"
@@ -78,8 +78,8 @@ export function NoCode() {
         mb="10px"
       >
         {Copy.NoCode.Header}
-      </chakra.h1>
-      <chakra.h2
+      </chakra.h2>
+      <chakra.h3
         fontSize="2xl"
         fontWeight="bold"
         textAlign="center"
@@ -90,7 +90,7 @@ export function NoCode() {
         mb="2em"
       >
         {Copy.NoCode.Subheader}
-      </chakra.h2>
+      </chakra.h3>
 
       <SimpleGrid
         columns={{ base: 1, sm: 1, md: 2 }}

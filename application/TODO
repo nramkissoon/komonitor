@@ -16,31 +16,53 @@ Teams:
     ✔ create new team in app header @done(22-02-16 15:25)
     auth:
         ✘  team obj in db is source of truth for members -> implement an auth when accessing all routes on teams/{teamId} (middleware?????) ->  updgrade nextauth @cancelled(22-02-16 23:53)
-        ☐ eval need for team provider
+        ✔ eval need for team provider @done(22-02-22 09:54)
         
     creation:
-        ☐ /teams/new
-        ☐ form for team name (id), purpose, submit writes new team to db set user as admin, check if name exists first, make clear that need to pay
-        ☐ after successful creation redirect to strip checkout page for 14 day free trial of team subscription
-        ☐ create checkout api for teams
-        ☐ redirect to teams/{new team} after successful checkout
+        ✘ /teams/new @cancelled(22-02-21 21:09)
+        ✔ form for team name (id), submit writes new team to db set user as admin, check if name exists first, make clear that need to pay @done(22-02-21 17:23)
+        ✔ after successful creation , create stripe subscription with trial @done(22-02-21 21:09)
+        ✔ create checkout api for teams @done(22-02-21 10:56)
+        ✔ redirect to teams/{new team} after successful checkout @done(22-02-20 19:35)
+        ☐ subscription must be valid to use team
+        ✘ create team on checkout complete, provision on invoice paid @cancelled(22-02-21 20:32)
     invites:
-        ☐ api setup
+        ✔ api setup @done(22-03-02 11:52)
         create and send invite:
-            ☐ create unique code and associate input email in team db with role -> set expiration
-            ☐ send email with link to invite api to add user if account created
+            ✔ create unique code and associate input email in team db with role -> set expiration @done(22-03-02 11:52)
+            ✔ send email with link to invite api to add user if account created @done(22-03-03 17:25)
         add invited user api:
-            ☐ if user logged in (user in session) -> add user to team if expiration valid
-            ☐ if user not logged in -> redirect to sign in page -> prompt them to click link again
-            ☐ if user successfully added -> delete invite and code in team db
+            ✔ if user logged in (user in session) -> add user to team if expiration valid @done(22-03-03 17:25)
+            ✔ if user not logged in -> redirect to sign in page -> prompt them to click link again @done(22-03-03 17:25)
+            ✔ if user successfully added -> delete invite and code in team db @done(22-03-03 17:25)
         remove user from team:
-            ☐ admin permission
-            ☐ delete user id from team db, delete team from user 
+            ✔ admin permission @done(22-03-02 11:53)
+            ✔ delete user id from team db, delete team from user @done(22-03-02 11:53)
+            ✔ leave team if not admin @done(22-03-04 17:23)
+    settings:
+        ✔ add, remove invites @done(22-03-03 12:40)
+        ✔ add, remove teammates @done(22-03-04 17:23)
+        ✔ disbale billing and deelte buttons if not admin @done(22-03-04 17:23)
+        ✔ customer portal only available to admin @done(22-02-28 13:38)
+        ✔ webhook secret @done(22-02-28 13:38)
+        ✔ delete team cancels subscription and then deletes team @done(22-03-01 11:39)
+        ✔ project settings - rename and delete @done(22-02-28 10:15)
+        ✔ personal account - delete -> check if teams exists before deleting @done(22-03-01 10:51)
+    uptime monitors:
+        ✔ make sure creation works like projects @done(22-02-24 22:54)
+    integrations:
+        ✔ adding slack integrations work @done(22-02-23 12:24)
+        ✔ removing integ works for both teams and user @done(22-02-23 13:08)
+        ✔ loading when add slack button press @done(22-02-23 13:10)
+        ✔  test updating channel slack @done(22-02-23 12:20)
+    alert and uptime lambda:
+        ✔ make sure we get correct webhook -> check if owner is a team @done(22-02-24 13:52)
+        ☐ test
     delete:
-        ☐  admin role
-        ☐  delete team from users
-        ☐  delete projects and assets
-        ☐  delete stripe sub
+        ✔  admin role @done(22-03-04 17:23)
+        ✔  delete team from users @done(22-03-04 17:23)
+        ✔  delete projects and assets @done(22-03-04 17:23)
+        ✔  delete stripe sub @done(22-03-04 17:24)
     
 
 ✘ pause function graph weirdness @cancelled(22-02-01 12:29)
@@ -56,6 +78,8 @@ Status Pages:
     ☐ status page table
     ☐ scope private, public
     ☐ define core fields, 
+
+☐  axiom logging
 
 ☐ increase data retention and view for free plan to 90 days
 

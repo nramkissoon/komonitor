@@ -57,6 +57,9 @@ async function postHandler(
       mode: "subscription",
       subscription_data: {
         trial_period_days: 14,
+        metadata: {
+          team_id: teamId,
+        },
       },
       success_url: env.BASE_URL + "/teams/" + teamId,
       cancel_url: env.BASE_URL + "/app?checkout_canceled=true",

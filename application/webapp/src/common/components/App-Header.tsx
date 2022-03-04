@@ -6,6 +6,7 @@ import {
   TriangleDownIcon,
 } from "@chakra-ui/icons";
 import {
+  Badge,
   Box,
   Button,
   ButtonProps,
@@ -16,7 +17,6 @@ import {
   Heading,
   HStack,
   HTMLChakraProps,
-  IconButton,
   IconButtonProps,
   Input,
   InputGroup,
@@ -36,10 +36,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi";
+import { PLAN_PRODUCT_IDS } from "../../modules/billing/plans";
+import { useTeam } from "../../modules/teams/client";
 import { useUptimeMonitorsForProject } from "../../modules/uptime/client";
 import { useUser } from "../../modules/user/client";
 import { HeaderLogo } from "./Header-Logo";
-import { useTeam } from "./TeamProvider";
+import { NewTeamDialog } from "./New-Team-Dialog";
 
 const HeaderLink = (props: {
   text: string;
@@ -75,11 +77,9 @@ const HeaderLink = (props: {
 const TeamSelector = ({
   isCurrent,
   team,
-  setTeam,
 }: {
   isCurrent: boolean;
   team: string;
-  setTeam: (team: string) => void;
 }) => {
   const router = useRouter();
   return (
@@ -98,7 +98,6 @@ const TeamSelector = ({
         bg: useColorModeValue("blue.200", "blue.700"),
       }}
       onClick={() => {
-        setTeam(team);
         router.push(`/teams/${team}`);
       }}
     >
@@ -114,13 +113,23 @@ const TeamSelector = ({
 };
 
 const TeamSelection = () => {
-  const { setTeam, team } = useTeam();
   const { user } = useUser();
   const router = useRouter();
+  const { teamId } = router.query;
+  const { team } = useTeam(teamId as string);
+
+  let plan;
+  if (team && team.product_id === PLAN_PRODUCT_IDS.PRO) {
+    plan = "pro";
+  } else if (team && team.product_id === PLAN_PRODUCT_IDS.BUSINESS) {
+    plan = "business";
+  }
+
+  const [createNewTeamIsOpen, setCreateNewTeamIsOpen] = React.useState(false);
 
   const teams = user && user.teams ? user.teams : [];
 
-  const isPersonal = team === undefined;
+  const isPersonal = teamId === undefined;
 
   const [searchQuery, setSearchQuery] = React.useState("");
   const fuse = new Fuse(teams);
@@ -128,18 +137,29 @@ const TeamSelection = () => {
 
   return (
     <Popover placement="bottom-start">
+      <NewTeamDialog
+        isOpen={createNewTeamIsOpen}
+        onClose={() => setCreateNewTeamIsOpen(false)}
+      />
       <PopoverTrigger>
-        <Button
-          rightIcon={<TriangleDownIcon />}
-          variant="outline"
-          bg={useColorModeValue("white", "gray.950")}
-          borderColor={useColorModeValue("black", "gray.600")}
-          px="5"
-          fontWeight="normal"
-          letterSpacing="wider"
-        >
-          {isPersonal ? "Personal Account" : team}
-        </Button>
+        <Flex>
+          <Button
+            rightIcon={<TriangleDownIcon />}
+            variant="outline"
+            bg={useColorModeValue("white", "gray.950")}
+            borderColor={useColorModeValue("black", "gray.600")}
+            px="5"
+            fontWeight="normal"
+            letterSpacing="wider"
+          >
+            {isPersonal ? "Personal Account" : teamId}
+            {plan && (
+              <Badge ml="15px" p="2px" px="4px" colorScheme={"blue"}>
+                {plan}
+              </Badge>
+            )}
+          </Button>
+        </Flex>
       </PopoverTrigger>
       <PopoverContent backgroundColor={useColorModeValue("white", "gray.950")}>
         <PopoverBody px="2" py="0">
@@ -180,7 +200,6 @@ const TeamSelection = () => {
                 bg: useColorModeValue("blue.200", "blue.700"),
               }}
               onClick={() => {
-                setTeam(undefined);
                 router.push(`/app`);
               }}
             >
@@ -211,36 +230,29 @@ const TeamSelection = () => {
                   <TeamSelector
                     key={t.item}
                     team={t.item}
-                    setTeam={setTeam}
-                    isCurrent={t.item === team}
+                    isCurrent={t.item === teamId}
                   />
                 ))
               : teams.map((t) => (
-                  <TeamSelector
-                    key={t}
-                    team={t}
-                    setTeam={setTeam}
-                    isCurrent={t === team}
-                  />
+                  <TeamSelector key={t} team={t} isCurrent={t === teamId} />
                 ))}
-            <Link href="/teams/new" passHref>
-              <Button
-                as="a"
-                mx="2"
-                px="4"
-                my="2"
-                py="1"
-                rounded="full"
-                size="md"
-                fontWeight="normal"
-                leftIcon={<AddIcon />}
-                bg="none"
-                justifyContent="left"
-                _hover={{ bg: useColorModeValue("blue.100", "gray.700") }}
-              >
-                Create Team
-              </Button>
-            </Link>
+            <Button
+              as="a"
+              mx="2"
+              px="4"
+              my="2"
+              py="1"
+              rounded="full"
+              size="md"
+              fontWeight="normal"
+              leftIcon={<AddIcon />}
+              bg="none"
+              justifyContent="left"
+              _hover={{ bg: useColorModeValue("blue.100", "gray.700") }}
+              onClick={() => setCreateNewTeamIsOpen(true)}
+            >
+              Create Team
+            </Button>
           </Flex>
         </PopoverBody>
       </PopoverContent>
@@ -256,7 +268,7 @@ export const AppHeader = () => {
 
   const router = useRouter();
   const { projectId, monitorId } = router.query;
-  const { team } = useTeam();
+  const { teamId } = router.query;
 
   const { monitors } = useUptimeMonitorsForProject(projectId as string);
 
@@ -337,7 +349,7 @@ export const AppHeader = () => {
           <Spacer />
           <Flex justify="flex-end" align="center" color="gray.400">
             {projectId && (
-              <Link href={team ? "/" + team : "/app"} passHref>
+              <Link href={teamId ? "/teams/" + teamId : "/app"} passHref>
                 <Button
                   p="0"
                   px="5px"
@@ -357,7 +369,6 @@ export const AppHeader = () => {
               text: "Docs",
               href: "/docs/getting-started/introduction",
             })}
-            <IconButton {...defaultColorModeToggleStyles} />
           </Flex>
         </Flex>
       </chakra.header>

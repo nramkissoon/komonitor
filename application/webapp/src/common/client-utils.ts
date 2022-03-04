@@ -1,6 +1,7 @@
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { DateTime } from "luxon";
+import { useRouter } from "next/router";
 
 export const env = {
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
@@ -52,3 +53,11 @@ export function getTimeString(offset: number, timestamp: number) {
     .setZone("UTC" + offsetString)
     .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
 }
+
+export const useAppBaseRoute = () => {
+  const router = useRouter();
+  const { teamId } = router.query;
+
+  if (teamId) return "/teams/" + teamId;
+  return "/app";
+};

@@ -69,7 +69,9 @@
     "next-transpile-modules": "^9.0.0",
     "luxon": "^2.1.1",
     "fuse.js": "^6.5.3",
-    "react-syntax-highlighter": "^15.4.5"
+    "react-syntax-highlighter": "^15.4.5",
+    "zod": "^3.11.6",
+    "@hookform/resolvers": "^2.8.8"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

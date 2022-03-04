@@ -10,8 +10,9 @@ import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import { useRouter } from "next/router";
 import React from "react";
-import { TeamProvider } from "../src/common/components/TeamProvider";
+import { TeamCheckoutNotCompleteModal } from "../src/common/components/Team-Checkout-Not-Complete-Modal";
 import theme from "../src/common/components/theme";
+import { useTeam } from "../src/modules/teams/client";
 
 export interface ExtendedPageContext extends NextPageContext {}
 
@@ -62,9 +63,9 @@ export default function App({
       <SessionProvider session={session}>
         {Component.requiresAuth ? (
           <Auth>
-            <TeamProvider>
+            <TeamSubscriptionChecker>
               <Component {...pageProps} />
-            </TeamProvider>
+            </TeamSubscriptionChecker>
           </Auth>
         ) : (
           <Component {...pageProps} />
@@ -79,15 +80,52 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   const isUser = session && session?.user; // get user if it exists on the session object
 
   const router = useRouter();
+  const { teamId } = router.query;
+
+  const { team, teamFetchError, teamIsLoading } = useTeam(teamId as string);
 
   React.useEffect(() => {
     if (status === "loading") return;
     if (!isUser) signIn();
   }, [isUser, status]);
 
-  if (isUser || router.pathname.startsWith("/demo")) {
+  // auth for teams
+  if (teamId && !teamIsLoading && !teamFetchError && team) {
+    return <React.Fragment>{children}</React.Fragment>;
+  } else if (teamId && !team && !teamIsLoading) {
+    // not authed for team
+    return <div>You do not have access to this team.</div>;
+  } else if (teamIsLoading) {
+    return <div></div>;
+  } else if (isUser || router.pathname.startsWith("/demo")) {
     return <React.Fragment>{children}</React.Fragment>;
   }
 
-  return <div></div>;
+  return <div>You do not have access to this page.</div>;
+};
+
+/*
+  Wrapper component for checking if a team has a valid subscription status.
+  This is a client side check, API's should check sub status on backend.
+  Shows a modal to prompt user to complete checkout or change payment method if invalid sub status.
+*/
+const TeamSubscriptionChecker = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const router = useRouter();
+  const { teamId } = router.query;
+
+  const { team, teamFetchError, teamIsLoading } = useTeam(teamId as string);
+  if ((!team && !teamIsLoading) || (team && team.subscription_status))
+    return <React.Fragment>{children}</React.Fragment>;
+  if (team && !team.subscription_status)
+    return (
+      <div>
+        {children}
+        <TeamCheckoutNotCompleteModal team={team} />
+      </div>
+    );
+  return <React.Fragment>{children}</React.Fragment>;
 };

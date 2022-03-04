@@ -1,10 +1,10 @@
 import { AlertInvocation, UptimeMonitorStatus } from "utils";
 import { config, ddbClient } from "./config";
 import {
+  getOwnerById,
   getPreviousAlertInvocationForMonitor,
   getStatusesForUptimeMonitor,
   getUptimeMonitorForUserByMonitorId,
-  getUserById,
   getUserWebhookSecret,
   writeAlertInvocation,
 } from "./dynamo-db";
@@ -122,8 +122,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
     ongoing: true,
   };
 
-  const user = await getUserById(ddbClient, config.userTableName, userId);
-  if (!user) {
+  const owner = await getOwnerById(userId);
+  if (!owner) {
     return;
   }
 
@@ -136,20 +136,24 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
         monitor,
         alert,
         triggeringStatuses,
-        user
+        owner
       );
       if (!emailSent) {
         alertTriggered = false;
       }
     }
     if (channelType === "Slack") {
-      const slackSent = await sendUptimeMonitorSlackAlert(monitor, alert, user);
+      const slackSent = await sendUptimeMonitorSlackAlert(
+        monitor,
+        alert,
+        owner
+      );
       if (!slackSent) {
         alertTriggered = false;
       }
     }
     if (channelType === "Webhook") {
-      const secret = await getUserWebhookSecret(user.id);
+      const secret = await getUserWebhookSecret(owner.id);
       if (!secret) {
         alertTriggered = false;
         console.log("no user secret, but webhook channel type provided");

@@ -14,21 +14,31 @@ import {
   getProjectForOwnerByProjectId,
   getProjectsForOwner,
 } from "../../../src/modules/projects/server/db";
+import {
+  getTeamById,
+  userIsMember,
+} from "../../../src/modules/teams/server/db";
 import { transferMultipleMonitorsToProject } from "../../../src/modules/uptime/monitor-db";
 import { getServicePlanProductIdForUser } from "../../../src/modules/user/user-db";
 
-const getOwnerId = (req: NextApiRequest, session: Session) => {
+const getOwnerIdAndTeam = async (req: NextApiRequest, session: Session) => {
   const userId = session.uid as string;
-  const { team } = req.query;
+  const { teamId } = req.query;
 
   // if team is defined it should be taken over userId since we are working in a team
-  const ownerId = team ? (team as string) : userId;
+  const ownerId = teamId ? (teamId as string) : userId;
 
-  if (ownerId === team) {
+  if (ownerId === teamId) {
     // check if userId in team members
     // throw if not valid
+    const team = await getTeamById(teamId);
+    if (!team) throw new Error(`team: ${teamId} not found in db`);
+    if (!userIsMember(userId, team)) {
+      throw new Error(`user is not member of team`);
+    }
+    return { ownerId, team };
   }
-  return ownerId;
+  return { ownerId };
 };
 
 const verifyDeletePermission = (
@@ -37,11 +47,11 @@ const verifyDeletePermission = (
   project: Project
 ) => {
   const userId = session.uid as string;
-  const { team } = req.query;
+  const { teamId } = req.query;
 
-  const ownerId = team ? (team as string) : userId;
+  const ownerId = teamId ? (teamId as string) : userId;
 
-  if (ownerId === team) {
+  if (ownerId === teamId) {
     // is team project
     // check if userId in team members and allowed to edit
     return true;
@@ -56,11 +66,11 @@ const verifyEditPermission = (
   project: Project
 ) => {
   const userId = session.uid as string;
-  const { team } = req.query;
+  const { teamId } = req.query;
 
-  const ownerId = team ? (team as string) : userId;
+  const ownerId = teamId ? (teamId as string) : userId;
 
-  if (ownerId === team) {
+  if (ownerId === teamId) {
     // check if userId in team members and allowed to edit
     return true;
   } else {
@@ -70,11 +80,11 @@ const verifyEditPermission = (
 
 const verifyCreatePermission = (req: NextApiRequest, session: Session) => {
   const userId = session.uid as string;
-  const { team } = req.query;
+  const { teamId } = req.query;
 
-  const ownerId = team ? (team as string) : userId;
+  const ownerId = teamId ? (teamId as string) : userId;
 
-  if (ownerId === team) {
+  if (ownerId === teamId) {
     // check if userId in team members and allowed to edit
     return true;
   } else {
@@ -111,12 +121,13 @@ const verifyProjectFromFormIsProject = (
 const createProjectFromFormData = (
   project: Project,
   req: NextApiRequest,
-  session: Session
+  session: Session,
+  ownerId: string
 ) => {
   const now = new Date().getTime();
   project.created_at = now;
   project.updated_at = now;
-  project.owner_id = getOwnerId(req, session);
+  project.owner_id = ownerId;
   return project;
 };
 
@@ -126,7 +137,8 @@ async function getHandler(
   session: Session
 ) {
   try {
-    const ownerId = getOwnerId(req, session);
+    const ownerIdTeam = await getOwnerIdAndTeam(req, session);
+    const ownerId = ownerIdTeam.ownerId;
     const projects = await getProjectsForOwner(
       ddbClient,
       env.PROJECTS_TABLE_NAME,
@@ -152,7 +164,8 @@ async function updateHandler(
       originalId: string;
     };
 
-    const ownerId = getOwnerId(req, session);
+    const ownerIdTeam = await getOwnerIdAndTeam(req, session);
+    const ownerId = ownerIdTeam.ownerId;
     const { originalId } = formData;
     const projectInDb = await getProjectForOwnerByProjectId(
       ddbClient,
@@ -232,25 +245,44 @@ async function createHandler(
       return;
     }
 
-    const ownerId = getOwnerId(req, session);
+    const ownerIdTeam = await getOwnerIdAndTeam(req, session);
+    const ownerId = ownerIdTeam.ownerId;
 
-    // TODO check this for teams
-    const productId = await getServicePlanProductIdForUser(
+    const projects = await getProjectsForOwner(
       ddbClient,
-      env.USER_TABLE_NAME,
+      env.PROJECTS_TABLE_NAME,
       ownerId
     );
 
-    if (productId === PLAN_PRODUCT_IDS.STARTER) {
-      const projects = await getProjectsForOwner(
+    if (ownerIdTeam.team) {
+      const team = ownerIdTeam.team;
+      const teamProductId = team.product_id;
+
+      if (!teamProductId) {
+        res.status(403);
+        return;
+      }
+
+      if (teamProductId === PLAN_PRODUCT_IDS.STARTER) {
+        if (
+          projects.length === getProjectAllowanceFromProductId(teamProductId)
+        ) {
+          res.status(403);
+          return;
+        }
+      }
+    } else {
+      const productId = await getServicePlanProductIdForUser(
         ddbClient,
-        env.PROJECTS_TABLE_NAME,
+        env.USER_TABLE_NAME,
         ownerId
       );
 
-      if (projects.length === getProjectAllowanceFromProductId(productId)) {
-        res.status(403);
-        return;
+      if (productId === PLAN_PRODUCT_IDS.STARTER) {
+        if (projects.length === getProjectAllowanceFromProductId(productId)) {
+          res.status(403);
+          return;
+        }
       }
     }
 
@@ -259,7 +291,12 @@ async function createHandler(
       return;
     }
 
-    const project = createProjectFromFormData(projectFromForm, req, session);
+    const project = createProjectFromFormData(
+      projectFromForm,
+      req,
+      session,
+      ownerId
+    );
     const created = await createProject(
       ddbClient,
       env.PROJECTS_TABLE_NAME,
@@ -271,6 +308,7 @@ async function createHandler(
     }
     return;
   } catch (err) {
+    console.log(err);
     res.status(500);
     return;
   }
@@ -282,7 +320,8 @@ async function deleteHandler(
   session: Session
 ) {
   try {
-    const ownerId = getOwnerId(req, session);
+    const ownerIdTeam = await getOwnerIdAndTeam(req, session);
+    const ownerId = ownerIdTeam.ownerId;
     const { projectId } = req.query;
     const projectInDb = await getProjectForOwnerByProjectId(
       ddbClient,

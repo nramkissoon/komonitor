@@ -108,7 +108,7 @@ export async function deleteUser(onError: (message: string) => void) {
     switch (response.status) {
       case 403:
         errorMessage =
-          "You must cancel your subscription before deleting your account.";
+          "You must cancel all of your  team subscriptions before deleting your account.";
         break;
       case 500:
         errorMessage =
@@ -122,61 +122,4 @@ export async function deleteUser(onError: (message: string) => void) {
     // ye mum was here
   }
   return true;
-}
-
-export async function createWebhookSecret() {
-  const response = await fetch(userWebhookSecretApiUrl, { method: "POST" });
-  if (response.ok) return true;
-  return false;
-}
-
-export async function deleteWebhookSecret(onError?: (message: string) => void) {
-  const response = await fetch(userWebhookSecretApiUrl, { method: "DELETE" });
-  if (response.ok) {
-  } else {
-    let errorMessage;
-    switch (response.status) {
-      case 500:
-        errorMessage =
-          "Internal server error. Please try again later or contact us.";
-        break;
-      default:
-        errorMessage = "An unknown error occurred. Please try again later.";
-    }
-    onError ? onError(errorMessage) : undefined;
-    return false;
-  }
-  return true;
-}
-
-export async function deleteSlackIntegration(
-  channelId: string,
-  teamId: string,
-  onSuccess: () => void,
-  onError: (message: string) => void
-) {
-  const response = await fetch(userSlackInstallationApiUrl, {
-    method: "DELETE",
-    body: JSON.stringify({ channelId: channelId, teamId: teamId }),
-  });
-  if (response.ok) {
-    onSuccess();
-    return true;
-  } else {
-    let errorMessage;
-    switch (response.status) {
-      case 403:
-        errorMessage =
-          "An error occurred while deleting existing Slack alerts.";
-        break;
-      case 500:
-        errorMessage =
-          "Internal server error. Please try again later or contact us.";
-        break;
-      default:
-        errorMessage = "An unknown error occurred. Please try again later.";
-    }
-    onError(errorMessage);
-    return false;
-  }
 }

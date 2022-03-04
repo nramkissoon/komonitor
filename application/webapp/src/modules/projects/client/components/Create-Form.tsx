@@ -9,9 +9,10 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Project } from "utils";
+import { useAppBaseRoute } from "../../../../common/client-utils";
 import { createProject, useProjects } from "../client";
 
 export type Inputs = Project;
@@ -21,6 +22,8 @@ export const CreateForm = ({
 }: {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const { teamId } = useRouter().query;
+  const baseRoute = useAppBaseRoute();
   const { projects, projectsFetchError, projectsIsLoading, mutateProjects } =
     useProjects();
   const errorToast = useToast();
@@ -56,7 +59,6 @@ export const CreateForm = ({
       owner_id: "",
     },
   });
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const existingProjectIds = projects
       ? projects.map((project) => project.project_id)
@@ -74,9 +76,10 @@ export const CreateForm = ({
       data,
       async () => {
         await mutateProjects();
-        Router.push("/app/projects/" + data.project_id);
+        Router.push(baseRoute + "/projects/" + data.project_id);
       },
-      postErrorToast
+      postErrorToast,
+      teamId as string
     );
   };
 

@@ -7,8 +7,8 @@ import AbortController from "abort-controller";
 import { MonitorTypes, UptimeMonitor, UptimeMonitorStatus } from "utils";
 import { config } from "./config";
 import {
+  getOwnerById,
   getPreviousAlertInvocationForMonitor,
-  getUserWebhookSecret,
   writeAlertInvocation,
   writeStatusToDB,
 } from "./db";
@@ -85,7 +85,8 @@ export const runJob = async (job: UptimeMonitor) => {
     const dbWriteResponse = await writeStatusToDB(status);
 
     if (webhook_url) {
-      const secret = await getUserWebhookSecret(owner_id);
+      const owner = await getOwnerById(owner_id);
+      const secret = owner?.webhook_secret;
 
       if (secret !== undefined) {
         console.log("sending webhook...");

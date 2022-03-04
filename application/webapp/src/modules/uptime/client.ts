@@ -1,9 +1,10 @@
+import { useRouter } from "next/router";
 import useSWR from "swr";
 import {
   CoreUptimeMonitor,
   UptimeCheckSupportedFrequenciesInMinutes,
   UptimeMonitor,
-  UptimeMonitorStatus
+  UptimeMonitorStatus,
 } from "utils";
 import { env } from "../../common/client-utils";
 import { useProjects } from "../projects/client/client";
@@ -27,8 +28,14 @@ export function useUptimeMonitors() {
 }
 
 export function useUptimeMonitorsForProject(projectId: string) {
+  const { teamId } = useRouter().query;
   const fetcher = (url: string, projectId: string) => {
-    const urlWithParams = url + "?" + "projectId=" + projectId;
+    const urlWithParams =
+      url +
+      "?" +
+      "projectId=" +
+      projectId +
+      (teamId ? `&teamId=${teamId}` : "");
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 
@@ -46,9 +53,13 @@ export function useUptimeMonitorsForProject(projectId: string) {
 }
 
 export function useUptimeMonitorsForMultipleProjects(projectIds: string[]) {
+  const { teamId } = useRouter().query;
   const fetcher = (url: string, ...ids: string[]) => {
     const urlWithParams =
-      url + "?" + ids.map((id) => "projectId=" + id).join("&");
+      url +
+      "?" +
+      ids.map((id) => "projectId=" + id).join("&") +
+      (teamId ? `&teamId=${teamId}` : "");
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 
@@ -220,12 +231,18 @@ export function useMonitorStatusHistory(monitorId: string, since: number) {
 
 export async function deleteMonitor(
   monitorId: string,
+  teamId?: string,
   onSuccess?: () => void,
   onError?: () => void
 ) {
-  const response = await fetch(monitorApiUrl + `?monitorId=${monitorId}`, {
-    method: "DELETE",
-  });
+  const response = await fetch(
+    monitorApiUrl +
+      `?monitorId=${monitorId}` +
+      (teamId ? `&teamId=${teamId}` : ""),
+    {
+      method: "DELETE",
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
     return true;
@@ -297,18 +314,22 @@ function createCoreMonitorFromFormData(formData: Inputs) {
 
 export async function createMonitor(
   formData: any,
+  teamId?: string,
   onSuccess?: () => void,
   onError?: (message: string) => void
 ) {
   const monitor = createCoreMonitorFromFormData(formData);
 
-  const response = await fetch(monitorApiUrl, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(monitor),
-  });
+  const response = await fetch(
+    monitorApiUrl + (teamId ? `?teamId=${teamId}` : ""),
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(monitor),
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {
@@ -344,17 +365,21 @@ function createUpdatedMonitorFromFormData(formData: any) {
 
 export async function updateMonitor(
   formData: any,
+  teamId?: string,
   onSuccess?: () => void,
   onError?: (message: string) => void
 ) {
   const monitor = createUpdatedMonitorFromFormData(formData);
-  const response = await fetch(monitorApiUrl, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(monitor),
-  });
+  const response = await fetch(
+    monitorApiUrl + (teamId ? `?teamId=${teamId}` : ""),
+    {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(monitor),
+    }
+  );
   if (response.ok) {
     onSuccess ? onSuccess() : null;
   } else {

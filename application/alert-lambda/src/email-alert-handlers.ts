@@ -1,5 +1,5 @@
 import Email from "email-templates";
-import { Alert, UptimeMonitor, UptimeMonitorStatus, User } from "utils";
+import { Alert, Team, UptimeMonitor, UptimeMonitorStatus, User } from "utils";
 import {
   convertUptimeMonitorStatusesToStatusesWithReadableTimeStampAndStatusCode,
   emailTransporter,
@@ -10,10 +10,10 @@ export async function sendUptimeMonitorAlertEmail(
   monitor: UptimeMonitor,
   alert: Alert,
   statuses: UptimeMonitorStatus[],
-  user: User
+  owner: User | Team
 ): Promise<boolean> {
   try {
-    const tz = user.tz ?? "Etc/GMT";
+    const tz = (owner as any).tz ? (owner as any).tz : "Etc/GMT";
     const statusesForTemplate =
       convertUptimeMonitorStatusesToStatusesWithReadableTimeStampAndStatusCode(
         tz,

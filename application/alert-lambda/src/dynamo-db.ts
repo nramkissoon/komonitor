@@ -9,6 +9,7 @@ import {
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   AlertInvocation,
+  Team,
   UptimeMonitor,
   UptimeMonitorStatus,
   User,
@@ -149,6 +150,49 @@ export async function getUserById(
     return;
   }
 }
+
+export const getTeamById = async (id: string): Promise<Team | undefined> => {
+  try {
+    const queryCommandInput: QueryCommandInput = {
+      TableName: config.userTableName,
+      KeyConditionExpression: "pk = :partitionkeyval AND sk = :sortkeyval",
+      ExpressionAttributeValues: {
+        ":partitionkeyval": { S: id },
+        ":sortkeyval": { S: id },
+      },
+    };
+    const response = await ddbClient.send(new QueryCommand(queryCommandInput));
+    if (response.Count && response.Count > 0 && response.Items) {
+      const team = unmarshall(response.Items[0]) as Team;
+      return team;
+    }
+  } catch (err) {
+    return;
+  }
+};
+
+export const getWebhookSecretFromOwnerObj = (owner: Team | User) => {
+  if (owner.product_id && owner.product_id !== "FREE") {
+    // must be paid plan
+    return owner.webhook_secret;
+  }
+  return;
+};
+
+// Need to check for both user and strings because of brain dead db data structure
+export const getOwnerById = async (
+  id: string
+): Promise<User | Team | undefined> => {
+  const user = getUserById(ddbClient, config.userTableName, id);
+  const team = getTeamById(id);
+
+  const u = await user;
+  if (u !== undefined) return u;
+  const t = await team;
+  if (t !== undefined) return t;
+
+  return;
+};
 
 export async function writeAlertInvocation(
   ddbClient: DynamoDBClient,

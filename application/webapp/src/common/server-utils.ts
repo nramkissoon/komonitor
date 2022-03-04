@@ -25,6 +25,8 @@ export const env = {
   UPTIME_MONITOR_TABLE_PID_GSI_NAME: process.env
     .UPTIME_MONITOR_TABLE_PID_GSI_NAME as string,
   PROJECTS_TABLE_NAME: process.env.PROJECTS_TABLE_NAME as string,
+  SLACK_NEW_USER_NOTIFICATION_BOT_WEBHOOK: process.env
+    .SLACK_NEW_USER_NOTIFICATION_BOT_WEBHOOK as string,
 };
 
 export const ddbClient = new DynamoDBClient({

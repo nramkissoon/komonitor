@@ -18,7 +18,7 @@ import Fuse from "fuse.js";
 import Link from "next/link";
 import React from "react";
 import { Project, UptimeMonitor } from "utils";
-import { timeAgo } from "../../common/client-utils";
+import { timeAgo, useAppBaseRoute } from "../../common/client-utils";
 import { AppSubNav } from "../../common/components/App-Sub-Nav";
 import { LoadingSpinner } from "../../common/components/Loading-Spinner";
 import { useProjects } from "../projects/client/client";
@@ -47,9 +47,10 @@ const ProjectCard = ({
   project: Project;
   uptimeMonitors: UptimeMonitor[];
 }) => {
+  const baseRoute = useAppBaseRoute();
   return (
     <GridItem colSpan={1}>
-      <Link href={"/app/projects/" + project.project_id} passHref>
+      <Link href={baseRoute + "/projects/" + project.project_id} passHref>
         <Box
           bg={useColorModeValue("white", "gray.950")}
           p="5"
@@ -161,11 +162,7 @@ const ProjectsTab = () => {
       {!projectsIsLoading && projects && projects.length === 0 && (
         <Box textAlign="center" fontWeight="medium" p="2em" fontSize="3xl">
           <chakra.p>No projects have been created.</chakra.p>
-          <chakra.span
-            fontWeight="normal"
-            fontSize="2xl"
-            color={useColorModeValue("blue.400", "blue.300")}
-          >
+          <chakra.span fontWeight="normal" fontSize="2xl" color="blue.400">
             Create a new project to get started.
           </chakra.span>
         </Box>
@@ -198,17 +195,22 @@ const ProjectsTab = () => {
 };
 
 export function AppIndexPage() {
+  const baseRoute = useAppBaseRoute();
   return (
     <>
       <AppSubNav
         links={[
-          { isSelected: true, href: "/app", text: "Projects" },
+          { isSelected: true, href: baseRoute, text: "Projects" },
           {
             isSelected: false,
-            href: "/app/integrations",
+            href: baseRoute + "/integrations",
             text: "Integrations",
           },
-          { isSelected: false, href: "/app/settings", text: "Settings" },
+          {
+            isSelected: false,
+            href: baseRoute + "/settings",
+            text: "Settings",
+          },
         ]}
       />
 

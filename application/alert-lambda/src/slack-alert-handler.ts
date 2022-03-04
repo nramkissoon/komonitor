@@ -1,5 +1,5 @@
 import fetch from "isomorphic-fetch";
-import { Alert, UptimeMonitor, User } from "utils";
+import { Alert, Team, UptimeMonitor, User } from "utils";
 import { regionToLocationStringMap } from "./config";
 
 const createUptimeMonitorSlackAlertMessage = (
@@ -45,36 +45,74 @@ const getTeamChannelIdFromCompoundKey = (key: string) => {
   };
 };
 
+const ownerIsTeam = (owner: User | Team): owner is Team => {
+  return owner.type === "TEAM";
+};
+
+const getWebhookForTeam = ({
+  team,
+  channel,
+  slackTeam,
+}: {
+  team: Team;
+  channel: string;
+  slackTeam: string;
+}) => {
+  const matchingInstallations = team.integrations.filter((i) => {
+    if (i.type === "Slack") {
+      return (
+        i.data.incomingWebhook?.channelId === channel &&
+        i.data.team?.id === slackTeam
+      );
+    }
+    return false;
+  });
+
+  if (matchingInstallations.length === 0) return null;
+  else return matchingInstallations[0].data.incomingWebhook?.url;
+};
+
 export const sendUptimeMonitorSlackAlert = async (
   monitor: UptimeMonitor,
   alert: Alert,
-  user: User
+  owner: User | Team
 ): Promise<boolean> => {
   try {
-    if (!user.slack_installations || user.slack_installations.length === 0) {
-      throw new Error(`no slack installation for user ${user.id}`);
-    }
-
     if (
       !alert.recipients ||
       !alert.recipients.Slack ||
       alert.recipients.Slack.length === 0
     ) {
-      throw new Error(`no slack alert for user ${user.id}`);
+      throw new Error(`no slack alert for owner ${owner.id}`);
     }
 
     const slackTeamChannelId = getTeamChannelIdFromCompoundKey(
       alert.recipients.Slack[0]
     );
 
-    const webhook = user.slack_installations.filter(
-      (i) =>
-        i.incomingWebhook?.channelId === slackTeamChannelId.channel &&
-        i.team?.id === slackTeamChannelId.team
-    )[0].incomingWebhook?.url;
+    let webhook;
+    if (ownerIsTeam(owner)) {
+      webhook = getWebhookForTeam({
+        team: owner,
+        channel: slackTeamChannelId.channel,
+        slackTeam: slackTeamChannelId.team,
+      });
+    } else {
+      if (
+        !owner.slack_installations ||
+        owner.slack_installations.length === 0
+      ) {
+        throw new Error(`no slack installation for user ${owner.id}`);
+      }
+      webhook = owner.slack_installations.filter(
+        (i) =>
+          i.incomingWebhook?.channelId === slackTeamChannelId.channel &&
+          i.team?.id === slackTeamChannelId.team
+      )[0].incomingWebhook?.url;
+    }
 
     if (!webhook) {
-      throw new Error(`no Slack webhook for user ${user.id}`);
+      throw new Error(`no Slack webhook for owner ${owner.id}`);
     }
 
     const response = await fetch(webhook, {
@@ -87,7 +125,7 @@ export const sendUptimeMonitorSlackAlert = async (
 
     if (!response.ok) {
       throw new Error(
-        `failed to send alert for ${user.id} ${monitor.monitor_id}`
+        `failed to send alert for ${owner.id} ${monitor.monitor_id}`
       );
     }
 

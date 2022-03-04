@@ -75,7 +75,7 @@ export function ComingSoon() {
   const features = Copy.ComingSoon.List;
   return (
     <Flex mb="4em" flexDir="column" alignItems="center" as="section">
-      <chakra.h1
+      <chakra.h2
         textAlign="center"
         fontSize="5xl"
         fontWeight="extrabold"
@@ -85,7 +85,7 @@ export function ComingSoon() {
       >
         New Features Coming Soon{" "}
         <chakra.span fontWeight="normal">🚀</chakra.span>
-      </chakra.h1>
+      </chakra.h2>
       <SimpleGrid
         columns={{ base: 1, sm: 2, md: 2, lg: 3 }}
         spacingX={{ base: 16, lg: 24 }}
@@ -129,14 +129,6 @@ export function ComingSoon() {
           }
         />
       </SimpleGrid>
-      <chakra.h2
-        textAlign="center"
-        fontSize="xl"
-        fontWeight="bold"
-        color={useColorModeValue("gray.800", "gray.100")}
-        lineHeight="shorter"
-        mb="1.6em"
-      ></chakra.h2>
     </Flex>
   );
 }

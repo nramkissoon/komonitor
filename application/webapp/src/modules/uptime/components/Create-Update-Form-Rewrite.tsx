@@ -154,6 +154,8 @@ function createHttpMethodOptions() {
 export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   let { product_id, currentMonitorAttributes, closeForm } = props;
 
+  const { teamId } = useRouter().query;
+
   const placeholders = React.useMemo(() => {
     return createFormPlaceholdersFromMonitor(
       currentMonitorAttributes
@@ -312,6 +314,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
     if (createNewMonitor && Object.keys(errors).length === 0) {
       await createMonitor(
         data,
+        teamId as string,
         async () => {
           await mutate();
           closeForm();
@@ -327,6 +330,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
       augmentedValues.last_updated = currentMonitorAttributes?.last_updated;
       await updateMonitor(
         augmentedValues,
+        teamId as string,
         async () => {
           await mutate();
           closeForm();

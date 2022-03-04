@@ -50,17 +50,20 @@ export type TeamPermissionLevel = "admin" | "edit";
 
 export interface TeamMember {
   user_id: string;
+  email: string;
+  name?: string;
   permission_level: TeamPermissionLevel;
 }
 
 export interface TeamIntegration {
-  type: "slack";
+  type: "Slack";
   data: Installation;
 }
 export interface TeamInvite {
   team_id_invite_code_composite_key: string;
   expiration: number;
   email: string;
+  permission_level: TeamPermissionLevel;
 }
 
 export const createTeamIdInviteCodeCompositeKey = (teamId: string) => {
@@ -75,7 +78,11 @@ export const createTeamIdInviteCodeCompositeKey = (teamId: string) => {
   return key;
 };
 
-export const createNewInvite = (email: string, teamId: string): TeamInvite => {
+export const createNewInvite = (
+  email: string,
+  teamId: string,
+  permission: TeamPermissionLevel
+): TeamInvite => {
   const exp = new Date();
   exp.setDate(exp.getDate() + 7);
   return {
@@ -83,6 +90,7 @@ export const createNewInvite = (email: string, teamId: string): TeamInvite => {
       createTeamIdInviteCodeCompositeKey(teamId),
     expiration: exp.getTime(),
     email: email,
+    permission_level: permission,
   };
 };
 

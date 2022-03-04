@@ -71,11 +71,15 @@ export function DeleteAccountDialog(props: DeleteAccountDialogProps) {
         </AlertDialogHeader>
         <AlertDialogBody>
           <Text mb="1em">
-            Are you sure? Your account and associated monitors/alerts will be{" "}
+            Are you sure? Your account and associated projects/monitors will be{" "}
             <chakra.span color="red.500" fontSize="lg" fontWeight="semibold">
               permanently
             </chakra.span>{" "}
             deleted. You cannot undo this action afterwards.
+          </Text>
+          <Text mb="1em">
+            Note: You cannot delete your account if you have existing team
+            subscriptions. You must cancel those subscriptions first.
           </Text>
           <Text>
             Enter{" "}

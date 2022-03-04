@@ -19,12 +19,14 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { AlertInvocation, UptimeMonitor } from "utils";
-import { regionToLocationStringMap } from "../../../common/client-utils";
+import {
+  regionToLocationStringMap,
+  useAppBaseRoute,
+} from "../../../common/client-utils";
 import {
   DeleteDialog,
   useDeleteDialog,
 } from "../../../common/components/Delete-Dialog";
-import { useTeam } from "../../../common/components/TeamProvider";
 import { useAlertInvocationsAllTime } from "../../alerts/client";
 import { InvocationTable } from "../../alerts/components/Invocation-Table";
 import { PLAN_PRODUCT_IDS } from "../../billing/plans";
@@ -101,7 +103,7 @@ export function OverviewPage(props: OverviewPageProps) {
   const { name, url, monitor_id, region, alert } = monitor;
 
   const router = useRouter();
-  const { team } = useTeam();
+  const baseRoute = useAppBaseRoute();
   const { projectId } = router.query;
 
   const {
@@ -161,8 +163,7 @@ export function OverviewPage(props: OverviewPageProps) {
         itemType="monitor"
         onSuccess={() =>
           router.push(
-            ((`/${team ? team : "app"}/projects/` + projectId) as string) +
-              "/uptime"
+            ((`${baseRoute}/projects/` + projectId) as string) + "/uptime"
           )
         }
       />

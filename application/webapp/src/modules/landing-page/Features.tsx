@@ -100,7 +100,7 @@ export function Features() {
   const { domRef: headerRef, isVisible: headerIsVisible } = useFadeInView();
   return (
     <Flex flexDir="column" alignItems="center" as="section">
-      <chakra.h1
+      <chakra.h2
         ref={headerRef as RefObject<HTMLHeadingElement>}
         textAlign="center"
         fontSize="5xl"
@@ -109,9 +109,9 @@ export function Features() {
         lineHeight="shorter"
         mb=".1em"
       >
-        Modern Features and Tools
-      </chakra.h1>
-      <chakra.h2
+        Modern Monitoring and Alerting
+      </chakra.h2>
+      <chakra.h3
         fontSize="2xl"
         fontWeight="bold"
         textAlign="center"
@@ -120,12 +120,8 @@ export function Features() {
         mx="auto"
         color={useColorModeValue("gray.600", "gray.400")}
       >
-        Know when things go wrong,{" "}
-        <chakra.span color="red.500" fontWeight="extrabold">
-          before
-        </chakra.span>{" "}
-        your users do.
-      </chakra.h2>
+        Downtime happens. Know when things go wrong, before your users do.
+      </chakra.h3>
       {Feature({
         header: Copy.Features.Uptime.Header,
         subheader: Copy.Features.Uptime.Subheader,

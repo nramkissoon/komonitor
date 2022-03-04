@@ -18,6 +18,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Pagination from "@choc-ui/paginator";
+import { useRouter } from "next/router";
 import React, { forwardRef, LegacyRef } from "react";
 import {
   Column,
@@ -158,6 +159,8 @@ export function OverviewTable(props: TableProps) {
   const openDeleteDialog = (name: string, id: string) =>
     setDeleteMonitor({ name: name, monitorId: id });
 
+  const { teamId } = useRouter().query;
+
   // Setup for table
   const data = React.useMemo(() => {
     return createMonitorDataWithStatus(props.statusesMap, props.monitors).map(
@@ -269,13 +272,14 @@ export function OverviewTable(props: TableProps) {
       p="1.5em"
       mb="2em"
     >
-      {MonitorDeleteDialog({
-        isOpen: deleteMonitor.monitorId !== undefined,
-        name: deleteMonitor.name as string,
-        monitorId: deleteMonitor.monitorId as string,
-        onClose: onCloseDeleteDialog,
-        leastDestructiveRef: cancelRef,
-      })}
+      <MonitorDeleteDialog
+        isOpen={deleteMonitor.monitorId !== undefined}
+        name={deleteMonitor.name as string}
+        monitorId={deleteMonitor.monitorId as string}
+        onClose={onCloseDeleteDialog}
+        leastDestructiveRef={cancelRef}
+        teamId={teamId as string}
+      />
       {GlobalFilter({ globalFilter, setGlobalFilter })}
       <Box
         overflow="auto"
