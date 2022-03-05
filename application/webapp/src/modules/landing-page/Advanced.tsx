@@ -159,7 +159,7 @@ export const Advanced = () => {
         borderRadius="lg"
         p="1.5em"
         mb="10px"
-        maxW="4xl"
+        maxW="7xl"
       >
         <Box
           overflow="auto"
@@ -203,3 +203,109 @@ export const Advanced = () => {
     </Flex>
   );
 };
+
+const codeString = `
+{
+  "type": "uptime-monitor-status",
+  "data": {
+    "monitor_id": "up-0c5c19a8-e52c-45fb-b86b-b25de7c74db1",
+    "timestamp": 1646434754040,
+    "status": "up",
+    "response": {
+      "timings": {
+        "start": 1646434753600,
+        "socket": 1646434753600,
+        "lookup": 1646434753620,
+        "connect": 1646434753659,
+        "secure_connect": 1646434753680,
+        "upload": 1646434753680,
+        "response": 1646434753740,
+        "end": 1646434753741,
+        "phases": {
+          "wait": 0,
+          "dns": 20,
+          "tcp": 39,
+          "tls": 21,
+          "request": 0,
+          "first_byte": 60,
+          "download": 1,
+          "total": 141
+        }
+      },
+      "body": "Body content over 2000 characters...",
+      "headers": {
+        "date": "Fri, 04 Mar 2022 22:59:13 GMT",
+        "expires": "-1",
+        "cache-control": "private, max-age=0",
+        "content-type": "text/html; charset=ISO-8859-1",
+        "p3p": "CP=\"This is not a P3P policy! See g.co/p3phelp for more info.\"",
+        "content-encoding": "gzip",
+        "server": "gws",
+        "x-xss-protection": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "set-cookie": [
+          "1P_JAR=2022-03-04-22; expires=Sun, 03-Apr-2022 22:59:13 GMT; path=/; domain=.google.com; Secure",
+          "NID=511=nLImcbc5Q6UXstGHTQfEQN3YaPtQ9-j9Bx5W1FBC0EZQPVRghyCQ-wXZj9Bb4z_1sowoQSP9y85AuJ5hefeY1Izk6ttJpkl_g2rZEJ_F_sniz1nb76mgu_fWZoaUInRgQ6NdTan7XRGFvYsMNhxlM1kfmUxXw8ODKd1ioqf0zEA; expires=Sat, 03-Sep-2022 22:59:13 GMT; path=/; domain=.google.com; HttpOnly"
+        ],
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"",
+        "connection": "close",
+        "transfer-encoding": "chunked"
+      },
+      "redirect_urls": [
+        "https://www.google.com/"
+      ],
+      "request_url": "https://google.com/",
+      "retry_count": 0,
+      "ip": "142.250.31.147",
+      "url": "https://www.google.com/",
+      "status_code": 200,
+      "status_message": "OK",
+      "is_from_cache": false,
+      "aborted": false,
+      "complete": true
+    },
+    "request": {
+      "method": "GET",
+      "headers": {
+        "user-agent": "komonitor",
+        "accept-encoding": "gzip, deflate, br"
+      },
+      "decompress": true,
+      "follow_redirect": true,
+      "is_stream": false,
+      "response_type": "text",
+      "resolve_body_only": false,
+      "max_redirects": 10,
+      "prefix_url": "",
+      "method_rewriting": true,
+      "ignore_invalid_cookies": false,
+      "http_2": false,
+      "allow_get_body": true,
+      "cache_options": {},
+      "url": "https://www.google.com/",
+      "username": "",
+      "password": "",
+      "timeout": {
+        "response": 5000
+      }
+    },
+    "monitor_snapshot": {
+      "last_updated": 1646434260649,
+      "http_parameters": {
+        "method": "GET",
+        "follow_redirects": true
+      },
+      "created_at": 1646433429943,
+      "up_condition_checks": [],
+      "frequency": 30,
+      "monitor_id": "up-0c5c19a8-e52c-45fb-b86b-b25de7c74db1",
+      "url": "https://google.com",
+      "name": "google-test",
+      "owner_id": "paid-team",
+      "webhook_url": "https://webhook.site/4c8b0b8b-2b26-485e-9a76-98d5a26407a2",
+      "project_id": "zero-created",
+      "region": "us-east-1"
+    }
+  }
+}
+`;

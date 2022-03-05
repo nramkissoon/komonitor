@@ -167,9 +167,13 @@ export const getOwnerById = async (
   const team = getTeamById(id);
 
   const u = await user;
-  if (u !== undefined) return u;
+  if (u !== undefined) {
+    return u;
+  }
   const t = await team;
-  if (t !== undefined) return t;
+  if (t !== undefined) {
+    return t;
+  }
 
   return;
 };

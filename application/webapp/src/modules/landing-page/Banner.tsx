@@ -6,6 +6,7 @@ import {
   HStack,
   Icon,
   Image,
+  SlideFade,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -102,41 +103,44 @@ export function Banner() {
         >
           <SVG />
         </Box>
-        <Flex
-          justifyContent="center"
-          position="relative"
-          py={["0", null, null, null, null, "60px"]}
-          pl={["0", null, null, null, null, "40px"]}
-          pr={["0", null, null, null, null, "5vw"]}
-        >
-          <Box
-            bg={useColorModeValue("gray.700", "gray.200")}
-            borderRadius="xl"
-            shadow={"lg"}
-            pt="5px"
-            pb="10px"
-            px="10px"
-            w={["3xl", null, "4xl", null, "5xl", "inherit"]}
-            mt={["40px", null, null, null, null, "inherit"]}
-            mx="2em"
+
+        <SlideFade in={true} offsetY="100px">
+          <Flex
+            justifyContent="center"
+            position="relative"
+            py={["0", null, null, null, null, "60px"]}
+            pl={["0", null, null, null, null, "40px"]}
+            pr={["0", null, null, null, null, "5vw"]}
           >
-            <Box>
-              <HStack mb="5px" ml="5px">
-                {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
-                {CircleIcon("red.400")}
-              </HStack>
-              <Image
-                rounded="md"
-                src={"/banner.png"}
-                width="1100px"
-                css={{
-                  imageRendering: "-webkit-optimize-contrast",
-                }}
-                alt="Komonitor App Dashboard"
-              />
+            <Box
+              bg={useColorModeValue("gray.700", "gray.200")}
+              borderRadius="xl"
+              shadow={"lg"}
+              pt="5px"
+              pb="10px"
+              px="10px"
+              w={["3xl", null, "4xl", null, "5xl", "inherit"]}
+              mt={["40px", null, null, null, null, "inherit"]}
+              mx="2em"
+            >
+              <Box>
+                <HStack mb="5px" ml="5px">
+                  {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
+                  {CircleIcon("red.400")}
+                </HStack>
+                <Image
+                  rounded="md"
+                  src={"/banner.png"}
+                  width="1100px"
+                  css={{
+                    imageRendering: "-webkit-optimize-contrast",
+                  }}
+                  alt="Komonitor App Dashboard"
+                />
+              </Box>
             </Box>
-          </Box>
-        </Flex>
+          </Flex>
+        </SlideFade>
       </Box>
     </Flex>
   );
