@@ -1,3 +1,40 @@
+☐ finish resume
+☐ find 20 companies
+✔ design analytics @done(22-03-07 14:15)
+
+Teams:
+    ☐ view permssion
+    ☐ check for edit permission in project, monitor apis
+    ☐ api and webhook secrets not seen if view
+
+Landing: 
+    ☐ add syntax highlighter for json
+    ☐ design and implement team section
+
+Discord:
+    ☐ design for user and team
+    ☐ implement
+    ☐ test
+
+Status Pages:
+    ☐ status page table
+    ☐ scope private, public
+    ☐ define core fields, notifs, etc 
+
+ez: 
+    ☐ follow redirect default
+
+Marketing: 
+    ☐ redesign blog section
+    ☐ write alarm post
+    ☐ add to reddit saas group
+
+App header: 
+    ☐ redesign
+
+Project overview:
+    ☐ redesign, quick actions, go to
+    
 
 Uptime HTTP:
     ☐  design dashboard to show HTTP settings + alerts
@@ -12,14 +49,7 @@ Usage Tab:
     ☐ monitor usage
     ☐ unlock x by upgrading
 
-Landing: 
-    ☐ add syntax highlighter
-    ☐ add teams section -> email notif
 
-Teams:
-    ☐ view permssion
-    ☐ check for edit permission in project, monitor apis
-    ☐ api and webhook secrets not seen if view
 
     
 
@@ -32,10 +62,7 @@ Demo:
     ☐  create demo project, monitors, and api for getting resources
 
 ☐ scope status pages
-Status Pages:
-    ☐ status page table
-    ☐ scope private, public
-    ☐ define core fields, 
+
 
 ☐  axiom logging
 
