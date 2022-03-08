@@ -101,7 +101,7 @@ export const MDXComponents = {
   BlogCta: (props: any & { ctaMessage: string }) => (
     <Box
       mt="5em"
-      bg={useColorModeValue("gray.700", "gray.800")}
+      bg={useColorModeValue("gray.700", "gray.950")}
       borderRadius="2xl"
       p={["1em", null, "1.5em"]}
       shadow="lg"
@@ -112,7 +112,7 @@ export const MDXComponents = {
       <Flex
         flexDir="column"
         alignItems="center"
-        bg={useColorModeValue("white", "gray.800")}
+        bg={useColorModeValue("white", "gray.950")}
         borderRadius="xl"
         p="1.5em"
       >

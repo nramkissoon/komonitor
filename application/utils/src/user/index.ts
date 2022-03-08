@@ -46,7 +46,7 @@ export interface User
   teams?: string[];
 }
 
-export type TeamPermissionLevel = "admin" | "edit";
+export type TeamPermissionLevel = "admin" | "edit" | "view";
 
 export interface TeamMember {
   user_id: string;

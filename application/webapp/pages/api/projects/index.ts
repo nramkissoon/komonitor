@@ -16,6 +16,7 @@ import {
 } from "../../../src/modules/projects/server/db";
 import {
   getTeamById,
+  userCanEdit,
   userIsMember,
 } from "../../../src/modules/teams/server/db";
 import { transferMultipleMonitorsToProject } from "../../../src/modules/uptime/monitor-db";
@@ -158,6 +159,7 @@ async function updateHandler(
   session: Session
 ) {
   try {
+    const userId = session.uid as string;
     const formData = req.body as {
       updateType: keyof Project;
       newValue: unknown;
@@ -174,7 +176,7 @@ async function updateHandler(
       originalId
     );
 
-    if (!verifyEditPermission(req, session, projectInDb)) {
+    if (ownerIdTeam.team && !userCanEdit(userId, ownerIdTeam.team)) {
       res.status(403);
       return;
     }
@@ -239,6 +241,7 @@ async function createHandler(
   session: Session
 ) {
   try {
+    const userId = session.uid as string;
     const projectFromForm = req.body;
     if (!verifyCreatePermission(req, session)) {
       res.status(403);
@@ -257,6 +260,11 @@ async function createHandler(
     if (ownerIdTeam.team) {
       const team = ownerIdTeam.team;
       const teamProductId = team.product_id;
+
+      if (!userCanEdit(userId, ownerIdTeam.team)) {
+        res.status(403);
+        return;
+      }
 
       if (!teamProductId) {
         res.status(403);
@@ -320,6 +328,7 @@ async function deleteHandler(
   session: Session
 ) {
   try {
+    const userId = session.uid as string;
     const ownerIdTeam = await getOwnerIdAndTeam(req, session);
     const ownerId = ownerIdTeam.ownerId;
     const { projectId } = req.query;
@@ -329,7 +338,7 @@ async function deleteHandler(
       ownerId,
       projectId as string
     );
-    if (!verifyDeletePermission(req, session, projectInDb)) {
+    if (ownerIdTeam.team && !userCanEdit(userId, ownerIdTeam.team)) {
       res.status(403);
       return;
     }

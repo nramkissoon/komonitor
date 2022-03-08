@@ -336,8 +336,7 @@ export async function createMonitor(
     let errorMessage;
     switch (response.status) {
       case 403:
-        errorMessage =
-          "Monitor limit reached. Please consider deleting an existing monitor or upgrading your account.";
+        errorMessage = "You do not have permission to perform this action.";
         break;
       case 400:
         errorMessage = "Invalid monitor attributes sent to server.";

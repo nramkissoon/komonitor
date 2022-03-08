@@ -61,15 +61,8 @@ function PageContainer(props: PageContainerProps) {
     <>
       <Seo title={title} description={description} />
       <Header />
-      <Box
-        as="main"
-        className="main-content"
-        w="full"
-        maxW="5xl"
-        mx="auto"
-        mb="4em"
-      >
-        <Box display={{ md: "flex" }}>
+      <Box as="main" className="main-content" w="full" mx="auto" mb="4em">
+        <Box display={{ md: "flex" }} maxW="6xl" mx="auto">
           <Box flex="1" minW="0">
             <Box id="content" px={5} mx="auto" minH="76vh">
               <Flex>
@@ -79,7 +72,7 @@ function PageContainer(props: PageContainerProps) {
                   px="4em"
                   mt="10"
                   py="1.5em"
-                  bg={useColorModeValue("white", "gray.950")}
+                  bg={useColorModeValue("gray.50", "gray.900")}
                   shadow="sm"
                   rounded="xl"
                 >

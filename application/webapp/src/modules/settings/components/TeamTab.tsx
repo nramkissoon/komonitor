@@ -578,7 +578,7 @@ const AddTeamInviteForm = ({
     formState: { isSubmitting, errors },
   } = useForm<TeamInviteInputs>({
     resolver: zodResolver(teamInvitationInputSchema),
-    defaultValues: { permission: "edit" },
+    defaultValues: { permission: "view" },
   });
   const { teamId } = useRouter().query;
 
@@ -646,7 +646,8 @@ const AddTeamInviteForm = ({
                       >
                         <FormLabel>Permission level:</FormLabel>
                         <Stack direction="row">
-                          <Radio value={"edit"}>Edit</Radio>
+                          <Radio value={"view"}>Can View</Radio>
+                          <Radio value={"edit"}>Can Edit</Radio>
                         </Stack>
                         <chakra.div color="red.400" mt="6px" fontSize={"md"}>
                           {errors.permission?.message}

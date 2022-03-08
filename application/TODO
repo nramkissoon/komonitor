@@ -3,13 +3,17 @@
 ✔ design analytics @done(22-03-07 14:15)
 
 Teams:
-    ☐ view permssion
-    ☐ check for edit permission in project, monitor apis
-    ☐ api and webhook secrets not seen if view
+    ✔ view permssion @done(22-03-08 12:18)
+    ✔ check for edit permission in project, monitor apis @done(22-03-08 12:13)
+    ✔ api and webhook secrets not seen if view @done(22-03-08 12:16)
+    ✘ verify webhook hidden and viewer can only view @cancelled(22-03-08 13:03)
+    ✔ form and invite updates @done(22-03-08 13:05)
+    ✔ verify @done(22-03-08 13:56)
+    ☐ permission docs
 
 Landing: 
     ✔ add syntax highlighter for json @done(22-03-08 11:20)
-    ☐ design and implement team section
+    ☐ design and implement team section -> depend on view perm
 
 Discord:
     ☐ design for user and team
@@ -25,7 +29,7 @@ ez:
     ✔ follow redirect default @done(22-03-08 10:01)
 
 Marketing: 
-    ☐ redesign blog section
+    ✔ redesign blog section @done(22-03-08 12:01)
     ☐ write alarm post
     ☐ add to reddit saas group
 

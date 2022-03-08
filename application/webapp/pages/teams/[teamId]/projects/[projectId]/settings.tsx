@@ -84,8 +84,7 @@ function DeleteProjectDialog(props: DeleteProjectDialogProps) {
         () => {
           router.push(baseRoute);
         },
-        () =>
-          postErrorToast("An unknown error occurred. Please try again later."),
+        (message: string) => postErrorToast(message),
         teamId as string
       );
     }

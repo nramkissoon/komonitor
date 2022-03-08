@@ -80,8 +80,7 @@ function DeleteProjectDialog(props: DeleteProjectDialogProps) {
         () => {
           router.push("/app");
         },
-        () =>
-          postErrorToast("An unknown error occurred. Please try again later.")
+        (message: string) => postErrorToast(message)
       );
     }
   };

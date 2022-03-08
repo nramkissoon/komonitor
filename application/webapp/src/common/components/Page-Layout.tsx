@@ -1,6 +1,5 @@
 import { Box } from "@chakra-ui/react";
 import { NextSeoProps } from "next-seo";
-import React from "react";
 import { AppFooter } from "./App-Footer";
 import { AppHeader } from "./App-Header";
 import { Footer } from "./Footer";
@@ -23,7 +22,7 @@ export function PageLayout(props: PageLayoutProps & any) {
   return (
     <>
       <Seo {...seoProps} />
-      <Box display="flex" flexDir="column" minH="95vh" p={0} m={0}>
+      <Box display="flex" flexDir="column" minH="99vh" p={0} m={0}>
         {header}
         {!full && (
           <PageContainer isAppPage={isAppPage}>{props.children}</PageContainer>

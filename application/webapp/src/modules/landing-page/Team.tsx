@@ -23,8 +23,7 @@ export const TeamsSection = () => {
         color={useColorModeValue("gray.600", "gray.400")}
         mb="2em"
       >
-        Invite your team to view and edit monitors for your team's websites and
-        services.
+        Invite your team to view and edit monitors and projects.
       </chakra.h3>
     </Flex>
   );
