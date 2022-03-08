@@ -9,7 +9,7 @@ Teams:
     ✘ verify webhook hidden and viewer can only view @cancelled(22-03-08 13:03)
     ✔ form and invite updates @done(22-03-08 13:05)
     ✔ verify @done(22-03-08 13:56)
-    ☐ permission docs
+    ✔ permission docs @done(22-03-08 14:43)
 
 Landing: 
     ✔ add syntax highlighter for json @done(22-03-08 11:20)

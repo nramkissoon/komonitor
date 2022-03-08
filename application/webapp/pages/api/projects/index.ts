@@ -188,7 +188,6 @@ async function updateHandler(
     switch (formData.updateType) {
       case "project_id":
         if (typeof formData.newValue !== "string") {
-          console.log("HERE");
           res.status(400);
           return;
         }

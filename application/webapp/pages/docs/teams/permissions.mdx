@@ -1,0 +1,26 @@
+---
+title: Team Permissions
+description: Documentation on how Komonitor team permissions work.
+---
+
+Team permissions allow teams to control what team members are allowed to do within Komonitor.
+There are three permission level roles available within a team: **admin**, **edit**, **view**.
+
+## View permission
+
+The view permission is the most restrictive permission. Team members with this permission are only able to
+view monitors, projects, and settings. Attempting to edit anything within the team will result in an error.
+
+## Edit permission
+
+Team members with the edit permission are granted the same privileges allowed with the view permission in addition to the ability to
+edit monitors, projects, and settings within the team. This permission also allows team members to delete monitors/projects and invite and remove team members.
+
+## Admin permission
+
+The admin role is a special team role. Only the team creator is allowed to be admin. The admin permission
+grants access to all resources within the team, and allows the admin to manage Stripe billing and delete the team permanently.
+
+The admin permission role is assigned to the user that originally creates the team.
+
+There is only **one** admin user per team and that user cannot leave the team without fully deleting it.
