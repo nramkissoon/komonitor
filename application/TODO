@@ -8,7 +8,7 @@ Teams:
     ☐ api and webhook secrets not seen if view
 
 Landing: 
-    ☐ add syntax highlighter for json
+    ✔ add syntax highlighter for json @done(22-03-08 11:20)
     ☐ design and implement team section
 
 Discord:
@@ -22,7 +22,7 @@ Status Pages:
     ☐ define core fields, notifs, etc 
 
 ez: 
-    ☐ follow redirect default
+    ✔ follow redirect default @done(22-03-08 10:01)
 
 Marketing: 
     ☐ redesign blog section
