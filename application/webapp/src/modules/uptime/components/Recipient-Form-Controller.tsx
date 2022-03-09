@@ -31,7 +31,7 @@ import {
   getAlertRecipientLimitFromProductId,
   PLAN_PRODUCT_IDS,
 } from "../../billing/plans";
-import { useUserSlackInstallations } from "../../user/client";
+import { useIntegrations } from "../../integrations/client";
 import { Inputs } from "./Create-Update-Form-Rewrite";
 
 interface RecipientFormControllerProps {
@@ -198,10 +198,16 @@ export const RecipientFormController = (
     clearErrors,
   } = props;
   let {
-    data: slackInstallations,
-    isError: slackIsError,
-    isLoading: slackIsLoading,
-  } = useUserSlackInstallations();
+    integrations: integrations,
+    isError: integIsError,
+    isLoading: integIsLoading,
+  } = useIntegrations();
+  const slackInstallations = !integrations
+    ? undefined
+    : (integrations
+        .filter((i) => i.type === "Slack" && i.data !== undefined)
+        .map((i) => i.data) as SlackInstallation[]);
+
   const { field: emailField } = useController({
     control: control,
     name: "alert.recipients.Email",
@@ -299,9 +305,9 @@ export const RecipientFormController = (
       )}
       <Flex mt="1em">
         <Switch
-          display={!slackInstallations && !slackIsLoading ? "none" : "inherit"}
+          display={!slackInstallations && !integIsLoading ? "none" : "inherit"}
           isChecked={addSlack}
-          isDisabled={!hasAlert || (!slackInstallations && !slackIsLoading)}
+          isDisabled={!hasAlert || (!slackInstallations && !integIsLoading)}
           onChange={(e) => {
             toggleAddSlack(e.target.checked);
             clearErrors("alert.recipients.Slack");
@@ -310,7 +316,7 @@ export const RecipientFormController = (
           }}
         />
         {(!slackInstallations || slackInstallations.length === 0) &&
-        !slackIsLoading ? (
+        !integIsLoading ? (
           <Box ml="1rem">
             <Link href="/app/integrations" passHref>
               <chakra.a
