@@ -1,4 +1,10 @@
-import { chakra, Flex, useColorModeValue } from "@chakra-ui/react";
+import {
+  Center,
+  chakra,
+  Flex,
+  Image,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 export const TeamsSection = () => {
   return (
@@ -25,6 +31,15 @@ export const TeamsSection = () => {
       >
         Invite your team to view and edit monitors and projects.
       </chakra.h3>
+      <Center w={["fit-content"]}>
+        <Image
+          shadow={"xl"}
+          borderRadius="3xl"
+          alt="Komonitor email team invite"
+          src={"/landing/invite-team-notif.png"}
+          width="5xl"
+        />
+      </Center>
     </Flex>
   );
 };

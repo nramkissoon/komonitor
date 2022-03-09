@@ -13,7 +13,7 @@ Teams:
 
 Landing: 
     ✔ add syntax highlighter for json @done(22-03-08 11:20)
-    ☐ design and implement team section -> depend on view perm
+    ✔ design and implement team section -> depend on view perm @done(22-03-09 11:53)
 
 Discord:
     ☐ design for user and team
