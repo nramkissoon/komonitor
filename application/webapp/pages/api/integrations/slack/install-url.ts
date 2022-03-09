@@ -5,7 +5,7 @@ import { env } from "../../../../src/common/server-utils";
 import { slackInstaller } from "../../../../src/modules/integrations/slack/server";
 import {
   getTeamById,
-  userIsMember,
+  userCanEdit,
 } from "../../../../src/modules/teams/server/db";
 
 const createOwnerIdCompoundKey = (id: string, isTeam: boolean) => {
@@ -30,7 +30,7 @@ async function getHandler(
         res.status(400);
         return;
       }
-      if (!userIsMember(userId, team)) {
+      if (!userCanEdit(userId, team)) {
         res.status(403);
         return;
       }

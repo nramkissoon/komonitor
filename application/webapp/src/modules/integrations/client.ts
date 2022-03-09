@@ -41,5 +41,26 @@ export function useUserIntegrations() {
     integrations: [...slackIntegrations] as Integrations,
     isError,
     isLoading,
+    mutate: async () => {
+      await mutate();
+    },
+  };
+}
+
+export function useIntegrations() {
+  const { teamId } = useRouter().query;
+  const { integrations, isError, isLoading, mutate } = useUserIntegrations();
+  const {
+    integrations: teamIntegrations,
+    teamFetchError,
+    teamIsLoading,
+    mutateTeams,
+  } = useTeamIntegrations();
+
+  return {
+    integrations: teamId ? teamIntegrations : integrations,
+    isLoading: teamId ? teamIsLoading : isLoading,
+    isError: teamId ? teamFetchError : isError,
+    mutate: teamId ? mutateTeams : mutate,
   };
 }

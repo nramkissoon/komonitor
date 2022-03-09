@@ -19,6 +19,17 @@ Discord:
     ☐ design for user and team
     ☐ implement
     ☐ test
+    Tasks: 
+        ☐ message for no integrations tab
+        ☐ test slack integration
+        ☐ useDiscordInstallUrl and info card in NewIntegrationsList
+        ☐ DiscordInstallationInfoBar + Remove dialog + test button
+        api:
+            ☐  index - detach monitors with discord alerts, delete discord integ (delete webhook)
+            ☐  test - execute webhook
+        ☐ redirect -> integrations/discord/callback -> save webhook data -> redirect to integ page
+        ☐ check if webhook alerady exists on channel before adding and check if prev webhook is deleted, if not, dont add new
+        ☐ getDiscord 
 
 Status Pages:
     ☐ status page table

@@ -7,7 +7,7 @@ import {
   deleteTeamSlackInstallation,
   getTeamById,
   getTeamSlackInstallationsFromTeamObj,
-  userIsMember,
+  userCanEdit,
 } from "../../../../src/modules/teams/server/db";
 import {
   getMonitorsForOwner,
@@ -193,7 +193,7 @@ async function deleteHandler(
     }
 
     const team = await getTeamById(teamId);
-    if (!team || !userIsMember(userId, team)) {
+    if (!team || !userCanEdit(userId, team)) {
       res.status(403);
       return;
     }
