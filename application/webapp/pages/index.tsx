@@ -3,10 +3,9 @@ import type { NextPage } from "next";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { Advanced } from "../src/modules/landing-page/Advanced";
 import { Banner } from "../src/modules/landing-page/Banner";
-import { ComingSoon } from "../src/modules/landing-page/Coming-Soon";
 import { CTA } from "../src/modules/landing-page/Cta";
 import { Features } from "../src/modules/landing-page/Features";
-import { NoCode } from "../src/modules/landing-page/Nocode";
+import { TeamsSection } from "../src/modules/landing-page/Team";
 
 const SectionDivider = () => (
   <Divider
@@ -40,12 +39,12 @@ const Home: NextPage = () => {
       >
         <SectionDivider />
         <Features />
-        <SectionDivider />
-        <NoCode />
+
         <SectionDivider />
         <Advanced />
         <SectionDivider />
-        <ComingSoon />
+        <TeamsSection />
+        <SectionDivider />
         <CTA />
       </Box>
     </PageLayout>

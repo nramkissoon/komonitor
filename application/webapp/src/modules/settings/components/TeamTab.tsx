@@ -578,7 +578,7 @@ const AddTeamInviteForm = ({
     formState: { isSubmitting, errors },
   } = useForm<TeamInviteInputs>({
     resolver: zodResolver(teamInvitationInputSchema),
-    defaultValues: { permission: "edit" },
+    defaultValues: { permission: "view" },
   });
   const { teamId } = useRouter().query;
 
@@ -606,6 +606,7 @@ const AddTeamInviteForm = ({
         bg={useColorModeValue("white", "gray.950")}
         border="2px"
         borderColor={useColorModeValue("gray.500", "whiteAlpha.400")}
+        rounded="sm"
       >
         <ModalHeader
           textAlign="center"
@@ -620,7 +621,7 @@ const AddTeamInviteForm = ({
           <Box px="2em" mb="1em">
             <chakra.p>
               Enter your teammate's email below to send them an invite to join{" "}
-              {teamId}.
+              your team. We'll send an email to them with an invite link.
             </chakra.p>
           </Box>
           <Box px="2em" mb="20px">
@@ -646,7 +647,8 @@ const AddTeamInviteForm = ({
                       >
                         <FormLabel>Permission level:</FormLabel>
                         <Stack direction="row">
-                          <Radio value={"edit"}>Edit</Radio>
+                          <Radio value={"view"}>Can View</Radio>
+                          <Radio value={"edit"}>Can Edit</Radio>
                         </Stack>
                         <chakra.div color="red.400" mt="6px" fontSize={"md"}>
                           {errors.permission?.message}

@@ -5,6 +5,7 @@ import { ddbClient, env } from "../../../src/common/server-utils";
 import {
   getTeamById,
   removeTeamMember,
+  userCanEdit,
   userIsAdmin,
 } from "../../../src/modules/teams/server/db";
 import { getUserById } from "../../../src/modules/user/user-db";
@@ -57,6 +58,11 @@ async function deleteHandler(
     // admin cannot remove self
     if (userIsAdmin(userId, team) && userId === userToDelete) {
       res.status(400);
+      return;
+    }
+
+    if (!userCanEdit(userId, team)) {
+      res.status(403);
       return;
     }
 

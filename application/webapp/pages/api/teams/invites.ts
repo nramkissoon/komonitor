@@ -12,18 +12,27 @@ import {
   getTeamById,
   removeInvite,
   saveInvite,
-  userIsMember,
+  userCanEdit,
 } from "../../../src/modules/teams/server/db";
 import { teamInvitationInputSchema } from "../../../src/modules/teams/server/validation";
 
 const html = ({ code, teamId }: { code: string; teamId: string }) => {
   code = code.replace("#", "%23");
+  const buttonBackgroundColor = "#3182CE";
+  const buttonTextColor = "#ffffff";
+  const buttonBorderColor = "#3182CE";
+  const backgroundColor = "#F7FAFC";
   return `
-  <body style="padding: 20px; border-radius: 20px;">
+  <body style="padding: 20px; background: ${backgroundColor};">
   <table width="100%" border="0" cellspacing="20" cellpadding="0" style=" max-width: 600px; margin: auto; border-radius: 10px;">
     <tr>
+        <td align="center" style="padding: 10px 0px 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif;">
+          Team invite from <strong>Komonitor</strong>
+        </td>
+      </tr>  
+    <tr>
       <td align="center" style="padding: 10px 0px 0px 0px; font-size: 18px; font-family: Helvetica, Arial, sans-serif;">
-        Hey there! You were sent a team invite from ${teamId}!
+        Hey there! You were sent a team invite for ${teamId}!
       </td>
     </tr>
     <tr>
@@ -37,9 +46,10 @@ const html = ({ code, teamId }: { code: string; teamId: string }) => {
       <td align="center" style="padding: 20px 0;">
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td align="center" style="border-radius: 5px;"><a href="${
+            <td align="center" style="border-radius: 5px;">
+            <a href="${
               env.BASE_URL + "teams/new-member?code=" + code
-            }" target="_blank" style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight: bold;">Join Team!</a></td>
+            }" target="_blank" style="background: ${buttonBackgroundColor}; font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${buttonTextColor}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${buttonBorderColor}; display: inline-block; font-weight: bold;">Join Team!</a></td>
           </tr>
           <tr>
             <td align="center" style="border-radius: 5px;">
@@ -83,7 +93,7 @@ async function createHandler(
       return;
     }
 
-    if (!userIsMember(userId, team)) {
+    if (team && !userCanEdit(userId, team)) {
       res.status(403);
       return;
     }
@@ -184,7 +194,7 @@ async function deleteHandler(
       return;
     }
 
-    if (!userIsMember(userId, team)) {
+    if (team && !userCanEdit(userId, team)) {
       res.status(403);
       return;
     }

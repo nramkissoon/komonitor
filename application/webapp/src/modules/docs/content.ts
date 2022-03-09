@@ -62,4 +62,15 @@ export const SidebarRoutes: SidebarRouteSection[] = [
       },
     ],
   },
+  {
+    title: "Teams",
+    path: "/docs/teams",
+    heading: true,
+    routes: [
+      {
+        title: "Permissions",
+        path: "/docs/teams/permissions",
+      },
+    ],
+  },
 ];

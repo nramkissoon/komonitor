@@ -13,6 +13,7 @@ import {
 } from "../../../../src/modules/billing/plans";
 import {
   getTeamById,
+  userCanEdit,
   userIsMember,
 } from "../../../../src/modules/teams/server/db";
 import {
@@ -142,6 +143,7 @@ async function updateHandler(
   session: Session
 ) {
   try {
+    const userId = session.uid as string;
     const { ownerId, team } = await getOwnerIdAndTeam(req, session);
     const { valid, productId } = await getProductPlanIdAndValidSubscription(
       ownerId,
@@ -156,6 +158,11 @@ async function updateHandler(
     const monitor = req.body;
     if (!monitor || !isValidUptimeMonitor(monitor, productId)) {
       res.status(400);
+      return;
+    }
+
+    if (team && !userCanEdit(userId, team)) {
+      res.status(403);
       return;
     }
     // verify that the monitor id belongs to the user before updating
@@ -233,6 +240,12 @@ async function createHandler(
       return;
     }
 
+    const userId = session.uid as string;
+    if (team && !userCanEdit(userId, team)) {
+      res.status(403);
+      return;
+    }
+
     const allowance = getUptimeMonitorAllowanceFromProductId(productId);
     const currentMonitorsTotal = (
       await getMonitorsForOwner(
@@ -287,6 +300,12 @@ async function deleteHandler(
     }
 
     const { ownerId, team } = await getOwnerIdAndTeam(req, session);
+
+    const userId = session.uid as string;
+    if (team && !userCanEdit(userId, team)) {
+      res.status(403);
+      return;
+    }
 
     const deleted = await deleteMonitor(
       ddbClient,

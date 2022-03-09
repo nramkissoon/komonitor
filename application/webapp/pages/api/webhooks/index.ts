@@ -9,6 +9,7 @@ import {
   deleteTeamWebhook,
   getTeamById,
   setTeamWebhookSecret,
+  userCanEdit,
   userIsMember,
 } from "../../../src/modules/teams/server/db";
 import {
@@ -69,6 +70,11 @@ async function createHandler(
         res.status(403);
         return;
       }
+      if (!userCanEdit(userId, ownerIdTeam.team)) {
+        // no permission
+        res.status(403);
+        return;
+      }
       await setTeamWebhookSecret(ownerIdTeam.team.id, secret);
     } else {
       const user = await getUserById(ddbClient, env.USER_TABLE_NAME, userId);
@@ -109,6 +115,11 @@ async function deleteHandler(
     // TODO this is kinda weird because what if the user maliciously does not add teamId to req, their own webhook gets deleted
 
     if (ownerIdTeam.team) {
+      if (!userCanEdit(userId, ownerIdTeam.team)) {
+        // no permission
+        res.status(403);
+        return;
+      }
       await deleteTeamWebhook(ownerIdTeam.team.id);
     } else {
       const user = await getUserById(ddbClient, env.USER_TABLE_NAME, userId);

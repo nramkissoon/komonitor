@@ -33,7 +33,7 @@ function BlogPostPanel(props: { frontMatter: FrontMatter }) {
         {frontMatter.description}
       </chakra.p>
       <NextLink href={frontMatter.slug as string} passHref>
-        <Button size="md" maxW="8em" _hover={{ bg: "gray.300" }} shadow="sm">
+        <Button size="md" maxW="8em" _hover={{ bg: "gray.400" }} shadow="sm">
           Read More
         </Button>
       </NextLink>

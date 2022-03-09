@@ -450,6 +450,29 @@ export const userCanEdit = (userId: string, team: Team) => {
   return false;
 };
 
+export const userCanView = (userId: string, team: Team) => {
+  for (let member of team.members) {
+    if (
+      member.user_id === userId &&
+      (member.permission_level === "admin" ||
+        member.permission_level === "view" ||
+        member.permission_level === "edit")
+    ) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const userIsOnlyViewer = (userId: string, team: Team) => {
+  for (let member of team.members) {
+    if (member.user_id === userId && member.permission_level === "view") {
+      return true;
+    }
+  }
+  return false;
+};
+
 export const getTeamSlackInstallations = async (id: string) => {
   const team = await getTeamById(id);
   if (!team) return [];

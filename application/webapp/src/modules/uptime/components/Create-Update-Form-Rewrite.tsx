@@ -173,7 +173,10 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
 
   const methods = useForm<Inputs>({
     defaultValues: createNewMonitor
-      ? { project_id: projectId as string }
+      ? {
+          project_id: projectId as string,
+          http_parameters: { follow_redirects: true },
+        }
       : placeholders,
   });
   const {

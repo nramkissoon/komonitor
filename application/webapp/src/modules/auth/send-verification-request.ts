@@ -38,7 +38,7 @@ function html({ url, host, email }: Record<"url" | "host" | "email", string>) {
   const buttonTextColor = "#ffffff";
 
   return `
-<body style="background: ${backgroundColor}; padding: 20px; border-radius: 20px;">
+<body style="background: ${backgroundColor}; padding: 20px;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td align="center" style="padding: 10px 0px 20px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: #ffffff;">

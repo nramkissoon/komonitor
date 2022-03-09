@@ -30,7 +30,7 @@ export const useProjects = () => {
 export const deleteProject = async (
   projectId: string,
   onSuccess: () => void,
-  onError: () => void,
+  onError: (message: string) => void,
   teamId?: string
 ) => {
   const response = await fetch(
@@ -44,7 +44,22 @@ export const deleteProject = async (
   if (response.ok) {
     onSuccess();
   } else {
-    onError();
+    let errorMessage;
+    switch (response.status) {
+      case 403:
+        errorMessage = "You do not have permission to perform this action.";
+        break;
+      case 400:
+        errorMessage = "Invalid project attributes sent to server.";
+        break;
+      case 500:
+        errorMessage = "Internal server error. Please try again later.";
+        break;
+      default:
+        errorMessage = "An unknown error occurred. Please try again later.";
+        break;
+    }
+    onError ? onError(errorMessage) : null;
   }
 };
 

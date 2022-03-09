@@ -63,7 +63,7 @@ export const teamInvitationInputSchema = z.object({
     .string({ required_error: "Permission level is required." })
     .refine(
       (s) => {
-        return ["edit"].includes(s);
+        return ["edit", "view"].includes(s);
       },
       { message: "Invalid permission level." }
     ),
