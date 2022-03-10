@@ -16,10 +16,11 @@ Landing:
     ✔ design and implement team section -> depend on view perm @done(22-03-09 11:53)
 
 Discord:
-    ☐ design for user and team
+    ✔ design for user and team @done(22-03-10 10:07)
     ☐ implement
     ☐ test
     Tasks: 
+        ✔ model changes for team/user @done(22-03-10 10:07)
         ☐ message for no integrations tab
         ☐ test slack integration
         ☐ useDiscordInstallUrl and info card in NewIntegrationsList
