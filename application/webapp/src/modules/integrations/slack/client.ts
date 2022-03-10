@@ -25,8 +25,15 @@ export function useSlackInstallUrl(teamId?: string) {
   return { url: data, isLoading: !error && !data, isError: error };
 }
 
-export async function testSlackInstallation() {
-  const response = await fetch(slackInstallationTestApi, { method: "GET" });
+export async function testSlackInstallation(webhookUrl: string) {
+  console.log(webhookUrl);
+  const response = await fetch(slackInstallationTestApi, {
+    method: "POST",
+    body: JSON.stringify({ incomingWebhookUrl: webhookUrl }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
   return response.ok;
 }
 

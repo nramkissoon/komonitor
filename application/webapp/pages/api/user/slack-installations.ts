@@ -65,8 +65,6 @@ async function getHandler(
               slackInstallation
             );
           }
-
-          if (slackInstallation) slackInstallation!.incomingWebhook!.url = "";
         } catch (err) {
           console.log(err);
           console.log("updated team and channel check failed");

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   chakra,
   Flex,
   useColorModeValue,
@@ -12,6 +13,7 @@ import { SlackInstallation } from "utils";
 import { v4 as uuidv4 } from "uuid";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { Integrations } from "../../user/client";
+import { testSlackInstallation } from "../slack/client";
 import { SlackSvg } from "./Icons";
 import { RemoveSlackInstallationDialogProps } from "./RemoveDialogs";
 
@@ -29,7 +31,32 @@ const RemoveIntegrationButton = ({ onClick }: { onClick: () => void }) => {
       variant="ghost"
       onClick={onClick}
     >
-      Remove Integration
+      Remove
+    </Button>
+  );
+};
+
+const TestIntegrationButton = ({
+  onClick,
+}: {
+  onClick: () => Promise<void>;
+}) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  return (
+    <Button
+      rounded="full"
+      isLoading={isLoading}
+      loadingText={"Testing..."}
+      colorScheme="blue"
+      color="blue.500"
+      variant="ghost"
+      onClick={async () => {
+        setIsLoading(true);
+        await onClick();
+        setIsLoading(false);
+      }}
+    >
+      Test
     </Button>
   );
 };
@@ -65,7 +92,7 @@ const SlackInstallationInfoBar = ({
         w="full"
         flexDir={["column", "row"]}
       >
-        <Box>
+        <Box my={["10px", "inherit"]}>
           You can receive alerts in the{" "}
           <chakra.span color="blue.400">
             {installation?.incomingWebhook?.channel ?? ""}
@@ -76,9 +103,20 @@ const SlackInstallationInfoBar = ({
           </chakra.span>{" "}
           workspace.
         </Box>
-        <Box>
-          <RemoveIntegrationButton onClick={onOpen} />
-        </Box>
+        <Flex>
+          <Box>
+            <TestIntegrationButton
+              onClick={async () => {
+                await testSlackInstallation(
+                  installation.incomingWebhook?.url ?? ""
+                );
+              }}
+            />
+          </Box>
+          <Box>
+            <RemoveIntegrationButton onClick={onOpen} />
+          </Box>
+        </Flex>
       </Flex>
     </>
   );
@@ -136,9 +174,15 @@ export const ActiveIntegrationList = ({
 }) => {
   // add filtering and sorting integrations
 
-  return integrations && !isLoading ? (
-    <Flex flexDir="column"> {getIntegrationInfoBars(integrations)}</Flex>
-  ) : (
-    <LoadingSpinner />
+  return (
+    <>
+      {integrations && !isLoading && integrations.length > 0 && (
+        <Flex flexDir="column"> {getIntegrationInfoBars(integrations)}</Flex>
+      )}
+      {integrations && !isLoading && integrations.length === 0 && (
+        <Center>No Integrations found.</Center>
+      )}
+      {isLoading && <LoadingSpinner />}
+    </>
   );
 };

@@ -23,8 +23,6 @@ async function getHandler(
     if (user) {
       if (user.slack_installations) {
         user.slack_installations.forEach((installation) => {
-          if (installation.incomingWebhook)
-            installation.incomingWebhook.url = "--redacted--";
           if (installation.bot) installation.bot.token = "--redacted--";
         });
       }

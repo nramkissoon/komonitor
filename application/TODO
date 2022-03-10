@@ -21,8 +21,8 @@ Discord:
     ☐ test
     Tasks: 
         ✔ model changes for team/user @done(22-03-10 10:07)
-        ☐ message for no integrations tab
-        ☐ test slack integration
+        ✔ message for no integrations tab @done(22-03-10 10:16)
+        ✔ test slack integration @done(22-03-10 12:32)
         ☐ useDiscordInstallUrl and info card in NewIntegrationsList
         ☐ DiscordInstallationInfoBar + Remove dialog + test button
         api:
