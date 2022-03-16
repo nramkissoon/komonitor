@@ -20,7 +20,7 @@ Discord:
     ✔ test test @done(22-03-14 17:24)
     ✔ test delete @done(22-03-14 17:24)
     ✔ test create @done(22-03-14 17:24)
-    ☐ test alert
+    ✔ test alert @done(22-03-16 12:24)
     Tasks: 
         ✔ model changes for team/user @done(22-03-10 10:07)
         ✔ message for no integrations tab @done(22-03-10 10:16)

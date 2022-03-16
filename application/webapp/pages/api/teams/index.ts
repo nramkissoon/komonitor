@@ -77,19 +77,20 @@ export const updateDiscordIntegrations = async (owner: Team | User) => {
     : [];
 
   try {
-    const client = new Client({ intents: [] });
+    const client = new Client();
     const login = await client.login(env.DISCORD_BOT_TOKEN);
 
-    const guilds = await client.guilds.fetch();
-
+    const guilds = await client.guilds;
+    const channels = await client.channels;
     for (let integration of integrations) {
       const oldIntegration = integration;
-      const guild = guilds.find((g) => g.id === integration.webhook.guild_id);
+      const guild = await guilds.fetch(integration.webhook.guild_id);
       const newGuildName = guild?.name;
-      const channels = await (await guild?.fetch())?.channels.fetch();
-      const newChannelName = channels?.find(
-        (c) => c.id === integration.webhook.channel_id
-      )?.name;
+
+      const newChannel = (
+        await channels.fetch(integration.webhook.channel_id)
+      ).toJSON();
+      const newChannelName = (newChannel as any)["name"];
 
       const mustUpdate =
         newChannelName !== integration.webhook.channelName ||
@@ -102,6 +103,7 @@ export const updateDiscordIntegrations = async (owner: Team | User) => {
         await updateDiscordIntegration(oldIntegration, newIntegration, owner);
       }
     }
+    client.destroy();
   } catch (err) {
     console.error(err);
   }

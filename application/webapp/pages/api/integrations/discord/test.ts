@@ -18,10 +18,10 @@ async function getHandler(
       return;
     }
 
-    const client = new WebhookClient({
-      token: webhookToken as string,
-      id: webhookId as string,
-    });
+    const client = new WebhookClient(
+      webhookId as string,
+      webhookToken as string
+    );
 
     const discordResponse = await client.send({
       content: "[TEST ALERT]",
@@ -33,7 +33,8 @@ async function getHandler(
           color: 0xe53e3e,
         },
       ],
-    });
+    } as any); // as any because api is weird
+    client.destroy();
 
     res.status(200);
   } catch (err) {
