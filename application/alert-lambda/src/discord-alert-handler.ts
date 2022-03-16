@@ -41,10 +41,10 @@ export const sendUptimeMonitorDiscordAlert = async (
     if (!discordIntegration)
       throw new Error("id in alert not found in integrations for owner");
 
-    const client = new WebhookClient({
-      token: discordIntegration.webhook.token,
-      id: discordIntegration.webhook.id,
-    });
+    const client = new WebhookClient(
+      discordIntegration.webhook.id,
+      discordIntegration.webhook.token
+    );
 
     const baseUrl =
       "https://komonitor.com/" +

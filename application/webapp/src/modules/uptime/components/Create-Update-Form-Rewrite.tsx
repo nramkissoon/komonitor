@@ -229,7 +229,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   const freqSelectFieldOptions =
     createFrequencySelectOptionsReactSelect(product_id);
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(errors);
     if (hasAlert) {
       if (data.alert && data.alert.recipients === undefined) {
         setError("alert.recipients", {
