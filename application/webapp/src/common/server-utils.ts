@@ -1,4 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import crypto from "crypto";
 import Stripe from "stripe";
 
 export const env = {
@@ -27,6 +28,10 @@ export const env = {
   PROJECTS_TABLE_NAME: process.env.PROJECTS_TABLE_NAME as string,
   SLACK_NEW_USER_NOTIFICATION_BOT_WEBHOOK: process.env
     .SLACK_NEW_USER_NOTIFICATION_BOT_WEBHOOK as string,
+  STATE_SECRET: process.env.STATE_SECRET as string,
+  DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID as string,
+  DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET as string,
+  DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN as string,
 };
 
 export const ddbClient = new DynamoDBClient({
@@ -67,3 +72,30 @@ export const REGIONS = Object.keys({
   "eu-north-1": "Stockholm, Sweden",
   "sa-east-1": "São Paulo, Brazil",
 });
+
+const algorithm = "aes-256-ctr";
+const iv = crypto.randomBytes(16);
+
+export const encrypt = (text: string) => {
+  const cipher = crypto.createCipheriv(algorithm, env.STATE_SECRET, iv);
+
+  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+
+  return [iv.toString("hex"), encrypted.toString("hex")].join("_");
+};
+
+export const decrypt = (hash: string) => {
+  const parts = hash.split("_");
+  const decipher = crypto.createDecipheriv(
+    algorithm,
+    env.STATE_SECRET,
+    Buffer.from(parts[0], "hex")
+  );
+
+  const decrypted = Buffer.concat([
+    decipher.update(Buffer.from(parts[1], "hex")),
+    decipher.final(),
+  ]);
+
+  return decrypted.toString();
+};

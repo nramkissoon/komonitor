@@ -1,5 +1,6 @@
 import { AlertInvocation, UptimeMonitorStatus } from "utils";
 import { config, ddbClient } from "./config";
+import { sendUptimeMonitorDiscordAlert } from "./discord-alert-handler";
 import {
   getOwnerById,
   getPreviousAlertInvocationForMonitor,
@@ -128,7 +129,7 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
   }
 
   const channels = alert.channels;
-  let alertTriggered = true;
+  let alertTriggered = false;
 
   for (let channelType of channels) {
     if (channelType === "Email") {
@@ -138,8 +139,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
         triggeringStatuses,
         owner
       );
-      if (!emailSent) {
-        alertTriggered = false;
+      if (emailSent) {
+        alertTriggered = true;
       }
     }
     if (channelType === "Slack") {
@@ -148,14 +149,14 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
         alert,
         owner
       );
-      if (!slackSent) {
-        alertTriggered = false;
+      if (slackSent) {
+        alertTriggered = true;
       }
     }
     if (channelType === "Webhook") {
       const secret = await getUserWebhookSecret(owner.id);
       if (!secret) {
-        alertTriggered = false;
+        alertTriggered = true;
         console.log("no user secret, but webhook channel type provided");
       } else {
         if (alert.recipients.Webhook && alert.recipients.Webhook.length > 0) {
@@ -164,10 +165,20 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
             invocation,
             secret
           );
-          if (!webhookSent) {
-            alertTriggered = false;
+          if (webhookSent) {
+            alertTriggered = true;
           }
         }
+      }
+    }
+    if (channelType === "Discord") {
+      const discordSent = await sendUptimeMonitorDiscordAlert(
+        monitor,
+        alert,
+        owner
+      );
+      if (discordSent) {
+        alertTriggered = true;
       }
     }
   }

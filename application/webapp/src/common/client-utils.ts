@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 export const env = {
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL as string,
   SLACK_REDIRECT: process.env.NEXT_PUBLIC_SLACK_REDIRECT as string,
+  DISCORD_OAUTH_URL: process.env.NEXT_PUBLIC_DISCORD_OAUTH_URL as string,
 };
 
 export const minutesToString: { [key: number]: string } = {

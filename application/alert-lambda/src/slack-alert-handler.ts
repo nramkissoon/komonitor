@@ -1,11 +1,15 @@
 import fetch from "isomorphic-fetch";
-import { Alert, Team, UptimeMonitor, User } from "utils";
+import { Alert, SlackInstallation, Team, UptimeMonitor, User } from "utils";
 import { regionToLocationStringMap } from "./config";
 
 const createUptimeMonitorSlackAlertMessage = (
   alert: Alert,
-  monitor: UptimeMonitor
+  monitor: UptimeMonitor,
+  isTeam: boolean,
+  ownerId: string
 ) => {
+  const baseUrl =
+    "https://komonitor.com/" + (isTeam ? ownerId + "/" : "app/") + "/projects/";
   return {
     text: `ALERT - ${monitor.name} Uptime Monitor in ${
       regionToLocationStringMap[monitor.region]
@@ -26,7 +30,7 @@ const createUptimeMonitorSlackAlertMessage = (
             text: {
               type: "mrkdwn",
               // TODO CHANGE FOR TEAMS
-              text: `*<https://komonitor.com/app/projects/${monitor.project_id}/uptime/${monitor.monitor_id}|View monitor>*`,
+              text: `*<${baseUrl}${monitor.project_id}/uptime/${monitor.monitor_id}|View monitor>*`,
             },
           },
         ],
@@ -61,15 +65,17 @@ const getWebhookForTeam = ({
   const matchingInstallations = team.integrations.filter((i) => {
     if (i.type === "Slack") {
       return (
-        i.data.incomingWebhook?.channelId === channel &&
-        i.data.team?.id === slackTeam
+        (i.data as SlackInstallation).incomingWebhook?.channelId === channel &&
+        (i.data as SlackInstallation).team?.id === slackTeam
       );
     }
     return false;
   });
 
   if (matchingInstallations.length === 0) return null;
-  else return matchingInstallations[0].data.incomingWebhook?.url;
+  else
+    return (matchingInstallations[0].data as SlackInstallation).incomingWebhook
+      ?.url;
 };
 
 export const sendUptimeMonitorSlackAlert = async (
@@ -119,7 +125,12 @@ export const sendUptimeMonitorSlackAlert = async (
       method: "POST",
       headers: new Headers({ "content-type": "application/json" }),
       body: JSON.stringify(
-        createUptimeMonitorSlackAlertMessage(alert, monitor)
+        createUptimeMonitorSlackAlertMessage(
+          alert,
+          monitor,
+          ownerIsTeam(owner),
+          owner.id
+        )
       ),
     });
 

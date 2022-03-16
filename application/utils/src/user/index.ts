@@ -4,23 +4,34 @@ import crypto from "crypto";
 
 export { Installation as SlackInstallation } from "@slack/oauth";
 
+export interface DiscordWebhook {
+  application_id: string;
+  name: string;
+  url: string;
+  channel_id: string;
+  token: string;
+  type: number;
+  avatar: any;
+  guild_id: string;
+  id: string;
+}
+
+export interface DiscordWebhookAccessToken {
+  token_type: string;
+  access_token: string;
+  scope: string;
+  expires_in: number;
+  refresh_token: string;
+  webhook: DiscordWebhook;
+}
+
 export interface DiscordWebhookIntegration {
   token_type: string;
   access_token: string;
   scope: string;
   expires_in: number;
   refresh_token: string;
-  webhook: {
-    application_id: string;
-    name: string;
-    url: string;
-    channel_id: string;
-    token: string;
-    type: number;
-    avatar: any;
-    guild_id: string;
-    id: string;
-  };
+  webhook: DiscordWebhook & { channelName: string; guildName: string };
 }
 
 export interface WebhookSecret {

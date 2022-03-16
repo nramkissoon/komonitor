@@ -13,7 +13,7 @@ import {
 import { useRouter } from "next/router";
 import { AppSubNav } from "../../src/common/components/App-Sub-Nav";
 import { PageLayout } from "../../src/common/components/Page-Layout";
-import { useUserIntegrations } from "../../src/modules/integrations/client";
+import { useIntegrations } from "../../src/modules/integrations/client";
 import { ActiveIntegrationList } from "../../src/modules/integrations/components/ActiveIntegrationList";
 import { NewIntegrationsList } from "../../src/modules/integrations/components/NewIntegrationsList";
 import { ExtendedNextPage } from "../_app";
@@ -24,9 +24,11 @@ const App: ExtendedNextPage = () => {
     slackAlreadyInstalled,
     slackIntegrationSuccess,
     slackIntegrationCanceled,
+    discordIntegrationSuccess,
+    discordAlreadyInstalled,
   } = router.query;
 
-  const { integrations, isLoading } = useUserIntegrations();
+  const { integrations, isLoading } = useIntegrations();
 
   return (
     <PageLayout isAppPage maxW={["sm", "xl", "3xl", "5xl", "6xl"]}>
@@ -80,6 +82,28 @@ const App: ExtendedNextPage = () => {
         <Alert status="warning" mt="-.2em" mb=".5em" variant="left-accent">
           <AlertIcon />
           <AlertDescription>Slack integration canceled.</AlertDescription>
+        </Alert>
+      )}
+      {discordAlreadyInstalled === "true" && (
+        <Alert status="warning" mt="-.2em" mb=".5em" variant="left-accent">
+          <AlertIcon />
+          <AlertDescription>
+            Discord already integrated with given server and channel.
+          </AlertDescription>
+        </Alert>
+      )}
+      {discordIntegrationSuccess === "true" && (
+        <Alert status="success" mt="-.2em" mb=".5em" variant="left-accent">
+          <AlertIcon />
+          <AlertDescription>Discord successfully integrated!</AlertDescription>
+        </Alert>
+      )}
+      {discordIntegrationSuccess === "false" && (
+        <Alert status="error" mt="-.2em" mb=".5em" variant="left-accent">
+          <AlertIcon />
+          <AlertDescription>
+            Discord integrations failed, please try again later.
+          </AlertDescription>
         </Alert>
       )}
       <Tabs variant="line">

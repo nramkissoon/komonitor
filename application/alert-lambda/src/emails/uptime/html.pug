@@ -28,5 +28,5 @@ body
                                 p!= `<span class="bold">Status:</span> <span class="red-500 bold">Down</span>`
         tr
             td 
-                p.spaced!= `<span class="bold">Need to pause or edit this monitor?</span> You can do so in the <a href="https://komonitor.com/app/uptime/${monitor.monitor_id}">Komonitor console</a>.`
+                p.spaced!= `<span class="bold">Need to pause or edit this monitor?</span> You can do so in the <a href="${url}">Komonitor console</a>.`
                 p!= `This is a no-reply email. For support, please contact us at <b>support@komonitor.com</b>.`

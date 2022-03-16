@@ -229,6 +229,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   const freqSelectFieldOptions =
     createFrequencySelectOptionsReactSelect(product_id);
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(errors);
     if (hasAlert) {
       if (data.alert && data.alert.recipients === undefined) {
         setError("alert.recipients", {
@@ -271,7 +272,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                     data.alert.channels = Array.from(s);
                   }
                   data.alert.recipients.Webhook = undefined;
-                  console.log("erer");
                 } else if (recipientList[0].length > 400) {
                   setError("alert.recipients.Webhook", {
                     type: "maxLength",
@@ -581,6 +581,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                     onChange={(e) => {
                       if (!e.target.checked) {
                         clearErrors("alert.recipients");
+                        clearErrors("alert.description");
                         resetField("alert");
                       }
                       setHasAlert(e.target.checked);
@@ -656,7 +657,6 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
                 rules={
                   hasAlert
                     ? {
-                        required: "Alert description is required.",
                         maxLength: {
                           value: 300,
                           message:

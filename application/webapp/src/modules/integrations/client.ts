@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { TeamIntegration } from "utils";
 import { useTeam } from "../teams/client";
-import { useUserSlackInstallations } from "../user/client";
+import { useUser, useUserSlackInstallations } from "../user/client";
 
 export interface Integration extends TeamIntegration {
   mutate: () => void;
@@ -32,15 +32,19 @@ export const useTeamIntegrations = () => {
 
 export function useUserIntegrations() {
   const { data, isError, mutate, isLoading } = useUserSlackInstallations();
+  const { user, userIsLoading, userMutate } = useUser();
   const slackIntegrations: Integration[] = data
     ? data.map((integ) => ({ data: integ, type: "Slack", mutate: mutate }))
     : [];
   return {
-    integrations: [...slackIntegrations] as Integration[],
+    integrations: [
+      ...slackIntegrations,
+      ...(user ? user.integrations ?? [] : []),
+    ] as Integration[],
     isError,
     isLoading,
     mutate: async () => {
-      await mutate();
+      await userMutate();
     },
   };
 }

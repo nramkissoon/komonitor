@@ -1,9 +1,16 @@
 import { WebClient } from "@slack/web-api";
+import { Client } from "discord.js";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
-import { SlackInstallation, Team } from "utils";
+import {
+  DiscordWebhookIntegration,
+  SlackInstallation,
+  Team,
+  User,
+} from "utils";
 import { ddbClient, env, stripeClient } from "../../../src/common/server-utils";
+import { updateDiscordIntegration } from "../../../src/modules/integrations/db";
 import {
   createTeam,
   deleteTeamAndAssociatedAssets,
@@ -62,6 +69,44 @@ const updateSlackInstallations = async (KoTeam: Team) => {
   }
 };
 
+export const updateDiscordIntegrations = async (owner: Team | User) => {
+  const integrations = owner.integrations
+    ? (owner.integrations
+        .filter((i) => i.type === "DiscordWebhook")
+        .map((i) => i.data) as DiscordWebhookIntegration[])
+    : [];
+
+  try {
+    const client = new Client({ intents: [] });
+    const login = await client.login(env.DISCORD_BOT_TOKEN);
+
+    const guilds = await client.guilds.fetch();
+
+    for (let integration of integrations) {
+      const oldIntegration = integration;
+      const guild = guilds.find((g) => g.id === integration.webhook.guild_id);
+      const newGuildName = guild?.name;
+      const channels = await (await guild?.fetch())?.channels.fetch();
+      const newChannelName = channels?.find(
+        (c) => c.id === integration.webhook.channel_id
+      )?.name;
+
+      const mustUpdate =
+        newChannelName !== integration.webhook.channelName ||
+        newGuildName !== integration.webhook.guildName;
+
+      if (mustUpdate) {
+        const newIntegration = oldIntegration;
+        newIntegration.webhook.channelName = newChannelName ?? "";
+        newIntegration.webhook.guildName = newGuildName ?? "";
+        await updateDiscordIntegration(oldIntegration, newIntegration, owner);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 async function getHandler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -92,6 +137,7 @@ async function getHandler(
     // ensures integrations are not stale
     if (req.headers["referer"]?.includes("/integrations")) {
       updateSlackInstallations(team);
+      updateDiscordIntegrations(team);
     }
 
     res.status(200);
