@@ -51,17 +51,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const webhookAccessToken =
       (await accessTokenResponse.json()) as DiscordWebhookAccessToken;
-    const client = new Client({ intents: [] });
+    const client = new Client();
     const login = await client.login(env.DISCORD_BOT_TOKEN);
-    const guilds = await client.guilds.fetch();
-    const guild = guilds.find(
-      (g) => g.id === webhookAccessToken.webhook.guild_id
-    );
+    const guilds = await client.guilds;
+    const channels = await client.channels;
+
+    const guild = await guilds.fetch(webhookAccessToken.webhook.guild_id);
     const guildName = guild?.name;
-    const channels = await (await guild?.fetch())?.channels.fetch();
-    const channelName = channels?.find(
-      (c) => c.id === webhookAccessToken.webhook.channel_id
-    )?.name;
+    const newChannel = (
+      await channels.fetch(webhookAccessToken.webhook.channel_id)
+    ).toJSON();
+    const channelName = (newChannel as any)["name"];
 
     const integration: DiscordWebhookIntegration = {
       access_token: webhookAccessToken.access_token,
