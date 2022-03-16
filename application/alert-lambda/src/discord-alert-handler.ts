@@ -78,7 +78,7 @@ export const sendUptimeMonitorDiscordAlert = async (
       ],
     });
 
-    if (!discordRequest.nonce) throw new Error("discord failed to send alert");
+    client.destroy();
 
     return true;
   } catch (err) {
