@@ -1,35 +1,40 @@
 import useSWR from "swr";
 import { env } from "../../../common/client-utils";
 
-export const slackInstallUrlApi =
-  env.BASE_URL + "api/integrations/slack/install-url";
+export const discordApi = env.BASE_URL + "api/integrations/discord";
 
-export const slackInstallationTestApi =
-  env.BASE_URL + "api/integrations/slack/test";
+export const discordInstallUrlApi =
+  env.BASE_URL + "api/integrations/discord/install-url";
 
-export const slackInstallationApi = env.BASE_URL + "api/integrations/slack";
+export const discordInstallationTestApi =
+  env.BASE_URL + "api/integrations/discord/test";
 
 const getFetcher = (url: string) =>
   fetch(url, { method: "GET" }).then((r) => r.json());
 
-export function useSlackInstallUrl(teamId?: string) {
-  // use a custom install URL for every integration
+export const getDiscordUrl = (teamId?: string) => {
   const fetcher = getFetcher;
   const { data, error } = useSWR(
-    slackInstallUrlApi + (teamId ? "?teamId=" + teamId : ""),
+    discordInstallUrlApi + (teamId ? "?teamId=" + teamId : ""),
     fetcher,
     {
       revalidateOnReconnect: true,
     }
   );
-  return { url: data, isLoading: !error && !data, isError: error };
-}
+  return {
+    url: data ? data.url : undefined,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
 
-export async function testSlackInstallation(webhookUrl: string) {
-  console.log(webhookUrl);
-  const response = await fetch(slackInstallationTestApi, {
+export async function testDiscordInstallation(
+  webhookToken: string,
+  webhookId: string
+) {
+  const response = await fetch(discordInstallationTestApi, {
     method: "POST",
-    body: JSON.stringify({ incomingWebhookUrl: webhookUrl }),
+    body: JSON.stringify({ webhookId, webhookToken }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
@@ -37,25 +42,25 @@ export async function testSlackInstallation(webhookUrl: string) {
   return response.ok;
 }
 
-export const deleteSlackIntegration = async ({
-  slackChannel,
-  slackTeam,
+export const deleteDiscordIntegration = async ({
+  guildId,
+  channelId,
   teamId,
   onError,
   onSuccess,
 }: {
-  slackChannel: string;
-  slackTeam: string;
+  guildId: string;
+  channelId: string;
   teamId?: string;
   onSuccess: () => void;
   onError: (message: string) => void;
 }) => {
-  const response = await fetch(slackInstallationApi, {
+  const response = await fetch(discordApi, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
-    body: JSON.stringify({ slackChannel, slackTeam, teamId }),
+    body: JSON.stringify({ guildId, channelId, teamId }),
   });
   if (response.ok) {
     onSuccess();
@@ -65,7 +70,7 @@ export const deleteSlackIntegration = async ({
     switch (response.status) {
       case 403:
         errorMessage =
-          "An error occurred while deleting existing Slack alerts.";
+          "An error occurred while deleting existing Discord alerts.";
         break;
       case 500:
         errorMessage =

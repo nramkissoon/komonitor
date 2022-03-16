@@ -293,6 +293,7 @@ function createCoreMonitorFromFormData(formData: Inputs) {
           recipients: {
             Email: formData.alert?.recipients.Email ?? undefined,
             Slack: formData.alert?.recipients.Slack ?? undefined,
+            Discord: formData.alert?.recipients.Discord ?? undefined,
             Webhook: handleWebhookAlertUrl(formData),
           },
           description: formData.alert?.description ?? "",

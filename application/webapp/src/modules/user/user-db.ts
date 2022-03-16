@@ -9,7 +9,13 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import Stripe from "stripe";
-import { SlackInstallation, User, WebhookSecret } from "utils";
+import {
+  DiscordWebhookIntegration,
+  SlackInstallation,
+  User,
+  UserIntegration,
+  WebhookSecret,
+} from "utils";
 import { ddbClient, env } from "../../common/server-utils";
 import { createStripeCustomer, getStripeCustomer } from "../billing/customer";
 import { PLAN_PRODUCT_IDS } from "../billing/plans";
@@ -548,6 +554,102 @@ export async function deleteUserSlackInstallation(
     throw err;
   }
 }
+
+export const deleteUserDiscordIntegration = async ({
+  user,
+  channelId,
+  guildId,
+}: {
+  user: User;
+  channelId: string;
+  guildId: string;
+}) => {
+  try {
+    const currentIntegrations = user.integrations;
+    const updatedIntegrations = currentIntegrations
+      ? currentIntegrations.filter((i) => {
+          if (i.type === "DiscordWebhook") {
+            return !(
+              (i.data as DiscordWebhookIntegration).webhook.guild_id ===
+                guildId &&
+              (i.data as DiscordWebhookIntegration).webhook.channel_id ===
+                channelId
+            );
+          }
+          return true;
+        })
+      : [];
+    const marshalledInstallations = updatedIntegrations.map((installation) => ({
+      M: marshall(installation, { removeUndefinedValues: true }),
+    }));
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: env.USER_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + user.id },
+        sk: { S: "USER#" + user.id },
+      },
+      ExpressionAttributeValues: {
+        ":val": {
+          L: marshalledInstallations,
+        },
+      },
+      UpdateExpression: "SET integrations = :val",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const addUserIntegration = async (
+  user: User,
+  integration: UserIntegration
+) => {
+  try {
+    if (!user) return false;
+    if (!user.integrations) {
+      user.integrations = [integration];
+    } else {
+      user.integrations.push(integration);
+    }
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: env.USER_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: "USER#" + user.id },
+        sk: { S: "USER#" + user.id },
+      },
+      ExpressionAttributeValues: {
+        ":val": {
+          L: user.integrations.map((m) => ({
+            M: marshall(m, { removeUndefinedValues: true }),
+          })),
+        },
+      },
+      UpdateExpression: "SET integrations = :val",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
 
 export async function addUserSlackInstallation(
   ddbClient: DynamoDBClient,

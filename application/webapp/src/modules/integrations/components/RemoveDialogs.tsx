@@ -4,6 +4,7 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   chakra,
   useColorModeValue,
@@ -11,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { RefObject } from "react";
+import { deleteDiscordIntegration } from "../discord/client";
 import { deleteSlackIntegration } from "../slack/client";
 
 export interface RemoveSlackInstallationDialogProps {
@@ -59,6 +61,7 @@ export const RemoveSlackInstallationDialog = (
       isOpen={isOpen}
       onClose={onClose}
     >
+      <AlertDialogOverlay />
       <AlertDialogContent
         shadow="xl"
         borderWidth="1px"
@@ -122,6 +125,117 @@ export const RemoveSlackInstallationDialog = (
             }}
           >
             Remove Slack
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
+export interface RemoveDiscordDialogProps {
+  leastDestructiveRef: RefObject<any>;
+  isOpen: boolean;
+  onClose: () => void;
+  mutate: () => void;
+  channelId: string;
+  guildId: string;
+  channelName: string;
+  guildName: string;
+}
+
+export const RemoveDiscordDialog = ({
+  leastDestructiveRef,
+  isOpen,
+  onClose,
+  mutate,
+  channelId,
+  channelName,
+  guildId,
+  guildName,
+}: RemoveDiscordDialogProps) => {
+  const { teamId } = useRouter().query;
+  const toast = useToast();
+  const postErrorToast = (message: string) => {
+    toast({
+      title: "Unable to remove integration",
+      description: message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      variant: "solid",
+      position: "top",
+    });
+  };
+  return (
+    <AlertDialog
+      leastDestructiveRef={leastDestructiveRef}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <AlertDialogOverlay />
+      <AlertDialogContent
+        shadow="xl"
+        borderWidth="1px"
+        borderColor="red.300"
+        bg={useColorModeValue("white", "gray.900")}
+      >
+        <AlertDialogHeader fontSize="2xl" fontWeight="medium">
+          Remove Discord Integration
+        </AlertDialogHeader>
+        <AlertDialogBody fontSize="lg" fontWeight="normal">
+          Are you sure you want to remove your integration on{" "}
+          <chakra.b color="blue.400">{guildName}</chakra.b> server? This
+          integration sends alerts to the{" "}
+          <chakra.b color="blue.400">{channelName}</chakra.b> channel.
+          <chakra.hr my="1em" />
+          Removing Discord will{" "}
+          <chakra.b color="red.500">
+            delete any corresponding Discord Alerts from all monitors. If
+            Discord is the only alert channel for a monitor, the monitor will
+            have no alerts.
+          </chakra.b>{" "}
+          You will have to create a new alert for the monitor.
+        </AlertDialogBody>
+        <AlertDialogFooter>
+          <Button
+            ref={leastDestructiveRef}
+            onClick={onClose}
+            mr="1.5em"
+            fontWeight="normal"
+          >
+            Cancel
+          </Button>
+          <Button
+            colorScheme="red"
+            color="white"
+            bgColor="red.500"
+            fontWeight="normal"
+            onClick={async () => {
+              const removed = await deleteDiscordIntegration({
+                guildId,
+                channelId,
+                teamId: teamId as string,
+                onError: postErrorToast,
+                onSuccess: () => {
+                  mutate();
+                  onClose();
+                },
+              });
+
+              if (removed) {
+                toast({
+                  title: "Successfully removed integration",
+                  description: "Slack integration removal completed.",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: true,
+                  variant: "solid",
+                  position: "top",
+                });
+              }
+            }}
+          >
+            Remove Discord
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

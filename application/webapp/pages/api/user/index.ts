@@ -11,6 +11,7 @@ import {
   getServicePlanProductIdForUser,
   getUserById,
 } from "../../../src/modules/user/user-db";
+import { updateDiscordIntegrations } from "../teams";
 
 async function getHandler(
   req: NextApiRequest,
@@ -23,10 +24,11 @@ async function getHandler(
     if (user) {
       if (user.slack_installations) {
         user.slack_installations.forEach((installation) => {
-          if (installation.incomingWebhook)
-            installation.incomingWebhook.url = "--redacted--";
           if (installation.bot) installation.bot.token = "--redacted--";
         });
+      }
+      if (req.headers["referer"]?.includes("/integrations")) {
+        updateDiscordIntegrations(user);
       }
       res.status(200);
       res.json(user);

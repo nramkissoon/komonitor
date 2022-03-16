@@ -5,6 +5,7 @@ import { Advanced } from "../src/modules/landing-page/Advanced";
 import { Banner } from "../src/modules/landing-page/Banner";
 import { CTA } from "../src/modules/landing-page/Cta";
 import { Features } from "../src/modules/landing-page/Features";
+import { IntegrationSection } from "../src/modules/landing-page/Integrations";
 import { TeamsSection } from "../src/modules/landing-page/Team";
 
 const SectionDivider = () => (
@@ -44,6 +45,8 @@ const Home: NextPage = () => {
         <Advanced />
         <SectionDivider />
         <TeamsSection />
+        <SectionDivider />
+        <IntegrationSection />
         <SectionDivider />
         <CTA />
       </Box>

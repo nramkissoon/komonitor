@@ -8,8 +8,10 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
+import { getDiscordUrl } from "../discord/client";
 import { useSlackInstallUrl } from "../slack/client";
-import { SlackSvg } from "./Icons";
+import { DiscordSvg, SlackSvg } from "./Icons";
 
 const SlackIntegrationButton = () => {
   const { teamId } = useRouter().query;
@@ -26,6 +28,27 @@ const SlackIntegrationButton = () => {
         loadingText={"Redirecting"}
       >
         Add to Slack
+      </Button>
+    </Link>
+  );
+};
+
+const DiscordWebhookIntegrationButton = () => {
+  const { teamId } = useRouter().query;
+
+  const { url, isLoading, isError } = getDiscordUrl(teamId as string);
+  return (
+    <Link href={url ? url : ""} passHref>
+      <Button
+        as="a"
+        bg="#5865F2"
+        color="white"
+        w="160px"
+        _hover={{ bg: "blue.600" }}
+        isLoading={isLoading}
+        loadingText={"Redirecting"}
+      >
+        Add to Discord
       </Button>
     </Link>
   );
@@ -83,6 +106,12 @@ export const NewIntegrationsList = () => {
         icon={SlackSvg}
         description="Send alerts directly to your Slack channels."
         integrationButton={<SlackIntegrationButton />}
+      />
+      <IntegrationInfoCard
+        name="Discord"
+        icon={DiscordSvg}
+        description="Send alerts directly to your Discord channels."
+        integrationButton={<DiscordWebhookIntegrationButton />}
       />
     </Grid>
   );

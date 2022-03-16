@@ -22,7 +22,8 @@ import {
   UseFormClearErrors,
   UseFormSetValue,
 } from "react-hook-form";
-import { SlackInstallation } from "utils";
+import { DiscordWebhookIntegration, SlackInstallation } from "utils";
+import { useAppBaseRoute } from "../../../common/client-utils";
 import {
   MultiSelectTextInput,
   ReactSelect,
@@ -43,6 +44,7 @@ interface RecipientFormControllerProps {
   currentValues: {
     Email?: string[];
     Slack?: string[];
+    Discord?: string[];
     Webhook?: string[];
   };
   clearErrors: UseFormClearErrors<Inputs>;
@@ -58,6 +60,16 @@ const createSlackInstallationOptions = (installations: SlackInstallation[]) => {
   return installations.map((i) => ({
     label: (i.incomingWebhook?.channel as string) + ` (in ${i.team?.name})`,
     value: createTeamChannelIdCompoundKey(i),
+    isDisabled: false,
+  }));
+};
+
+const createDiscordIntegrationOptions = (
+  integrations: DiscordWebhookIntegration[]
+) => {
+  return integrations.map((i) => ({
+    label: i.webhook.channelName + ` (in ${i.webhook.guildName} server)`,
+    value: i.webhook.id,
     isDisabled: false,
   }));
 };
@@ -197,6 +209,7 @@ export const RecipientFormController = (
     currentValues,
     clearErrors,
   } = props;
+  const baseUrl = useAppBaseRoute();
   let {
     integrations: integrations,
     isError: integIsError,
@@ -208,6 +221,12 @@ export const RecipientFormController = (
         .filter((i) => i.type === "Slack" && i.data !== undefined)
         .map((i) => i.data) as SlackInstallation[]);
 
+  const discordIntegrations = !integrations
+    ? undefined
+    : (integrations
+        .filter((i) => i.type === "DiscordWebhook" && i.data !== undefined)
+        .map((i) => i.data) as DiscordWebhookIntegration[]);
+
   const { field: emailField } = useController({
     control: control,
     name: "alert.recipients.Email",
@@ -215,6 +234,10 @@ export const RecipientFormController = (
   const { field: slackField } = useController({
     control: control,
     name: "alert.recipients.Slack",
+  });
+  const { field: discordField } = useController({
+    control: control,
+    name: "alert.recipients.Discord",
   });
   const { field: webhookField } = useController({
     control: control,
@@ -226,6 +249,9 @@ export const RecipientFormController = (
   const [addSlack, toggleAddSlack] = React.useState<boolean>(
     slackField.value ? slackField.value.length > 0 : false
   );
+  const [addDiscord, toggleAddDiscord] = React.useState<boolean>(
+    discordField.value ? discordField.value.length > 0 : false
+  );
   const [addWebhook, toggleAddWebhook] = React.useState<boolean>(
     webhookField.value ? webhookField.value.length > 0 : false
   );
@@ -235,10 +261,13 @@ export const RecipientFormController = (
     if (!hasAlert) {
       toggleAddEmail(false);
       toggleAddSlack(false);
+      toggleAddDiscord(false);
       toggleAddWebhook(false);
     } else {
       if (emailField.value && emailField.value.length > 0) toggleAddEmail(true);
       if (slackField.value && slackField.value.length > 0) toggleAddSlack(true);
+      if (discordField.value && discordField.value.length > 0)
+        toggleAddDiscord(true);
       if (webhookField.value && webhookField.value.length > 0)
         toggleAddWebhook(true);
     }
@@ -318,7 +347,7 @@ export const RecipientFormController = (
         {(!slackInstallations || slackInstallations.length === 0) &&
         !integIsLoading ? (
           <Box ml="1rem">
-            <Link href="/app/integrations" passHref>
+            <Link href={baseUrl + "/integrations"} passHref>
               <chakra.a
                 target="_blank"
                 fontWeight="normal"
@@ -384,6 +413,90 @@ export const RecipientFormController = (
               );
             }
             return <></>;
+          }}
+        />
+      )}
+      <Flex mt="1em">
+        <Switch
+          display={!discordIntegrations && !integIsLoading ? "none" : "inherit"}
+          isChecked={addDiscord}
+          isDisabled={!hasAlert || (!discordIntegrations && !integIsLoading)}
+          onChange={(e) => {
+            toggleAddDiscord(e.target.checked);
+            clearErrors("alert.recipients.Discord");
+            if (!e.target.checked)
+              setValue("alert.recipients.Discord", undefined);
+          }}
+        />
+        {(!discordIntegrations || discordIntegrations.length === 0) &&
+        !integIsLoading ? (
+          <Box ml="1rem">
+            <Link href={baseUrl + "/integrations"} passHref>
+              <chakra.a
+                target="_blank"
+                fontWeight="normal"
+                color="blue.500"
+                _hover={{ color: "blue.700" }}
+              >
+                Add Discord integration
+              </chakra.a>
+            </Link>{" "}
+            <chakra.span color="gray.500">
+              (go to integrations page)
+            </chakra.span>
+          </Box>
+        ) : (
+          <chakra.span
+            ml="1rem"
+            fontWeight="medium"
+            opacity={!hasAlert ? 0.4 : 1}
+          >
+            Add Discord Alert
+          </chakra.span>
+        )}
+      </Flex>
+      {addDiscord && discordIntegrations && (
+        <Controller
+          name="alert.recipients.Discord"
+          control={control}
+          render={({ field, fieldState }) => {
+            if (discordIntegrations !== undefined) {
+              const integrationOptions =
+                createDiscordIntegrationOptions(discordIntegrations);
+              return (
+                <FormControl
+                  isDisabled={!hasAlert || !addDiscord}
+                  isInvalid={fieldState.error ? fieldState.isTouched : false}
+                  isRequired
+                  mt="1em"
+                >
+                  <FormLabel htmlFor="recipients">Discord Channel</FormLabel>
+                  <ReactSelect
+                    defaultValue={
+                      field.value ? integrationOptions[0] : undefined
+                    }
+                    options={integrationOptions}
+                    placeholder={"Discord Channel"}
+                    field={field as any}
+                    setValue={(fieldName: string, value: string) => {
+                      clearErrors("alert.recipients");
+                      if (value !== "") setValue(fieldName as any, [value]);
+                      else setValue(fieldName as any, []);
+                    }}
+                  />
+                  <chakra.div
+                    fontSize="sm"
+                    mt="5px"
+                    color={useColorModeValue("red.500", "red.300")}
+                  >
+                    {fieldState.error?.message !== undefined &&
+                      "Please select a Discord Channel to send alerts to."}
+                  </chakra.div>
+                </FormControl>
+              );
+            } else {
+              return <></>;
+            }
           }}
         />
       )}

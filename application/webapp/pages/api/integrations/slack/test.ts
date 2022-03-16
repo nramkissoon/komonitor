@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
-import { ddbClient, env } from "../../../../src/common/server-utils";
-import { getUserSlackInstallation } from "../../../../src/modules/user/user-db";
 
 async function getHandler(
   req: NextApiRequest,
@@ -11,15 +9,12 @@ async function getHandler(
 ) {
   try {
     const userId = session.uid as string;
-    const installation = await getUserSlackInstallation(
-      ddbClient,
-      env.USER_TABLE_NAME,
-      userId
-    );
-    if (!installation || installation.incomingWebhook?.url === undefined)
-      throw new Error("no installation or webhook url");
 
-    const response = await fetch(installation.incomingWebhook?.url, {
+    const { incomingWebhookUrl } = req.body;
+
+    if (!incomingWebhookUrl) throw new Error("no webhook url");
+
+    const response = await fetch(incomingWebhookUrl, {
       method: "POST",
       headers: new Headers({ "content-type": "application/json" }),
       body: JSON.stringify({
@@ -56,7 +51,7 @@ export default async function handler(
   const session = await getSession({ req });
   if (session) {
     switch (req.method) {
-      case "GET":
+      case "POST":
         await getHandler(req, res, session);
         break;
       default:

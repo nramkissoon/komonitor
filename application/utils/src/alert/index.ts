@@ -1,6 +1,6 @@
 import _ from "../lodash";
 
-export type ChannelType = "Email" | "Slack" | "Webhook";
+export type ChannelType = "Email" | "Slack" | "Webhook" | "Discord";
 
 export interface Alert {
   description: string;
@@ -8,6 +8,7 @@ export interface Alert {
     Slack?: string[];
     Email?: string[];
     Webhook?: string[];
+    Discord?: string[];
   };
   channels: ChannelType[];
 }

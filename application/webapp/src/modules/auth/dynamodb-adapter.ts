@@ -155,6 +155,7 @@ export const DynamoDBAdapter = (
         createdAt: now.toISOString(),
         updatedAt: now.toISOString(),
         refresh_token_expires_in: profile.refresh_token_expires_in ?? undefined,
+        integrations: [],
       };
 
       if (profile.email) {

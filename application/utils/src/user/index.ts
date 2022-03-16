@@ -4,6 +4,36 @@ import crypto from "crypto";
 
 export { Installation as SlackInstallation } from "@slack/oauth";
 
+export interface DiscordWebhook {
+  application_id: string;
+  name: string;
+  url: string;
+  channel_id: string;
+  token: string;
+  type: number;
+  avatar: any;
+  guild_id: string;
+  id: string;
+}
+
+export interface DiscordWebhookAccessToken {
+  token_type: string;
+  access_token: string;
+  scope: string;
+  expires_in: number;
+  refresh_token: string;
+  webhook: DiscordWebhook;
+}
+
+export interface DiscordWebhookIntegration {
+  token_type: string;
+  access_token: string;
+  scope: string;
+  expires_in: number;
+  refresh_token: string;
+  webhook: DiscordWebhook & { channelName: string; guildName: string };
+}
+
 export interface WebhookSecret {
   value: string;
   created_at: number;
@@ -44,6 +74,7 @@ export interface User
   webhook_secret?: WebhookSecret;
   emailOptIn: boolean;
   teams?: string[];
+  integrations?: UserIntegration[];
 }
 
 export type TeamPermissionLevel = "admin" | "edit" | "view";
@@ -56,9 +87,12 @@ export interface TeamMember {
 }
 
 export interface TeamIntegration {
-  type: "Slack";
-  data: Installation;
+  type: "Slack" | "DiscordWebhook";
+  data: Installation | DiscordWebhookIntegration;
 }
+
+export interface UserIntegration extends TeamIntegration {}
+
 export interface TeamInvite {
   team_id_invite_code_composite_key: string;
   expiration: number;

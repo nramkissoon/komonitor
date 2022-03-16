@@ -71,8 +71,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const alreadyInstalled =
       installations.find(
         (installation) =>
-          installation.team?.id === slackInstallation?.team?.id &&
-          installation.incomingWebhook?.channelId ===
+          (installation as Installation).team?.id ===
+            slackInstallation?.team?.id &&
+          (installation as Installation).incomingWebhook?.channelId ===
             slackInstallation?.incomingWebhook?.channelId
       ) !== undefined;
 

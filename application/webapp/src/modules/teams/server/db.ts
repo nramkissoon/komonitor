@@ -11,8 +11,10 @@ import {
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Installation } from "@slack/oauth";
 import {
+  DiscordWebhookIntegration,
   SlackInstallation,
   Team,
+  TeamIntegration,
   TeamInvite,
   TeamPermissionLevel,
   User,
@@ -523,6 +525,43 @@ export const addTeamSlackIntegration = async (
   }
 };
 
+export const addTeamIntegration = async (
+  team: Team,
+  integration: TeamIntegration
+) => {
+  try {
+    if (!team) return false;
+    team.integrations.push(integration);
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: TEAM_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: team.pk },
+        sk: { S: team.sk },
+      },
+      ExpressionAttributeValues: {
+        ":val": {
+          L: team.integrations.map((m) => ({
+            M: marshall(m, { removeUndefinedValues: true }),
+          })),
+        },
+      },
+      UpdateExpression: "SET integrations = :val",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const updateTeamSlackInstallation = async (
   oldInstallation: SlackInstallation,
   newInstallation: SlackInstallation,
@@ -533,8 +572,8 @@ export const updateTeamSlackInstallation = async (
     const updatedIntegrations = currentIntegrations.map((i) => {
       if (i.type === "Slack") {
         if (
-          i.data.team?.id === oldInstallation.team?.id &&
-          i.data.incomingWebhook?.channelId ===
+          (i.data as SlackInstallation).team?.id === oldInstallation.team?.id &&
+          (i.data as SlackInstallation).incomingWebhook?.channelId ===
             oldInstallation.incomingWebhook?.channelId
         ) {
           i.data = newInstallation;
@@ -588,8 +627,60 @@ export const deleteTeamSlackInstallation = async ({
     const updatedIntegrations = currentIntegrations.filter((i) => {
       if (i.type === "Slack") {
         return !(
-          i.data.team?.id === slackTeam &&
-          i.data.incomingWebhook?.channelId === slackChannel
+          (i.data as SlackInstallation).team?.id === slackTeam &&
+          (i.data as SlackInstallation).incomingWebhook?.channelId ===
+            slackChannel
+        );
+      }
+      return true;
+    });
+    const marshalledInstallations = updatedIntegrations.map((installation) => ({
+      M: marshall(installation, { removeUndefinedValues: true }),
+    }));
+    const updateCommandInput: UpdateItemCommandInput = {
+      TableName: TEAM_TABLE_NAME,
+      ConditionExpression: "attribute_exists(pk)", // asserts that the user exists
+      Key: {
+        pk: { S: team.pk },
+        sk: { S: team.sk },
+      },
+      ExpressionAttributeValues: {
+        ":val": {
+          L: marshalledInstallations,
+        },
+      },
+      UpdateExpression: "SET integrations = :val",
+    };
+    const response = await ddbClient.send(
+      new UpdateItemCommand(updateCommandInput)
+    );
+    const statusCode = response.$metadata.httpStatusCode as number;
+    if (statusCode >= 200 && statusCode < 300) return true;
+
+    // throw an error with the requestId for debugging
+    throw new Error(response.$metadata.requestId);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const deleteTeamDiscordIntegration = async ({
+  team,
+  channelId,
+  guildId,
+}: {
+  team: Team;
+  channelId: string;
+  guildId: string;
+}) => {
+  try {
+    const currentIntegrations = team.integrations;
+    const updatedIntegrations = currentIntegrations.filter((i) => {
+      if (i.type === "DiscordWebhook") {
+        return !(
+          (i.data as DiscordWebhookIntegration).webhook.guild_id === guildId &&
+          (i.data as DiscordWebhookIntegration).webhook.channel_id === channelId
         );
       }
       return true;

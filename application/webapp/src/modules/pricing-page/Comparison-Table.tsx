@@ -85,6 +85,7 @@ const monitorSectionData = [
 const alertSectionData = [
   ["Email Alerts", CheckIcon, CheckIcon, CheckIcon],
   ["Slack Alerts", CheckIcon, CheckIcon, CheckIcon],
+  ["Discord Alerts", CheckIcon, CheckIcon, CheckIcon],
   ["Email Recipients per Alert", "1", "5", "10"],
   ["Webhook Alerts", "-", CheckIcon, CheckIcon],
 ];
