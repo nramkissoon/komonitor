@@ -135,10 +135,7 @@ const deleteDiscordIntegration = async ({
     throw new Error("no discord installation to delete");
   }
   const webhook = webhooks[0];
-  const client = new WebhookClient({
-    token: webhook.webhook.token,
-    id: webhook.webhook.id,
-  });
+  const client = new WebhookClient(webhook.webhook.id, webhook.webhook.token);
   const discordResponse = await client.delete();
   client.destroy();
 
