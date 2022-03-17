@@ -15,6 +15,8 @@ Alerts:
 
 ☐ add uptime condition check results to status -> add results to alerts
 
+☐ send pasued to uptime lambda
+
 ☐ integration page
 
 ✔ footer hover style @done(22-03-17 10:37)
@@ -122,10 +124,7 @@ Webapp:
         ☐  verify
     Website View:
         ✘  scope @cancelled(22-01-28 22:28)
-    custom status pages: 
-        ☐  scope
-    teams: 
-        ☐  scope
+
 
 Customer Serve:
     ☐ notification for new users -> email template
