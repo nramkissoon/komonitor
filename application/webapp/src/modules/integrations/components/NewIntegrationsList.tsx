@@ -78,7 +78,9 @@ const IntegrationInfoCard: React.FC<{
       flexDir={["column", "row"]}
     >
       <Flex alignItems="center" justifyContent="center" flexDir="column">
-        {icon}
+        <Box h="30px" w="30px">
+          {icon}
+        </Box>
 
         <Box fontSize="lg" textAlign="center" my="10px">
           {description}

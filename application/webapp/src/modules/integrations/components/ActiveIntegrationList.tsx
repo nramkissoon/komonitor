@@ -91,7 +91,11 @@ const SlackInstallationInfoBar = ({
           teamId={installation.team?.id ?? ""}
         />
       )}
-      <Box marginLeft={[0, "20px"]}>{SlackSvg}</Box>
+      <Box marginLeft={[0, "20px"]}>
+        <Box h="30px" w="30px">
+          {SlackSvg}
+        </Box>
+      </Box>
       <Flex
         mx="20px"
         alignItems="center"
@@ -152,7 +156,11 @@ const DiscordIntegrationInfoBar = ({
           mutate={mutate}
         />
       )}
-      <Box marginLeft={[0, "20px"]}>{DiscordSvg}</Box>
+      <Box marginLeft={[0, "20px"]}>
+        <Box h="30px" w="30px">
+          {DiscordSvg}
+        </Box>
+      </Box>
       <Flex
         mx="20px"
         alignItems="center"
