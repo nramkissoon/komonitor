@@ -69,7 +69,7 @@ export function Banner() {
           lineHeight="shorter"
           mb=".3em"
         >
-          Simple and Reliable Website Monitoring.
+          Easy and Reliable Website Monitoring.
         </chakra.h1>
 
         <chakra.h2

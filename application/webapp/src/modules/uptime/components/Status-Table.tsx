@@ -86,7 +86,7 @@ function createRowPropsFromMonitorStatus(
     timestamp: status.timestamp,
     filterString: [
       status.status,
-      getTimeString(offset, status.timestamp),
+      getTimeString(offset, status.timestamp / 1000),
       status.response.statusCode,
       status.response.statusMessage,
     ].join(" "),
