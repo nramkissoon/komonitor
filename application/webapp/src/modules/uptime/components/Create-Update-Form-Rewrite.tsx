@@ -343,7 +343,7 @@ export const CreateUpdateFormRewrite = (props: CreateUpdateFormProps) => {
   };
   return (
     <>
-      <Container mb="3em" p="0" maxW="6xl">
+      <Container mb="3em" p="0" maxW="7xl">
         <FormProvider {...methods}>
           <chakra.form onSubmit={handleSubmit(onSubmit)}>
             <Box

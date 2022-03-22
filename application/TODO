@@ -2,43 +2,6 @@
 ☐ find 20 companies
 ✔ design analytics @done(22-03-07 14:15)
 
-Teams:
-    ✔ view permssion @done(22-03-08 12:18)
-    ✔ check for edit permission in project, monitor apis @done(22-03-08 12:13)
-    ✔ api and webhook secrets not seen if view @done(22-03-08 12:16)
-    ✘ verify webhook hidden and viewer can only view @cancelled(22-03-08 13:03)
-    ✔ form and invite updates @done(22-03-08 13:05)
-    ✔ verify @done(22-03-08 13:56)
-    ✔ permission docs @done(22-03-08 14:43)
-
-Landing: 
-    ✔ add syntax highlighter for json @done(22-03-08 11:20)
-    ✔ design and implement team section -> depend on view perm @done(22-03-09 11:53)
-
-Discord:
-    ✔ design for user and team @done(22-03-10 10:07)
-    ✔ test test @done(22-03-14 17:24)
-    ✔ test delete @done(22-03-14 17:24)
-    ✔ test create @done(22-03-14 17:24)
-    ✔ test alert @done(22-03-16 12:24)
-    Tasks: 
-        ✔ model changes for team/user @done(22-03-10 10:07)
-        ✔ message for no integrations tab @done(22-03-10 10:16)
-        ✔ test slack integration @done(22-03-10 12:32)
-        ✔ useDiscordInstallUrl -> call api -> create secret -> return url @done(22-03-12 14:08)
-        ✔ info card in NewIntegrationsList @done(22-03-11 10:27)
-        ✔ DiscordInstallationInfoBar + Remove dialog + test button @done(22-03-11 10:42)
-        api:
-            ✔  index - detach monitors with discord alerts, delete discord integ (delete webhook) @done(22-03-11 10:59)
-            ✔  test - execute webhook @done(22-03-11 11:41)
-        ✔ redirect -> integrations/discord/callback -> save webhook data / get channel name and guild name -> redirect to integ page @done(22-03-14 17:24)
-        ✔ check if webhook alerady exists on channel before adding and check if prev webhook is deleted, if not, dont add new @done(22-03-14 17:24)
-        ✔ getDiscord channel and guiild names and add to obj @done(22-03-15 15:19)
-        ✔ add env to vercel @done(22-03-16 11:46)
-        ✔  setup prod app @done(22-03-16 11:46)
-        ✔ for alerts and monitors ->  use webhook id to get webhook @done(22-03-15 15:19)
-        ✔ team todo in slack handler -> check email handler @done(22-03-15 10:57)
-        ☐ landing and pricing updates
 
 Status Pages:
     ☐ status page table
@@ -51,6 +14,18 @@ Alerts:
     ☐ alert when up -> design for email, disc, slack, webhook
 
 ☐ add uptime condition check results to status -> add results to alerts
+
+☐ send pasued to uptime lambda
+
+☐  slack app distribution
+
+✔ slack integ page @done(22-03-22 10:33)
+☐ disc integ page
+✔ email integ page @done(22-03-22 10:33)
+✔ webhook integ page @done(22-03-22 10:33)
+✔ integ page cta @done(22-03-22 10:33)
+
+✔ footer hover style @done(22-03-17 10:37)
 
 ez: 
     ✔ follow redirect default @done(22-03-08 10:01)
@@ -155,10 +130,7 @@ Webapp:
         ☐  verify
     Website View:
         ✘  scope @cancelled(22-01-28 22:28)
-    custom status pages: 
-        ☐  scope
-    teams: 
-        ☐  scope
+
 
 Customer Serve:
     ☐ notification for new users -> email template

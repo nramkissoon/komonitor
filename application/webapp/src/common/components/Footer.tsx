@@ -20,18 +20,21 @@ const HeaderLink = (props: {
 
   const defaultButtonLinkStyles: ButtonProps = {
     color: useColorModeValue("gray.900", "gray.400"),
-    display: "inline-flex",
     alignItems: "center",
     variant: "ghost",
     fontWeight: "medium",
-    fontSize: "lg",
+    fontSize: "md",
     _focus: { boxShadow: "none" },
-    _hover: { color: useColorModeValue("gray.500", "white") },
+    _hover: {
+      color: useColorModeValue("inherit", "white"),
+      bg: useColorModeValue("gray.200", "gray.600"),
+    },
     as: "a",
+    rounded: "md",
   };
   return (
     <Link href={href} passHref>
-      <Button {...defaultButtonLinkStyles} {...buttonProps}>
+      <Button {...defaultButtonLinkStyles} {...buttonProps} py="0">
         {text}
       </Button>
     </Link>

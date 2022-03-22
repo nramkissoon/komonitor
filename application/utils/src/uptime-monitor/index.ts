@@ -126,7 +126,7 @@ export type UptimeStatusRequest = Omit<
 export interface UptimeMonitorStatus {
   monitor_id: string;
   timestamp: number;
-  status: "up" | "down";
+  status: "up" | "down" | "paused";
   request: UptimeStatusRequest;
   response: UptimeStatusResponse;
   monitor_snapshot: UptimeMonitor;
@@ -135,7 +135,7 @@ export interface UptimeMonitorStatus {
 export interface UptimeMonitorWebhookNotification {
   url: string;
   name: string;
-  trigger: "up" | "down";
+  trigger: "up" | "down" | "paused";
   region: string;
   monitor_type: "uptime";
   latency: number;

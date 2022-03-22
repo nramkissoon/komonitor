@@ -80,12 +80,12 @@ export const updateDiscordIntegrations = async (owner: Team | User) => {
     const client = new Client();
     const login = await client.login(env.DISCORD_BOT_TOKEN);
 
-    const guilds = await client.guilds;
-    const channels = await client.channels;
+    const guilds = client.guilds;
+    const channels = client.channels;
     for (let integration of integrations) {
       const oldIntegration = integration;
       const guild = await guilds.fetch(integration.webhook.guild_id);
-      const newGuildName = guild?.name;
+      const newGuildName = guild.name;
 
       const newChannel = (
         await channels.fetch(integration.webhook.channel_id)
@@ -94,7 +94,8 @@ export const updateDiscordIntegrations = async (owner: Team | User) => {
 
       const mustUpdate =
         newChannelName !== integration.webhook.channelName ||
-        newGuildName !== integration.webhook.guildName;
+        (newGuildName !== integration.webhook.guildName &&
+          newGuildName !== undefined); // weird cases where guildname is coming in undefined
 
       if (mustUpdate) {
         const newIntegration = oldIntegration;

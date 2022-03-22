@@ -1,10 +1,12 @@
 import {
+  Box,
   Center,
   chakra,
   Flex,
   Image,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Link from "next/link";
 
 export const TeamsSection = () => {
   return (
@@ -40,6 +42,21 @@ export const TeamsSection = () => {
           width="5xl"
         />
       </Center>
+      <Box
+        fontSize="xl"
+        fontWeight={"medium"}
+        mt="15px"
+        role="group"
+        transitionDuration={".2s"}
+        color="blue.500"
+        _hover={{
+          color: "blue.700",
+        }}
+      >
+        <Link href={"/pricing"}>
+          Check out our team plans on the pricing page!
+        </Link>
+      </Box>
     </Flex>
   );
 };

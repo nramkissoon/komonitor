@@ -1,5 +1,4 @@
 import { Container } from "@chakra-ui/react";
-import React from "react";
 
 export const PageContainer = (props: { isAppPage?: boolean } & any) => {
   const { isAppPage } = props;
@@ -7,7 +6,7 @@ export const PageContainer = (props: { isAppPage?: boolean } & any) => {
     <Container
       maxW={
         isAppPage
-          ? ["sm", "xl", "3xl", "5xl", "6xl"]
+          ? ["sm", "xl", "3xl", "5xl", "6xl", "7xl"]
           : ["sm", "xl", "3xl", "5xl", "6xl", "8xl"]
       }
       mt="3em"

@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   ButtonProps,
+  Center,
   chakra,
   CloseButton,
   CloseButtonProps,
@@ -152,18 +153,14 @@ export const Header = () => {
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
     w: "full",
-    px: { base: 2, sm: 4, md: 4, xl: "12em" },
+    maxW: "8xl",
+    px: [8, null, null, null, null, 0],
     py: 4,
-    bg: useColorModeValue("white", "gray.900"),
-    borderBottomColor: useColorModeValue("gray.100", "gray.800"),
-    borderBottomWidth: useColorModeValue("0px", "1px"),
-    shadow: "sm",
   };
 
   const defaultFlexContainerStyles: FlexProps = {
     h: "full",
     w: "full",
-    px: "6",
     alignItems: "center",
   };
 
@@ -196,35 +193,51 @@ export const Header = () => {
   };
 
   return (
-    <chakra.header {...defaultHeaderContainerStyles}>
-      <Flex {...defaultFlexContainerStyles}>
-        <Flex align="flex-start">
-          <Link href="/" passHref>
-            <HStack>
-              <Box w="fit-content">
-                <HeaderLogo />
-              </Box>
+    <Center
+      {...{
+        h: "full",
+        w: "full",
+        bg: useColorModeValue("white", "gray.900"),
+        borderBottomColor: useColorModeValue("gray.100", "gray.800"),
+        borderBottomWidth: useColorModeValue("0px", "1px"),
+        shadow: "sm",
+      }}
+    >
+      <chakra.header {...defaultHeaderContainerStyles}>
+        <Flex {...defaultFlexContainerStyles}>
+          <Flex align="flex-start">
+            <Link href="/" passHref>
+              <HStack>
+                <Box w="fit-content">
+                  <HeaderLogo />
+                </Box>
+              </HStack>
+            </Link>
+          </Flex>
+          <Spacer />
+          <Flex mr="3em">
+            <HStack {...defaultLinksHstackContainerStyles}>
+              {HeaderLink({
+                text: "Pricing",
+                href: "/pricing",
+              })}
             </HStack>
-          </Link>
+          </Flex>
+          <Flex justify="flex-end" align="center" color="gray.400">
+            <HStack
+              justify="flex-end"
+              align="center"
+              color="gray.400"
+              mr=".8em"
+            >
+              {GoToAppOrSigninButton({ authed: authed })}
+            </HStack>
+            <IconButton {...defaultColorModeToggleStyles} />
+            <IconButton {...defaultMobileNavHamburgerStyles} />
+          </Flex>
         </Flex>
-        <Spacer />
-        <Flex mr="3em">
-          <HStack {...defaultLinksHstackContainerStyles}>
-            {HeaderLink({
-              text: "Pricing",
-              href: "/pricing",
-            })}
-          </HStack>
-        </Flex>
-        <Flex justify="flex-end" align="center" color="gray.400">
-          <HStack justify="flex-end" align="center" color="gray.400" mr=".8em">
-            {GoToAppOrSigninButton({ authed: authed })}
-          </HStack>
-          <IconButton {...defaultColorModeToggleStyles} />
-          <IconButton {...defaultMobileNavHamburgerStyles} />
-        </Flex>
-      </Flex>
-      {MobileNavHeader({ isOpen: isOpen, onClose: onClose })}
-    </chakra.header>
+        {MobileNavHeader({ isOpen: isOpen, onClose: onClose })}
+      </chakra.header>
+    </Center>
   );
 };
