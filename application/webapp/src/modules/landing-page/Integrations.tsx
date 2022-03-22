@@ -58,28 +58,28 @@ export const IntegrationSection = () => {
           description="Send alerts directly to your Slack channels. Connect your account in a few clicks with OAuth2."
           name="Slack"
           bg="#611f69"
-          href="/integration?tab=slack"
+          href="/integrations/slack"
         />
         <IntegrationInfoCard
           icon={GmailSvg}
           description="Send alerts and weekly monitor reports to your inbox in just a couple of clicks."
           name="Email"
           bg="blue.600"
-          href="/integration?tab=email"
+          href="/integrations/email"
         />
         <IntegrationInfoCard
           icon={DiscordSvg}
           description="Send alerts to your Discord server. Connect your account with OAuth2."
           name="Discord"
           bg="#23272a"
-          href="/integration?tab=discord"
+          href="/integrations/discord"
         />
         <IntegrationInfoCard
           icon={WebhookSvg}
           description="Send alerts and monitor statuses directly to your own application endpoints with webhooks."
           name="Webhooks"
           bg="pink.500"
-          href="/integration?tab=webhook"
+          href="/integrations/webhook"
         />
       </Grid>
       <chakra.h3
@@ -148,9 +148,9 @@ const IntegrationInfoCard: React.FC<{
           <Link href={href}>Learn more</Link>
           <ArrowForwardIcon
             ml="2px"
-            display={"none"}
+            opacity={0}
             transitionDuration=".2s"
-            _groupHover={{ display: "inline-block" }}
+            _groupHover={{ opacity: 1 }}
           />
         </Box>
       </Flex>

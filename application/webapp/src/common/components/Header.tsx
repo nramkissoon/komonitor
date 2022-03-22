@@ -154,6 +154,7 @@ export const Header = () => {
     h: "full",
     w: "full",
     maxW: "8xl",
+    px: [8, null, null, null, null, 0],
     py: 4,
   };
 

@@ -9,7 +9,10 @@ module.exports = (withImages(
     {
       reactStrictMode: true,
       pageExtensions: ['ts', 'tsx',],
-      async redirects() {return [{source: '/docs', destination: '/docs/getting-started/introduction', permanent: true}]}
+      async redirects() {return [
+        {source: '/docs', destination: '/docs/getting-started/introduction', permanent: true},
+    {source: '/integrations', destination: '/integrations/discord', permanent: true}
+  ]}
     }
     )
   )

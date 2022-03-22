@@ -17,7 +17,13 @@ Alerts:
 
 ☐ send pasued to uptime lambda
 
-☐ integration page
+☐  slack app distribution
+
+✔ slack integ page @done(22-03-22 10:33)
+☐ disc integ page
+✔ email integ page @done(22-03-22 10:33)
+✔ webhook integ page @done(22-03-22 10:33)
+✔ integ page cta @done(22-03-22 10:33)
 
 ✔ footer hover style @done(22-03-17 10:37)
 
