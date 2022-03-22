@@ -77,6 +77,7 @@ const contentData: {
     description: "Receive alerts directly to your Discord server channels.",
     bg: "#7289da",
     integHeader: "Integrate with OAuth2",
+    img: "/integrations/discord-integ.png",
     cta: {
       header: "Bring website monitoring to Discord.",
     },
@@ -152,7 +153,7 @@ const Content = ({ selected }: { selected: string }) => {
       <Box
         bg={data?.bg}
         w="100%"
-        h={["150px", "200px", null, "300px"]}
+        h={["150px", "200px", null, "350px"]}
         rounded={"2xl"}
         display={"table-cell"}
         verticalAlign="middle"
@@ -202,7 +203,7 @@ const Content = ({ selected }: { selected: string }) => {
           color={useColorModeValue("gray.600", "gray.400")}
           mb=".8em"
         >
-          ""
+          Simple and reliable website uptime monitoring and alerting.
         </chakra.h3>
         <Link href="/auth/signin" passHref>
           <Button
