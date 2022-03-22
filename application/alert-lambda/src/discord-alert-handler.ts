@@ -61,6 +61,7 @@ export const sendUptimeMonitorDiscordAlert = async (
           fields: [
             { name: "URL", value: monitor.url },
             { name: "Region", value: monitor.region },
+            { name: "Project", value: monitor.project_id },
             {
               name: "Failures before alert",
               value: monitor.failures_before_alert?.toString() ?? "",
