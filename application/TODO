@@ -10,8 +10,9 @@ Status Pages:
     ☐ define core fields, notifs, etc 
 
 Alerts:
-    ☐ add alert type to alert req and invoke model
-    ☐ alert when up -> design for email, disc, slack, webhook
+    ✔ add alert type to alert req and invoke model @done(22-03-23 10:48)
+    ✔ alert when up -> design for email, disc, slack, webhook @done(22-03-23 13:47)
+    ☐ test
 
 ☐ add uptime condition check results to status 
 ☐ add check results to alerts

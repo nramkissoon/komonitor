@@ -79,6 +79,10 @@ a:hover {
   color: #e53e3e;
 }
 
+.green-500 {
+  color: #48bb78;
+}
+
 .bold {
   font-weight: 600;
 }
@@ -98,4 +102,9 @@ a:hover {
 .down {
   font-weight: 600;
   color: #e53e3e;
+}
+
+.up {
+  font-weight: 600;
+  color: #48bb78;
 }

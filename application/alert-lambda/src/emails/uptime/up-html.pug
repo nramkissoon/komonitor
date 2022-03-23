@@ -1,0 +1,27 @@
+head
+    link(rel="stylesheet", href="/css/uptime.css", data-inline)
+
+body
+    table.title-table
+        tr 
+            td.title Komonitor Alert
+
+    table.main-table 
+        tr 
+            td.lg.centered-text 
+                span.bold #{monitor.url}
+                span!= ` is <span class="up">UP</span>.`
+        tr
+            td.lg.centered-text Uptime checks that triggered this alert:
+        tr
+            td 
+                ol.spaced 
+                    each status in statuses 
+                        li.spaced-more 
+                            div 
+                                p!= `<span class="bold">Timestamp (UTC):</span> ${status.timestampAsUserTz}`
+                                p!= `<span class="bold">Status:</span> <span class="green-500 bold">Up</span>`
+        tr
+            td 
+                p.spaced!= `<span class="bold">Need to pause or edit this monitor?</span> You can do so in the <a href="${url}">Komonitor console</a>.`
+                p!= `This is a no-reply email. For support, please contact us at <b>support@komonitor.com</b>.`

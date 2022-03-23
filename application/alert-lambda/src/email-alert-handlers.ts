@@ -14,7 +14,8 @@ export async function sendUptimeMonitorAlertEmail(
   monitor: UptimeMonitor,
   alert: Alert,
   statuses: UptimeMonitorStatus[],
-  owner: User | Team
+  owner: User | Team,
+  alertType: "incident_start" | "incident_end"
 ): Promise<boolean> {
   try {
     const baseUrl =
@@ -30,27 +31,51 @@ export async function sendUptimeMonitorAlertEmail(
         statuses
       );
     const email = new Email();
-    const html = await email.render("uptime/html", {
-      monitor: monitor,
-      alert: alert,
-      region: regionToLocationStringMap[monitor.region],
-      failures: monitor.failures_before_alert,
-      statuses: statusesForTemplate,
-      url: baseUrl,
-    });
-    const subject = await email.render("uptime/subject", {
-      monitorName: monitor.name,
-      monitorRegion: regionToLocationStringMap[monitor.region],
-      failures: monitor.failures_before_alert,
-      statuses: statusesForTemplate,
-    });
-    await emailTransporter.sendMail({
-      from: "no-reply@komonitor.com",
-      to: alert.recipients.Email,
-      html: html,
-      subject: subject,
-    });
-    return true;
+
+    if (alertType === "incident_start") {
+      const html = await email.render("uptime/down-html", {
+        monitor: monitor,
+        alert: alert,
+        region: regionToLocationStringMap[monitor.region],
+        failures: monitor.failures_before_alert,
+        statuses: statusesForTemplate,
+        url: baseUrl,
+      });
+      const subject = await email.render("uptime/down-subject", {
+        monitorUrl: monitor.url,
+        monitorRegion: regionToLocationStringMap[monitor.region],
+        failures: monitor.failures_before_alert,
+        statuses: statusesForTemplate,
+      });
+      await emailTransporter.sendMail({
+        from: "no-reply@komonitor.com",
+        to: alert.recipients.Email,
+        html: html,
+        subject: subject,
+      });
+      return true;
+    } else {
+      const html = await email.render("uptime/up-html", {
+        monitor: monitor,
+        alert: alert,
+        region: regionToLocationStringMap[monitor.region],
+        failures: monitor.failures_before_alert,
+        statuses: statusesForTemplate,
+        url: baseUrl,
+      });
+      const subject = await email.render("uptime/up-subject", {
+        monitorUrl: monitor.url,
+        monitorRegion: regionToLocationStringMap[monitor.region],
+        statuses: statusesForTemplate,
+      });
+      await emailTransporter.sendMail({
+        from: "no-reply@komonitor.com",
+        to: alert.recipients.Email,
+        html: html,
+        subject: subject,
+      });
+      return true;
+    }
   } catch (err) {
     console.error(err);
     return false;

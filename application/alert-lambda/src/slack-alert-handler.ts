@@ -6,12 +6,50 @@ const createUptimeMonitorSlackAlertMessage = (
   alert: Alert,
   monitor: UptimeMonitor,
   isTeam: boolean,
-  ownerId: string
+  ownerId: string,
+  alertType: "incident_start" | "incident_end"
 ) => {
   const baseUrl =
     "https://komonitor.com/" + (isTeam ? ownerId + "/" : "app/") + "/projects/";
+
+  if (alertType === "incident_end") {
+    return {
+      text: `UP ALERT - ${monitor.name} Uptime Monitor in ${
+        regionToLocationStringMap[monitor.region]
+      }`,
+      attachments: [
+        {
+          color: "#48BB78",
+          blocks: [
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: `*${monitor.url}* *UP* for ${
+                  monitor.failures_before_alert
+                } uptime check(s).\n*${
+                  (monitor.failures_before_alert ?? 1) * monitor.frequency
+                } min. of downtime detected.*\nAlert description: ${
+                  alert.description
+                }`,
+              },
+            },
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                // TODO CHANGE FOR TEAMS
+                text: `*<${baseUrl}${monitor.project_id}/uptime/${monitor.monitor_id}|View monitor>*`,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+
   return {
-    text: `ALERT - ${monitor.name} Uptime Monitor in ${
+    text: `DOWN ALERT - ${monitor.name} Uptime Monitor in ${
       regionToLocationStringMap[monitor.region]
     }`,
     attachments: [
@@ -87,7 +125,8 @@ const getWebhookForTeam = ({
 export const sendUptimeMonitorSlackAlert = async (
   monitor: UptimeMonitor,
   alert: Alert,
-  owner: User | Team
+  owner: User | Team,
+  alertType: "incident_start" | "incident_end"
 ): Promise<boolean> => {
   try {
     if (
@@ -135,7 +174,8 @@ export const sendUptimeMonitorSlackAlert = async (
           alert,
           monitor,
           ownerIsTeam(owner),
-          owner.id
+          owner.id,
+          alertType
         )
       ),
     });

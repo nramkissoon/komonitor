@@ -108,6 +108,12 @@ export const runJob = async (job: UptimeMonitor) => {
         );
 
         // TODO invoke lambda
+        const incidentEndRes = await asyncInvokeLambda({
+          monitorId: monitor_id,
+          ownerId: owner_id,
+          monitorType: "uptime-monitor",
+          alertType: "incident_end",
+        });
       }
     }
 

@@ -71,6 +71,7 @@ interface RowProps {
   };
   alert: Alert;
   invocationObj: AlertInvocation;
+  type?: string;
   filterString: string;
 }
 
@@ -89,6 +90,7 @@ function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
           },
           alert: invocation.alert,
           invocationObj: invocation,
+          type: invocation.type,
           filterString: [
             name,
             new Date(invocation.timestamp).toUTCString(),
@@ -168,6 +170,12 @@ export function InvocationTable(props: InvocationTableProps) {
       accessor: "alert",
       disableSortBy: true,
       Cell: (props) => AlertChannelCell(props.cell.value as Alert),
+    },
+    {
+      Header: "Alert Type",
+      accessor: "type",
+      disableSortBy: true,
+      Cell: (props) => <Box>{props.cell.value ?? "incident_start"}</Box>,
     },
     {
       Header: "Actions",
