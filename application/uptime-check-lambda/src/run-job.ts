@@ -107,7 +107,6 @@ export const runJob = async (job: UptimeMonitor) => {
           lastAlertForMonitor
         );
 
-        // TODO invoke lambda
         const incidentEndRes = await asyncInvokeLambda({
           monitorId: monitor_id,
           ownerId: owner_id,
@@ -115,6 +114,7 @@ export const runJob = async (job: UptimeMonitor) => {
           alertType: "incident_end",
         });
       }
+      return;
     }
 
     if (status.status === "down" && alert) {

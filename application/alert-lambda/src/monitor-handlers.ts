@@ -64,7 +64,7 @@ const handleIncidentEndAlert = async ({
       statuses.length > 0
         ? [{ id: statuses[0].monitor_id, timestamp: statuses[0].timestamp }]
         : [],
-    ongoing: true,
+    ongoing: false,
   };
 
   const channels = alert.channels;
@@ -172,7 +172,12 @@ export async function handleUptimeMonitor(
   }
 
   if (alertType === "incident_end") {
-    // handle up alert logic
+    console.log("sending up alert...");
+    await handleIncidentEndAlert({
+      statuses: [statuses[0]],
+      monitor,
+      alert,
+    });
     return;
   }
 

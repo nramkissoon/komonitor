@@ -13,6 +13,7 @@ Alerts:
     ✔ add alert type to alert req and invoke model @done(22-03-23 10:48)
     ✔ alert when up -> design for email, disc, slack, webhook @done(22-03-23 13:47)
     ☐ test
+    ☐  discord badge in alert invoke table
 
 ☐ add uptime condition check results to status 
 ☐ add check results to alerts
@@ -38,7 +39,9 @@ Marketing:
     ☐ add to reddit saas group
 
 App header: 
-    ☐ redesign
+    ☐ add settings wheel
+    ☐ add links in breadcrumbs
+    ☐ change team button to just icon
 
 Project overview:
     ☐ redesign, quick actions, go to
