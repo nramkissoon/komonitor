@@ -1,2 +1,9 @@
+# *
 User-agent: *
-Sitemap: https://leerob.io/sitemap.xml
+Allow: /
+
+# Host
+Host: https://komonitor.com
+
+# Sitemaps
+Sitemap: https://komonitor.com/sitemap.xml

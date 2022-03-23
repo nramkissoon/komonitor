@@ -13,9 +13,10 @@ Alerts:
     ☐ add alert type to alert req and invoke model
     ☐ alert when up -> design for email, disc, slack, webhook
 
-☐ add uptime condition check results to status -> add results to alerts
+☐ add uptime condition check results to status 
+☐ add check results to alerts
 
-☐ send pasued to uptime lambda
+✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
 ☐  slack app distribution
 

@@ -19,6 +19,7 @@ const asyncInvokeLambda = async (event: {
   monitorId: string;
   ownerId: string;
   monitorType: MonitorTypes;
+  alertType: "incident_start" | "incident_end";
 }) => {
   const input: InvokeCommandInput = {
     FunctionName: config.ALERT_LAMBDA_NAME,
@@ -89,7 +90,6 @@ export const runJob = async (job: UptimeMonitor) => {
       const secret = owner?.webhook_secret;
 
       if (secret !== undefined) {
-        console.log("sending webhook...");
         await webhookRequest(webhook_url, status, secret);
       }
     }
@@ -116,6 +116,7 @@ export const runJob = async (job: UptimeMonitor) => {
         monitorId: monitor_id,
         ownerId: owner_id,
         monitorType: "uptime-monitor",
+        alertType: "incident_start",
       });
     }
   } catch (err) {
