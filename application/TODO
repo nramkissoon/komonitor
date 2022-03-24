@@ -41,9 +41,10 @@ Marketing:
 ☐ promise.all alert lambda
 
 App header: 
-    ☐ add settings wheel
-    ☐ add links in breadcrumbs
-    ☐ change team button to just icon
+    ✔ add settings wheel @done(22-03-24 13:36)
+    ✔ add links in breadcrumbs @done(22-03-24 13:04)
+    ✔ change team button to just icon @done(22-03-24 13:04)
+    ✔ add back button @done(22-03-24 13:39)
 
 Project overview:
     ☐ redesign, quick actions, go to

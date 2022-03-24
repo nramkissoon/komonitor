@@ -200,7 +200,7 @@ export function OverviewPageHeader(props: OverviewPageHeaderProps) {
             router.push(baseRoute + "/projects/" + projectId + "/uptime");
           }}
         >
-          Back to all monitors
+          Back to monitors
         </Button>
         <Button
           leftIcon={paused ? <AiOutlinePlaySquare /> : <AiOutlinePause />}
