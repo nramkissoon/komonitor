@@ -1,7 +1,7 @@
 import { EmailIcon } from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
-import React from "react";
 import { AiOutlineSlack } from "react-icons/ai";
+import { FaDiscord } from "react-icons/fa";
 import { ChannelType } from "utils";
 
 export function alertTypeToBadge(type: ChannelType) {
@@ -10,6 +10,8 @@ export function alertTypeToBadge(type: ChannelType) {
       return EmailTypeBadge;
     case "Slack":
       return SlackTypeBadge;
+    case "Discord":
+      return DiscordTypeBadge;
     default:
       return <></>;
   }
@@ -40,5 +42,19 @@ export const SlackTypeBadge = (
     fontWeight="normal"
   >
     Slack
+  </Button>
+);
+
+export const DiscordTypeBadge = (
+  <Button
+    leftIcon={<FaDiscord />}
+    colorScheme="gray"
+    variant="outline"
+    as="div"
+    _hover={{}}
+    size="xs"
+    fontWeight="normal"
+  >
+    Discord
   </Button>
 );

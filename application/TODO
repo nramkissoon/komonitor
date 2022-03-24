@@ -12,8 +12,8 @@ Status Pages:
 Alerts:
     ✔ add alert type to alert req and invoke model @done(22-03-23 10:48)
     ✔ alert when up -> design for email, disc, slack, webhook @done(22-03-23 13:47)
-    ☐ test
-    ☐  discord badge in alert invoke table
+    ✔ test @done(22-03-23 15:11)
+    ✔  discord badge in alert invoke table @done(22-03-24 10:32)
 
 ☐ add uptime condition check results to status 
 ☐ add check results to alerts
@@ -37,6 +37,8 @@ Marketing:
     ✔ redesign blog section @done(22-03-08 12:01)
     ☐ write alarm post
     ☐ add to reddit saas group
+
+☐ promise.all alert lambda
 
 App header: 
     ☐ add settings wheel

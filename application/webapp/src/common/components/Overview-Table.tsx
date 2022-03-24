@@ -164,6 +164,7 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
                           fontSize="sm"
                           fontWeight="medium"
                           borderColor={tableBorderColor}
+                          p="10px"
                         >
                           <Flex>
                             <Box my="auto">{column.render("Header")}</Box>
@@ -195,6 +196,7 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
                           <Td
                             {...cell.getCellProps()}
                             borderColor={tableBorderColor}
+                            p="10px"
                           >
                             {cell.render("Cell")}{" "}
                           </Td>
