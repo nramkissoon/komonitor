@@ -170,6 +170,7 @@ export const webhookRequest = async (
       timeout: { response: 3000 },
       method: "POST",
       body: JSON.stringify(data),
+      throwHttpErrors: false,
     };
     const sent = await new Promise<boolean>(async (resolve, reject) => {
       (await got.post(url, options)).once("end", () => {

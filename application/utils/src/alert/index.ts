@@ -16,6 +16,7 @@ export interface Alert {
 export interface AlertInvocation {
   monitor_id: string;
   alert: Alert; // Alert state at invocation
+  type: "incident_start" | "incident_end";
   timestamp: number;
   monitor: any; // state of the monitor at invocation
   statuses: {

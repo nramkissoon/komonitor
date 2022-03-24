@@ -1,4 +1,9 @@
-import { AlertInvocation, UptimeMonitorStatus } from "utils";
+import {
+  Alert,
+  AlertInvocation,
+  UptimeMonitor,
+  UptimeMonitorStatus,
+} from "utils";
 import { config, ddbClient } from "./config";
 import { sendUptimeMonitorDiscordAlert } from "./discord-alert-handler";
 import {
@@ -30,7 +35,109 @@ function wasStatusTriggeredPreviousAlert(
   return false;
 }
 
-export async function handleUptimeMonitor(monitorId: string, userId: string) {
+const handleIncidentEndAlert = async ({
+  statuses,
+  monitor,
+  alert,
+}: {
+  statuses: UptimeMonitorStatus[];
+  monitor: UptimeMonitor;
+  alert: Alert;
+}) => {
+  const owner = await getOwnerById(monitor.owner_id);
+  if (!owner) {
+    return;
+  }
+  const previousInvocation = await getPreviousAlertInvocationForMonitor(
+    ddbClient,
+    monitor.monitor_id,
+    config.alertInvocationTableName
+  );
+  const now = Date.now();
+  const invocation: AlertInvocation = {
+    type: "incident_end",
+    monitor_id: monitor.monitor_id,
+    alert: alert,
+    timestamp: now,
+    monitor: monitor,
+    statuses:
+      statuses.length > 0
+        ? [{ id: statuses[0].monitor_id, timestamp: statuses[0].timestamp }]
+        : [],
+    ongoing: false,
+  };
+
+  const channels = alert.channels;
+  let alertTriggered = false;
+  for (let channelType of channels) {
+    if (channelType === "Email") {
+      const emailSent = await sendUptimeMonitorAlertEmail(
+        monitor,
+        alert,
+        statuses.length > 0 ? statuses : [],
+        owner,
+        "incident_end"
+      );
+      if (emailSent) {
+        alertTriggered = true;
+      }
+    }
+    if (channelType === "Slack") {
+      const slackSent = await sendUptimeMonitorSlackAlert(
+        monitor,
+        alert,
+        owner,
+        "incident_end"
+      );
+      if (slackSent) {
+        alertTriggered = true;
+      }
+    }
+    if (channelType === "Webhook") {
+      const secret = await getUserWebhookSecret(owner.id);
+      if (!secret) {
+        alertTriggered = true;
+        console.log("no user secret, but webhook channel type provided");
+      } else {
+        if (alert.recipients.Webhook && alert.recipients.Webhook.length > 0) {
+          const webhookSent = await webhookRequestAlert(
+            alert.recipients.Webhook[0],
+            invocation,
+            secret
+          );
+          if (webhookSent) {
+            alertTriggered = true;
+          }
+        }
+      }
+    }
+    if (channelType === "Discord") {
+      const discordSent = await sendUptimeMonitorDiscordAlert(
+        monitor,
+        alert,
+        owner,
+        "incident_end"
+      );
+      if (discordSent) {
+        alertTriggered = true;
+      }
+    }
+  }
+
+  if (alertTriggered) {
+    await writeAlertInvocation(
+      ddbClient,
+      config.alertInvocationTableName,
+      invocation
+    );
+  }
+};
+
+export async function handleUptimeMonitor(
+  monitorId: string,
+  userId: string,
+  alertType: "incident_start" | "incident_end"
+) {
   const monitor = await getUptimeMonitorForUserByMonitorId(
     ddbClient,
     config.uptimeMonitorTableName,
@@ -62,6 +169,16 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
 
   if (alert === undefined) {
     throw new Error(`Alert is ${alert}`);
+  }
+
+  if (alertType === "incident_end") {
+    console.log("sending up alert...");
+    await handleIncidentEndAlert({
+      statuses: [statuses[0]],
+      monitor,
+      alert,
+    });
+    return;
   }
 
   let alertShouldTrigger: boolean = true;
@@ -112,6 +229,7 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
 
   const now = Date.now();
   const invocation: AlertInvocation = {
+    type: "incident_start",
     monitor_id: monitorId,
     alert: alert,
     timestamp: now,
@@ -137,7 +255,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
         monitor,
         alert,
         triggeringStatuses,
-        owner
+        owner,
+        alertType
       );
       if (emailSent) {
         alertTriggered = true;
@@ -147,7 +266,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
       const slackSent = await sendUptimeMonitorSlackAlert(
         monitor,
         alert,
-        owner
+        owner,
+        alertType
       );
       if (slackSent) {
         alertTriggered = true;
@@ -175,7 +295,8 @@ export async function handleUptimeMonitor(monitorId: string, userId: string) {
       const discordSent = await sendUptimeMonitorDiscordAlert(
         monitor,
         alert,
-        owner
+        owner,
+        alertType
       );
       if (discordSent) {
         alertTriggered = true;

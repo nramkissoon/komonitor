@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>https://komonitor.com</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/blog</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/integrations/discord/callback</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/integrations/slack/callback</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/pricing</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/privacy</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/teams/new-member</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/tos</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/uptime</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/blog/posts/cost-of-downtime</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/blog/posts/free-uptime-monitoring</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/getting-started/introduction</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/getting-started/quick-start</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/getting-started/support</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/teams/permissions</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/uptime-monitor/intro</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/uptime-monitor/up-condition-checks</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/webhooks/alerts</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/webhooks/getting-started</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+<url><loc>https://komonitor.com/docs/webhooks/uptime-monitor-status</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2022-03-23T14:02:10.315Z</lastmod></url>
+</urlset>

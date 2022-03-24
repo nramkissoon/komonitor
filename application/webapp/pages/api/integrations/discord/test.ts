@@ -24,7 +24,6 @@ async function getHandler(
     );
 
     const discordResponse = await client.send({
-      content: "[TEST ALERT]",
       embeds: [
         {
           title: "https://example.com is DOWN",

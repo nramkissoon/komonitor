@@ -86,7 +86,7 @@ function createRowPropsFromMonitorStatus(
     timestamp: status.timestamp,
     filterString: [
       status.status,
-      getTimeString(offset, status.timestamp),
+      getTimeString(offset, status.timestamp / 1000),
       status.response.statusCode,
       status.response.statusMessage,
     ].join(" "),
@@ -248,7 +248,7 @@ export default function StatusTable(props: TableProps) {
       data: data ? data : [],
       autoResetSortBy: false,
       autoResetPage: false,
-      initialState: { pageIndex: 0, pageSize: 8 },
+      initialState: { pageIndex: 0, pageSize: 10 },
     },
     useGlobalFilter,
     useSortBy,
@@ -263,7 +263,7 @@ export default function StatusTable(props: TableProps) {
       w="100%"
       shadow="lg"
       bg={useColorModeValue("white", "gray.950")}
-      borderRadius="xl"
+      borderRadius="lg"
       p="1.5em"
       mb="2em"
     >
@@ -272,7 +272,7 @@ export default function StatusTable(props: TableProps) {
         isOpen={isOpen}
         onClose={onClose}
       />
-      <Heading textAlign="center" size="lg" mb=".7em">
+      <Heading textAlign="left" size="lg" mb=".7em">
         Monitor Statuses
       </Heading>
       <Flex flexDir="row" justifyContent="space-between">
@@ -316,6 +316,7 @@ export default function StatusTable(props: TableProps) {
                           fontSize="sm"
                           fontWeight="medium"
                           borderColor={tableBorderColor}
+                          p="10px"
                         >
                           <Flex>
                             <Box my="auto">{column.render("Header")}</Box>
@@ -347,6 +348,7 @@ export default function StatusTable(props: TableProps) {
                           <Td
                             {...cell.getCellProps()}
                             borderColor={tableBorderColor}
+                            p="10px"
                           >
                             {cell.render("Cell")}{" "}
                           </Td>

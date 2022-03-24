@@ -8,12 +8,15 @@ export const handler = async (event: any) => {
     if (
       event.monitorId !== undefined &&
       event.ownerId !== undefined &&
-      event.monitorType !== undefined
+      event.monitorType !== undefined &&
+      event.alertType !== undefined
     ) {
       if ((event.monitorType as MonitorTypes) === "uptime-monitor") {
+        console.log("event: ", event);
         await handleUptimeMonitor(
           event.monitorId as string,
-          event.ownerId as string
+          event.ownerId as string,
+          event.alertType as "incident_start" | "incident_end"
         );
       }
     } else {

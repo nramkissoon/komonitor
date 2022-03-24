@@ -1,8 +1,8 @@
 import {
   AddIcon,
-  ArrowBackIcon,
   CheckIcon,
   SearchIcon,
+  SettingsIcon,
   TriangleDownIcon,
 } from "@chakra-ui/icons";
 import {
@@ -17,16 +17,16 @@ import {
   Heading,
   HStack,
   HTMLChakraProps,
-  IconButtonProps,
+  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
   Popover,
+  PopoverAnchor,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Spacer,
-  useColorMode,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -35,11 +35,11 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { HiMoon, HiSun } from "react-icons/hi";
 import { PLAN_PRODUCT_IDS } from "../../modules/billing/plans";
 import { useTeam } from "../../modules/teams/client";
 import { useUptimeMonitorsForProject } from "../../modules/uptime/client";
 import { useUser } from "../../modules/user/client";
+import { useAppBaseRoute } from "../client-utils";
 import { HeaderLogo } from "./Header-Logo";
 import { NewTeamDialog } from "./New-Team-Dialog";
 
@@ -134,6 +134,7 @@ const TeamSelection = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const fuse = new Fuse(teams);
   const results = fuse.search(searchQuery);
+  const baseUrl = useAppBaseRoute();
 
   return (
     <Popover placement="bottom-start">
@@ -141,26 +142,48 @@ const TeamSelection = () => {
         isOpen={createNewTeamIsOpen}
         onClose={() => setCreateNewTeamIsOpen(false)}
       />
-      <PopoverTrigger>
-        <Flex>
-          <Button
-            rightIcon={<TriangleDownIcon />}
-            variant="outline"
-            bg={useColorModeValue("white", "gray.950")}
-            borderColor={useColorModeValue("black", "gray.600")}
-            px="5"
-            fontWeight="normal"
-            letterSpacing="wider"
-          >
-            {isPersonal ? "Personal Account" : teamId}
-            {plan && (
-              <Badge ml="15px" p="2px" px="4px" colorScheme={"blue"}>
-                {plan}
-              </Badge>
-            )}
-          </Button>
+      <PopoverAnchor>
+        <Flex
+          justifyContent={"center"}
+          alignItems="center"
+          _hover={{ cursor: "pointer" }}
+        >
+          <Link href={baseUrl} passHref>
+            <Flex
+              fontWeight="normal"
+              letterSpacing="wider"
+              as="div"
+              justifyContent={"center"}
+              alignItems="center"
+              outline={1}
+              mx="1"
+            >
+              {isPersonal ? "Personal Account" : teamId}
+              {plan && (
+                <Badge
+                  ml="8px"
+                  p="3px"
+                  mr="2px"
+                  rounded={"sm"}
+                  colorScheme={"blue"}
+                >
+                  {plan}
+                </Badge>
+              )}
+            </Flex>
+          </Link>
+
+          <PopoverTrigger>
+            <IconButton
+              aria-label="Select team"
+              icon={<TriangleDownIcon />}
+              size="sm"
+              variant="ghost"
+            />
+          </PopoverTrigger>
         </Flex>
-      </PopoverTrigger>
+      </PopoverAnchor>
+
       <PopoverContent backgroundColor={useColorModeValue("white", "gray.950")}>
         <PopoverBody px="2" py="0">
           <Flex flexDir="column">
@@ -285,22 +308,7 @@ export const AppHeader = () => {
     alignItems: "center",
   };
 
-  const { toggleColorMode: toggleMode } = useColorMode();
-  const colorModeText = useColorModeValue("dark", "light");
-  let darkIcon = HiMoon;
-  let lightIcon = HiSun;
-  let SwitchIcon = useColorModeValue(darkIcon, lightIcon);
-
-  const defaultColorModeToggleStyles: IconButtonProps = {
-    size: "md",
-    fontSize: "1.8em",
-    "aria-label": `Switch to ${colorModeText} mode`,
-    variant: "ghost",
-    color: useColorModeValue("gray.500", "inherit"),
-    ml: { base: "0", sm: "3" },
-    onClick: toggleMode,
-    icon: <SwitchIcon />,
-  };
+  const baseRoute = useAppBaseRoute();
 
   return (
     <Box
@@ -322,53 +330,80 @@ export const AppHeader = () => {
           <Flex ml="2em" alignItems="center">
             <TeamSelection />
             {projectId && (
-              <Box fontSize="lg">
-                <chakra.span mx="15px" color="gray.500" fontWeight="bold">
+              <Box fontSize="md" letterSpacing="wider" fontWeight={"normal"}>
+                <chakra.span mx="10px" color="gray.500" fontWeight="bold">
                   /
                 </chakra.span>
-                <chakra.span fontWeight="normal" letterSpacing="wider">
-                  {projectId}
-                </chakra.span>
+                <Link
+                  href={
+                    teamId
+                      ? `/teams/${teamId}/projects/${projectId}`
+                      : `/app/projects/${projectId}`
+                  }
+                  passHref
+                >
+                  <chakra.div
+                    color={useColorModeValue("gray.900", "gray.400")}
+                    _hover={{ color: useColorModeValue("gray.500", "white") }}
+                    w="fit-content"
+                    fontWeight="medium"
+                    as="a"
+                  >
+                    {projectId}
+                  </chakra.div>
+                </Link>
               </Box>
             )}
             {monitorId && (
-              <Box fontSize="lg">
-                <chakra.span mx="15px" color="gray.500" fontWeight="bold">
+              <Box fontSize="md" letterSpacing="wider" fontWeight={"normal"}>
+                <chakra.span mx="10px" color="gray.500" fontWeight="bold">
                   /
                 </chakra.span>
-                <chakra.span fontWeight="normal" letterSpacing="wider">
-                  {monitors
-                    ? monitors[projectId as string].find(
-                        (m) => m.monitor_id === monitorId
-                      )?.name
-                    : ""}
-                </chakra.span>
+                <Link
+                  href={
+                    teamId
+                      ? `/teams/${teamId}/projects/${projectId}/uptime/${monitorId}`
+                      : `/app/projects/${projectId}/uptime/${monitorId}`
+                  }
+                  passHref
+                >
+                  <chakra.div
+                    color={useColorModeValue("gray.900", "gray.400")}
+                    _hover={{ color: useColorModeValue("gray.500", "white") }}
+                    w="fit-content"
+                    fontWeight="medium"
+                    as="a"
+                  >
+                    {monitors
+                      ? monitors[projectId as string].find(
+                          (m) => m.monitor_id === monitorId
+                        )?.name
+                      : ""}
+                  </chakra.div>
+                </Link>
               </Box>
             )}
           </Flex>
           <Spacer />
           <Flex justify="flex-end" align="center" color="gray.400">
-            {projectId && (
-              <Link href={teamId ? "/teams/" + teamId : "/app"} passHref>
-                <Button
-                  p="0"
-                  px="5px"
-                  bg="none"
-                  color={useColorModeValue("gray.900", "gray.400")}
-                  _hover={{ color: useColorModeValue("gray.500", "white") }}
-                  display="flex"
-                  w="fit-content"
-                  alignItems="center"
-                  fontWeight="medium"
-                >
-                  <ArrowBackIcon /> Return to project page
-                </Button>
-              </Link>
-            )}
             {HeaderLink({
               text: "Docs",
               href: "/docs/getting-started/introduction",
             })}
+
+            <Link href={baseRoute + "/settings"} passHref>
+              <IconButton
+                aria-label="settings"
+                as="a"
+                icon={<SettingsIcon />}
+                variant="ghost"
+                color={useColorModeValue("gray.900", "gray.400")}
+                _hover={{
+                  cursor: "pointer",
+                  bg: useColorModeValue("gray.100", "gray.700"),
+                }}
+              />
+            </Link>
           </Flex>
         </Flex>
       </chakra.header>

@@ -19,6 +19,7 @@ The payload sent with every alert webhook request will have the following struct
 interface Payload {
   type: "alert"; // identifies the type of payload data
   data: {
+    type: "incident_start" | "incident_end"; // identifies what kind of alert, e.g. if an uptime monitor detects an up status after downtime, an incident_end alert type is sent
     monitor_id: string; // identifies monitor associated with the alert
     alert: {
       description: string;

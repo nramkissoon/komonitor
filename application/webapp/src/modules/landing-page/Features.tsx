@@ -109,7 +109,7 @@ export function Features() {
         lineHeight="shorter"
         mb=".1em"
       >
-        Modern Monitoring and Alerting
+        Modern Monitoring and Instant Alerting
       </chakra.h2>
       <chakra.h3
         fontSize="2xl"
