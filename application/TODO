@@ -16,11 +16,12 @@ Alerts:
     ✔  discord badge in alert invoke table @done(22-03-24 10:32)
 
 ☐ add uptime condition check results to status 
+☐ add duration to up alerts
 ☐ add check results to alerts
 
 ✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
-☐  slack app distribution
+☐ pager duty integ research
 
 ✔ slack integ page @done(22-03-22 10:33)
 ✔ disc integ page @done(22-03-22 11:01)
@@ -47,15 +48,25 @@ App header:
     ✔ add back button @done(22-03-24 13:39)
 
 Project overview:
-    ☐ redesign, quick actions, go to
+    ✔ add tailwind @done(22-03-24 20:34)
+    ☐ Uptime monitor section
+    ☐ create monitor quick link
+    ☐ view monitor quick link
+    ☐ list monitors with ongoin alerts
     
 
 Uptime HTTP:
-    ☐  design dashboard to show HTTP settings + alerts
     ✔  follow http redirects @done(22-01-31 13:20)
     ✔  pause function @done(22-01-31 13:58)
+    ☐  add edit + delete + pause as a settings tab
+    Statuses Tab: 
+        ☐  redesign - view json side by side
+    Alert Tab: 
+        ☐  redesign - view json side by side
+    Overview Tab:
+        ☐ design status aggregator into 100 data points
+        ☐ uptime changes + durations
 
-☐ tw space hosting tools
 
 
 Usage Tab:

@@ -6,7 +6,6 @@ import {
   HStack,
   Icon,
   Image,
-  SlideFade,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -61,6 +60,7 @@ export function Banner() {
         px="20px"
         mb="30px"
       >
+        {/* <SlideFade in={true} offsetX="-100px" delay={0.1}> */}
         <chakra.h1
           textAlign="center"
           fontSize={["4xl", null, "5xl", null, "6xl", "7xl"]}
@@ -71,7 +71,9 @@ export function Banner() {
         >
           Easy and Reliable Website Monitoring.
         </chakra.h1>
+        {/* </SlideFade> */}
 
+        {/* <SlideFade in={true} offsetX="-100px" delay={0.1}> */}
         <chakra.h2
           fontSize={["2xl", null, "3xl", null, "3xl", "4xl"]}
           fontWeight="bold"
@@ -85,7 +87,10 @@ export function Banner() {
           Monitoring and alerting for your websites when user experience is
           nonnegotiable. Set up and deploy in minutes.
         </chakra.h2>
+        {/* </SlideFade>
+        <ScaleFade initialScale={0.8} in={true} delay={0.3}>*/}
         <CtaButton />
+        {/* </ScaleFade> */}
       </Flex>
 
       <Box
@@ -104,43 +109,43 @@ export function Banner() {
           <SVG />
         </Box>
 
-        <SlideFade in={true} offsetY="100px">
-          <Flex
-            justifyContent="center"
-            position="relative"
-            py={["0", null, null, null, null, "60px"]}
-            pl={["0", null, null, null, null, "40px"]}
-            pr={["0", null, null, null, null, "5vw"]}
+        {/* <SlideFade in={true} offsetY="100px" delay={0.3}> */}
+        <Flex
+          justifyContent="center"
+          position="relative"
+          py={["0", null, null, null, null, "60px"]}
+          pl={["0", null, null, null, null, "40px"]}
+          pr={["0", null, null, null, null, "5vw"]}
+        >
+          <Box
+            bg={useColorModeValue("gray.700", "gray.200")}
+            borderRadius="xl"
+            shadow={"lg"}
+            pt="5px"
+            pb="10px"
+            px="10px"
+            w={["3xl", null, "4xl", null, "5xl", "inherit"]}
+            mt={["40px", null, null, null, null, "inherit"]}
+            mx="2em"
           >
-            <Box
-              bg={useColorModeValue("gray.700", "gray.200")}
-              borderRadius="xl"
-              shadow={"lg"}
-              pt="5px"
-              pb="10px"
-              px="10px"
-              w={["3xl", null, "4xl", null, "5xl", "inherit"]}
-              mt={["40px", null, null, null, null, "inherit"]}
-              mx="2em"
-            >
-              <Box>
-                <HStack mb="5px" ml="5px">
-                  {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
-                  {CircleIcon("red.400")}
-                </HStack>
-                <Image
-                  rounded="md"
-                  src={"/banner.png"}
-                  width="1100px"
-                  css={{
-                    imageRendering: "-webkit-optimize-contrast",
-                  }}
-                  alt="Komonitor App Dashboard"
-                />
-              </Box>
+            <Box>
+              <HStack mb="5px" ml="5px">
+                {CircleIcon("purple.400")} {CircleIcon("yellow.400")}{" "}
+                {CircleIcon("red.400")}
+              </HStack>
+              <Image
+                rounded="md"
+                src={"/banner.png"}
+                width="1100px"
+                css={{
+                  imageRendering: "-webkit-optimize-contrast",
+                }}
+                alt="Komonitor App Dashboard"
+              />
             </Box>
-          </Flex>
-        </SlideFade>
+          </Box>
+        </Flex>
+        {/* </SlideFade> */}
       </Box>
     </Flex>
   );
