@@ -23,7 +23,13 @@ module.exports = {
         "slide-fade-in-right": "slide-fade-in-right .4s ease-out forwards",
         "slide-fade-out-right": "slide-fade-out-right .4s ease-in forwards",
         "slide-fade-in-left": "slide-fade-in-left .4s ease-out forwards",
-        "slide-fade-out-left": "slide-fade-out-left .4s ease-in forwards"
+        "slide-fade-out-left": "slide-fade-out-left .4s ease-in forwards",
+        "slide-fade-in-top": "slide-fade-in-top .5s ease-out forwards",
+        "slide-fade-out-top": "slide-fade-out-top .4s ease-in forwards",
+        "slide-fade-in-bottom": "slide-fade-in-bottom .5s ease-out forwards",
+        "slide-fade-out-bottom": "slide-fade-out-bottom .4s ease-in forwards",
+        "notification-fade-in": "notification-fade-in .2s ease-in-out forwards",
+        "notification-fade-out": "notification-fade-out .2s ease-in forwards",
       },
       variants: {
         animation: ["motion-safe"]
@@ -55,6 +61,22 @@ module.exports = {
         "slide-fade-out-left": {
           "0%": { opacity: 1, transform: "translateX(0)" },
           "100%": { opacity: 0, transform: "translateX(-50%)" }
+        },
+        "slide-fade-in-top": {
+          "0%": { opacity: 0, transform: "translateY(50%)" },
+          "100%": { opacity: 1, transform: "translateY(0%)" }
+        },
+        "slide-fade-in-bottom": {
+          "0%": { opacity: 0, transform: "translateY(-50%)" },
+          "100%": { opacity: 1, transform: "translateY(0%)" }
+        },
+        "notification-fade-in": {
+          "0%": { opacity: 0, transform: "translateY(50%) scale(.85)" },
+          "100%": { opacity: 1, transform: "translateY(0%) scale(1)" }
+        },
+        "notification-fade-out": {
+          "0%": { opacity: 1, transform: "scale(1)" },
+          "100%": { opacity: 0, transform: "scale(.70)" }
         }
       }
     },

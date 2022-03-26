@@ -285,7 +285,7 @@ export const Advanced = () => {
   return (
     <Flex flexDir="column" alignItems="center" as="section">
       <FadeInView
-        obvProps={{ threshold: 0.5, rootMargin: "0px 0px -100px 0px" }}
+        obvProps={{ threshold: 0.5, rootMargin: "0px 0px -300px 0px" }}
         inAnimation="motion-safe:animate-scale-fade-in"
         outAnimation="motion-safe:animate-scale-fade-out"
       >
@@ -361,6 +361,7 @@ export const Advanced = () => {
             </Table>
           </Box>
         </GridItem>
+
         <GridItem
           w="100%"
           shadow="md"
@@ -452,6 +453,7 @@ export const Advanced = () => {
           </Box>
         </GridItem>
       </Grid>
+
       <chakra.h3
         fontSize="2xl"
         fontWeight="bold"

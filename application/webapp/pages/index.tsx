@@ -16,7 +16,7 @@ import { TeamsSection } from "../src/modules/landing-page/Team";
 
 const SectionDivider = () => (
   <FadeInView
-    obvProps={{ threshold: 1, rootMargin: "0px 0px 0px 0px" }}
+    obvProps={{ threshold: 1, rootMargin: "100px 0px 0px 0px" }}
     inAnimation="motion-safe:animate-scale-fade-in"
     outAnimation="motion-safe:animate-scale-fade-out"
   >
@@ -25,7 +25,7 @@ const SectionDivider = () => (
       margin="auto"
       borderWidth="1px"
       borderColor={useColorModeValue("blue.500", "blue.300")}
-      mt="5em"
+      mt="8em"
       mb=".8em"
     />
   </FadeInView>

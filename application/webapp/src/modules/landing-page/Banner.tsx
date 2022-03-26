@@ -48,7 +48,6 @@ export function Banner() {
   const headerPossibilities = [
     "Developers",
     "Indie-Hackers",
-    "Website Owners",
     "E-Commerce",
     "Startups",
     "Teams",

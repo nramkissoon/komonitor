@@ -8,7 +8,7 @@ const CtaButton = () => {
       <Button
         colorScheme="blue"
         bgColor="blue.300"
-        fontSize="2xl"
+        fontSize="xl"
         fontWeight="medium"
         color="white"
         _hover={{
@@ -18,6 +18,7 @@ const CtaButton = () => {
         mb=".5em"
         w={["80%", null, "60%", null, "50%"]}
         py="1em"
+        px="1em"
       >
         Start monitoring today
       </Button>
