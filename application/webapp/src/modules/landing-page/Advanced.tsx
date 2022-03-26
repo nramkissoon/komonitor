@@ -14,6 +14,7 @@ import {
   useToken,
 } from "@chakra-ui/react";
 import { v4 as uuidv4 } from "uuid";
+import { FadeInView } from "../../common/components/Animation";
 
 const JsonSample = () => {
   const codeString = `{
@@ -283,29 +284,35 @@ export const Advanced = () => {
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
   return (
     <Flex flexDir="column" alignItems="center" as="section">
-      <chakra.h2
-        textAlign="center"
-        fontSize="5xl"
-        fontWeight="extrabold"
-        color={useColorModeValue("gray.800", "gray.100")}
-        lineHeight="shorter"
-        mb="10px"
+      <FadeInView
+        obvProps={{ threshold: 0.5, rootMargin: "0px 0px -100px 0px" }}
+        inAnimation="motion-safe:animate-scale-fade-in"
+        outAnimation="motion-safe:animate-scale-fade-out"
       >
-        Need To Monitor API Responses? No Problem.
-      </chakra.h2>
-      <chakra.h3
-        fontSize="2xl"
-        fontWeight="bold"
-        textAlign="center"
-        lineHeight="shorter"
-        w={["70%"]}
-        mx="auto"
-        color={useColorModeValue("gray.600", "gray.400")}
-        mb="2em"
-      >
-        Customize your monitor's HTTP requests to match your use case and
-        analyze the response.
-      </chakra.h3>
+        <chakra.h2
+          textAlign="center"
+          fontSize="5xl"
+          fontWeight="extrabold"
+          color={useColorModeValue("gray.800", "gray.100")}
+          lineHeight="shorter"
+          mb="10px"
+        >
+          Need To Monitor API Responses?
+        </chakra.h2>
+        <chakra.h3
+          fontSize="2xl"
+          fontWeight="bold"
+          textAlign="center"
+          lineHeight="shorter"
+          w={["70%"]}
+          mx="auto"
+          color={useColorModeValue("gray.600", "gray.400")}
+          mb="2em"
+        >
+          Customize your monitor's HTTP requests to match your use case and
+          analyze the response.
+        </chakra.h3>
+      </FadeInView>
       <Grid
         templateColumns={[
           "repeat(1, 1fr)",

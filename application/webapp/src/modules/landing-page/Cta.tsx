@@ -19,7 +19,7 @@ const CtaButton = () => {
         w={["80%", null, "60%", null, "50%"]}
         py="1em"
       >
-        Start monitoring
+        Start monitoring today
       </Button>
     </Link>
   );

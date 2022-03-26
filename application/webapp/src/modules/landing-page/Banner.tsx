@@ -9,6 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import React, { useEffect } from "react";
 import SVG from "../../../public/banner.svg";
 import { Copy } from "./constants";
 
@@ -44,6 +45,26 @@ const CtaButton = () => {
 };
 
 export function Banner() {
+  const headerPossibilities = [
+    "Developers",
+    "Indie-Hackers",
+    "Website Owners",
+    "E-Commerce",
+    "Startups",
+    "Teams",
+    "Portfolios",
+    "Everyone",
+    "APIs",
+  ];
+  const [index, setIndex] = React.useState(0);
+
+  useEffect(() => {
+    let id = setInterval(() => {
+      setIndex(index === headerPossibilities.length - 1 ? 0 : index + 1);
+    }, 4000);
+    return () => clearInterval(id);
+  });
+
   return (
     <Flex
       flexDir={["column", null, null, null, null, "row"]}
@@ -69,7 +90,10 @@ export function Banner() {
           lineHeight="shorter"
           mb=".3em"
         >
-          Easy and Reliable Website Monitoring.
+          Website Monitoring for{" "}
+          <span className="underline decoration-black decoration-3 decoration-solid decoration-blue-400">
+            {headerPossibilities[index]}
+          </span>
         </chakra.h1>
         {/* </SlideFade> */}
 
@@ -84,8 +108,8 @@ export function Banner() {
           color={useColorModeValue("gray.600", "gray.400")}
           mb=".8em"
         >
-          Monitoring and alerting for your websites when user experience is
-          nonnegotiable. Set up and deploy in minutes.
+          Monitoring and alerting for when user experience is nonnegotiable. Set
+          up and deploy in minutes.
         </chakra.h2>
         {/* </SlideFade>
         <ScaleFade initialScale={0.8} in={true} delay={0.3}>*/}
