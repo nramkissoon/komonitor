@@ -115,7 +115,7 @@ export function Footer({ lightModeOnly }: { lightModeOnly?: boolean }) {
         pb="2em"
       >
         <LinkColumn
-          header="Product"
+          header="Why Komonitor?"
           useColorModeValue={useColorModeValueModified}
           links={[
             <HeaderLink
