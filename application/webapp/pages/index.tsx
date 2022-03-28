@@ -9,6 +9,7 @@ import { FadeInView } from "../src/common/components/Animation";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { Advanced } from "../src/modules/landing-page/Advanced";
 import { Banner } from "../src/modules/landing-page/Banner";
+import { CostSection } from "../src/modules/landing-page/Cost";
 import { CTA } from "../src/modules/landing-page/Cta";
 import { Features } from "../src/modules/landing-page/Features";
 import { IntegrationSection } from "../src/modules/landing-page/Integrations";
@@ -21,7 +22,7 @@ const SectionDivider = () => (
     outAnimation="motion-safe:animate-scale-fade-out"
   >
     <Divider
-      maxW="md"
+      maxW={["xs", "sm", "md"]}
       margin="auto"
       borderWidth="1px"
       borderColor={useColorModeValue("blue.500", "blue.300")}
@@ -48,6 +49,7 @@ const Home: NextPage = () => {
     >
       <Banner />
       <Box display="flex" flexDir="column" m="auto" overflowX="hidden" w="full">
+        <CostSection />
         <SectionDivider />
         <Features />
       </Box>

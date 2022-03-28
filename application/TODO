@@ -154,22 +154,12 @@ Webapp:
 Customer Serve:
     ☐ notification for new users -> email template
 
-Teams:
-    ☐ scope teams
-
 API:
     ☐ research rate limiting
     ☐ API server design (api.komonitor.com)
     API keys:
         ☐ design api key creation, storage, etc.
         ☐ research what header API keys are sent in
-
-
-
-
-TEAMS: 
-    ☐  search todos
-
 
 
 
@@ -204,9 +194,9 @@ Bugs:
     ☐  Remove aws-cdk package by rewriting nextauth ddb client
     ✔  upgrade nextauth @done(22-02-15 15:40)
     ☐  get rid of hypernext
-    ☐  keyed mutates
-     ☐ make monitor url unchangeable, it messes up stats 
-     ☐  get rid of uptime monitor jobs
+    ✘  keyed mutates @cancelled(22-03-27 17:09)
+     ✔ make monitor url unchangeable, it messes up stats @done(22-03-27 17:09)
+     ✔  get rid of uptime monitor jobs @done(22-03-27 17:09)
      ☐ add sweden to cdk
     ☐  consolidate useUser hooks to one api call
     ☐  consolidate db logic into one package

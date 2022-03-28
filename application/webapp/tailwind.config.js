@@ -15,7 +15,14 @@ module.exports = {
           700: "#2C5282",
           800: "#2A4365",
           900: "#1A365D",
+        },
+        red: {
+          500: "#E53E3E",
+          600: '#C53030',
         }
+      },
+      backgroundImage: {
+        'banner': "url('/banner.svg')"
       },
       animation: {
         "scale-fade-in": "scale-fade-in .4s ease-in forwards",

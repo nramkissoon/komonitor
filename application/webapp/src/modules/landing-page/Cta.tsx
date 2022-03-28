@@ -16,7 +16,7 @@ const CtaButton = () => {
         }}
         shadow="lg"
         mb=".5em"
-        w={["80%", null, "60%", null, "50%"]}
+        w={"fit-content"}
         py="1em"
         px="1em"
       >
