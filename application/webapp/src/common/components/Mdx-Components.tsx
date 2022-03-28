@@ -72,7 +72,16 @@ export const MDXComponents = {
       </Button>
     </NextLink>
   ),
-  li: (props: any) => <chakra.li fontSize="xl" mt=".2em" ml="1em" {...props} />,
+  li: (props: any) => (
+    <chakra.li
+      fontSize="xl"
+      mt=".2em"
+      ml="1em"
+      display="list-item"
+      listStyleType="disc"
+      {...props}
+    />
+  ),
   blockquote: (props: any) => (
     <Alert
       status="error"
@@ -99,29 +108,13 @@ export const MDXComponents = {
   ),
 
   BlogCta: (props: any & { ctaMessage: string }) => (
-    <Box
-      mt="5em"
-      bg={useColorModeValue("gray.700", "gray.950")}
-      borderRadius="2xl"
-      p={["1em", null, "1.5em"]}
-      shadow="lg"
-      mb="1.5em"
-      maxW="3xl"
-      mx="auto"
-    >
-      <Flex
-        flexDir="column"
-        alignItems="center"
-        bg={useColorModeValue("white", "gray.950")}
-        borderRadius="xl"
-        p="1.5em"
-      >
+    <Box mt="5em" p={["1em", null, "1.5em"]} mb="1.5em" maxW="5xl" mx="auto">
+      <Flex flexDir="column" alignItems="center" p="1.5em">
         <Box>
           <chakra.h1
             textAlign="center"
             fontSize="4xl"
             fontWeight="extrabold"
-            color={useColorModeValue("gray.800", "gray.100")}
             lineHeight="shorter"
             mb=".2em"
           >
@@ -135,7 +128,6 @@ export const MDXComponents = {
             lineHeight="shorter"
             w={["70%"]}
             mx="auto"
-            color={useColorModeValue("gray.600", "gray.400")}
             mb="1.2em"
           >
             Sign up to access Komonitor's free tier.

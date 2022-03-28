@@ -4,10 +4,7 @@
 
 
 Status Pages:
-    ☐ status page table
-    ☐ scope private, public
-    ☐ create status pages for random landing pages for marketing
-    ☐ define core fields, notifs, etc 
+    ☐ scope work
 
 Alerts:
     ✔ add alert type to alert req and invoke model @done(22-03-23 10:48)
@@ -16,23 +13,23 @@ Alerts:
     ✔  discord badge in alert invoke table @done(22-03-24 10:32)
 
 ☐ add uptime condition check results to status 
-☐ add duration to up alerts
 ☐ add check results to alerts
 
 ✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
-☐ pager duty integ research
+Landing: 
+    ☐ follow hyperping for signups
+    ☐ redesign advanced section
 
-✔ slack integ page @done(22-03-22 10:33)
-✔ disc integ page @done(22-03-22 11:01)
-✔ email integ page @done(22-03-22 10:33)
-✔ webhook integ page @done(22-03-22 10:33)
-✔ integ page cta @done(22-03-22 10:33)
+Sign up page: 
+    ☐ scope and follow hyperping
 
-✔ footer hover style @done(22-03-17 10:37)
-
-ez: 
-    ✔ follow redirect default @done(22-03-08 10:01)
+ez:
+    ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
+    ☐ add duration to up alerts
+    ☐ branch for eu gdpr
+    ☐ footer why komonitor
+    ☐ list blog ideas
 
 Marketing: 
     ✔ redesign blog section @done(22-03-08 12:01)

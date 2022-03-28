@@ -31,9 +31,10 @@ import { HeaderLogo } from "./Header-Logo";
 const HeaderLink = (props: {
   text: string;
   href: string;
+  useColorModeValue: Function;
   buttonProps?: ButtonProps;
 }) => {
-  const { text, href, buttonProps } = props;
+  const { text, href, buttonProps, useColorModeValue } = props;
 
   const defaultButtonLinkStyles: ButtonProps = {
     color: useColorModeValue("gray.900", "gray.400"),
@@ -56,8 +57,11 @@ const HeaderLink = (props: {
   );
 };
 
-const GoToAppOrSigninButton = (props: { authed: boolean }) => {
-  const { authed } = props;
+const GoToAppOrSigninButton = (props: {
+  authed: boolean;
+  useColorModeValue: Function;
+}) => {
+  const { authed, useColorModeValue } = props;
   return (
     <Link href={authed ? "/app" : "/auth/signin"} passHref>
       <Button
@@ -81,8 +85,9 @@ const GoToAppOrSigninButton = (props: { authed: boolean }) => {
 const MobileNavHeader = (props: {
   isOpen: boolean;
   onClose: React.MouseEventHandler<HTMLButtonElement>;
+  useColorModeValue: Function;
 }) => {
-  const { isOpen, onClose } = props;
+  const { isOpen, onClose, useColorModeValue } = props;
 
   const defaultSlideTransitionStyles: SlideProps = {
     direction: "right",
@@ -131,24 +136,30 @@ const MobileNavHeader = (props: {
           text: "Pricing",
           href: "/pricing",
           buttonProps: linkButtonStyles,
+          useColorModeValue,
         })}
       </VStack>
     </Slide>
   );
 };
 
-export const Header = () => {
+export const Header = ({ lightModeOnly }: { lightModeOnly?: boolean }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { data: session } = useSession();
   const authed = session?.user !== undefined;
 
-  const { toggleColorMode: toggleMode } = useColorMode();
+  const { setColorMode, toggleColorMode: toggleMode } = useColorMode();
   const colorModeText = useColorModeValue("dark", "light");
   let darkIcon = HiMoon;
   let lightIcon = HiSun;
 
   let SwitchIcon = useColorModeValue(darkIcon, lightIcon);
+
+  let useColorModeValueModified = (light: string, dark: string) => {
+    if (lightModeOnly === true) return useColorModeValue(light, light);
+    return useColorModeValue(light, dark);
+  };
 
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
@@ -169,7 +180,7 @@ export const Header = () => {
     fontSize: "1.8em",
     "aria-label": `Switch to ${colorModeText} mode`,
     variant: "ghost",
-    color: useColorModeValue("gray.500", "inherit"),
+    color: useColorModeValueModified("gray.500", "inherit"),
     ml: { base: "0", sm: "3" },
     onClick: toggleMode,
     icon: <SwitchIcon />,
@@ -179,7 +190,7 @@ export const Header = () => {
     display: { base: "flex", md: "flex", lg: "none" },
     "aria-label": "Open menu",
     fontSize: "1.8em",
-    color: useColorModeValue("gray.500", "inherit"),
+    color: useColorModeValueModified("gray.500", "inherit"),
     variant: "ghost",
     ml: { base: "0", sm: "3" },
     icon: <AiOutlineMenu />,
@@ -197,9 +208,9 @@ export const Header = () => {
       {...{
         h: "full",
         w: "full",
-        bg: useColorModeValue("white", "gray.900"),
-        borderBottomColor: useColorModeValue("gray.100", "gray.800"),
-        borderBottomWidth: useColorModeValue("0px", "1px"),
+        bg: useColorModeValueModified("white", "gray.900"),
+        borderBottomColor: useColorModeValueModified("gray.100", "gray.800"),
+        borderBottomWidth: useColorModeValueModified("0px", "1px"),
         shadow: "sm",
       }}
     >
@@ -209,7 +220,7 @@ export const Header = () => {
             <Link href="/" passHref>
               <HStack>
                 <Box w="fit-content">
-                  <HeaderLogo />
+                  <HeaderLogo useLightModeValue={lightModeOnly} />
                 </Box>
               </HStack>
             </Link>
@@ -220,6 +231,7 @@ export const Header = () => {
               {HeaderLink({
                 text: "Pricing",
                 href: "/pricing",
+                useColorModeValue: useColorModeValueModified,
               })}
             </HStack>
           </Flex>
@@ -230,13 +242,20 @@ export const Header = () => {
               color="gray.400"
               mr=".8em"
             >
-              {GoToAppOrSigninButton({ authed: authed })}
+              {GoToAppOrSigninButton({
+                authed: authed,
+                useColorModeValue: useColorModeValueModified,
+              })}
             </HStack>
-            <IconButton {...defaultColorModeToggleStyles} />
+            {<IconButton {...defaultColorModeToggleStyles} />}
             <IconButton {...defaultMobileNavHamburgerStyles} />
           </Flex>
         </Flex>
-        {MobileNavHeader({ isOpen: isOpen, onClose: onClose })}
+        {MobileNavHeader({
+          isOpen: isOpen,
+          onClose: onClose,
+          useColorModeValue: useColorModeValueModified,
+        })}
       </chakra.header>
     </Center>
   );

@@ -9,5 +9,9 @@ interface MDXLayoutProps {
 export default function MDXLayout(props: MDXLayoutProps) {
   const { frontmatter, children } = props;
 
-  return <PageContainer frontmatter={frontmatter}>{children}</PageContainer>;
+  return (
+    <PageContainer frontmatter={frontmatter} lightOnly>
+      {children}
+    </PageContainer>
+  );
 }
