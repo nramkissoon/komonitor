@@ -12,12 +12,21 @@ interface PageLayoutProps {
   seoProps: Pick<NextSeoProps, "title" | "description">;
   maxW?: string[];
   full?: boolean;
+  lightModeOnly?: boolean;
 }
 
 export function PageLayout(props: PageLayoutProps & any) {
-  const { isAppPage, seoProps, full } = props;
-  const footer = isAppPage ? <AppFooter /> : <Footer />;
-  const header = isAppPage ? <AppHeader /> : <Header />;
+  const { isAppPage, seoProps, full, lightModeOnly } = props;
+  const footer = isAppPage ? (
+    <AppFooter />
+  ) : (
+    <Footer lightModeOnly={lightModeOnly} />
+  );
+  const header = isAppPage ? (
+    <AppHeader />
+  ) : (
+    <Header lightModeOnly={lightModeOnly} />
+  );
 
   return (
     <>

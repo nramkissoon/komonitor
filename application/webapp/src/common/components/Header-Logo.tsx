@@ -1,6 +1,10 @@
 import { Box, Flex, Image, useColorModeValue } from "@chakra-ui/react";
 
-export function HeaderLogo() {
+export function HeaderLogo({
+  useLightModeValue,
+}: {
+  useLightModeValue?: boolean;
+}) {
   const LightModeLogo = (
     <Flex>
       <Box boxSize="35px" mr=".5em">
@@ -45,6 +49,6 @@ export function HeaderLogo() {
       </Box>
     </Flex>
   );
-
+  if (useLightModeValue) return LightModeLogo;
   return useColorModeValue(LightModeLogo, DarkModeLogo);
 }

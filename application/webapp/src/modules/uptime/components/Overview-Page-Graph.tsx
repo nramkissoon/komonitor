@@ -222,7 +222,7 @@ function LineGraph(props: LineGraphProps) {
         format: (v) => (v as string).slice((v as string).length - 11),
       }}
       enableGridX={false}
-      enablePoints={true}
+      enablePoints={false}
       pointLabelYOffset={-12}
       theme={graphTheme(colorMode === "dark")}
       useMesh
@@ -276,7 +276,7 @@ export function OverviewPageGraph(props: OverviewPageGraphProps) {
   ) : (
     <ScaleFade in={statuses !== undefined} initialScale={0.8}>
       <Box
-        h="xl"
+        h="md"
         bg={useColorModeValue("white", "gray.950")}
         borderRadius="xl"
         p="1.5em"

@@ -49,7 +49,8 @@ export const IntegrationSection = () => {
           null,
           "repeat(4, 1fr)",
         ]}
-        gap={6}
+        columnGap={[10, null, null, null, null, 6]}
+        rowGap={[10, null, null, null, null, 6]}
         maxW="9xl"
         mb="10px"
       >

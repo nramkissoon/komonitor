@@ -4,10 +4,7 @@
 
 
 Status Pages:
-    ☐ status page table
-    ☐ scope private, public
-    ☐ create status pages for random landing pages for marketing
-    ☐ define core fields, notifs, etc 
+    ☐ scope work
 
 Alerts:
     ✔ add alert type to alert req and invoke model @done(22-03-23 10:48)
@@ -20,18 +17,19 @@ Alerts:
 
 ✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
-☐  slack app distribution
+Landing: 
+    ☐ follow hyperping for signups
+    ☐ redesign advanced section
 
-✔ slack integ page @done(22-03-22 10:33)
-✔ disc integ page @done(22-03-22 11:01)
-✔ email integ page @done(22-03-22 10:33)
-✔ webhook integ page @done(22-03-22 10:33)
-✔ integ page cta @done(22-03-22 10:33)
+Sign up page: 
+    ☐ scope and follow hyperping
 
-✔ footer hover style @done(22-03-17 10:37)
-
-ez: 
-    ✔ follow redirect default @done(22-03-08 10:01)
+ez:
+    ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
+    ☐ add duration to up alerts
+    ☐ branch for eu gdpr
+    ✔ footer why komonitor @done(22-03-28 14:25)
+    ☐ list blog ideas
 
 Marketing: 
     ✔ redesign blog section @done(22-03-08 12:01)
@@ -47,15 +45,25 @@ App header:
     ✔ add back button @done(22-03-24 13:39)
 
 Project overview:
-    ☐ redesign, quick actions, go to
+    ✔ add tailwind @done(22-03-24 20:34)
+    ☐ Uptime monitor section
+    ☐ create monitor quick link
+    ☐ view monitor quick link
+    ☐ list monitors with ongoing alerts
     
 
 Uptime HTTP:
-    ☐  design dashboard to show HTTP settings + alerts
     ✔  follow http redirects @done(22-01-31 13:20)
     ✔  pause function @done(22-01-31 13:58)
+    ☐  add edit + delete + pause as a settings tab
+    Statuses Tab: 
+        ☐  redesign - view json side by side
+    Alert Tab: 
+        ☐  redesign - view json side by side
+    Overview Tab:
+        ☐ design status aggregator into 100 data points
+        ☐ uptime changes + durations
 
-☐ tw space hosting tools
 
 
 Usage Tab:
@@ -143,22 +151,12 @@ Webapp:
 Customer Serve:
     ☐ notification for new users -> email template
 
-Teams:
-    ☐ scope teams
-
 API:
     ☐ research rate limiting
     ☐ API server design (api.komonitor.com)
     API keys:
         ☐ design api key creation, storage, etc.
         ☐ research what header API keys are sent in
-
-
-
-
-TEAMS: 
-    ☐  search todos
-
 
 
 
@@ -193,9 +191,9 @@ Bugs:
     ☐  Remove aws-cdk package by rewriting nextauth ddb client
     ✔  upgrade nextauth @done(22-02-15 15:40)
     ☐  get rid of hypernext
-    ☐  keyed mutates
-     ☐ make monitor url unchangeable, it messes up stats 
-     ☐  get rid of uptime monitor jobs
+    ✘  keyed mutates @cancelled(22-03-27 17:09)
+     ✔ make monitor url unchangeable, it messes up stats @done(22-03-27 17:09)
+     ✔  get rid of uptime monitor jobs @done(22-03-27 17:09)
      ☐ add sweden to cdk
     ☐  consolidate useUser hooks to one api call
     ☐  consolidate db logic into one package

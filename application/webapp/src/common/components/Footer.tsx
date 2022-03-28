@@ -14,9 +14,10 @@ import React from "react";
 const HeaderLink = (props: {
   text: string;
   href: string;
+  useColorModeValue: Function;
   buttonProps?: ButtonProps;
 }) => {
-  const { text, href, buttonProps } = props;
+  const { text, href, buttonProps, useColorModeValue } = props;
 
   const defaultButtonLinkStyles: ButtonProps = {
     color: useColorModeValue("gray.900", "gray.400"),
@@ -44,9 +45,10 @@ const HeaderLink = (props: {
 const StripeClimateLink = (props: {
   text: string;
   href: string;
+  useColorModeValue: Function;
   buttonProps?: ButtonProps;
 }) => {
-  const { text, href, buttonProps } = props;
+  const { text, href, buttonProps, useColorModeValue } = props;
 
   const defaultButtonLinkStyles: ButtonProps = {
     color: useColorModeValue("gray.900", "gray.400"),
@@ -68,8 +70,12 @@ const StripeClimateLink = (props: {
   );
 };
 
-const LinkColumn = (props: { header: string; links: React.ReactElement[] }) => {
-  const { links, header } = props;
+const LinkColumn = (props: {
+  header: string;
+  links: React.ReactElement[];
+  useColorModeValue: Function;
+}) => {
+  const { links, header, useColorModeValue } = props;
   return (
     <VStack>
       <Heading color={useColorModeValue("gray.900", "gray.300")} fontSize="xl">
@@ -80,7 +86,12 @@ const LinkColumn = (props: { header: string; links: React.ReactElement[] }) => {
   );
 };
 
-export function Footer() {
+export function Footer({ lightModeOnly }: { lightModeOnly?: boolean }) {
+  let useColorModeValueModified = (light: string, dark: string) => {
+    if (lightModeOnly === true) return useColorModeValue(light, light);
+    return useColorModeValue(light, dark);
+  };
+
   const containerBoxStyles: FlexProps = {
     h: "3em",
     mt: "auto",
@@ -89,8 +100,8 @@ export function Footer() {
     p: "1em",
     flexDir: "column",
     alignItems: "center",
-    borderTopColor: useColorModeValue("gray.100", "gray.800"),
-    borderTopWidth: useColorModeValue("0px", "1px"),
+    borderTopColor: useColorModeValueModified("gray.100", "gray.800"),
+    borderTopWidth: useColorModeValueModified("0px", "1px"),
   };
 
   const year = new Date().getFullYear();
@@ -104,41 +115,72 @@ export function Footer() {
         pb="2em"
       >
         <LinkColumn
-          header="Product"
+          header="Why Komonitor?"
+          useColorModeValue={useColorModeValueModified}
           links={[
-            <HeaderLink text="Uptime Monitoring" href="/uptime" key="uptime" />,
+            <HeaderLink
+              text="Uptime Monitoring"
+              href="/uptime"
+              key="uptime"
+              useColorModeValue={useColorModeValueModified}
+            />,
 
             <HeaderLink
               text="Integrations"
               href="/integrations"
               key="integrations"
+              useColorModeValue={useColorModeValueModified}
             />,
           ]}
         />
 
         <LinkColumn
+          useColorModeValue={useColorModeValueModified}
           header="Resources"
           links={[
-            <HeaderLink text="Pricing" href="/pricing" key="pricing" />,
+            <HeaderLink
+              text="Pricing"
+              href="/pricing"
+              key="pricing"
+              useColorModeValue={useColorModeValueModified}
+            />,
             <HeaderLink
               text="Documentation"
               href="/docs/getting-started/introduction"
               key="docs"
+              useColorModeValue={useColorModeValueModified}
             />,
 
-            <HeaderLink text="Blog" href="/blog" key="blog" />,
+            <HeaderLink
+              text="Blog"
+              href="/blog"
+              key="blog"
+              useColorModeValue={useColorModeValueModified}
+            />,
           ]}
         />
         <LinkColumn
+          useColorModeValue={useColorModeValueModified}
           header="Company"
           links={[
             <HeaderLink
               text="Contact"
               href="mailto:support@komonitor.com"
               key="contact"
+              useColorModeValue={useColorModeValueModified}
             />,
-            <HeaderLink text="Privacy" href="/privacy" key="privacy" />,
-            <HeaderLink text="Terms of Service" href="/tos" key="tos" />,
+            <HeaderLink
+              text="Privacy"
+              href="/privacy"
+              key="privacy"
+              useColorModeValue={useColorModeValueModified}
+            />,
+            <HeaderLink
+              text="Terms of Service"
+              href="/tos"
+              key="tos"
+              useColorModeValue={useColorModeValueModified}
+            />,
           ]}
         />
       </SimpleGrid>

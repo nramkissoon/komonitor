@@ -13,6 +13,7 @@ import React from "react";
 import { TeamCheckoutNotCompleteModal } from "../src/common/components/Team-Checkout-Not-Complete-Modal";
 import theme from "../src/common/components/theme";
 import { useTeam } from "../src/modules/teams/client";
+import "../styles/globals.css";
 
 export interface ExtendedPageContext extends NextPageContext {}
 

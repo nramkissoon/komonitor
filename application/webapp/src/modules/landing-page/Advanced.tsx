@@ -291,7 +291,7 @@ export const Advanced = () => {
         lineHeight="shorter"
         mb="10px"
       >
-        Need To Monitor API Responses? No Problem.
+        Need To Monitor API Responses?
       </chakra.h2>
       <chakra.h3
         fontSize="2xl"
@@ -306,6 +306,7 @@ export const Advanced = () => {
         Customize your monitor's HTTP requests to match your use case and
         analyze the response.
       </chakra.h3>
+
       <Grid
         templateColumns={[
           "repeat(1, 1fr)",
@@ -326,6 +327,7 @@ export const Advanced = () => {
           borderRadius="lg"
           p="1.5em"
           mb="10px"
+          maxW={"100vw"}
         >
           <Box
             overflow="auto"
@@ -354,6 +356,7 @@ export const Advanced = () => {
             </Table>
           </Box>
         </GridItem>
+
         <GridItem
           w="100%"
           shadow="md"
@@ -363,6 +366,7 @@ export const Advanced = () => {
           mb="10px"
           maxH={"600px"}
           overflowY="auto"
+          maxW={"100vw"}
           css={{
             "&::-webkit-scrollbar": {
               width: "10px",
@@ -445,6 +449,7 @@ export const Advanced = () => {
           </Box>
         </GridItem>
       </Grid>
+
       <chakra.h3
         fontSize="2xl"
         fontWeight="bold"

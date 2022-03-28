@@ -1,4 +1,4 @@
-import { Badge, Box, chakra, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Badge, Box, chakra, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { Footer } from "../../../common/components/Footer";
@@ -41,10 +41,11 @@ interface PageContainerProps {
     };
   };
   children: React.ReactNode;
+  lightOnly?: boolean;
 }
 
 function PageContainer(props: PageContainerProps) {
-  const { frontmatter, children } = props;
+  const { frontmatter, children, lightOnly } = props;
   useHeadingFocusOnRouteChange();
 
   const {
@@ -60,9 +61,9 @@ function PageContainer(props: PageContainerProps) {
   return (
     <>
       <Seo title={title} description={description} />
-      <Header />
+      <Header lightModeOnly={lightOnly} />
       <Box as="main" className="main-content" w="full" mx="auto" mb="4em">
-        <Box display={{ md: "flex" }} maxW="6xl" mx="auto">
+        <Box display={{ md: "flex" }} maxW="5xl" mx="auto">
           <Box flex="1" minW="0">
             <Box id="content" px={5} mx="auto" minH="76vh">
               <Flex>
@@ -72,7 +73,7 @@ function PageContainer(props: PageContainerProps) {
                   px="4em"
                   mt="10"
                   py="1.5em"
-                  bg={useColorModeValue("gray.50", "gray.900")}
+                  bg="gray.50"
                   shadow="sm"
                   rounded="xl"
                 >
@@ -86,13 +87,14 @@ function PageContainer(props: PageContainerProps) {
                     {title}
                   </chakra.h1>
                   <Badge
-                    colorScheme="green"
                     fontSize="md"
                     borderRadius="sm"
                     variant="subtle"
                     fontWeight="medium"
                     p=".3em"
                     mb="1em"
+                    bg="green.100"
+                    color="green.700"
                   >
                     {readTimeMinutes} minute read
                   </Badge>
@@ -103,7 +105,7 @@ function PageContainer(props: PageContainerProps) {
           </Box>
         </Box>
       </Box>
-      <Footer />
+      <Footer lightModeOnly={lightOnly} />
     </>
   );
 }

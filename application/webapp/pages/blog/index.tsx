@@ -1,3 +1,5 @@
+import { ChakraProvider, extendTheme, theme } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 import { InferGetStaticPropsType } from "next";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import { IndexPage } from "../../src/modules/blog/components/Index-Page";
@@ -8,16 +10,33 @@ const CONTENT_PATH = "blog/posts";
 export default function Page({
   frontMatters,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const blogTheme = extendTheme(
+    {
+      styles: {
+        global: (props: any) => ({
+          body: {
+            bg: mode("gray.50", "gray.50")(props),
+            color: mode("black", "black")(props),
+          },
+        }),
+      },
+    },
+    theme
+  );
   return (
-    <PageLayout
-      seoProps={{
-        title: "Blog",
-        description:
-          "Komonitor Blog. Articles and guides on effective monitoring and alerting for any website.",
-      }}
-    >
-      <IndexPage frontMatters={frontMatters as any} />
-    </PageLayout>
+    <ChakraProvider theme={blogTheme}>
+      <PageLayout
+        seoProps={{
+          title: "Blog",
+          description:
+            "Komonitor Blog. Articles and guides on effective monitoring and alerting for any website.",
+        }}
+        full
+        lightModeOnly
+      >
+        <IndexPage frontMatters={frontMatters as any} />
+      </PageLayout>
+    </ChakraProvider>
   );
 }
 

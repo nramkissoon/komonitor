@@ -1,25 +1,42 @@
-import { Box, Divider, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  useColorModeValue,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import type { NextPage } from "next";
+import { FadeInView } from "../src/common/components/Animation";
 import { PageLayout } from "../src/common/components/Page-Layout";
 import { Advanced } from "../src/modules/landing-page/Advanced";
 import { Banner } from "../src/modules/landing-page/Banner";
+import { CostSection } from "../src/modules/landing-page/Cost";
 import { CTA } from "../src/modules/landing-page/Cta";
 import { Features } from "../src/modules/landing-page/Features";
 import { IntegrationSection } from "../src/modules/landing-page/Integrations";
 import { TeamsSection } from "../src/modules/landing-page/Team";
 
 const SectionDivider = () => (
-  <Divider
-    maxW="md"
-    margin="auto"
-    borderWidth="1px"
-    borderColor={useColorModeValue("blue.500", "blue.300")}
-    mt="5em"
-    mb=".8em"
-  />
+  <FadeInView
+    obvProps={{ threshold: 1, rootMargin: "100px 0px 0px 0px" }}
+    inAnimation="motion-safe:animate-scale-fade-in"
+    outAnimation="motion-safe:animate-scale-fade-out"
+  >
+    <Divider
+      maxW={["xs", "sm", "md"]}
+      margin="auto"
+      borderWidth="1px"
+      borderColor={useColorModeValue("blue.500", "blue.300")}
+      mt="8em"
+      mb=".8em"
+    />
+  </FadeInView>
 );
 
 const Home: NextPage = () => {
+  const [isLargerThanHD, isDisplayingInBrowser] = useMediaQuery([
+    "(min-width: 1920px)",
+    "(display-mode: browser)",
+  ]);
   return (
     <PageLayout
       full
@@ -31,6 +48,11 @@ const Home: NextPage = () => {
       }}
     >
       <Banner />
+      <Box display="flex" flexDir="column" m="auto" overflowX="hidden" w="full">
+        <CostSection />
+        <SectionDivider />
+        <Features />
+      </Box>
       <Box
         maxW={["sm", "xl", "3xl", "5xl", "6xl", "1600px"]}
         display="flex"
@@ -38,9 +60,6 @@ const Home: NextPage = () => {
         m="auto"
         px={["10px", null, null, null, null, "20px"]}
       >
-        <SectionDivider />
-        <Features />
-
         <SectionDivider />
         <Advanced />
         <SectionDivider />

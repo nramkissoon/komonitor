@@ -1,3 +1,5 @@
+import { ChakraProvider, extendTheme, theme } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 import { InferGetStaticPropsType } from "next";
 import { MDXRemote } from "next-mdx-remote";
 import { MDXComponents } from "../../../src/common/components/Mdx-Components";
@@ -10,10 +12,25 @@ export default function Page({
   mdxSource,
   frontMatter,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const blogTheme = extendTheme(
+    {
+      styles: {
+        global: (props: any) => ({
+          body: {
+            bg: mode("gray.50", "gray.50")(props),
+            color: mode("black", "black")(props),
+          },
+        }),
+      },
+    },
+    theme
+  );
   return (
-    <MDXLayout frontmatter={frontMatter}>
-      <MDXRemote {...mdxSource} components={MDXComponents} />
-    </MDXLayout>
+    <ChakraProvider theme={blogTheme}>
+      <MDXLayout frontmatter={frontMatter}>
+        <MDXRemote {...mdxSource} components={MDXComponents} />
+      </MDXLayout>
+    </ChakraProvider>
   );
 }
 

@@ -1,10 +1,4 @@
-import {
-  Badge,
-  Button,
-  chakra,
-  Flex,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Badge, Box, chakra, Flex } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FrontMatter } from "../utils";
 
@@ -12,30 +6,51 @@ function BlogPostPanel(props: { frontMatter: FrontMatter }) {
   const { frontMatter } = props;
   return (
     <Flex
-      bg={useColorModeValue("white", "gray.950")}
+      bg={"white"}
       borderRadius="lg"
       shadow="lg"
       flexDir="column"
       p="1.5em"
       maxWidth={["3xl"]}
       mb="2em"
+      role={"group"}
+      transitionDuration="0.2s"
+      _hover={{
+        cursor: "pointer",
+        transform: "scale(1.03)",
+      }}
     >
-      <chakra.h2 fontSize="3xl" fontWeight="bold">
-        {frontMatter.title}
-      </chakra.h2>
-      <chakra.h3 fontSize="ls" fontWeight="bold">
-        {frontMatter.lastEdited?.date}
-      </chakra.h3>
-      <Badge colorScheme="green" w="fit-content" mt="3px" mb="1.5em">
-        {frontMatter.readTimeMinutes} minute read
-      </Badge>
-      <chakra.p mb="1em" fontSize="lg">
-        {frontMatter.description}
-      </chakra.p>
       <NextLink href={frontMatter.slug as string} passHref>
-        <Button size="md" maxW="8em" _hover={{ bg: "gray.400" }} shadow="sm">
-          Read More
-        </Button>
+        <Box>
+          <chakra.h2 fontSize="3xl" fontWeight="bold">
+            {frontMatter.title}
+          </chakra.h2>
+          <chakra.h3 fontSize="ls" fontWeight="bold">
+            {frontMatter.lastEdited?.date}
+          </chakra.h3>
+          <Badge
+            w="fit-content"
+            mt="3px"
+            mb="1em"
+            bg="green.100"
+            color="green.700"
+          >
+            {frontMatter.readTimeMinutes} minute read
+          </Badge>
+          <chakra.p mb=".8em" fontSize="lg">
+            {frontMatter.description}
+          </chakra.p>
+          <chakra.p
+            fontSize="lg"
+            fontWeight="medium"
+            color="blue.500"
+            opacity={0}
+            transitionDuration="0.2s"
+            _groupHover={{ opacity: 1 }}
+          >
+            Read more
+          </chakra.p>
+        </Box>
       </NextLink>
     </Flex>
   );
@@ -45,15 +60,15 @@ export function IndexPage(props: { frontMatters: FrontMatter[] }) {
   const { frontMatters } = props;
 
   const Header = (
-    <Flex justifyContent="center" flexDir="column" mb="4em">
+    <Flex justifyContent="center" flexDir="column" mb="4em" w="full" mt="3em">
       <chakra.h1 fontSize="5xl" fontWeight="extrabold" textAlign="center">
-        Komonitor Blog
+        Blog
       </chakra.h1>
       <chakra.h2
         fontSize="xl"
         fontWeight="bold"
         textAlign="center"
-        color={useColorModeValue("gray.600", "gray.500")}
+        color={"gray.600"}
       >
         Articles, guides, and knowledge on effective monitoring and alerting
         systems.
