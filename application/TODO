@@ -26,14 +26,15 @@ Sign up page:
 
 ez:
     ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
-    ☐ add duration to up alerts
+    ✔ add duration to up alerts @done(22-03-28 14:56)
+    ☐ test duration in alerts
+    ☐  deploy duration in alerts
     ☐ branch for eu gdpr
     ✔ footer why komonitor @done(22-03-28 14:25)
-    ☐ list blog ideas
+    ✔ list blog ideas @done(22-03-28 14:40)
 
 Marketing: 
     ✔ redesign blog section @done(22-03-08 12:01)
-    ☐ write alarm post
     ☐ add to reddit saas group
 
 ☐ promise.all alert lambda
@@ -83,14 +84,11 @@ Demo:
     ☐  set up demo route
     ☐  create demo project, monitors, and api for getting resources
 
-☐ scope status pages
 
 
 ☐  axiom logging
 
 ☐ increase data retention and view for free plan to 90 days
-
-☐ pricing page
 
 ☐ pause button confirmation when pausing
 

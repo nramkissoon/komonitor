@@ -12,6 +12,8 @@ body
                 span.bold #{monitor.url}
                 span!= ` is <span class="up">UP</span>.`
         tr
+            td.lg.centered-text!= `${(monitor.failures_before_alert ?? 1) * monitor.frequency} minute(s) of downtime experienced.` 
+        tr
             td.lg.centered-text Uptime checks that triggered this alert:
         tr
             td 

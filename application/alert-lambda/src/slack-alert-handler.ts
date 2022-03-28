@@ -25,11 +25,9 @@ const createUptimeMonitorSlackAlertMessage = (
               type: "section",
               text: {
                 type: "mrkdwn",
-                text: `*${monitor.url}* *UP* for ${
-                  monitor.failures_before_alert
-                } uptime check(s).\n*${
+                text: `*${monitor.url}* is *UP*.\n*${
                   (monitor.failures_before_alert ?? 1) * monitor.frequency
-                } min. of downtime detected.*\nAlert description: ${
+                } min. of downtime experienced.*\nAlert description: ${
                   alert.description
                 }`,
               },
