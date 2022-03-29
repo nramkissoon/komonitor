@@ -84,9 +84,12 @@ export const IntersectedBox: React.FC<{
 
 export const CostSection = () => {
   const [dollar, setDollar] = React.useState(0);
-  const [dollarColor, setDollarColor] = React.useState("red.50");
+
   const [startDollarAnimation, setStartDollarAnimation] = React.useState(false);
   const { colorMode } = useColorMode();
+  const [dollarColor, setDollarColor] = React.useState(
+    colorMode === "dark" ? "red.50" : "#171923"
+  );
 
   React.useEffect(() => {
     const interval = setInterval(() => {

@@ -52,7 +52,7 @@ ez:
     ☐ test duration in alerts
     ☐ deploy duration in alerts
     ☐ branch for eu gdpr
-    ☐ cost number bug in light mode
+    ✔ cost number bug in light mode @done(22-03-29 14:55)
     ✔ footer why komonitor @done(22-03-28 14:25)
     ✔ list blog ideas @done(22-03-28 14:40)
 

@@ -185,7 +185,7 @@ function LineGraph(props: LineGraphProps) {
       yScale={{
         type: "linear",
         min: minLatency ? Math.floor(minLatency) : "auto",
-        max: maxLatency ? Math.ceil(maxLatency) : "auto",
+        max: maxLatency ? Math.ceil(maxLatency * 3) : "auto",
         stacked: true,
         reverse: false,
       }}
