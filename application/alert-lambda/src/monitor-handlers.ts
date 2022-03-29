@@ -1,10 +1,11 @@
 import {
   Alert,
   AlertInvocation,
+  JsonBodyCheck,
   UptimeMonitor,
   UptimeMonitorStatus,
 } from "utils";
-import { config, ddbClient } from "./config";
+import { config, ddbClient, expectationString } from "./config";
 import { sendUptimeMonitorDiscordAlert } from "./discord-alert-handler";
 import {
   getOwnerById,
@@ -205,6 +206,9 @@ export async function handleUptimeMonitor(
     return; // do nothing because we do not want to spam alerts
   }
 
+  // get expectation strings for triggering statuses
+  const expectationStrings: { timestamp: number; message: string }[] = [];
+
   // check if previous invocation was triggered by any of the statuses, don't check if no invocation
   if (previousInvocation) {
     for (let status of triggeringStatuses) {
@@ -219,6 +223,23 @@ export async function handleUptimeMonitor(
         )
       ) {
         alertShouldTrigger = false;
+      } else {
+        for (let conditionCheck of status.up_condition_check_results ?? []) {
+          if (conditionCheck.passed === false) {
+            expectationStrings.push({
+              timestamp: status.timestamp,
+              message: expectationString({
+                property:
+                  (conditionCheck.check.condition as JsonBodyCheck).property ??
+                  "",
+                actualValue: conditionCheck.value,
+                comparison: conditionCheck.check.condition.comparison ?? "",
+                type: conditionCheck.check.type,
+                expectedValue: conditionCheck.check.condition.expected ?? "",
+              }),
+            });
+          }
+        }
       }
     }
   }
@@ -267,7 +288,8 @@ export async function handleUptimeMonitor(
         monitor,
         alert,
         owner,
-        alertType
+        alertType,
+        expectationStrings.length > 0 ? expectationStrings : undefined
       );
       if (slackSent) {
         alertTriggered = true;
@@ -296,7 +318,8 @@ export async function handleUptimeMonitor(
         monitor,
         alert,
         owner,
-        alertType
+        alertType,
+        expectationStrings.length > 0 ? expectationStrings : undefined
       );
       if (discordSent) {
         alertTriggered = true;

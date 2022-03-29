@@ -5,6 +5,26 @@
 
 Status Pages:
     ☐ scope work
+    Overview page in Projects tabs:
+        ☐ lists all status pages
+        ☐ link to either edit, view, or delete status page
+        ☐ link to create new status page
+    New/ Edit page:
+        ☐ design mockup + scope components
+    DB:
+        ☐ declare db in cdk
+        ☐ declare s3 bucket for storing images
+        ☐ deploy cdk
+        ☐ implement fetching from db
+        ☐ implement saving to db
+        ☐ implement deleting from db
+        ☐ implement updating in db
+        ☐ implement deleting all from db
+        ☐ add envs to vercel
+    UI:
+        ☐ implement hook for fetching from db based on team/owner
+    
+    
 
 Alerts:
     ✔ add alert type to alert req and invoke model @done(22-03-23 10:48)
@@ -12,8 +32,10 @@ Alerts:
     ✔ test @done(22-03-23 15:11)
     ✔  discord badge in alert invoke table @done(22-03-24 10:32)
 
-☐ add uptime condition check results to status 
-☐ add check results to alerts
+✔ add uptime condition check results to status @done(22-03-29 09:49)
+☐ test check results and alerts
+✔ add check results to alerts @done(22-03-29 14:18)
+☐ test check results and alerts and add to email alert
 
 ✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
@@ -30,6 +52,7 @@ ez:
     ☐ test duration in alerts
     ☐ deploy duration in alerts
     ☐ branch for eu gdpr
+    ☐ cost number bug in light mode
     ✔ footer why komonitor @done(22-03-28 14:25)
     ✔ list blog ideas @done(22-03-28 14:40)
 

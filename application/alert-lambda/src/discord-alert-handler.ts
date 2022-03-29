@@ -6,6 +6,7 @@ import {
   UptimeMonitor,
   User,
 } from "utils";
+import { getTimeString } from "./config";
 
 const ownerIsTeam = (owner: User | Team): owner is Team => {
   return owner.type === "TEAM";
@@ -15,7 +16,8 @@ export const sendUptimeMonitorDiscordAlert = async (
   monitor: UptimeMonitor,
   alert: Alert,
   owner: User | Team,
-  alertType: "incident_start" | "incident_end"
+  alertType: "incident_start" | "incident_end",
+  expectationMessages?: { timestamp: number; message: string }[]
 ): Promise<boolean> => {
   try {
     if (
@@ -52,6 +54,17 @@ export const sendUptimeMonitorDiscordAlert = async (
       (ownerIsTeam(owner) ? owner.id + "/" : "app/") +
       "/projects/";
 
+    let fields: { name: string; value: string }[] = [];
+    const tz = (owner as any).tz ? (owner as any).tz : "Etc/GMT";
+    if (expectationMessages) {
+      expectationMessages.forEach((e) => {
+        fields.push({
+          name: getTimeString(tz, e.timestamp),
+          value: e.message,
+        });
+      });
+    }
+
     if (alertType === "incident_start") {
       const discordRequest = await client.send({
         embeds: [
@@ -76,6 +89,13 @@ export const sendUptimeMonitorDiscordAlert = async (
             footer: {
               text: `View monitor at: ${baseUrl}${monitor.project_id}/uptime/${monitor.monitor_id}`,
             },
+          },
+          {
+            title: "Failures",
+            description:
+              "Trace of condition check failures that triggered alert.",
+            color: 0xe53e3e,
+            fields: fields,
           },
         ],
       });
