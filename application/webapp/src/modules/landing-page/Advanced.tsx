@@ -5,14 +5,15 @@ import {
   Grid,
   GridItem,
   Icon,
-  Table,
-  Tbody,
+  List,
+  ListIcon,
+  ListItem,
   Td,
-  Thead,
   Tr,
   useColorModeValue,
   useToken,
 } from "@chakra-ui/react";
+import { MdCheckCircle } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 
 const JsonSample = () => {
@@ -322,39 +323,48 @@ export const Advanced = () => {
       >
         <GridItem
           w="100%"
-          shadow="md"
-          bg={useColorModeValue("white", "gray.950")}
+          //shadow="md"
+          //bg={useColorModeValue("white", "gray.950")}
           borderRadius="lg"
           p="1.5em"
           mb="10px"
           maxW={"100vw"}
+          alignSelf="center"
         >
-          <Box
-            overflow="auto"
-            css={{
-              "&::-webkit-scrollbar": {
-                width: "10px",
-                height: "10px",
-              },
-              "&::-webkit-scrollbar-track": {
-                width: "10px",
-                height: "10px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: useColorModeValue("#E2E8F0", "#1A202C"),
-              },
-            }}
-          >
-            <Table>
-              <Thead></Thead>
-              <Tbody>
-                {TableSectionRow(tableBorderColor, "Custom Request Parameters")}
-                {TableRows(tableBorderColor, requestSectionData)}
-                {TableSectionRow(tableBorderColor, "Response Data")}
-                {TableRows(tableBorderColor, responseSectionData)}
-              </Tbody>
-            </Table>
-          </Box>
+          <chakra.h3 fontWeight="medium" fontSize="2xl">
+            Configurable Request Parameters:
+          </chakra.h3>
+          <List fontWeight="normal" fontSize="xl" spacing={3} mt=".8em">
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              HTTP Methods (GET, POST, PUT, DELETE, PATCH, HEAD)
+            </ListItem>
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Request Body (text, JSON, XML, etc.)
+            </ListItem>
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Request Headers
+            </ListItem>
+          </List>
+          <chakra.h3 fontWeight="medium" fontSize="2xl" mt="50px">
+            Response Data:
+          </chakra.h3>
+          <List fontWeight="normal" fontSize="xl" spacing={3} mt=".8em">
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Timing Phases (DNS, TLS, time-to-first-byte, and more timings.)
+            </ListItem>
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Response Body
+            </ListItem>
+            <ListItem>
+              <ListIcon as={MdCheckCircle} color="green.500" />
+              Response Headers
+            </ListItem>
+          </List>
         </GridItem>
 
         <GridItem
@@ -364,7 +374,7 @@ export const Advanced = () => {
           borderRadius="lg"
           p="1.5em"
           mb="10px"
-          maxH={"600px"}
+          maxH={"550px"}
           overflowY="auto"
           maxW={"100vw"}
           css={{

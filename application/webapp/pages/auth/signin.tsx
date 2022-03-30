@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { PageLayout } from "../../src/common/components/Page-Layout";

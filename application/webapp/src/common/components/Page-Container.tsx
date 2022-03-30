@@ -13,6 +13,7 @@ export const PageContainer = (props: { isAppPage?: boolean } & any) => {
       mb="3em"
       pt=".3em"
       px="0"
+      flexGrow="1"
     >
       {props.children}
     </Container>

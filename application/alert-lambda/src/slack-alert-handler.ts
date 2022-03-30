@@ -1,13 +1,14 @@
 import fetch from "isomorphic-fetch";
 import { Alert, SlackInstallation, Team, UptimeMonitor, User } from "utils";
-import { regionToLocationStringMap } from "./config";
+import { getTimeString, regionToLocationStringMap } from "./config";
 
 const createUptimeMonitorSlackAlertMessage = (
   alert: Alert,
   monitor: UptimeMonitor,
   isTeam: boolean,
   ownerId: string,
-  alertType: "incident_start" | "incident_end"
+  alertType: "incident_start" | "incident_end",
+  messageStrings?: string[]
 ) => {
   const baseUrl =
     "https://komonitor.com/" + (isTeam ? ownerId + "/" : "app/") + "/projects/";
@@ -25,11 +26,9 @@ const createUptimeMonitorSlackAlertMessage = (
               type: "section",
               text: {
                 type: "mrkdwn",
-                text: `*${monitor.url}* *UP* for ${
-                  monitor.failures_before_alert
-                } uptime check(s).\n*${
+                text: `*${monitor.url}* is *UP*.\n*${
                   (monitor.failures_before_alert ?? 1) * monitor.frequency
-                } min. of downtime detected.*\nAlert description: ${
+                } min. of total downtime experienced.*\nAlert description: ${
                   alert.description
                 }`,
               },
@@ -38,7 +37,6 @@ const createUptimeMonitorSlackAlertMessage = (
               type: "section",
               text: {
                 type: "mrkdwn",
-                // TODO CHANGE FOR TEAMS
                 text: `*<${baseUrl}${monitor.project_id}/uptime/${monitor.monitor_id}|View monitor>*`,
               },
             },
@@ -73,8 +71,14 @@ const createUptimeMonitorSlackAlertMessage = (
             type: "section",
             text: {
               type: "mrkdwn",
-              // TODO CHANGE FOR TEAMS
               text: `*<${baseUrl}${monitor.project_id}/uptime/${monitor.monitor_id}|View monitor>*`,
+            },
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: messageStrings?.join("\n"),
             },
           },
         ],
@@ -126,7 +130,8 @@ export const sendUptimeMonitorSlackAlert = async (
   monitor: UptimeMonitor,
   alert: Alert,
   owner: User | Team,
-  alertType: "incident_start" | "incident_end"
+  alertType: "incident_start" | "incident_end",
+  expectationMessages?: { timestamp: number; message: string }[]
 ): Promise<boolean> => {
   try {
     if (
@@ -166,6 +171,16 @@ export const sendUptimeMonitorSlackAlert = async (
       throw new Error(`no Slack webhook for owner ${owner.id}`);
     }
 
+    let expectedMessageStrings: string[] = [];
+    const tz = (owner as any).tz ? (owner as any).tz : "Etc/GMT";
+    if (expectationMessages) {
+      expectationMessages.forEach((e) => {
+        expectedMessageStrings.push(
+          `${getTimeString(tz, e.timestamp)}: ${e.message}`
+        );
+      });
+    }
+
     const response = await fetch(webhook, {
       method: "POST",
       headers: new Headers({ "content-type": "application/json" }),
@@ -175,7 +190,8 @@ export const sendUptimeMonitorSlackAlert = async (
           monitor,
           ownerIsTeam(owner),
           owner.id,
-          alertType
+          alertType,
+          expectedMessageStrings.length > 0 ? expectedMessageStrings : undefined
         )
       ),
     });

@@ -164,7 +164,7 @@ export const webhookRequest = async (
         "user-agent": "komonitor",
       },
       retry: {
-        limit: 1,
+        limit: 0,
         maxRetryAfter: undefined,
       },
       timeout: { response: 3000 },
@@ -173,9 +173,13 @@ export const webhookRequest = async (
       throwHttpErrors: false,
     };
     const sent = await new Promise<boolean>(async (resolve, reject) => {
-      (await got.post(url, options)).once("end", () => {
-        resolve(true);
-      });
+      try {
+        (await got.post(url, options)).once("end", () => {
+          resolve(true);
+        });
+      } catch (err) {
+        reject(false);
+      }
     });
   } catch (err) {
     console.log(err);

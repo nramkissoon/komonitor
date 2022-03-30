@@ -123,6 +123,12 @@ export type UptimeStatusRequest = Omit<
   | "throwHttpErrors"
 >;
 
+export interface UpConditionCheckResult {
+  check: UpConditionCheck;
+  passed: boolean;
+  value: number | string | boolean | null;
+}
+
 export interface UptimeMonitorStatus {
   monitor_id: string;
   timestamp: number;
@@ -130,15 +136,7 @@ export interface UptimeMonitorStatus {
   request: UptimeStatusRequest;
   response: UptimeStatusResponse;
   monitor_snapshot: UptimeMonitor;
-}
-
-export interface UptimeMonitorWebhookNotification {
-  url: string;
-  name: string;
-  trigger: "up" | "down" | "paused";
-  region: string;
-  monitor_type: "uptime";
-  latency: number;
+  up_condition_check_results?: UpConditionCheckResult[];
 }
 
 export interface UptimeMonitorWithStatuses extends UptimeMonitor {

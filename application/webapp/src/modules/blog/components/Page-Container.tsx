@@ -1,4 +1,6 @@
-import { Badge, Box, chakra, Flex } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { Box, Button, chakra, Flex } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { Footer } from "../../../common/components/Footer";
@@ -62,7 +64,15 @@ function PageContainer(props: PageContainerProps) {
     <>
       <Seo title={title} description={description} />
       <Header lightModeOnly={lightOnly} />
-      <Box as="main" className="main-content" w="full" mx="auto" mb="4em">
+      <Box
+        as="main"
+        w="full"
+        mx="auto"
+        mb="4em"
+        className="main-content bg-blog-tile"
+        bgRepeat="repeat"
+        bgAttachment="fixed"
+      >
         <Box display={{ md: "flex" }} maxW="5xl" mx="auto">
           <Box flex="1" minW="0">
             <Box id="content" px={5} mx="auto" minH="76vh">
@@ -77,27 +87,60 @@ function PageContainer(props: PageContainerProps) {
                   shadow="sm"
                   rounded="xl"
                 >
+                  <Box>
+                    <Link passHref href="/blog">
+                      <Button
+                        leftIcon={<ArrowBackIcon />}
+                        colorScheme="gray"
+                        variant="ghost"
+                        _hover={{
+                          color: "blue.600",
+                        }}
+                        fontWeight="normal"
+                        as="a"
+                      >
+                        Back
+                      </Button>
+                    </Link>
+                  </Box>
+                  <chakra.div
+                    w="full"
+                    textAlign={"center"}
+                    fontWeight="medium"
+                    color="gray.500"
+                  >
+                    {lastEdited?.date}
+                  </chakra.div>
                   <chakra.h1
                     tabIndex={-1}
                     outline={0}
                     apply="mdx.h1"
                     fontWeight="extrabold"
                     fontSize="5xl"
+                    textAlign={"center"}
+                    lineHeight="shorter"
                   >
                     {title}
                   </chakra.h1>
-                  <Badge
-                    fontSize="md"
-                    borderRadius="sm"
-                    variant="subtle"
+                  <chakra.p
+                    w={["full", "80%"]}
+                    textAlign={"center"}
                     fontWeight="medium"
-                    p=".3em"
-                    mb="1em"
-                    bg="green.100"
-                    color="green.700"
+                    color="gray.600"
+                    m="auto"
                   >
-                    {readTimeMinutes} minute read
-                  </Badge>
+                    {description}
+                  </chakra.p>
+                  <chakra.div
+                    w={["full", "80%"]}
+                    textAlign={"center"}
+                    fontWeight="medium"
+                    color="gray.600"
+                    m="auto"
+                    my="15px"
+                  >
+                    Written by {lastEdited?.author}
+                  </chakra.div>
                   {children}
                 </Box>
               </Flex>

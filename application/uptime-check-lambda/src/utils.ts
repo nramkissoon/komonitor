@@ -8,6 +8,7 @@ import {
   LatencyCheck,
   NumericalOperators,
   UpConditionCheck,
+  UpConditionCheckResult,
   UptimeMonitor,
   UptimeMonitorStatus,
   UptimeStatusResponse,
@@ -33,34 +34,65 @@ export const getJobs = (event: any): UptimeMonitor[] => {
 export const runUpConditionChecks = (
   conditions: UpConditionCheck[],
   response: UptimeStatusResponse
-) => {
+): { isUp: boolean; conditionCheckResults: UpConditionCheckResult[] } => {
   try {
-    let passed = true;
+    let allPassed = true;
     let check;
+    const result = {
+      isUp: true,
+      conditionCheckResults: [] as UpConditionCheckResult[],
+    };
     for (let condition of conditions) {
       switch (condition.type) {
         case "code":
           check = condition.condition as CodeCheck;
-          passed = passed && codeCheckPassed(check, response);
+          let { passed, value } = codeCheckPassed(check, response);
+          allPassed = allPassed && passed;
+          result.conditionCheckResults.push({
+            passed: passed,
+            check: condition as UpConditionCheck,
+            value: value,
+          });
           break;
         case "latency":
           check = condition.condition as LatencyCheck;
-          passed = passed && latencyCheckPassed(check, response);
+          let { passed: lp, value: vp } = latencyCheckPassed(check, response);
+          allPassed = allPassed && lp;
+          result.conditionCheckResults.push({
+            passed: lp,
+            check: condition as UpConditionCheck,
+            value: vp,
+          });
           break;
         case "html_body":
           check = condition.condition as HtmlBodyCheck;
-          passed = passed && htmlBodyCheckPassed(check, response);
+          let { passed: hp, value: hv } = htmlBodyCheckPassed(check, response);
+          allPassed = allPassed && hp;
+          result.conditionCheckResults.push({
+            passed: hp,
+            check: condition as UpConditionCheck,
+            value: null,
+          });
           break;
         case "json_body":
+          check = condition.condition as JsonBodyCheck;
+          let { passed: jp, value: jv } = jsonBodyCheckPassed(check, response);
+          allPassed = allPassed && jp;
+          result.conditionCheckResults.push({
+            passed: jp,
+            check: condition as UpConditionCheck,
+            value: jv,
+          });
           break;
         default:
           break;
       }
     }
-    return passed;
+    result.isUp = allPassed;
+    return result;
   } catch (err) {
     console.log(err);
-    return false;
+    return { isUp: false, conditionCheckResults: [] };
   }
 };
 
@@ -131,14 +163,17 @@ export const jsonBodyCheckPassed = (
     !response.headers["content-type"] ||
     response.headers["content-type"].includes(expectedBodyContentType)
   ) {
-    return false;
+    return { passed: false, value: "wrong content-type header" };
   }
 
   try {
     const value = jsonpath.value(response.body, property);
-    return jsonComparison(value, comparison, expected);
+    return {
+      passed: jsonComparison(value, comparison, expected),
+      value: value,
+    };
   } catch (err) {
-    return false;
+    return { passed: false, value: "unknown error" };
   }
 };
 
@@ -150,14 +185,20 @@ export const htmlBodyCheckPassed = (
     !response.headers["content-type"] ||
     response.headers["content-type"].includes(expectedBodyContentType)
   ) {
-    return false;
+    return { passed: false, value: "wrong content-type header" };
   }
 
   if (comparison === "contains")
-    return (response.body as string).includes(expected);
+    return {
+      passed: (response.body as string).includes(expected),
+      value: response.body as string,
+    };
   if (comparison === "not_contains")
-    return !(response.body as string).includes(expected);
-  return false;
+    return {
+      passed: !(response.body as string).includes(expected),
+      value: response.body as string,
+    };
+  return { passed: false, value: "unknown error" };
 };
 
 export const latencyCheckPassed = (
@@ -165,20 +206,26 @@ export const latencyCheckPassed = (
   response: UptimeStatusResponse
 ) => {
   if (response.timings.phases[property] === undefined) {
-    return false;
+    return { passed: false, value: null };
   }
-  return numericComparison(
-    response.timings.phases[property] as number,
-    comparison,
-    expected
-  );
+  return {
+    passed: numericComparison(
+      response.timings.phases[property] as number,
+      comparison,
+      expected
+    ),
+    value: response.timings.phases[property] as number,
+  };
 };
 
 export const codeCheckPassed = (
   { comparison, expected }: CodeCheck,
   response: UptimeStatusResponse
 ) => {
-  return numericComparison(response.statusCode, comparison, expected);
+  return {
+    passed: numericComparison(response.statusCode, comparison, expected),
+    value: response.statusCode,
+  };
 };
 
 export const createUptimeStatusSignature = (

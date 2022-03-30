@@ -4,7 +4,12 @@ import {
   InvokeCommandInput,
 } from "@aws-sdk/client-lambda";
 import AbortController from "abort-controller";
-import { MonitorTypes, UptimeMonitor, UptimeMonitorStatus } from "utils";
+import {
+  MonitorTypes,
+  UpConditionCheckResult,
+  UptimeMonitor,
+  UptimeMonitorStatus,
+} from "utils";
 import { config } from "./config";
 import {
   getOwnerById,
@@ -38,16 +43,20 @@ const fetchTimeout = setTimeout(() => {
 
 const buildMonitorStatus = (
   fetchResult: Pick<UptimeMonitorStatus, "request" | "response">,
-  isUp: boolean,
+  checkResult: {
+    isUp: boolean;
+    conditionCheckResults: UpConditionCheckResult[];
+  },
   monitor: UptimeMonitor
 ): UptimeMonitorStatus => {
   return {
     monitor_id: monitor.monitor_id,
     timestamp: new Date().getTime(),
-    status: isUp ? "up" : "down",
+    status: checkResult.isUp ? "up" : "down",
     response: fetchResult.response,
     request: fetchResult.request,
     monitor_snapshot: monitor,
+    up_condition_check_results: checkResult.conditionCheckResults,
   };
 };
 
@@ -71,18 +80,24 @@ export const runJob = async (job: UptimeMonitor) => {
       http_parameters.follow_redirects
     );
 
-    let isUp = false;
+    let checkResult: {
+      isUp: boolean;
+      conditionCheckResults: UpConditionCheckResult[];
+    };
     if (up_condition_checks && up_condition_checks.length > 0) {
-      isUp = runUpConditionChecks(up_condition_checks, fetchResult.response);
+      checkResult = runUpConditionChecks(
+        up_condition_checks,
+        fetchResult.response
+      );
     } else {
       // run the default check
-      isUp = runUpConditionChecks(
+      checkResult = runUpConditionChecks(
         [{ type: "code", condition: { comparison: "equal", expected: 200 } }],
         fetchResult.response
       );
     }
 
-    const status = buildMonitorStatus(fetchResult as any, isUp, job);
+    const status = buildMonitorStatus(fetchResult as any, checkResult, job);
     const dbWriteResponse = await writeStatusToDB(status);
 
     if (webhook_url) {

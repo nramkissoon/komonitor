@@ -33,7 +33,16 @@ export const TeamsSection = () => {
           Invite your team to view and edit monitors and projects.
         </chakra.h3>
       </FadeInView>
-      <Flex flexDir={"column"} alignItems="center" gap={8} w={["fit-content"]}>
+      <Flex
+        flexDir={"column"}
+        alignItems="center"
+        gap={8}
+        w={["fit-content"]}
+        className="bg-banner"
+        backgroundSize={"cover"}
+        rounded="2xl"
+        p={8}
+      >
         <FadeInView
           obvProps={{ threshold: 0.5, rootMargin: "-100px 0px -300px 0px" }}
           inAnimation="motion-safe:animate-notification-fade-in"

@@ -60,40 +60,54 @@ export function IndexPage(props: { frontMatters: FrontMatter[] }) {
   const { frontMatters } = props;
 
   const Header = (
-    <Flex justifyContent="center" flexDir="column" mb="4em" w="full" mt="3em">
-      <chakra.h1 fontSize="5xl" fontWeight="extrabold" textAlign="center">
-        Blog
-      </chakra.h1>
-      <chakra.h2
+    <Flex
+      justifyContent="center"
+      flexDir="column"
+      mb="4em"
+      w="full"
+      mt="3em"
+      px="2"
+    >
+      <chakra.h1
         fontSize="xl"
+        fontWeight="medium"
+        textAlign="center"
+        color={"blue.500"}
+        letterSpacing="wide"
+      >
+        BLOG
+      </chakra.h1>
+      <chakra.span
+        fontSize="3xl"
         fontWeight="bold"
         textAlign="center"
-        color={"gray.600"}
+        m="auto"
+        maxW={"2xl"}
+        lineHeight="shorter"
       >
-        Articles, guides, and knowledge on effective monitoring and alerting
-        systems.
-      </chakra.h2>
+        Learn about monitoring and running an effective web business.
+      </chakra.span>
     </Flex>
   );
 
   if (!frontMatters || frontMatters.length === 0) {
     return (
-      <>
+      <Box flexGrow="1" className="bg-blog-tile" bgRepeat="repeat">
         {Header}
         <chakra.h1 fontSize="xl" fontWeight="bold" textAlign="center">
           Looks like there's nothing here yet....
         </chakra.h1>
-      </>
+      </Box>
     );
   }
   return (
-    <>
+    <Box flexGrow="1" className="bg-blog-tile" bgRepeat="repeat">
       {Header}
-      <Flex alignItems="center" flexDir="column">
+      <Flex alignItems="center" flexDir="column" px="2">
         {frontMatters.map((frontMatter: FrontMatter) => (
           <BlogPostPanel key={frontMatter.slug} frontMatter={frontMatter} />
         ))}
       </Flex>
-    </>
+    </Box>
   );
 }

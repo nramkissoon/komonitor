@@ -22,7 +22,8 @@ module.exports = {
         }
       },
       backgroundImage: {
-        'banner': "url('/banner.svg')"
+        'banner': "url('/banner.svg')",
+        'blog-tile': 'url("/blog-tile.svg")',
       },
       animation: {
         "scale-fade-in": "scale-fade-in .4s ease-in forwards",
