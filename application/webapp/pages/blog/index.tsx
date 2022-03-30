@@ -29,7 +29,7 @@ export default function Page({
         seoProps={{
           title: "Blog",
           description:
-            "Komonitor Blog. Articles and guides on effective monitoring and alerting for any website.",
+            "Articles and guides on effective monitoring and alerting for any website. Learn about uptime monitoring, best alerting practices, and how to build a reliable monitoring system.",
         }}
         full
         lightModeOnly

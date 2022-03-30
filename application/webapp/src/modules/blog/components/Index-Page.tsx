@@ -61,18 +61,25 @@ export function IndexPage(props: { frontMatters: FrontMatter[] }) {
 
   const Header = (
     <Flex justifyContent="center" flexDir="column" mb="4em" w="full" mt="3em">
-      <chakra.h1 fontSize="5xl" fontWeight="extrabold" textAlign="center">
-        Blog
-      </chakra.h1>
-      <chakra.h2
+      <chakra.h1
         fontSize="xl"
+        fontWeight="medium"
+        textAlign="center"
+        color={"blue.500"}
+        letterSpacing="wide"
+      >
+        BLOG
+      </chakra.h1>
+      <chakra.span
+        fontSize="3xl"
         fontWeight="bold"
         textAlign="center"
-        color={"gray.600"}
+        m="auto"
+        maxW={"2xl"}
+        lineHeight="shorter"
       >
-        Articles, guides, and knowledge on effective monitoring and alerting
-        systems.
-      </chakra.h2>
+        Learn about monitoring and running an effective web business.
+      </chakra.span>
     </Flex>
   );
 
