@@ -64,7 +64,15 @@ function PageContainer(props: PageContainerProps) {
     <>
       <Seo title={title} description={description} />
       <Header lightModeOnly={lightOnly} />
-      <Box as="main" className="main-content" w="full" mx="auto" mb="4em">
+      <Box
+        as="main"
+        w="full"
+        mx="auto"
+        mb="4em"
+        className="main-content bg-blog-tile"
+        bgRepeat="repeat"
+        bgAttachment="fixed"
+      >
         <Box display={{ md: "flex" }} maxW="5xl" mx="auto">
           <Box flex="1" minW="0">
             <Box id="content" px={5} mx="auto" minH="76vh">
