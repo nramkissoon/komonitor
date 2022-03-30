@@ -33,9 +33,9 @@ Alerts:
     ✔  discord badge in alert invoke table @done(22-03-24 10:32)
 
 ✔ add uptime condition check results to status @done(22-03-29 09:49)
-☐ test check results and alerts
+✔ test check results and alerts @done(22-03-29 15:18)
 ✔ add check results to alerts @done(22-03-29 14:18)
-☐ test check results and alerts and add to email alert
+✔ test check results and alerts and add to email alert @done(22-03-29 15:18)
 
 ✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
@@ -49,9 +49,10 @@ Sign up page:
 ez:
     ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
     ✔ add duration to up alerts @done(22-03-28 14:56)
-    ☐ test duration in alerts
-    ☐ deploy duration in alerts
+    ✔ test duration in alerts @done(22-03-29 15:18)
+    ☐ deploy duration in alerts and checks
     ☐ branch for eu gdpr
+    ✔ DO NOT INCLUDE ENTIRE HTML BODY IN ALERTS AND STATUSES CHANGE IN MONITOR STATUSES BRUHHHh @done(22-03-30 09:40)
     ✔ cost number bug in light mode @done(22-03-29 14:55)
     ✔ footer why komonitor @done(22-03-28 14:25)
     ✔ list blog ideas @done(22-03-28 14:40)

@@ -114,7 +114,7 @@ export const sendUptimeMonitorDiscordAlert = async (
                 name: "Total Downtime",
                 value: `${
                   monitor.frequency * (monitor.failures_before_alert ?? 1)
-                } minute(s) of downtime experienced.`,
+                } minute(s) of total downtime experienced.`,
               },
             ],
 

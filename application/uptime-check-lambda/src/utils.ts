@@ -71,7 +71,7 @@ export const runUpConditionChecks = (
           result.conditionCheckResults.push({
             passed: hp,
             check: condition as UpConditionCheck,
-            value: hv,
+            value: null,
           });
           break;
         case "json_body":

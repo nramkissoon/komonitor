@@ -196,7 +196,9 @@ export const expectationString = ({
   } else if (actualValue === null) {
     actualValueString = "null";
   }
-
+  if (type === "html_body") {
+    return `Expected ${propertyString} ${comparisonString} ${expectedValueString} but got check failed.`;
+  }
   return `Expected ${propertyString} ${comparisonString} ${expectedValueString} but got ${actualValueString}.`;
 };
 
