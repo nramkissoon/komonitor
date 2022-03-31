@@ -270,9 +270,17 @@ const SideBar = ({ selected }: { selected: string }) => {
 
 export default function Integrations() {
   const { integration } = useRouter().query;
+  const title = capitalize(integration as string) + " Integrations";
 
   return (
-    <PageLayout isAppPage={false}>
+    <PageLayout
+      isAppPage={false}
+      seoProps={{
+        title,
+        description:
+          "Integrate with your current tools to extend Komonitor's capabilities.",
+      }}
+    >
       <Flex gap={[4, null, "100px"]}>
         <SideBar selected={integration as string} />
         <Content selected={integration as string} />

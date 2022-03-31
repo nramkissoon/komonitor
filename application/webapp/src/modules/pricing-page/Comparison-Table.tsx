@@ -263,6 +263,7 @@ export function ComparisonTable({
             bg={useColorModeValue("green.50", "gray.200")}
             p="5px"
             borderRadius="lg"
+            alt="Stripe Climate logo"
           />{" "}
           <chakra.div
             ml={["3px", "5px", "7px", "10px"]}

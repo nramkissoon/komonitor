@@ -111,7 +111,7 @@ export const MDXComponents = {
     <Box mt="5em" p={["1em", null, "1.5em"]} mb="1.5em" maxW="5xl" mx="auto">
       <Flex flexDir="column" alignItems="center" p="1.5em">
         <Box>
-          <chakra.h1
+          <chakra.h2
             textAlign="center"
             fontSize="4xl"
             fontWeight="extrabold"
@@ -119,9 +119,9 @@ export const MDXComponents = {
             mb=".2em"
           >
             {props.ctaMessage}
-          </chakra.h1>
+          </chakra.h2>
 
-          <chakra.h2
+          <chakra.h3
             fontSize="2xl"
             fontWeight="bold"
             textAlign="center"
@@ -131,7 +131,7 @@ export const MDXComponents = {
             mb="1.2em"
           >
             Sign up to access Komonitor's free tier.
-          </chakra.h2>
+          </chakra.h3>
         </Box>
 
         <NextLink href={"/auth/signin"} passHref>

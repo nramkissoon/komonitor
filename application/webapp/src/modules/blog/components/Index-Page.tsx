@@ -85,7 +85,7 @@ export function IndexPage(props: { frontMatters: FrontMatter[] }) {
         maxW={"2xl"}
         lineHeight="shorter"
       >
-        Learn about monitoring and running an effective web business.
+        Learn about monitoring, DevOps, and running an reliable online business.
       </chakra.span>
     </Flex>
   );

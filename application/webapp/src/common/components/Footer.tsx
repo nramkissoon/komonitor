@@ -127,7 +127,7 @@ export function Footer({ lightModeOnly }: { lightModeOnly?: boolean }) {
 
             <HeaderLink
               text="Integrations"
-              href="/integrations"
+              href="/integrations/discord"
               key="integrations"
               useColorModeValue={useColorModeValueModified}
             />,

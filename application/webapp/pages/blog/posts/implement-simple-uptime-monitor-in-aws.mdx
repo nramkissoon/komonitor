@@ -1,0 +1,16 @@
+---
+title: Implement an Uptime Monitor Using AWS Lambda, EventBridge, and SNS.
+description: >
+  This article will walk you through the steps to implement a website uptime monitor
+  using AWS Lambda, EventBridge, and SNS.
+---
+
+You can use AWS EventBridge rules to schedule a Lambda function to run at a specific time or
+on a set interval. Combining these two services unlocks a vast array of use cases and workloads.
+Anything from regular web scraping jobs to automated daily reminders can be implemented
+by scheduling Lambda functions with EventBridge rules.
+
+In this article, we will be scheduling a Lambda function to run every 5 minutes to check
+the health of a website. The Lambda function will send a simple HTTP request to the website server and
+check the response code. If the response code is not 200, the Lambda function will send
+an alert message to an SNS topic for further distribution.

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "npx next-sitemap",
+    "postbuild": "nvm use 16 && npx next-sitemap && nvm use 14",
     "start": "next start",
     "lint": "next lint",
     "version": "next -v",
