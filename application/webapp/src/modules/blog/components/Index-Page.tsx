@@ -85,7 +85,7 @@ export function IndexPage(props: { frontMatters: FrontMatter[] }) {
         maxW={"2xl"}
         lineHeight="shorter"
       >
-        Learn about monitoring and running an effective web business.
+        Learn about monitoring, DevOps, and running an reliable online business.
       </chakra.span>
     </Flex>
   );
@@ -104,9 +104,16 @@ export function IndexPage(props: { frontMatters: FrontMatter[] }) {
     <Box flexGrow="1" className="bg-blog-tile" bgRepeat="repeat">
       {Header}
       <Flex alignItems="center" flexDir="column" px="2">
-        {frontMatters.map((frontMatter: FrontMatter) => (
-          <BlogPostPanel key={frontMatter.slug} frontMatter={frontMatter} />
-        ))}
+        {frontMatters
+          .sort((a, b) =>
+            new Date(a.lastEdited?.date ?? 0).getTime() <
+            new Date(b.lastEdited?.date ?? 0).getTime()
+              ? 1
+              : -1
+          )
+          .map((frontMatter: FrontMatter) => (
+            <BlogPostPanel key={frontMatter.slug} frontMatter={frontMatter} />
+          ))}
       </Flex>
     </Box>
   );

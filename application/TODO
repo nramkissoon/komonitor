@@ -50,7 +50,8 @@ ez:
     ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
     ✔ add duration to up alerts @done(22-03-28 14:56)
     ✔ test duration in alerts @done(22-03-29 15:18)
-    ☐ deploy duration in alerts and checks
+    ✔ deploy duration in alerts and checks @done(22-03-31 12:24)
+    ☐ update stripe checkout with branding and domains
     ☐ branch for eu gdpr
     ✔ DO NOT INCLUDE ENTIRE HTML BODY IN ALERTS AND STATUSES CHANGE IN MONITOR STATUSES BRUHHHh @done(22-03-30 09:40)
     ✔ cost number bug in light mode @done(22-03-29 14:55)
@@ -59,6 +60,9 @@ ez:
 
 Marketing: 
     ✔ redesign blog section @done(22-03-08 12:01)
+    ☐ write implement simple monitor post and post to medium, dev.to, personal blog
+        ✔  upload sqs image and others to s3 @done(22-04-03 15:29)
+        ✔  delete resources @done(22-04-03 15:29)
     ☐ add to reddit saas group
 
 ☐ promise.all alert lambda

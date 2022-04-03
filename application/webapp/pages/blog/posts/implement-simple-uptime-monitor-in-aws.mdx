@@ -1,0 +1,293 @@
+---
+title: Implement an Uptime Monitor Using AWS Lambda, EventBridge, SNS, and SQS.
+description: >
+  This article will walk you through the steps to implement a website uptime monitor
+  using AWS Lambda, EventBridge, SNS, and SQS.
+---
+
+You can use AWS EventBridge rules to schedule a Lambda function to run at a specific time or
+on a set interval. Combining these two services unlocks a vast array of use cases and workloads.
+Anything from regular web scraping jobs to automated daily reminders can be implemented
+by scheduling Lambda functions with EventBridge rules.
+
+In this article, we will be scheduling a Lambda function to run every 5 minutes to check
+the health of a website. The Lambda function will send a simple HTTP request to the website server and
+check the response code. If the response code is not 200, the Lambda function will send
+an alert message to an SNS topic that can be subscribed to.
+
+The only prerequisites for this article is having an AWS account and Node environment set up.
+
+## Setting up AWS resources
+
+This section will cover setting up the required AWS resources via the AWS console.
+
+### Lambda Function
+
+First, we need to create a Lambda function that will be used to check the health of our website.
+
+Navigate to the AWS Lambda console and create a new Lambda function and give it a name.
+After creating it, it should be visible in the console like this:
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="AWS Lambda console with newly created Lambda function"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-1.png"
+/>
+
+Right now, the function only has template code that prints a hello-world message. Later in this article we will implement the
+uptime checking logic in the Lambda function.
+
+### EventBridge Rule
+
+In order to schedule the Lambda function to run every 5 minutes, we need to create an EventBridge rule.
+Navigate to the AWS EventBridge console and click the **Create Rule** button.
+
+In the **Define rule detail** step, give the rule a name and set the **Rule type** to **Schedule** and proceed to the next step.
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="AWS EventBridge console - Define rule detail"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-2.png"
+/>
+
+On the next step, define the schedule pattern and set the **Rate expression** to 5 minutes.
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="AWS EventBridge console - Define schedule pattern"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-3.png"
+/>
+
+Now, select the targets for this event rule. Select **AWS Service** and then **Lambda function**.
+In the dropdown, the name Lambda function created earlier should be an option, select it.
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="AWS EventBridge console - Select targets"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-4.png"
+/>
+
+That is all the configuration needed to set up the event rule, proceed through the following steps and create the rule.
+
+To confirm that the rule was created and configured to target the Lambda function, navigate to the Lambda console and take a look
+at the function overview. The rule should be visible in the function overview and configuration tab like this:
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="AWS Lambda console with EventBridge rule listed as trigger"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-5.png"
+/>
+
+### SNS Topic and Lambda Permissions
+
+Our uptime monitor will be capturing alerts via an SNS topic that over parties can subscribe to. Go to the SNS console and create a new FIFO topic.
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="AWS SNS console with newly created FIFO topic"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-6.png"
+/>
+
+In order for the Lambda function to publish messages to the SNS topic, we need to edit the Lambda function's IAM role and give it permission to publish to the topic.
+Go back to the Lambda console for the function, select the **Configuration** tab, then select **Permissions**. You will see the
+Execution role listed. Click on it to be navigated to the IAM console.
+
+Click on **Add permission** and then **Create inline policy**.
+
+<BlogImg
+  width="1920px"
+  height="919px"
+  alt="IAM console for Lambda function execution role"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-7.png"
+/>
+
+In the inline policy visual editor, set the service to SNS and under actions, filter for and select **Publish**.
+
+<BlogImg
+  width="1920px"
+  height="919px"
+  alt="Inline policy visual editor"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-8.png"
+/>
+
+For **Resources**, enter the SNS topic ARN. Save the inline policy and make sure it is attached to the Lambda execution role.
+
+## SQS queue and subscribing to SNS
+
+We want to be able to see our alerts whenever our Lambda publishes a message to the SNS topic, so
+we will create an SWS queue that will subscribe to messages from the SNS Topic and allow us to view messages in the AWS console.
+
+Go to the SQS console and create a new FIFO queue like so:
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="AWS SQS creation console"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-9.png"
+/>
+
+After creating the queue, you will see an overview of the queue.
+Click on **Subscribe to Amazon SNS topic** and select the SNS topic you created earlier and create a subscription.
+
+Now whenever we publish alert messages to the SNS topic, those messages will appear in the SQS queue.
+
+All of the required AWS resources are now set up. In the next section, we will implement the Lambda function code.
+
+## Lambda code
+
+Now, let's write the code that will be executed by the Lambda function to perform uptime checking.
+We will write the Lambda function in JavaScript and use the Node.js runtime with NPM.
+
+Create a new directory on your system and run:
+
+```bash
+npm init
+touch index.js
+```
+
+Then, install the **AWS SDK** and **fetch** packages:
+
+```bash
+npm install aws-sdk node-fetch
+```
+
+To use ESM modules, open `package.json` and add `"type": "module"`.
+
+Open `index.js` and write the following code (Be sure to fill in your own website URL and SNS topic ARN.):
+
+```javascript
+import AWS from "aws-sdk";
+import fetch from "node-fetch";
+
+const snsClient = new AWS.SNS();
+globalThis.fetch = fetch;
+
+export async function handler(event) {
+  try {
+    const websiteUrl = "https://www.google.com";
+    const uptimeCheckResponse = await fetch(websiteUrl, {
+      method: "GET",
+      redirect: "follow",
+    });
+
+    if (uptimeCheckResponse.status !== 200) {
+      // publish to SNS
+      const snsResult = await snsClient
+        .publish(
+          {
+            TopicArn:
+              "arn:aws:sns:us-east-1:060780781184:Website-Alert-Topic.fifo",
+            Message: `Received ${uptimeCheckResponse.status} status code from ${websiteUrl}`,
+            MessageGroupId: "Website-Alert-Group",
+            MessageDeduplicationId: new Date().getTime().toString(),
+            Subject: "Website Down Alert",
+          },
+          async (err, data) => {
+            if (err) {
+              console.log(err);
+              throw new Error(err);
+            }
+            console.log(data);
+          }
+        )
+        .promise();
+    } else {
+      console.log("Website is up!");
+    }
+
+    const response = {
+      statusCode: 200,
+      body: "Lambda function executed successfully!",
+    };
+    return response;
+  } catch (err) {
+    // also publish to SNS in case of other errors
+    const snsResult = await snsClient
+      .publish(
+        {
+          TopicArn:
+            "arn:aws:sns:us-east-1:060780781184:Website-Alert-Topic.fifo",
+          Message: "Error: " + err.message,
+          MessageGroupId: "Website-Alert-Group",
+          MessageDeduplicationId: new Date().getTime().toString(),
+          Subject: "Website Down Alert",
+        },
+        async (err, data) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log(data);
+        }
+      )
+      .promise();
+    const response = {
+      statusCode: 500,
+      body: "Lambda function execution failed!",
+    };
+    return response;
+  }
+}
+```
+
+Note that in this simple implementation, we hardcoded the website URL and SNS topic ARN.
+Typically, we would want to read these values from the event that triggered the Lambda function or from environment variables.
+
+To upload the code and dependencies to the Lambda function, we need to zip the files.
+On Linux, this can be done using:
+
+```bash
+zip -r package.zip . *
+```
+
+This command will create a `package.zip` file in the current directory, and it will contain everything needed for Lambda.
+
+On the Lambda function overview, go to the **Code** tab and upload the zip file containing the code.
+
+## Making sure everything works
+
+We can run the Lambda manually in the **Test** tab.
+If the Lambda receives a 200 OK status code from the website it is monitoring, it will **not** publish a message to the SNS topic
+and will instead log that the website is up like so:
+
+<BlogImg
+  height="1280px"
+  width="1920px"
+  alt="Lambda function execution output"
+  src="https://komonitor-blog.s3.amazonaws.com/create-uptime-monitor-aws/step-10.png"
+/>
+
+If we want to see the alerts in action, change the website URL to **https://httpstat.us/400** so that we always get a 400 status code.
+Reupload a new zip file to the Lambda function, then test again. The Lambda logs will indicate that the website is down that it published a message to the SNS topic.
+
+To see the message, go to the SQS console for the queue and click on **Send and receive messages**. Click on **Poll for messages**, and you should be able to
+see messages in the queue. Click on it to see the message details, which should look like this JSON object:
+
+```json
+{
+  "Type": "Notification",
+  "MessageId": "a44c27f8-9c68-507e-8ba9-7d3b45a76115",
+  "SequenceNumber": "10000000000000011000",
+  "TopicArn": "arn:aws:sns:us-east-1:060780781184:Website-Alert-Topic.fifo",
+  "Subject": "Website Down Alert",
+  "Message": "Received 400 status code from https://httpstat.us/400",
+  "Timestamp": "2022-04-03T17:21:19.940Z",
+  "UnsubscribeURL": "<URL>"
+}
+```
+
+If you see a message like above in the queue, your uptime monitor is working! Try extending this simple
+implementation to cover multiple URL's, regions, and more.
+
+## Cleanup
+
+To avoid getting random bills from AWS, we need to clean up the resources we created.
+
+Make sure to delete the Lambda function, EventBridge rule, SNS topic, and SQS queue when they are no longer needed.
+
+<BlogCta ctaMessage="Need to monitor hundreds of URL's?" />
