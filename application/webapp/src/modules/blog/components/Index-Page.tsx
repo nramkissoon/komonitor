@@ -104,9 +104,16 @@ export function IndexPage(props: { frontMatters: FrontMatter[] }) {
     <Box flexGrow="1" className="bg-blog-tile" bgRepeat="repeat">
       {Header}
       <Flex alignItems="center" flexDir="column" px="2">
-        {frontMatters.map((frontMatter: FrontMatter) => (
-          <BlogPostPanel key={frontMatter.slug} frontMatter={frontMatter} />
-        ))}
+        {frontMatters
+          .sort((a, b) =>
+            new Date(a.lastEdited?.date ?? 0).getTime() <
+            new Date(b.lastEdited?.date ?? 0).getTime()
+              ? 1
+              : -1
+          )
+          .map((frontMatter: FrontMatter) => (
+            <BlogPostPanel key={frontMatter.slug} frontMatter={frontMatter} />
+          ))}
       </Flex>
     </Box>
   );

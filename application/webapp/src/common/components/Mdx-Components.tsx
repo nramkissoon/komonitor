@@ -10,6 +10,7 @@ import {
   Flex,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import NextLink from "next/link";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula as theme } from "react-syntax-highlighter/dist/cjs/styles/prism";
@@ -107,6 +108,31 @@ export const MDXComponents = {
     </Center>
   ),
 
+  BlogImg: (
+    props: any & { height: string; width: string; alt: string; src: string }
+  ) => (
+    <Box display="block" my="20px">
+      <Image
+        height={props.height}
+        width={props.width}
+        alt={props.alt}
+        src={props.src}
+        layout="responsive"
+        quality={80}
+        placeholder="empty"
+      />
+      <Box
+        m={"auto"}
+        textAlign="center"
+        mt="3px"
+        color="gray.600"
+        fontWeight="medium"
+      >
+        {props.alt}
+      </Box>
+    </Box>
+  ),
+
   BlogCta: (props: any & { ctaMessage: string }) => (
     <Box mt="5em" p={["1em", null, "1.5em"]} mb="1.5em" maxW="5xl" mx="auto">
       <Flex flexDir="column" alignItems="center" p="1.5em">
@@ -130,7 +156,7 @@ export const MDXComponents = {
             mx="auto"
             mb="1.2em"
           >
-            Sign up to access Komonitor's free tier.
+            Sign in to Komonitor and start monitoring in minutes.
           </chakra.h3>
         </Box>
 
@@ -155,7 +181,7 @@ export const MDXComponents = {
         </NextLink>
 
         <chakra.h3 color="gray.500" textAlign="center" fontSize="large">
-          No credit card required, free forever.
+          No credit card required.
         </chakra.h3>
       </Flex>
     </Box>
@@ -165,7 +191,7 @@ export const MDXComponents = {
       style={theme}
       showLineNumbers
       {...props}
-      language={"javascript"}
+      language={props.className.split("-")[1] ?? "javascript"}
       // eslint-disable-next-line react/no-children-prop
       children={(props.children as string).slice(0, -1)}
     />
