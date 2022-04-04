@@ -8,6 +8,8 @@ export class DevStackDdbTables extends cdk.Construct {
   public readonly uptimeMonitorStatusTable: dynamodb.Table;
   public readonly uptimeCheckMonitorTableFrequencyGsiName: string;
   public readonly uptimeCheckMonitorTableProjectIdGsiName: string;
+  public readonly statusPageTable: dynamodb.Table;
+  public readonly statusPageUuidGsiName: string;
   public readonly userTable: dynamodb.Table;
   public readonly alertInvocationTable: dynamodb.Table;
   public readonly stripeWebhooksTable: dynamodb.Table;
@@ -55,6 +57,22 @@ export class DevStackDdbTables extends cdk.Construct {
       indexName: this.uptimeCheckMonitorTableProjectIdGsiName,
       partitionKey: { name: "owner_id", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "project_id", type: dynamodb.AttributeType.STRING },
+      projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    this.statusPageTable = new dynamodb.Table(this, "dev_status_page", {
+      partitionKey: { name: "pk", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "sk", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      tableName: "komonitor-dev-status-page",
+    });
+
+    this.statusPageUuidGsiName = "uuidGSI";
+
+    this.statusPageTable.addGlobalSecondaryIndex({
+      indexName: this.statusPageUuidGsiName,
+      partitionKey: { name: "uuid", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
     });
 

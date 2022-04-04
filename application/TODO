@@ -2,9 +2,14 @@
 ☐ find 20 companies
 ✔ design analytics @done(22-03-07 14:15)
 
+☐ design and scope onboarding flow
+☐ design and scope tracking
+☐ scope google sign in
+☐ scope demo
+☐ scope pagerduty integ
+☐ scope red rectangle
 
 Status Pages:
-    ☐ scope work
     Overview page in Projects tabs:
         ☐ lists all status pages
         ☐ link to either edit, view, or delete status page
@@ -12,15 +17,18 @@ Status Pages:
     New/ Edit page:
         ☐ design mockup + scope components
     DB:
-        ☐ declare db in cdk
-        ☐ declare s3 bucket for storing images
+        ✔ declare models @done(22-04-04 14:49)
+        ✔ declare db in dev cdk @done(22-04-04 15:39)
+        ✔ declare dev s3 bucket for storing images @done(22-04-04 15:26)
         ☐ deploy cdk
         ☐ implement fetching from db
         ☐ implement saving to db
         ☐ implement deleting from db
         ☐ implement updating in db
         ☐ implement deleting all from db
-        ☐ add envs to vercel
+        ☐ add envs to dev vercel
+        ☐ prod cdk table and s3, prod env to vercel
+        ☐ deleting monitor should carry warning if part of status page
     UI:
         ☐ implement hook for fetching from db based on team/owner
     
@@ -44,7 +52,8 @@ Landing:
     ✔ redesign advanced section @done(22-03-30 11:59)
 
 Sign up page: 
-    ☐ scope and follow hyperping
+    ✔ add left column @done(22-04-04 13:01)
+    ☐ for later: add images to bottom
 
 ez:
     ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
@@ -60,9 +69,10 @@ ez:
 
 Marketing: 
     ✔ redesign blog section @done(22-03-08 12:01)
-    ☐ write implement simple monitor post and post to medium, dev.to, personal blog
+    ✔ write implement simple monitor post and post to dev.to, personal blog @done(22-04-04 10:00)
         ✔  upload sqs image and others to s3 @done(22-04-03 15:29)
         ✔  delete resources @done(22-04-03 15:29)
+        ☐ post to medium
     ☐ add to reddit saas group
 
 ☐ promise.all alert lambda
