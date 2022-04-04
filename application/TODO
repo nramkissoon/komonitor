@@ -2,6 +2,9 @@
 ☐ find 20 companies
 ✔ design analytics @done(22-03-07 14:15)
 
+☐ design and scope onboarding flow
+☐ design and scope tracking
+☐ scope google sign in
 
 Status Pages:
     ☐ scope work
@@ -44,7 +47,8 @@ Landing:
     ✔ redesign advanced section @done(22-03-30 11:59)
 
 Sign up page: 
-    ☐ scope and follow hyperping
+    ✔ add left column @done(22-04-04 13:01)
+    ☐ for later: add images to bottom
 
 ez:
     ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
@@ -60,9 +64,10 @@ ez:
 
 Marketing: 
     ✔ redesign blog section @done(22-03-08 12:01)
-    ☐ write implement simple monitor post and post to medium, dev.to, personal blog
+    ✔ write implement simple monitor post and post to dev.to, personal blog @done(22-04-04 10:00)
         ✔  upload sqs image and others to s3 @done(22-04-03 15:29)
         ✔  delete resources @done(22-04-03 15:29)
+        ☐ post to medium
     ☐ add to reddit saas group
 
 ☐ promise.all alert lambda

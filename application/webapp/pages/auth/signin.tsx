@@ -4,11 +4,12 @@ import {
   Box,
   Button,
   chakra,
-  Container,
   Divider,
   Flex,
   FormControl,
   FormErrorMessage,
+  Grid,
+  GridItem,
   Heading,
   Input,
   Text,
@@ -20,6 +21,12 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import { getErrorStringFromErrorCode } from "../../src/modules/auth/errors";
+import {
+  DiscordSvg,
+  GmailSvg,
+  SlackSvg,
+  WebhookSvg,
+} from "../../src/modules/integrations/components/Icons";
 import { ExtendedNextPage } from "../_app";
 
 const Signin: ExtendedNextPage = () => {
@@ -56,101 +63,103 @@ const Signin: ExtendedNextPage = () => {
 
   return (
     <PageLayout>
-      <Container
-        p="0"
-        shadow="md"
-        maxW="2xl"
+      <Grid
+        px="40px"
+        py="2em"
+        shadow="lg"
+        maxW="4xl"
+        minW="xl"
         borderRadius="lg"
         mt="2em"
+        mx="auto"
         bg={useColorModeValue("white", "gray.800")}
+        templateColumns={["repeat(2, 1fr)"]}
+        gap={8}
       >
-        <Box
-          bgGradient="linear(to-b, blue.300, blue.200)"
-          w="100%"
-          h="1.5em"
-          borderTopRadius="lg"
-          mb="1em"
-        />
-        <Flex flexDirection="column" w={["90%", "80%"]} m="auto">
-          <Heading as="h2" textAlign="center" mb="2">
-            Get started for free.
-          </Heading>
-          <Text
-            textAlign="center"
-            mb="2em"
-            color={useColorModeValue("gray.800", "gray.300")}
-          >
-            Sign in to get access to our free tier. No credit card required.
-          </Text>
-          {errorString ? (
-            <Alert status="error" variant="solid" borderRadius="lg" mb="1.2em">
-              <AlertIcon />
-              {errorString}
-            </Alert>
-          ) : (
-            <></>
-          )}
-          {emailSentString ? (
-            <Alert
-              status="success"
-              variant="solid"
-              borderRadius="lg"
-              mb="1.2em"
+        <GridItem>
+          <Flex flexDir="column" gap={10} justifyContent="center" h="full">
+            <Box>
+              <Heading as="h3" fontSize="xl">
+                Uptime Monitoring
+              </Heading>
+              <Text color={useColorModeValue("gray.600", "gray.300")}>
+                Monitor your websites and API's in minutes. Get started with 80
+                monitors.
+              </Text>
+            </Box>
+            <Box>
+              <Heading as="h3" fontSize="xl">
+                Alerts
+              </Heading>
+              <Text color={useColorModeValue("gray.600", "gray.300")}>
+                Get alerts when things go wrong instantly, before your users
+                notice.
+              </Text>
+            </Box>
+            <Box>
+              <Heading as="h3" fontSize="xl">
+                Integrations
+              </Heading>
+              <Text mb="3px" color={useColorModeValue("gray.600", "gray.300")}>
+                Integrate with your favorite and existing tools.
+              </Text>
+              <Flex gap={3}>
+                <Box h="20px" w="20px">
+                  {SlackSvg}
+                </Box>
+                <Box h="20px" w="20px">
+                  {DiscordSvg}
+                </Box>
+                <Box h="20px" w="20px">
+                  {WebhookSvg}
+                </Box>
+                <Box h="20px" w="20px">
+                  {GmailSvg}
+                </Box>
+              </Flex>
+            </Box>
+          </Flex>
+        </GridItem>
+        <GridItem>
+          <Flex flexDirection="column" w="full" m="auto">
+            <Heading as="h2" textAlign="center" mb="2">
+              Sign in
+            </Heading>
+            <Text
+              textAlign="center"
+              mb="2em"
+              color={useColorModeValue("gray.700", "gray.300")}
             >
-              <AlertIcon />
-              {emailSentString}
-            </Alert>
-          ) : (
-            <></>
-          )}
-          <chakra.form onSubmit={handleSubmit(onSubmit)}>
-            <Flex flexDirection="column">
-              <Controller
-                name="email"
-                control={control}
-                rules={{
-                  required: "Email is required.",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                    message: "Invalid email address.",
-                  },
-                }}
-                render={({ field }) => (
-                  <FormControl
-                    isInvalid={errors.email ? touchedFields.email : false}
-                  >
-                    <Text fontWeight="medium">Email Address:</Text>
-                    <Input
-                      {...field}
-                      id="email"
-                      placeholder="you@example.com"
-                      shadow="sm"
-                      size="lg"
-                      mb="1.3em"
-                    />
-
-                    <FormErrorMessage mt="-1.5em" mb="1.1em">
-                      {errors.email?.message}
-                    </FormErrorMessage>
-                  </FormControl>
-                )}
-              />
-              <Button
-                isLoading={isSubmitting}
-                type="submit"
-                size="lg"
-                colorScheme="blue"
-                color="white"
-                bgGradient="linear(to-r, blue.300, blue.400)"
-                shadow="sm"
-                mb="2em"
+              Welcome! Sign in to get started.
+            </Text>
+            {errorString ? (
+              <Alert
+                status="error"
+                variant="solid"
+                borderRadius="lg"
+                mb="1.2em"
               >
-                Sign in with Email
-              </Button>
-            </Flex>
-          </chakra.form>
-          <Divider borderColor="gray.300" mb="2em" />
-          {/* <Button
+                <AlertIcon />
+                {errorString}
+              </Alert>
+            ) : (
+              <></>
+            )}
+
+            <Button
+              leftIcon={<FaGithub />}
+              onClick={githubOnSubmit}
+              size="lg"
+              variant="outline"
+              colorScheme="black"
+              shadow="sm"
+              mb="1.5em"
+            >
+              Sign in with GitHub
+            </Button>
+
+            <Divider borderColor="gray.300" mb="2em" />
+            {/* <Button
             leftIcon={<FcGoogle />}
             onClick={googleOnSubmit}
             size="lg"
@@ -161,19 +170,67 @@ const Signin: ExtendedNextPage = () => {
           >
             Sign in with Google
           </Button> */}
-          <Button
-            leftIcon={<FaGithub />}
-            onClick={githubOnSubmit}
-            size="lg"
-            variant="outline"
-            colorScheme="black"
-            shadow="sm"
-            mb="1.5em"
-          >
-            Sign in with GitHub
-          </Button>
-        </Flex>
-      </Container>
+            {emailSentString ? (
+              <Alert
+                status="success"
+                variant="solid"
+                borderRadius="lg"
+                mb="1.2em"
+              >
+                <AlertIcon />
+                {emailSentString}
+              </Alert>
+            ) : (
+              <></>
+            )}
+            <chakra.form onSubmit={handleSubmit(onSubmit)}>
+              <Flex flexDirection="column">
+                <Controller
+                  name="email"
+                  control={control}
+                  rules={{
+                    required: "Email is required.",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: "Invalid email address.",
+                    },
+                  }}
+                  render={({ field }) => (
+                    <FormControl
+                      isInvalid={errors.email ? touchedFields.email : false}
+                    >
+                      <Text fontWeight="medium">Email Address:</Text>
+                      <Input
+                        {...field}
+                        id="email"
+                        placeholder="you@example.com"
+                        shadow="sm"
+                        size="lg"
+                        mb="1.3em"
+                      />
+
+                      <FormErrorMessage mt="-1.5em" mb="1.1em">
+                        {errors.email?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                />
+                <Button
+                  isLoading={isSubmitting}
+                  type="submit"
+                  size="lg"
+                  colorScheme="blue"
+                  color="white"
+                  bgGradient="linear(to-r, blue.300, blue.400)"
+                  shadow="sm"
+                >
+                  Sign in with Email
+                </Button>
+              </Flex>
+            </chakra.form>
+          </Flex>
+        </GridItem>
+      </Grid>
     </PageLayout>
   );
 };
