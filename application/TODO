@@ -5,9 +5,11 @@
 ☐ design and scope onboarding flow
 ☐ design and scope tracking
 ☐ scope google sign in
+☐ scope demo
+☐ scope pagerduty integ
+☐ scope red rectangle
 
 Status Pages:
-    ☐ scope work
     Overview page in Projects tabs:
         ☐ lists all status pages
         ☐ link to either edit, view, or delete status page
@@ -15,15 +17,18 @@ Status Pages:
     New/ Edit page:
         ☐ design mockup + scope components
     DB:
-        ☐ declare db in cdk
-        ☐ declare s3 bucket for storing images
+        ✔ declare models @done(22-04-04 14:49)
+        ✔ declare db in dev cdk @done(22-04-04 15:39)
+        ✔ declare dev s3 bucket for storing images @done(22-04-04 15:26)
         ☐ deploy cdk
         ☐ implement fetching from db
         ☐ implement saving to db
         ☐ implement deleting from db
         ☐ implement updating in db
         ☐ implement deleting all from db
-        ☐ add envs to vercel
+        ☐ add envs to dev vercel
+        ☐ prod cdk table and s3, prod env to vercel
+        ☐ deleting monitor should carry warning if part of status page
     UI:
         ☐ implement hook for fetching from db based on team/owner
     
