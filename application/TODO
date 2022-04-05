@@ -29,11 +29,11 @@ Status Pages:
         ✔ declare dev s3 bucket for storing images @done(22-04-04 15:26)
         ✔ deploy cdk @done(22-04-04 16:03)
         implement fetching from db:
-            ☐ get all by owner_id
-            ☐ get all by owner_id, project_id
-            ☐ get by uuid, query index
-            ☐ get by owner_id, project_id, page_id
-            ☐ get incidents by page_id, timestamp
+            ✔ get all by owner_id @done(22-04-05 13:12)
+            ✔ get all by owner_id, project_id @done(22-04-05 13:13)
+            ✔ get by uuid, query index @done(22-04-05 13:15)
+            ✔ get by owner_id, project_id, page_id @done(22-04-05 13:16)
+            ✔ get incidents by page_id, timestamp @done(22-04-05 13:30)
         ☐ implement saving to db
         ☐ implement deleting from db
         ☐ implement updating in db
