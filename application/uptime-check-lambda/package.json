@@ -27,6 +27,6 @@
     "request": "^2.88.2",
     "utils": "*",
     "got": "11.8.3",
-    "jsonpath": "^1.1.1"
+    "jsonpath-plus": "^6.0.1"
   }
 }

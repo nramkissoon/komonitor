@@ -9,6 +9,12 @@
 ☐ scope pagerduty integ
 ☐ scope red rectangle
 
+☐ add boolean to json checks
+☐ add boolean logic to up condition fields
+☐ add boolean to proprty type
+☐ check if boolean in field
+☐ docs for up condition checks
+
 Status Pages:
     Overview page in Projects tabs:
         ☐ lists all status pages
@@ -20,8 +26,13 @@ Status Pages:
         ✔ declare models @done(22-04-04 14:49)
         ✔ declare db in dev cdk @done(22-04-04 15:39)
         ✔ declare dev s3 bucket for storing images @done(22-04-04 15:26)
-        ☐ deploy cdk
-        ☐ implement fetching from db
+        ✔ deploy cdk @done(22-04-04 16:03)
+        implement fetching from db:
+            ☐ get all by owner_id
+            ☐ get all by owner_id, project_id
+            ☐ get by uuid, query index
+            ☐ get by owner_id, project_id, page_id
+            ☐ get incidents by page_id, timestamp
         ☐ implement saving to db
         ☐ implement deleting from db
         ☐ implement updating in db

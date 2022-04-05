@@ -45,10 +45,6 @@ const buildUptimeStatusResponse = (
     complete,
   } = response;
 
-  if (typeof body === "string" && body.length > 2000) {
-    body = "Body content over 2000 characters...";
-  }
-
   return {
     timings,
     body,

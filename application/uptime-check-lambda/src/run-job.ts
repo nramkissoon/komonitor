@@ -49,6 +49,10 @@ const buildMonitorStatus = (
   },
   monitor: UptimeMonitor
 ): UptimeMonitorStatus => {
+  const resBody = fetchResult.response.body;
+  if (typeof resBody === "string" && resBody.length > 2000) {
+    fetchResult.response.body = "Body content over 2000 characters...";
+  }
   return {
     monitor_id: monitor.monitor_id,
     timestamp: new Date().getTime(),
