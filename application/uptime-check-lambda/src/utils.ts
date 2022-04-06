@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import * as jsonpath from "jsonpath";
+import { JSONPath } from "jsonpath-plus";
 import {
   CodeCheck,
   HtmlBodyCheck,
@@ -42,12 +42,20 @@ export const runUpConditionChecks = (
       isUp: true,
       conditionCheckResults: [] as UpConditionCheckResult[],
     };
+
+    const shortenBody = (body: any) => {
+      if (typeof body === "string" && body.length > 2000) {
+        return "Body content over 2000 characters...";
+      }
+      return body;
+    };
+
     for (let condition of conditions) {
       switch (condition.type) {
         case "code":
           check = condition.condition as CodeCheck;
           let { passed, value } = codeCheckPassed(check, response);
-          allPassed = allPassed && passed;
+          allPassed = allPassed && passed === true;
           result.conditionCheckResults.push({
             passed: passed,
             check: condition as UpConditionCheck,
@@ -57,7 +65,7 @@ export const runUpConditionChecks = (
         case "latency":
           check = condition.condition as LatencyCheck;
           let { passed: lp, value: vp } = latencyCheckPassed(check, response);
-          allPassed = allPassed && lp;
+          allPassed = allPassed && (lp as boolean);
           result.conditionCheckResults.push({
             passed: lp,
             check: condition as UpConditionCheck,
@@ -67,17 +75,17 @@ export const runUpConditionChecks = (
         case "html_body":
           check = condition.condition as HtmlBodyCheck;
           let { passed: hp, value: hv } = htmlBodyCheckPassed(check, response);
-          allPassed = allPassed && hp;
+          allPassed = allPassed && (hp as boolean);
           result.conditionCheckResults.push({
             passed: hp,
             check: condition as UpConditionCheck,
-            value: null,
+            value: shortenBody(hv),
           });
           break;
         case "json_body":
           check = condition.condition as JsonBodyCheck;
           let { passed: jp, value: jv } = jsonBodyCheckPassed(check, response);
-          allPassed = allPassed && jp;
+          allPassed = allPassed && (jp as boolean);
           result.conditionCheckResults.push({
             passed: jp,
             check: condition as UpConditionCheck,
@@ -167,12 +175,22 @@ export const jsonBodyCheckPassed = (
   }
 
   try {
-    const value = jsonpath.value(response.body, property);
+    const json =
+      typeof response.body === "string"
+        ? JSON.parse(response.body)
+        : response.body;
+    const value = JSONPath({ path: property, json: json });
+    let comp = value;
+    if (Array.isArray(value) && value.length > 0) {
+      comp = value[0];
+    }
+
     return {
-      passed: jsonComparison(value, comparison, expected),
+      passed: jsonComparison(comp, comparison, expected),
       value: value,
     };
   } catch (err) {
+    console.log("jsonpath error", err);
     return { passed: false, value: "unknown error" };
   }
 };

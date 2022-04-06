@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx lerna run build --scope=utils && rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules &&  rm -rf dist/node_modules/@types dist/node_modules/typescript",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:build": "npm run build && cd dist && zip -r ../package.zip . *  && cd .."
+    "dev:build": "npm run build && cd dist && zip -r ../package.zip . *  && cd .. && export AWS_PROFILE=atsumari && aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:126258523001:function:devStackUptimeCheckLambda --zip-file fileb://package.zip"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,6 @@
     "request": "^2.88.2",
     "utils": "*",
     "got": "11.8.3",
-    "jsonpath": "^1.1.1"
+    "jsonpath-plus": "^6.0.1"
   }
 }

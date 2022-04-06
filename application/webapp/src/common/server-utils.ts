@@ -32,6 +32,9 @@ export const env = {
   DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID as string,
   DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET as string,
   DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN as string,
+  STATUS_PAGE_TABLE_NAME: process.env.STATUS_PAGE_TABLE_NAME as string,
+  STATUS_PAGE_TABLE_UUID_GSI_NAME: process.env
+    .STATUS_PAGE_TABLE_UUID_GSI_NAME as string,
 };
 
 export const ddbClient = new DynamoDBClient({

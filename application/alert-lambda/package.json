@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx lerna run build --scope=utils && rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && cp -LR src/emails dist/emails && mkdir dist/build && cp -LR src/css dist/build/css && rm -rf dist/node_modules/@types dist/node_modules/typescript",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:build": "npm run build && cd dist && zip -r ../package.zip . * && cd .."
+    "dev:build": "npm run build && cd dist && zip -r ../package.zip . * && cd .. && export AWS_PROFILE=atsumari && aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:126258523001:function:devStackAlertLambda --zip-file fileb://package.zip"
   },
   "keywords": [],
   "author": "",
