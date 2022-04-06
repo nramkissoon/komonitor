@@ -73,14 +73,13 @@ function PageContainer(props: PageContainerProps) {
         bgRepeat="repeat"
         bgAttachment="fixed"
       >
-        <Box display={{ md: "flex" }} maxW="5xl" mx="auto">
+        <Box display={{ md: "flex" }} maxW="4xl" mx="auto">
           <Box flex="1" minW="0">
-            <Box id="content" px={5} mx="auto" minH="76vh">
+            <Box id="content" px={2} mx="auto" minH="76vh">
               <Flex>
                 <Box
                   minW="0"
                   flex="auto"
-                  px="4em"
                   mt="10"
                   py="1.5em"
                   bg="gray.50"
@@ -116,7 +115,7 @@ function PageContainer(props: PageContainerProps) {
                     outline={0}
                     apply="mdx.h1"
                     fontWeight="extrabold"
-                    fontSize="5xl"
+                    fontSize={["3xl", null, "5xl"]}
                     textAlign={"center"}
                     lineHeight="shorter"
                   >
