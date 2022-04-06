@@ -85,7 +85,7 @@ Marketing:
         ✔  upload sqs image and others to s3 @done(22-04-03 15:29)
         ✔  delete resources @done(22-04-03 15:29)
         ☐ post to medium
-    ☐ add to reddit saas group
+    ✔ add to reddit saas group @done(22-04-06 11:20)
 
 ☐ promise.all alert lambda
 
@@ -97,10 +97,11 @@ App header:
 
 Project overview:
     ✔ add tailwind @done(22-03-24 20:34)
-    ☐ Uptime monitor section
-    ☐ create monitor quick link
-    ☐ view monitor quick link
-    ☐ list monitors with ongoing alerts
+    ✔ Uptime monitor section @done(22-04-05 21:38)
+    ✔ create monitor quick link @done(22-04-05 21:38)
+    ✔ view monitor quick link with search @done(22-04-05 21:38)
+    ✔ list monitors with ongoing alerts @done(22-04-06 12:04)
+    ☐ post to IH with updates
     
 
 Uptime HTTP:
