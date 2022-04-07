@@ -37,8 +37,7 @@ export interface DeleteDialogProps {
   itemId: string;
   onClose: () => void;
   leastDestructiveRef: RefObject<any>;
-  mutate: any;
-  mutateApiUrl: string;
+
   deleteApiFunc: any;
   itemType: string;
   onSuccess?: Function;
@@ -51,9 +50,9 @@ export function DeleteDialog(props: DeleteDialogProps) {
     itemId,
     itemName,
     leastDestructiveRef,
-    mutate,
+
     onClose,
-    mutateApiUrl,
+
     deleteApiFunc,
     itemType,
     onSuccess,
@@ -100,7 +99,6 @@ export function DeleteDialog(props: DeleteDialogProps) {
                 onSuccess ?? undefined,
                 onError ?? undefined
               );
-              if (deleted) mutate(mutateApiUrl);
               onClose();
             }}
           >

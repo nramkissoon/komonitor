@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import {
   CoreUptimeMonitor,
   UptimeCheckSupportedFrequenciesInMinutes,
@@ -14,19 +15,6 @@ import { sevenDaysAgo, thirtyDaysAgo, yesterday } from "./utils";
 export const monitorApiUrl = env.BASE_URL + "api/uptime/monitors";
 export const statusApiUrl = env.BASE_URL + "api/uptime/statuses";
 
-const getFetcher = (url: string) =>
-  fetch(url, { method: "GET" }).then((r) => r.json());
-
-export function useUptimeMonitors() {
-  const fetcher = getFetcher;
-  const { data, error } = useSWR(monitorApiUrl, fetcher);
-  return {
-    monitors: data as UptimeMonitor[],
-    isLoading: !error && !data,
-    isError: error,
-  };
-}
-
 export function useUptimeMonitorsForProject(projectId: string) {
   const { teamId } = useRouter().query;
   const fetcher = (url: string, projectId: string) => {
@@ -39,10 +27,14 @@ export function useUptimeMonitorsForProject(projectId: string) {
     return fetch(urlWithParams, { method: "GET" }).then((r) => r.json());
   };
 
-  const { data, error, mutate } = useSWR([monitorApiUrl, projectId], fetcher, {
-    shouldRetryOnError: true,
-    errorRetryInterval: 10000, // retry in 10 seconds
-  });
+  const { data, error, mutate } = useSWRImmutable(
+    [monitorApiUrl, projectId],
+    fetcher,
+    {
+      shouldRetryOnError: true,
+      errorRetryInterval: 10000, // retry in 10 seconds
+    }
+  );
 
   return {
     monitors: data as { [projectId: string]: UptimeMonitor[] },
@@ -95,6 +87,7 @@ export function use24HourMonitorStatuses(monitorIds: string[]) {
     {
       shouldRetryOnError: true,
       errorRetryInterval: 10000, // retry in 10 seconds
+      refreshInterval: 1000 * 60, // refresh every minute
     }
   );
 
@@ -232,7 +225,7 @@ export function useMonitorStatusHistory(monitorId: string, since: number) {
 export async function deleteMonitor(
   monitorId: string,
   teamId?: string,
-  onSuccess?: () => void,
+  onSuccess?: () => Promise<void>,
   onError?: () => void
 ) {
   const response = await fetch(
@@ -244,7 +237,7 @@ export async function deleteMonitor(
     }
   );
   if (response.ok) {
-    onSuccess ? onSuccess() : null;
+    onSuccess ? await onSuccess() : null;
     return true;
   } else {
     onError ? onError() : null;
