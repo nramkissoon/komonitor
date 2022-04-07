@@ -133,7 +133,7 @@ export const CostSection = () => {
             lineHeight="shorter"
             mb=".1em"
           >
-            The Cost of Downtime
+            Downtime Happens
           </chakra.h2>
           <chakra.h3
             fontSize={["xl", "3xl"]}

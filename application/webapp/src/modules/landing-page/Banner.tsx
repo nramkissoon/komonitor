@@ -71,8 +71,12 @@ export function Banner() {
         as="section"
         pt={["4em", null, null, null, null, "12em"]}
         minH={"88vh"}
+        w="100%"
       >
-        <Flex flexDir={["column", null, null, null, null, "row"]}>
+        <Flex
+          flexDir={["column", null, null, null, null, "row"]}
+          justifyContent="space-between"
+        >
           <Flex
             flexDir="column"
             alignItems="center"

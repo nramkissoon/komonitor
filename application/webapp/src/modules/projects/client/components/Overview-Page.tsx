@@ -15,6 +15,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Fuse from "fuse.js";
+import { uniqueId } from "lodash";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
@@ -148,6 +149,11 @@ const Overview: ExtendedNextPage = () => {
     ],
   });
 
+  const viewMonitorLinkColor = useColorModeValue("blue.500", "blue.300");
+  const viewMonitorLinkColorHover = useColorModeValue("blue.600", "blue.500");
+  const cardBgColor = useColorModeValue("white", "gray.950");
+  const cardBorderColor = useColorModeValue("gray.300", "whiteAlpha.300");
+
   const uptimeMonitorSearchQueryResults = fuse.search(
     uptimeMonitorSearchQuery === "" ? "https" : uptimeMonitorSearchQuery, // default to showing all monitors if no query
     { limit: 9 }
@@ -234,10 +240,10 @@ const Overview: ExtendedNextPage = () => {
                     is in alert.
                   </Box>
                   <Box
-                    color={useColorModeValue("blue.500", "blue.300")}
+                    color={viewMonitorLinkColor}
                     w="fit-content"
                     _hover={{
-                      color: useColorModeValue("blue.600", "blue.500"),
+                      color: viewMonitorLinkColorHover,
                     }}
                   >
                     <Link
@@ -273,7 +279,7 @@ const Overview: ExtendedNextPage = () => {
               <Input
                 shadow="sm"
                 placeholder={`Search ${monitors.length} uptime monitors...`}
-                background={useColorModeValue("white", "gray.950")}
+                background={cardBgColor}
                 value={uptimeMonitorSearchQuery}
                 onChange={(e) => setUptimeMonitorSearchQuery(e.target.value)}
               />
@@ -324,13 +330,10 @@ const Overview: ExtendedNextPage = () => {
                   <Grid
                     templateColumns={["repeat(1, 1fr)"]}
                     p={4}
-                    bg={useColorModeValue("white", "gray.950")}
+                    bg={cardBgColor}
                     rounded="md"
                     border="1px"
-                    borderColor={useColorModeValue(
-                      "gray.300",
-                      "whiteAlpha.300"
-                    )}
+                    borderColor={cardBorderColor}
                     gap={3}
                     h="full"
                   >
@@ -345,9 +348,9 @@ const Overview: ExtendedNextPage = () => {
                           {res.item.name}
                         </Box>
                         <Box
-                          color={useColorModeValue("gray.500", "gray.500")}
+                          color={"gray.500"}
                           _hover={{
-                            color: useColorModeValue("blue.500", "blue.500"),
+                            color: "blue.500",
                           }}
                           w="fit-content"
                           wordBreak="break-all"
@@ -361,7 +364,7 @@ const Overview: ExtendedNextPage = () => {
                           </chakra.a>
                           <ExternalLinkIcon ml="5px" mt="-3px" />
                         </Box>
-                        <Box color={useColorModeValue("gray.500", "gray.500")}>
+                        <Box color={"gray.500"}>
                           {regionToLocationStringMap[res.item.region]}
                         </Box>
                       </Flex>
@@ -372,7 +375,13 @@ const Overview: ExtendedNextPage = () => {
                           templateColumns={`repeat(${barValues.length}, 1fr)`}
                         >
                           {barValues.map((value) => {
-                            return <Box bg={colorBarMap[value]} h="2px"></Box>;
+                            return (
+                              <Box
+                                bg={colorBarMap[value]}
+                                h="2px"
+                                key={uniqueId()}
+                              ></Box>
+                            );
                           })}
                         </Grid>
                       </GridItem>
@@ -397,7 +406,7 @@ const Overview: ExtendedNextPage = () => {
                                 : "gray"
                             }
                           >
-                            {res.item.currentStatus}
+                            {res.item.currentStatus ?? "Loading..."}
                           </Badge>
                           <Box mt="2px">
                             {res.item.statuses
@@ -407,10 +416,10 @@ const Overview: ExtendedNextPage = () => {
                         </Flex>
                         <Box
                           mt="2px"
-                          color={useColorModeValue("blue.500", "blue.300")}
+                          color={viewMonitorLinkColor}
                           w="fit-content"
                           _hover={{
-                            color: useColorModeValue("blue.600", "blue.500"),
+                            color: viewMonitorLinkColorHover,
                           }}
                         >
                           <Link
