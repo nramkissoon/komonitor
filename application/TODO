@@ -19,9 +19,10 @@
 ☐ docs for up condition checks
 ☐ run deploy
 
-☐ tags for blogs
-☐ searchable blog posts
-☐ redesign blog grid
+✔ tags for blogs @done(22-04-07 12:22)
+✔ searchable blog posts @done(22-04-07 12:42)
+☐ redesign blog grid - when more posts
+✔ remove colormode toggle from pages with white only @done(22-04-07 11:40)
 
 Status Pages:
     Overview page in Projects tabs:
