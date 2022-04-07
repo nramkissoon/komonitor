@@ -61,7 +61,7 @@ async function deleteHandler(
       return;
     }
 
-    if (!userCanEdit(userId, team)) {
+    if (!userCanEdit(userId, team) && userToDelete !== userId) {
       res.status(403);
       return;
     }
