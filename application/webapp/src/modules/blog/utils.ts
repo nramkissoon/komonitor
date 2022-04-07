@@ -15,4 +15,5 @@ export interface FrontMatter {
     date: string;
     author: string;
   };
+  tags?: string[];
 }

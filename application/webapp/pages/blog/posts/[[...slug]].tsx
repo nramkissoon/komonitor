@@ -14,6 +14,10 @@ export default function Page({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const blogTheme = extendTheme(
     {
+      fonts: {
+        heading: "Roboto",
+        body: "Roboto",
+      },
       styles: {
         global: (props: any) => ({
           body: {

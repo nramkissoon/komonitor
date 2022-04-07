@@ -247,7 +247,7 @@ export const Header = ({ lightModeOnly }: { lightModeOnly?: boolean }) => {
                 useColorModeValue: useColorModeValueModified,
               })}
             </HStack>
-            {<IconButton {...defaultColorModeToggleStyles} />}
+            {!lightModeOnly && <IconButton {...defaultColorModeToggleStyles} />}
             <IconButton {...defaultMobileNavHamburgerStyles} />
           </Flex>
         </Flex>

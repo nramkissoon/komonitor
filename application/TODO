@@ -2,6 +2,9 @@
 ☐ find 20 companies
 ✔ design analytics @done(22-03-07 14:15)
 
+☐ github auth broken maybe???/
+✔ leave team forbidden @done(22-04-07 11:10)
+
 ☐ design and scope onboarding flow
 ☐ design and scope tracking
 ☐ scope google sign in
@@ -15,6 +18,11 @@
 ☐ check if boolean in field
 ☐ docs for up condition checks
 ☐ run deploy
+
+✔ tags for blogs @done(22-04-07 12:22)
+✔ searchable blog posts @done(22-04-07 12:42)
+☐ redesign blog grid - when more posts
+✔ remove colormode toggle from pages with white only @done(22-04-07 11:40)
 
 Status Pages:
     Overview page in Projects tabs:
@@ -44,18 +52,7 @@ Status Pages:
     UI:
         ☐ implement hook for fetching from db based on team/owner
     
-    
 
-Alerts:
-    ✔ add alert type to alert req and invoke model @done(22-03-23 10:48)
-    ✔ alert when up -> design for email, disc, slack, webhook @done(22-03-23 13:47)
-    ✔ test @done(22-03-23 15:11)
-    ✔  discord badge in alert invoke table @done(22-03-24 10:32)
-
-✔ add uptime condition check results to status @done(22-03-29 09:49)
-✔ test check results and alerts @done(22-03-29 15:18)
-✔ add check results to alerts @done(22-03-29 14:18)
-✔ test check results and alerts and add to email alert @done(22-03-29 15:18)
 
 ✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
@@ -74,10 +71,7 @@ ez:
     ✔ deploy duration in alerts and checks @done(22-03-31 12:24)
     ☐ update stripe checkout with branding and domains
     ☐ branch for eu gdpr
-    ✔ DO NOT INCLUDE ENTIRE HTML BODY IN ALERTS AND STATUSES CHANGE IN MONITOR STATUSES BRUHHHh @done(22-03-30 09:40)
-    ✔ cost number bug in light mode @done(22-03-29 14:55)
-    ✔ footer why komonitor @done(22-03-28 14:25)
-    ✔ list blog ideas @done(22-03-28 14:40)
+
 
 Marketing: 
     ✔ redesign blog section @done(22-03-08 12:01)

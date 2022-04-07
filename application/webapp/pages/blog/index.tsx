@@ -4,7 +4,6 @@ import { InferGetStaticPropsType } from "next";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import { IndexPage } from "../../src/modules/blog/components/Index-Page";
 import loadMDXFromPages from "../../src/modules/mdx-utils/load-mdx-dir";
-
 const CONTENT_PATH = "blog/posts";
 
 export default function Page({
@@ -12,6 +11,10 @@ export default function Page({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const blogTheme = extendTheme(
     {
+      fonts: {
+        heading: "Roboto",
+        body: "Roboto",
+      },
       styles: {
         global: (props: any) => ({
           body: {

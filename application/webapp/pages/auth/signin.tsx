@@ -16,6 +16,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
@@ -72,9 +73,10 @@ const Signin: ExtendedNextPage = () => {
         borderRadius="lg"
         mt="2em"
         mx="auto"
-        bg={useColorModeValue("white", "gray.800")}
+        bg={useColorModeValue("white", "gray.950")}
         templateColumns={["repeat(2, 1fr)"]}
         gap={8}
+        rowGap={3}
       >
         <GridItem>
           <Flex flexDir="column" gap={10} justifyContent="center" h="full">
@@ -229,6 +231,33 @@ const Signin: ExtendedNextPage = () => {
               </Flex>
             </chakra.form>
           </Flex>
+        </GridItem>
+        <GridItem fontSize="lg">
+          <chakra.span>Downtime happens</chakra.span>, we help you stay
+          prepared.
+        </GridItem>
+        <GridItem colSpan={1}>
+          By signing in, you agree to our{" "}
+          <Link href="/privacy" passHref>
+            <chakra.span
+              color="blue.400"
+              as="a"
+              _hover={{ color: "blue.600", cursor: "pointer" }}
+            >
+              Privacy Policy
+            </chakra.span>
+          </Link>
+          {" and "}
+          <Link href="/tos" passHref>
+            <chakra.span
+              color="blue.400"
+              as="a"
+              _hover={{ color: "blue.600", cursor: "pointer" }}
+            >
+              Terms of Service
+            </chakra.span>
+          </Link>
+          .
         </GridItem>
       </Grid>
     </PageLayout>
