@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Fade,
   Flex,
   Heading,
   Text,
@@ -18,7 +17,7 @@ import {
   useUptimeMonitorsForProject,
 } from "../../../uptime/client";
 import { CreateUpdateFormRewrite } from "../../../uptime/components/Create-Update-Form-Rewrite";
-import { OverviewTable } from "../../../uptime/components/Overview-Table";
+import { OverviewPageSearchableGrid } from "../../../uptime/components/Overview-Page-Searchable-Grid";
 import { useUserServicePlanProductId } from "../../../user/client";
 import { useProjects } from "../client";
 
@@ -115,6 +114,7 @@ const Page: ExtendedNextPage = () => {
           color="white"
           _hover={{
             bg: isCreateFormOpen ? "gray.600" : "blue.600",
+            cursor: "pointer",
           }}
           onClick={() => toggleOpenCreateForm()}
         >
@@ -125,12 +125,10 @@ const Page: ExtendedNextPage = () => {
         <>
           {monitorsIsLoading && <LoadingSpinner />}
           {hasMonitors && (
-            <Fade in={!monitorsIsLoading}>
-              <OverviewTable
-                monitors={monitors ? monitors : []}
-                statusesMap={statusesIsLoading ? {} : statuses}
-              />
-            </Fade>
+            <OverviewPageSearchableGrid
+              limit={10}
+              includeCreateButton={false}
+            />
           )}
           {noMonitorsForProject && (
             <Box>
