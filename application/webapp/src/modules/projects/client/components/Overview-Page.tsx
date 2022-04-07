@@ -156,7 +156,7 @@ const Overview: ExtendedNextPage = () => {
 
   const uptimeMonitorSearchQueryResults = fuse.search(
     uptimeMonitorSearchQuery === "" ? "https" : uptimeMonitorSearchQuery, // default to showing all monitors if no query
-    { limit: 9 }
+    { limit: 6 }
   );
 
   const colorBarMap: { [key: string]: string } = {
@@ -406,12 +406,12 @@ const Overview: ExtendedNextPage = () => {
                                 : "gray"
                             }
                           >
-                            {res.item.currentStatus ?? "Loading..."}
+                            {res.item.currentStatus ?? "Pending..."}
                           </Badge>
                           <Box mt="2px">
-                            {res.item.statuses
+                            {res.item.statuses && res.item.statuses.length > 0
                               ? timeAgo.format(res.item.statuses[0].timestamp)
-                              : "unknown"}
+                              : ""}
                           </Box>
                         </Flex>
                         <Box

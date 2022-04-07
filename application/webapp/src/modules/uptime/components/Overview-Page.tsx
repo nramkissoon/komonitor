@@ -34,7 +34,11 @@ import {
   useUserServicePlanProductId,
   useUserTimezoneAndOffset,
 } from "../../user/client";
-import { deleteMonitor, useMonitorStatusHistory } from "../client";
+import {
+  deleteMonitor,
+  useMonitorStatusHistory,
+  useUptimeMonitorsForProject,
+} from "../client";
 import { yesterday } from "../utils";
 import { CreateUpdateFormRewrite } from "./Create-Update-Form-Rewrite";
 import { OverviewPageDataCards } from "./Overview-Page-Data-Cards";
@@ -105,6 +109,7 @@ export function OverviewPage(props: OverviewPageProps) {
   const router = useRouter();
   const baseRoute = useAppBaseRoute();
   const { projectId } = router.query;
+  const { mutate } = useUptimeMonitorsForProject(projectId as string); // we need this mutate when deleting the monitor and returning to the overview page
 
   const {
     statuses,
@@ -141,7 +146,6 @@ export function OverviewPage(props: OverviewPageProps) {
 
   // Setup for delete dialog
   let {
-    mutate,
     deleteItem,
     setDeleteItem,
     onCloseDeleteDialog,
@@ -157,15 +161,14 @@ export function OverviewPage(props: OverviewPageProps) {
         itemId={deleteItem.id}
         onClose={onCloseDeleteDialog}
         leastDestructiveRef={cancelRef}
-        mutate={mutate}
-        mutateApiUrl="/api/uptime/monitors"
         deleteApiFunc={deleteMonitor}
         itemType="monitor"
-        onSuccess={() =>
+        onSuccess={async () => {
+          await mutate();
           router.push(
             ((`${baseRoute}/projects/` + projectId) as string) + "/uptime"
-          )
-        }
+          );
+        }}
       />
       <EditFormModal
         isOpen={isEditFormOpen}

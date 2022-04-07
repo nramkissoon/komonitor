@@ -74,6 +74,7 @@ export const getMonitorsForProjectForOwner = async (
         monitors.push(unmarshall(item) as UptimeMonitor)
       );
     }
+    console.log("FETCH_MONITORS_FOR_PROJECT_FOR_OWNER");
     return monitors;
   } catch (err) {
     console.log(err);
