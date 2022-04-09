@@ -11,6 +11,7 @@ import {
 import { capitalize } from "lodash";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { env } from "../../src/common/client-utils";
 import { PageLayout } from "../../src/common/components/Page-Layout";
 import {
   DiscordSvg,
@@ -278,7 +279,8 @@ export default function Integrations() {
       seoProps={{
         title,
         description:
-          "Integrate with your current tools to extend Komonitor's capabilities.",
+          "Integrate with your current tools to receive alerts and status updates directly to your Slack, Discord, email inbox, and more.",
+        canonical: `${env.BASE_URL}/integrations/discord`,
       }}
     >
       <Flex gap={[4, null, "100px"]}>

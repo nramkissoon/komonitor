@@ -85,17 +85,18 @@ function BlogPostPanel(props: { frontMatter: FrontMatter }) {
           <chakra.p mb=".8em" fontSize="lg">
             {frontMatter.description}
           </chakra.p>
-
-          <chakra.p
-            fontSize="lg"
-            fontWeight="medium"
-            color="blue.500"
-            opacity={0}
-            transitionDuration="0.2s"
-            _groupHover={{ opacity: 1 }}
-          >
-            Read more
-          </chakra.p>
+          <NextLink href={frontMatter.slug as string} passHref>
+            <chakra.a
+              fontSize="lg"
+              fontWeight="medium"
+              color="blue.500"
+              opacity={0}
+              transitionDuration="0.2s"
+              _groupHover={{ opacity: 1 }}
+            >
+              Read more
+            </chakra.a>
+          </NextLink>
         </Box>
       </NextLink>
     </Flex>

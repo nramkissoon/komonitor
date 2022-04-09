@@ -32,7 +32,7 @@ import {
 const getUptimeBarVisualValues = (
   statuses: UptimeMonitorStatus[] | undefined
 ) => {
-  if (!statuses) return;
+  if (!statuses || statuses.length === 0) return Array(100).fill("paused");
 
   let values = [];
   if (statuses.length >= 100) {
@@ -86,12 +86,14 @@ export const OverviewPageSearchableGrid = ({
   const monitorsWithStatuses: (UptimeMonitorWithStatuses & {
     currentStatus?: string;
     readableRegion?: string;
-  })[] = monitors.map((m) => ({
-    ...m,
-    statuses: statuses ? statuses[m.monitor_id] ?? undefined : undefined,
-    currentStatus: statuses ? statuses[m.monitor_id]?.[0]?.status : undefined,
-    readableRegion: regionToLocationStringMap[m.region],
-  }));
+  })[] = monitors
+    .map((m) => ({
+      ...m,
+      statuses: statuses ? statuses[m.monitor_id] ?? undefined : undefined,
+      currentStatus: statuses ? statuses[m.monitor_id]?.[0]?.status : undefined,
+      readableRegion: regionToLocationStringMap[m.region],
+    }))
+    .sort((a, b) => b.created_at - a.created_at);
 
   const [uptimeMonitorSearchQuery, setUptimeMonitorSearchQuery] =
     React.useState("");
