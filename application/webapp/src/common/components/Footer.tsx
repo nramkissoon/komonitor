@@ -119,6 +119,12 @@ export function Footer({ lightModeOnly }: { lightModeOnly?: boolean }) {
           useColorModeValue={useColorModeValueModified}
           links={[
             <HeaderLink
+              text="Home"
+              href="/"
+              key="home"
+              useColorModeValue={useColorModeValueModified}
+            />,
+            <HeaderLink
               text="Uptime Monitoring"
               href="/uptime"
               key="uptime"
