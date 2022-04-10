@@ -34,7 +34,10 @@ import {
 } from "react-table";
 import { toExternalUptimeStatusObject, UptimeMonitorStatus } from "utils";
 import { getTimeString, timeAgo } from "../../../common/client-utils";
-import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
+import {
+  JSONCopyButton,
+  JSONDownloadButton,
+} from "../../../common/components/JSON-Download-Button";
 import { JsonViewer } from "../../../common/components/Json-Viewer";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { TablePagination } from "../../../common/components/Table-Pagination";
@@ -338,7 +341,9 @@ export default function StatusTable(props: TableProps) {
         <GridItem colSpan={1}>
           {statusToView && (
             <>
-              <Flex h="50px"></Flex>
+              <Flex h="50px" flexDir="row" w="2xl" float="right">
+                <JSONCopyButton data={statusToView} />
+              </Flex>
               <Box
                 w="2xl"
                 overflowX="scroll"
