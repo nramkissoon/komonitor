@@ -8,7 +8,7 @@ const SEO = ({ title, description, canonical }: SEOProps) => (
     title={title}
     description={description}
     openGraph={{ title, description }}
-    titleTemplate={"Komonitor | %s"}
+    titleTemplate={"%s"}
     canonical={canonical}
   />
 );

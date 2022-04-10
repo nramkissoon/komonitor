@@ -17,15 +17,14 @@ export function JSONDownloadButton(props: JSONDownloadButtonProps) {
       leftIcon={<DownloadIcon />}
       download={filename}
       shadow="sm"
-      colorScheme="gray"
-      color="white"
-      bgColor="gray.500"
+      color="gray.500"
+      bgColor="transparent"
       _hover={{
-        bg: "gray.600",
+        color: "gray.600",
       }}
       fontWeight="normal"
     >
-      Export JSON
+      Export Table as JSON
     </Button>
   );
 }

@@ -80,7 +80,7 @@ Marketing:
     ✔ write implement simple monitor post and post to dev.to, personal blog @done(22-04-04 10:00)
         ✔  upload sqs image and others to s3 @done(22-04-03 15:29)
         ✔  delete resources @done(22-04-03 15:29)
-        ☐ post to medium
+        ✔ post to medium @done(22-04-09 12:39)
     ✔ add to reddit saas group @done(22-04-06 11:20)
 
 ☐ promise.all alert lambda

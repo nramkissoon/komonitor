@@ -45,7 +45,7 @@ export const MDXComponents = {
       {...props}
     />
   ),
-  p: (props: any) => <chakra.p fontSize="xl" mt="1em" {...props} />,
+  p: (props: any) => <chakra.p fontSize="lg" mt="1em" {...props} />,
   a: (props: any) => (
     <NextLink href={props.href} passHref>
       <chakra.a
@@ -75,7 +75,7 @@ export const MDXComponents = {
   ),
   li: (props: any) => (
     <chakra.li
-      fontSize="xl"
+      fontSize="lg"
       mt=".2em"
       ml="1em"
       display="list-item"

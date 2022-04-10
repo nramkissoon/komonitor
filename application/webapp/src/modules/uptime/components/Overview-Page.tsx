@@ -223,6 +223,7 @@ export function OverviewPage(props: OverviewPageProps) {
               monitorId={monitor_id}
               statuses={statuses ? statuses[monitor_id] : undefined}
               offset={tzAndOffset?.offset ?? 0}
+              since={Number.parseInt(monitorStatusSince)}
             />
           </TabPanel>
           <TabPanel p="0">

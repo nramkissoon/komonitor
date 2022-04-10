@@ -11,14 +11,9 @@ import {
   chakra,
   Fade,
   Flex,
+  Grid,
+  GridItem,
   Heading,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  ScaleFade,
   Spacer,
   Table,
   Tbody,
@@ -27,7 +22,6 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import {
@@ -39,18 +33,13 @@ import {
   useTable,
 } from "react-table";
 import { toExternalUptimeStatusObject, UptimeMonitorStatus } from "utils";
-import { getTimeString } from "../../../common/client-utils";
+import { getTimeString, timeAgo } from "../../../common/client-utils";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
+import { JsonViewer } from "../../../common/components/Json-Viewer";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { TablePagination } from "../../../common/components/Table-Pagination";
 import { TableSortColumnUi } from "../../../common/components/Table-Sort-Column-UI";
-import {
-  ResponseCell,
-  ResponseTimeCellProps,
-  StatusCell,
-  StatusObjectCell,
-  TimestampCell,
-} from "./Table-Cell";
+import { ResponseCell, StatusCell, TimestampCell } from "./Table-Cell";
 
 export interface RowProps {
   status: string;
@@ -68,6 +57,7 @@ interface TableProps {
   monitorId: string;
   statuses: UptimeMonitorStatus[] | undefined;
   offset: number;
+  since: number;
 }
 
 function createRowPropsFromMonitorStatus(
@@ -94,44 +84,6 @@ function createRowPropsFromMonitorStatus(
   };
 }
 
-function StatusObjectModal({
-  status,
-  isOpen,
-  onClose,
-}: {
-  status?: object;
-  isOpen: boolean;
-  onClose: () => void;
-}) {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent maxW="5xl">
-        <ModalHeader>Monitor Status</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody
-          overflowX="scroll"
-          css={{
-            "&::-webkit-scrollbar": {
-              width: "10px",
-              height: "10px",
-            },
-            "&::-webkit-scrollbar-track": {
-              width: "10px",
-              height: "10px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: useColorModeValue("#E2E8F0", "#1A202C"),
-            },
-          }}
-        >
-          <chakra.pre>{JSON.stringify(status, null, 2)}</chakra.pre>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-}
-
 function GlobalFilter(props: {
   globalFilter: any;
   setGlobalFilter: (filterValue: any) => void;
@@ -142,7 +94,8 @@ function GlobalFilter(props: {
   }, 200);
 
   const spacing: InputGroupProps = {
-    w: ["100%", "60%", "50%", "40%", "30%"],
+    maxW: ["500px"],
+    mr: "20px",
     mb: "1em",
   };
 
@@ -170,8 +123,7 @@ function GlobalFilter(props: {
 }
 
 export default function StatusTable(props: TableProps) {
-  const { monitorId, statuses, offset } = props;
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { monitorId, statuses, offset, since } = props;
   const [statusToView, setStatusToView] = React.useState<object | undefined>(
     undefined
   );
@@ -193,14 +145,9 @@ export default function StatusTable(props: TableProps) {
         accessor: "status",
         Cell: (props) => StatusCell({ status: props.cell.value }),
       },
+
       {
-        Header: "Response Time (time-to-first-byte)",
-        accessor: "responseTime",
-        Cell: (props) =>
-          ResponseTimeCellProps({ responseTime: props.cell.value }),
-      },
-      {
-        Header: "Response Status Code",
+        Header: "Response Code",
         accessor: "response",
         disableSortBy: true,
         Cell: (props) => ResponseCell({ ...props.cell.value }),
@@ -212,15 +159,11 @@ export default function StatusTable(props: TableProps) {
           TimestampCell({ timestamp: props.cell.value, offset: offset }),
       },
       {
-        Header: "Actions",
+        id: "statusObj",
         accessor: "statusObj",
-        disableSortBy: true,
-        Cell: (props) =>
-          StatusObjectCell({
-            status: props.cell.value,
-            onOpen,
-            setStatusToView,
-          }),
+        Cell: (props) => {
+          "hidden";
+        },
       },
       {
         id: "filter-column",
@@ -248,7 +191,7 @@ export default function StatusTable(props: TableProps) {
       data: data ? data : [],
       autoResetSortBy: false,
       autoResetPage: false,
-      initialState: { pageIndex: 0, pageSize: 10 },
+      initialState: { pageIndex: 0, pageSize: 15 },
     },
     useGlobalFilter,
     useSortBy,
@@ -257,124 +200,181 @@ export default function StatusTable(props: TableProps) {
 
   // this is defined here to avoid adding more hook calls as rows are added
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
+  const rowHoverBg = useColorModeValue("white", "gray.950");
 
   return (
-    <Box
-      w="100%"
-      shadow="lg"
-      bg={useColorModeValue("white", "gray.950")}
-      borderRadius="lg"
-      p="1.5em"
-      mb="2em"
-    >
-      <StatusObjectModal
-        status={statusToView}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
-      <Heading textAlign="left" size="lg" mb=".7em">
-        Monitor Statuses
+    <>
+      <Heading textAlign="left" size="lg" mb=".7em" as="h2" fontWeight="medium">
+        Monitor Statuses{" "}
+        <chakra.span fontSize="lg" color="gray.500">
+          ({timeAgo.format(Date.now() - since)})
+        </chakra.span>
       </Heading>
-      <Flex flexDir="row" justifyContent="space-between">
-        {GlobalFilter({ globalFilter, setGlobalFilter })}
-        <JSONDownloadButton
-          data={
-            statuses ? statuses.map((s) => toExternalUptimeStatusObject(s)) : {}
-          }
-          filename={"monitor-statuses.json"}
-        />
-      </Flex>
-      {statuses ? (
-        <ScaleFade in={statuses !== undefined} initialScale={0.8}>
-          <Box
-            overflow="auto"
-            css={{
-              "&::-webkit-scrollbar": {
-                width: "10px",
-                height: "10px",
-              },
-              "&::-webkit-scrollbar-track": {
-                width: "10px",
-                height: "10px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: useColorModeValue("#E2E8F0", "#1A202C"),
-              },
-            }}
-          >
-            <Table {...getTableProps()}>
-              <Thead>
-                {headerGroups.map((headerGroup) => (
-                  <Tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => {
-                      if (column.id === "filter-column") {
-                        column.toggleHidden(true);
-                      }
+      <Grid templateColumns={"repeat(2, 1fr)"} gap={4}>
+        <GridItem colSpan={1} w="100%" borderRadius="lg">
+          <Flex flexDir="row" justifyContent="space-between" h="50px">
+            {GlobalFilter({ globalFilter, setGlobalFilter })}
+            <JSONDownloadButton
+              data={
+                statuses
+                  ? statuses.map((s) => toExternalUptimeStatusObject(s))
+                  : {}
+              }
+              filename={"monitor-statuses.json"}
+            />
+          </Flex>
+          {statuses ? (
+            <Flex justifyContent="space-between" flexDir="column">
+              <Box
+                overflow="auto"
+                css={{
+                  "&::-webkit-scrollbar": {
+                    width: "10px",
+                    height: "10px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    width: "10px",
+                    height: "10px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: useColorModeValue("#E2E8F0", "#1A202C"),
+                  },
+                }}
+              >
+                <Table {...getTableProps()} fontSize="md">
+                  <Thead>
+                    {headerGroups.map((headerGroup) => (
+                      <Tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map((column) => {
+                          if (
+                            column.id === "filter-column" ||
+                            column.id === "statusObj"
+                          ) {
+                            column.toggleHidden(true);
+                          }
+                          return (
+                            <Th
+                              {...column.getHeaderProps()}
+                              fontSize="sm"
+                              fontWeight="medium"
+                              borderColor={tableBorderColor}
+                              p="5px"
+                            >
+                              <Flex>
+                                <Box my="auto">{column.render("Header")}</Box>
+                                {!column.disableSortBy ? (
+                                  <>
+                                    <Spacer />
+                                    <TableSortColumnUi
+                                      column={column}
+                                      toggleSortBy={toggleSortBy}
+                                    />
+                                  </>
+                                ) : (
+                                  <></>
+                                )}
+                              </Flex>
+                            </Th>
+                          );
+                        })}
+                      </Tr>
+                    ))}
+                  </Thead>
+                  <Tbody {...getTableBodyProps()}>
+                    {page.map((row, i) => {
+                      prepareRow(row);
                       return (
-                        <Th
-                          {...column.getHeaderProps()}
-                          fontSize="sm"
-                          fontWeight="medium"
-                          borderColor={tableBorderColor}
-                          p="10px"
+                        <Tr
+                          {...row.getRowProps()}
+                          bg={
+                            row.values.statusObj.timestamp ===
+                            (statusToView ?? ({} as any)).timestamp
+                              ? rowHoverBg
+                              : "inherit"
+                          }
+                          _hover={{
+                            bg: rowHoverBg,
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            setStatusToView(
+                              toExternalUptimeStatusObject(row.values.statusObj)
+                            );
+                          }}
                         >
-                          <Flex>
-                            <Box my="auto">{column.render("Header")}</Box>
-                            {!column.disableSortBy ? (
-                              <>
-                                <Spacer />
-                                <TableSortColumnUi
-                                  column={column}
-                                  toggleSortBy={toggleSortBy}
-                                />
-                              </>
-                            ) : (
-                              <></>
-                            )}
-                          </Flex>
-                        </Th>
+                          {row.cells.map((cell) => {
+                            return (
+                              <Td
+                                {...cell.getCellProps()}
+                                borderColor={tableBorderColor}
+                                p="5px"
+                              >
+                                {cell.render("Cell")}{" "}
+                              </Td>
+                            );
+                          })}
+                        </Tr>
                       );
                     })}
-                  </Tr>
-                ))}
-              </Thead>
-              <Tbody {...getTableBodyProps()}>
-                {page.map((row, i) => {
-                  prepareRow(row);
-                  return (
-                    <Tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
-                        return (
-                          <Td
-                            {...cell.getCellProps()}
-                            borderColor={tableBorderColor}
-                            p="10px"
-                          >
-                            {cell.render("Cell")}{" "}
-                          </Td>
-                        );
-                      })}
-                    </Tr>
-                  );
-                })}
-              </Tbody>
-            </Table>
-          </Box>
-          <Box>
-            <TablePagination
-              pageIndex={pageIndex}
-              pageSize={pageSize}
-              globalFilteredRowsLength={globalFilteredRows.length}
-              globalFilter={globalFilter}
-              goToPage={gotoPage}
-            />
-          </Box>
-        </ScaleFade>
-      ) : (
-        <Fade in={!statuses} delay={0.2}>
-          {LoadingSpinner()}
-        </Fade>
-      )}
-    </Box>
+                  </Tbody>
+                </Table>
+              </Box>
+              <Box>
+                <TablePagination
+                  pageIndex={pageIndex}
+                  pageSize={pageSize}
+                  globalFilteredRowsLength={globalFilteredRows.length}
+                  globalFilter={globalFilter}
+                  goToPage={gotoPage}
+                />
+              </Box>
+            </Flex>
+          ) : (
+            <Fade in={!statuses} delay={0.2}>
+              {LoadingSpinner()}
+            </Fade>
+          )}
+        </GridItem>
+        <GridItem colSpan={1}>
+          {statusToView && (
+            <>
+              <Flex h="50px"></Flex>
+              <Box
+                w="2xl"
+                overflowX="scroll"
+                h={"2xl"}
+                float="right"
+                py="20px"
+                rounded="sm"
+                bg={useColorModeValue("white", "gray.950")}
+                css={{
+                  "&::-webkit-scrollbar": {
+                    width: "10px",
+                    height: "10px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    width: "10px",
+                    height: "10px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: useColorModeValue("#E2E8F0", "#1A202C"),
+                  },
+                  "&::-webkit-scrollbar-corner": {
+                    background: "rgba(0,0,0,0)",
+                  },
+                }}
+              >
+                <JsonViewer json={JSON.stringify(statusToView, null, 2)} />
+              </Box>
+            </>
+          )}
+          {!statusToView && (
+            <Flex alignItems={"center"} justifyContent="center" h="full">
+              <Box fontSize="lg">Select a status in the table to view.</Box>
+            </Flex>
+          )}
+        </GridItem>
+      </Grid>
+    </>
   );
 }
