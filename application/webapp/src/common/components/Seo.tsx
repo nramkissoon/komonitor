@@ -1,13 +1,15 @@
 import { NextSeo, NextSeoProps } from "next-seo";
 
-export interface SEOProps extends Pick<NextSeoProps, "title" | "description"> {}
+export interface SEOProps
+  extends Pick<NextSeoProps, "title" | "description" | "canonical"> {}
 
-const SEO = ({ title, description }: SEOProps) => (
+const SEO = ({ title, description, canonical }: SEOProps) => (
   <NextSeo
     title={title}
     description={description}
     openGraph={{ title, description }}
-    titleTemplate={"Komonitor | %s"}
+    titleTemplate={"%s"}
+    canonical={canonical}
   />
 );
 

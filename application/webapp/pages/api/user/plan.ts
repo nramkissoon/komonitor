@@ -21,7 +21,7 @@ async function getHandler(
     res.json(response);
   } catch (err) {
     // User is allowed to be unauthed in the pricing page
-    if (req.headers.referer === env.SERVER_HOSTNAME + "pricing") {
+    if (req.headers.referer === env.BASE_URL + "pricing") {
       res.status(200);
       res.json({});
       return;

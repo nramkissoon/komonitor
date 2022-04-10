@@ -297,7 +297,7 @@ export const AppHeader = () => {
 
   const defaultHeaderContainerStyles: HTMLChakraProps<"header"> = {
     h: "full",
-    maxW: ["sm", "xl", "3xl", "5xl", "7xl"],
+    maxW: ["sm", "xl", "3xl", "5xl", "6xl", "8xl"],
     m: "auto",
     py: 4,
   };

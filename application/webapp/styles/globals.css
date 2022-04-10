@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  overflow-x: hidden;
+html {
+  overflow-x: auto;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+code > span > span {
+  word-break: keep-all;
+  word-wrap: normal;
+  white-space: pre;
+}
+
+code > span > span.token {
+  word-break: keep-all;
+  word-wrap: normal;
+  white-space: nowrap;
 }

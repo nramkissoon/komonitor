@@ -42,7 +42,7 @@ const Home: NextPage = () => {
       full
       isAppPage={false}
       seoProps={{
-        title: "Website Monitoring and Alerting",
+        title: "Monitor your websites at scale",
         description:
           "Online Service for creating and managing monitors and alerts for your websites. Know when things go wrong before your customers even notice.",
       }}

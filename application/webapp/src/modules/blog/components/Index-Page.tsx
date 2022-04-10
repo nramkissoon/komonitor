@@ -25,6 +25,8 @@ const getTagColor = (tag: string) => {
       return { bg: "purple.400", color: "white" };
     case "tutorial":
       return { bg: "gray.400", color: "white" };
+    case "metrics":
+      return { bg: "green.400", color: "white" };
     default:
       return { bg: "gray.500", color: "white" };
   }

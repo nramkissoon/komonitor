@@ -3,6 +3,7 @@ import {
   Badge,
   Box,
   Button,
+  chakra,
   Flex,
   IconButton,
   Text,
@@ -73,11 +74,11 @@ export function StatusCell(props: StatusCellProps) {
     <Badge
       variant="subtle"
       colorScheme={color}
-      fontSize="lg"
+      fontSize="sm"
       fontWeight="normal"
-      py=".5em"
-      px=".8em"
-      borderRadius="lg"
+      py=".3em"
+      px=".5em"
+      borderRadius="md"
     >
       {props.status}
     </Badge>
@@ -101,7 +102,9 @@ interface TimestampCellProps {
 
 export function TimestampCell(props: TimestampCellProps) {
   const { timestamp, offset } = props;
-  return <>{getTimeString(offset, timestamp)}</>;
+  return (
+    <chakra.span fontSize="sm">{getTimeString(offset, timestamp)}</chakra.span>
+  );
 }
 
 interface ResponseCellProps {
@@ -111,10 +114,10 @@ interface ResponseCellProps {
 
 export function ResponseCell({ code, message }: ResponseCellProps) {
   return (
-    <>
+    <chakra.p fontSize="sm">
       {code}
       {message ? " " + message : null}
-    </>
+    </chakra.p>
   );
 }
 
@@ -137,7 +140,9 @@ export function StatusObjectCell({
         setStatusToView(toExternalUptimeStatusObject(status));
         onOpen();
       }}
+      pl="0"
       fontWeight="normal"
+      fontSize="sm"
     >
       View Full Status
     </Button>
