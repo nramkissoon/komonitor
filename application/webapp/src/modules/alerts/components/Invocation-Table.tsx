@@ -90,8 +90,6 @@ export function InvocationTable(props: InvocationTableProps) {
     object | undefined
   >(undefined);
 
-  console.log(invocationToView);
-
   const {
     data: tzAndOffset,
     isLoading: tzPrefIsLoading,
