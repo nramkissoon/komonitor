@@ -42,7 +42,8 @@ function GlobalFilter(props: {
   }, 200);
 
   const spacing: InputGroupProps = {
-    w: ["100%", "60%", "50%", "40%", "30%"],
+    maxW: ["500px"],
+    mr: "20px",
     mb: "1em",
   };
 
@@ -79,10 +80,22 @@ interface OverviewTableProps {
   itemType: string;
   containerBoxProps?: BoxProps;
   jsonDownLoad?: React.ReactElement;
+  jsonViewProps: {
+    objToView: any;
+    onClick: (obj: any) => void;
+    checkFunc: (obj: any) => any;
+  };
 }
 
 export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
-  const { data, columns, itemType, containerBoxProps, jsonDownLoad } = props;
+  const {
+    data,
+    columns,
+    itemType,
+    containerBoxProps,
+    jsonDownLoad,
+    jsonViewProps,
+  } = props;
 
   const rows: RowProps[] = React.useMemo(
     () => data.rowPropsGeneratorFunction(...data.dependencies),
@@ -105,10 +118,10 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
   } = useTable(
     {
       columns: tableColumns,
-      data: rows ? rows : [],
+      data: rows ? (rows as any) : [],
       autoResetSortBy: false,
       autoResetPage: false,
-      initialState: { pageIndex: 0, pageSize: 8 },
+      initialState: { pageIndex: 0, pageSize: 15 },
     },
     useGlobalFilter,
     useSortBy,
@@ -117,23 +130,16 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
 
   // this is defined here to avoid adding more hook calls as rows are added
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
+  const rowHoverBg = useColorModeValue("white", "gray.950");
 
   return (
-    <Box
-      w="100%"
-      shadow="lg"
-      bg={useColorModeValue("white", "gray.950")}
-      borderRadius="xl"
-      p="1.5em"
-      mb="2em"
-      {...containerBoxProps}
-    >
-      <Flex flexDir="row" justifyContent="space-between">
+    <Box>
+      <Flex flexDir="row" justifyContent="space-between" h="50px">
         {GlobalFilter({ globalFilter, setGlobalFilter, itemType })}
         {jsonDownLoad}
       </Flex>
       {!data.dependenciesIsLoading ? (
-        <Fade in={!data.dependenciesIsLoading}>
+        <Flex justifyContent="space-between" flexDir="column">
           <Box
             overflow="auto"
             css={{
@@ -150,12 +156,15 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
               },
             }}
           >
-            <Table {...getTableProps()}>
+            <Table {...getTableProps()} fontSize="md">
               <Thead>
                 {headerGroups.map((headerGroup) => (
                   <Tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column) => {
-                      if (column.id === "filter-column") {
+                      if (
+                        column.id === "filter-column" ||
+                        column.id === "obj"
+                      ) {
                         column.toggleHidden(true);
                       }
                       return (
@@ -164,7 +173,7 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
                           fontSize="sm"
                           fontWeight="medium"
                           borderColor={tableBorderColor}
-                          p="10px"
+                          p="5px"
                         >
                           <Flex>
                             <Box my="auto">{column.render("Header")}</Box>
@@ -190,13 +199,28 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
                 {page.map((row, i) => {
                   prepareRow(row);
                   return (
-                    <Tr {...row.getRowProps()}>
+                    <Tr
+                      {...row.getRowProps()}
+                      bg={
+                        jsonViewProps.checkFunc(row.values.obj) ===
+                        jsonViewProps.checkFunc(jsonViewProps.objToView)
+                          ? rowHoverBg
+                          : "inherit"
+                      }
+                      _hover={{
+                        bg: rowHoverBg,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        jsonViewProps.onClick(row.values.obj);
+                      }}
+                    >
                       {row.cells.map((cell) => {
                         return (
                           <Td
                             {...cell.getCellProps()}
                             borderColor={tableBorderColor}
-                            p="10px"
+                            p="5px"
                           >
                             {cell.render("Cell")}{" "}
                           </Td>
@@ -217,7 +241,7 @@ export function CommonOverviewTable<RowProps>(props: OverviewTableProps) {
               goToPage={gotoPage}
             />
           </Box>
-        </Fade>
+        </Flex>
       ) : (
         <Fade in={data.dependenciesIsLoading} delay={0.2}>
           {LoadingSpinner()}

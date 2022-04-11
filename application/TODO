@@ -105,9 +105,9 @@ Uptime HTTP:
     ✔  pause function @done(22-01-31 13:58)
     ☐  add edit + delete + pause as a settings tab
     Statuses Tab: 
-        ☐  redesign - view json side by side
+        ✔  redesign - view json side by side @done(22-04-10 18:30)
     Alert Tab: 
-        ☐  redesign - view json side by side
+        ✔  redesign - view json side by side @done(22-04-11 10:48)
     Overview Tab:
         ☐ design status aggregator into 100 data points
         ☐ uptime changes + durations

@@ -1,64 +1,24 @@
 import {
+  Badge,
   Box,
-  Button,
   chakra,
   Flex,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
+  Grid,
+  GridItem,
+  Heading,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Column } from "react-table";
 import { Alert, AlertInvocation, toExternalAlertInvocation } from "utils";
 import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
+import {
+  JSONCopyButton,
+  JsonViewer,
+} from "../../../common/components/Json-Viewer";
 import { CommonOverviewTable } from "../../../common/components/Overview-Table";
 import { SimpleTimestampCell } from "../../../common/components/Table-Cell";
 import { useUserTimezoneAndOffset } from "../../user/client";
-import { alertTypeToBadge } from "./Alert-Type-Badges";
-
-function InvocationObjectModal({
-  invocation,
-  isOpen,
-  onClose,
-}: {
-  invocation?: object;
-  isOpen: boolean;
-  onClose: () => void;
-}) {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent maxW="5xl">
-        <ModalHeader>Alert Object</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody
-          overflowX="scroll"
-          css={{
-            "&::-webkit-scrollbar": {
-              width: "10px",
-              height: "10px",
-            },
-            "&::-webkit-scrollbar-track": {
-              width: "10px",
-              height: "10px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: useColorModeValue("#E2E8F0", "#1A202C"),
-            },
-          }}
-        >
-          <chakra.pre>{JSON.stringify(invocation, null, 2)}</chakra.pre>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-}
 
 interface RowProps {
   monitor: {
@@ -70,7 +30,7 @@ interface RowProps {
     ongoing: boolean;
   };
   alert: Alert;
-  invocationObj: AlertInvocation;
+  obj: AlertInvocation;
   type?: string;
   filterString: string;
 }
@@ -89,7 +49,7 @@ function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
             name: name,
           },
           alert: invocation.alert,
-          invocationObj: invocation,
+          obj: invocation,
           type: invocation.type,
           filterString: [
             name,
@@ -100,53 +60,37 @@ function rowPropsGeneratorFunction(invocations: AlertInvocation[]): RowProps[] {
     : [];
 }
 
-const AlertChannelCell = (alert: Alert) => (
-  <Flex>
-    {alert.channels.map((channel) => (
-      <Box key={channel} mr="1em">
-        {alertTypeToBadge(channel)}
-      </Box>
-    ))}
-  </Flex>
-);
-
-const InvocationObjectCell = ({
-  invocation,
-  setInvocationToView,
-  onOpen,
-}: {
-  invocation: AlertInvocation;
-  setInvocationToView: React.Dispatch<React.SetStateAction<object | undefined>>;
-  onOpen: () => void;
-}) => {
-  return (
-    <Button
-      aria-label="view alert invocation JSON object"
-      rightIcon={<AiOutlineInfoCircle />}
-      variant="ghost"
-      colorScheme="blue"
-      onClick={() => {
-        setInvocationToView(toExternalAlertInvocation(invocation));
-        onOpen();
-      }}
-      fontWeight="normal"
-    >
-      View Full Alert
-    </Button>
-  );
-};
-
 interface InvocationTableProps {
   invocations: AlertInvocation[] | undefined;
+}
+
+function AlertTypeCell(props: { type: string }) {
+  let color = "gray";
+  if (props.type === "incident_start") color = "green";
+  if (props.type === "incident_end") color = "red";
+  return (
+    <Badge
+      variant="subtle"
+      colorScheme={color}
+      fontSize="sm"
+      fontWeight="normal"
+      py=".3em"
+      px=".5em"
+      borderRadius="md"
+    >
+      {props.type ?? "unknown"}
+    </Badge>
+  );
 }
 
 export function InvocationTable(props: InvocationTableProps) {
   const { invocations } = props;
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [invocationToView, setInvocationToView] = React.useState<
     object | undefined
   >(undefined);
+
+  console.log(invocationToView);
 
   const {
     data: tzAndOffset,
@@ -156,6 +100,13 @@ export function InvocationTable(props: InvocationTableProps) {
 
   const columns: Column[] = [
     { id: "filter-column", filter: "includes", accessor: "filterString" },
+
+    {
+      Header: "Alert Type",
+      accessor: "type",
+      disableSortBy: true,
+      Cell: (props) => AlertTypeCell({ type: props.value }),
+    },
     {
       Header: "Timestamp",
       accessor: "timestampAndOngoing",
@@ -166,52 +117,100 @@ export function InvocationTable(props: InvocationTableProps) {
         }),
     },
     {
-      Header: "Alert Channels",
-      accessor: "alert",
-      disableSortBy: true,
-      Cell: (props) => AlertChannelCell(props.cell.value as Alert),
-    },
-    {
-      Header: "Alert Type",
-      accessor: "type",
-      disableSortBy: true,
-      Cell: (props) => <Box>{props.cell.value ?? "incident_start"}</Box>,
-    },
-    {
-      Header: "Actions",
-      accessor: "invocationObj",
-      disableSortBy: true,
-      Cell: (props) =>
-        InvocationObjectCell({
-          invocation: props.cell.value,
-          onOpen,
-          setInvocationToView,
-        }),
+      id: "obj",
+      accessor: "obj",
+      Cell: (props) => {
+        "hidden";
+      },
     },
   ];
 
+  const JsonViewerBg = useColorModeValue("white", "gray.950");
+  const JsonViewerScrollBarColor = useColorModeValue("#E2E8F0", "#1A202C");
+
   return (
     <>
-      <InvocationObjectModal
-        invocation={invocationToView}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
-      {CommonOverviewTable<RowProps>({
-        data: {
-          dependencies: [invocations ? invocations : []],
-          dependenciesIsLoading: invocations === undefined,
-          rowPropsGeneratorFunction: rowPropsGeneratorFunction,
-        },
-        columns: columns,
-        itemType: "Alert Invocations",
-        jsonDownLoad: (
-          <JSONDownloadButton
-            data={invocations?.map((i) => toExternalAlertInvocation(i))}
-            filename={"alerts.json"}
-          />
-        ),
-      })}
+      <Heading textAlign="left" size="lg" mb=".7em" as="h2" fontWeight="medium">
+        Alerts{" "}
+        <chakra.span fontSize="lg" color="gray.500">
+          (all time)
+        </chakra.span>
+      </Heading>
+      <Grid templateColumns={"repeat(2, 1fr)"} gap={4}>
+        <GridItem colSpan={1} w="100%" borderRadius="lg">
+          {CommonOverviewTable<RowProps>({
+            data: {
+              dependencies: [invocations ? invocations : []],
+              dependenciesIsLoading: invocations === undefined,
+              rowPropsGeneratorFunction: rowPropsGeneratorFunction,
+            },
+            columns: columns,
+            itemType: "Alert Invocations",
+            jsonDownLoad: (
+              <JSONDownloadButton
+                data={invocations?.map((i) => toExternalAlertInvocation(i))}
+                filename={"alerts.json"}
+              />
+            ),
+            jsonViewProps: {
+              objToView: invocationToView,
+              onClick: (obj: any) =>
+                setInvocationToView(toExternalAlertInvocation(obj) as object),
+              checkFunc: (obj) => {
+                if (!obj) return null;
+                return obj.timestamp;
+              },
+            },
+          })}
+        </GridItem>
+        <GridItem colSpan={1}>
+          {invocationToView && (
+            <>
+              <Flex h="50px" flexDir="row" w="2xl" float="right">
+                <JSONCopyButton data={invocationToView} />
+              </Flex>
+              <Box
+                w="2xl"
+                overflowX="scroll"
+                h={"2xl"}
+                float="right"
+                py="20px"
+                rounded="sm"
+                bg={JsonViewerBg}
+                css={{
+                  "&::-webkit-scrollbar": {
+                    width: "10px",
+                    height: "10px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    width: "10px",
+                    height: "10px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: JsonViewerScrollBarColor,
+                  },
+                  "&::-webkit-scrollbar-corner": {
+                    background: "rgba(0,0,0,0)",
+                  },
+                }}
+              >
+                <JsonViewer
+                  json={JSON.stringify(
+                    toExternalAlertInvocation(invocationToView as any),
+                    null,
+                    2
+                  )}
+                />
+              </Box>
+            </>
+          )}
+          {!invocationToView && (
+            <Flex alignItems={"center"} justifyContent="center" h="full">
+              <Box fontSize="lg">Select an alert in the table to view.</Box>
+            </Flex>
+          )}
+        </GridItem>
+      </Grid>
     </>
   );
 }

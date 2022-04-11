@@ -4,7 +4,6 @@ import { Box, Flex } from "@chakra-ui/layout";
 import { chakra, Text, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import Link from "next/link";
 import router from "next/router";
-import React from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { getTimeString } from "../client-utils";
 import { getItemBaseUrlFromItemId } from "../utils";
@@ -89,7 +88,7 @@ interface SimpleTimestampCellProps {
 export function SimpleTimestampCell(props: SimpleTimestampCellProps) {
   return (
     <Flex flexDir={["column", null, null, "row"]}>
-      <chakra.p fontWeight="medium" mr=".5em">
+      <chakra.p fontWeight="normal" mr=".5em" fontSize="sm">
         {getTimeString(props.offset, props.timestampAndOngoing.timestamp)}
       </chakra.p>
 

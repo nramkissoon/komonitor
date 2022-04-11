@@ -34,11 +34,11 @@ import {
 } from "react-table";
 import { toExternalUptimeStatusObject, UptimeMonitorStatus } from "utils";
 import { getTimeString, timeAgo } from "../../../common/client-utils";
+import { JSONDownloadButton } from "../../../common/components/JSON-Download-Button";
 import {
   JSONCopyButton,
-  JSONDownloadButton,
-} from "../../../common/components/JSON-Download-Button";
-import { JsonViewer } from "../../../common/components/Json-Viewer";
+  JsonViewer,
+} from "../../../common/components/Json-Viewer";
 import { LoadingSpinner } from "../../../common/components/Loading-Spinner";
 import { TablePagination } from "../../../common/components/Table-Pagination";
 import { TableSortColumnUi } from "../../../common/components/Table-Sort-Column-UI";
@@ -204,6 +204,8 @@ export default function StatusTable(props: TableProps) {
   // this is defined here to avoid adding more hook calls as rows are added
   const tableBorderColor = useColorModeValue("gray.100", "gray.700");
   const rowHoverBg = useColorModeValue("white", "gray.950");
+  const jsonViewerBg = useColorModeValue("white", "gray.950");
+  const jsonViewerScrollBarColor = useColorModeValue("#E2E8F0", "#1A202C");
 
   return (
     <>
@@ -351,7 +353,7 @@ export default function StatusTable(props: TableProps) {
                 float="right"
                 py="20px"
                 rounded="sm"
-                bg={useColorModeValue("white", "gray.950")}
+                bg={jsonViewerBg}
                 css={{
                   "&::-webkit-scrollbar": {
                     width: "10px",
@@ -362,14 +364,20 @@ export default function StatusTable(props: TableProps) {
                     height: "10px",
                   },
                   "&::-webkit-scrollbar-thumb": {
-                    background: useColorModeValue("#E2E8F0", "#1A202C"),
+                    background: jsonViewerScrollBarColor,
                   },
                   "&::-webkit-scrollbar-corner": {
                     background: "rgba(0,0,0,0)",
                   },
                 }}
               >
-                <JsonViewer json={JSON.stringify(statusToView, null, 2)} />
+                <JsonViewer
+                  json={JSON.stringify(
+                    toExternalUptimeStatusObject(statusToView as any),
+                    null,
+                    2
+                  )}
+                />
               </Box>
             </>
           )}

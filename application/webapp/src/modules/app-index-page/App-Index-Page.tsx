@@ -107,7 +107,7 @@ const ProjectsTab = () => {
   const fuse = new Fuse(projects ?? [], { keys: ["project_id"] });
   const results = fuse.search(searchQuery);
   return (
-    <Flex flexDir="column" maxW="7xl" margin="auto">
+    <Flex flexDir="column" maxW="full" margin="auto">
       <Heading textAlign="left" fontWeight="medium" mb=".2em" fontSize="3xl">
         Projects
       </Heading>
