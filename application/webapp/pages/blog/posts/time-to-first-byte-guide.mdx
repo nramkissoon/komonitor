@@ -1,0 +1,49 @@
+---
+title: A Guide to Time to First Byte (TTFB)
+description: A guide to TTFB and why stakeholders should have a firm understanding of what TTFB is and how it effects business metrics.
+tags: [monitoring, metrics]
+---
+
+**Time to First Byte (TTFB)** is a key metric for determining how a website or web server is performing.
+Unfortunately, many definitions of TTFB exist, but in loose terms, TTFB is the time it takes for the first byte of response data to be received by the client from a server.
+
+Typically, a low TTFB is a good indicator of a responsive server and network which is key for a good user experience.
+This article will dive deeper into the details of TTFB, why it matters, and what you can do to measure and improve it.
+
+## TTFB in Detail
+
+Again, many definitions of TTFB exist:
+
+- The [Wikipedia article for TTFB](https://en.wikipedia.org/wiki/Time_to_first_byte) defines it as "made up of the socket connection time, the time taken to send the HTTP request, and the time taken to get the first byte of the page".
+- Chrome DevTools and Lighthouse on the other hand, excludes the time establishing a socket connection to the server.
+
+To better understand why different definitions exist, let's look at the different phases of an HTTP/HTTPS request:
+
+## What is a "Good" TTFB?
+
+Fast is generally better when it comes to TTFB. Users expect to see a response in half a second these days.
+
+Even for heavier websites that require a ton of Javascript or data from a database query, servers should
+start sending data back to the client as soon as possible, instead of waiting to send all data at once.
+
+## Why does TTFB Matter?
+
+### User experience
+
+### TTFB and SEO
+
+### TTFB and First Contentful Paint
+
+**First Contentful Paint (FCP)** is not to be confused with TTFB, although the two are closely related.
+FCP is an important _user-centric metric_ that is defined as the moment the browser renders the first bit of content from the DOM. In other words, it is the
+moment the user sees content in their browser.
+When the user sees content appearing, they know that their request isn't just hanging and that the server has acknowledged their request.
+This is _user-perceived latency_, and it is very important for a good user experience. Search engines account for FCP when assessing rankings, so developers and stakeholders should aim to
+keep FCP as low as possible.
+
+How is FCP linked to TTFB? In order for content to be painted to the DOM, the client browser needs to know what data from the server to render. The faster the this data is received,
+the faster the browser can render the content. Therefore, TTFB is closely tied to FCP, in fact, FCP is _dependant_ on TTFB. Improvements in TTFB should also improve FCP.
+
+## How to Measure TTFB
+
+## How to Improve TTFB

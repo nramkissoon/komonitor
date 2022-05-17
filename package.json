@@ -1,5 +1,5 @@
 {
-  "name": "hypernext",
+  "name": "komonitor",
   "private": true,
   "scripts": {
     "prestart": "npm install && npm run bootstrap",

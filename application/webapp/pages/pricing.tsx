@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -29,19 +30,21 @@ const Pricing: NextPage = () => {
           "Online service for creating and managing monitors and alerts for your websites. Know when things go wrong and fix them before your customers even notice.",
       }}
     >
-      <PricingHeader />
-      <PricingCards
-        user={user}
-        productId={productId}
-        showAnnualPricing={showAnnualPricing}
-        setShowAnnualPricing={setShowAnnualPricing}
-      />
-      <ComparisonTable
-        user={user}
-        productId={productId}
-        showAnnualPricing={showAnnualPricing}
-      />
-      <ContactSection />
+      <Box maxW="7xl" m="auto">
+        <PricingHeader />
+        <PricingCards
+          user={user}
+          productId={productId}
+          showAnnualPricing={showAnnualPricing}
+          setShowAnnualPricing={setShowAnnualPricing}
+        />
+        <ComparisonTable
+          user={user}
+          productId={productId}
+          showAnnualPricing={showAnnualPricing}
+        />
+        <ContactSection />
+      </Box>
     </PageLayout>
   );
 };
