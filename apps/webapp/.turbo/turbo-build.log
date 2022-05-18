@@ -1,0 +1,120 @@
+[34mwebapp:build: [0mcache hit, replaying output [2m0e5dd779563eed8d[0m
+[34mwebapp:build: [0m
+[34mwebapp:build: [0m> webapp@0.1.0 build
+[34mwebapp:build: [0m> next build
+[34mwebapp:build: [0m
+[34mwebapp:build: [0minfo  - Loaded env from /home/nick/projects/ono/apps/webapp/.env.production.local
+[34mwebapp:build: [0minfo  - Checking validity of types...
+[34mwebapp:build: [0merror - ESLint: Plugin "@next/next" was conflicted between ".eslintrc.json » eslint-config-next/core-web-vitals » plugin:@next/next/core-web-vitals" and "../../.eslintrc » eslint-config-next » plugin:@next/next/recommended".
+[34mwebapp:build: [0minfo  - Creating an optimized production build...
+[34mwebapp:build: [0minfo  - Disabled SWC as replacement for Babel because of custom Babel configuration ".babelrc" https://nextjs.org/docs/messages/swc-disabled
+[34mwebapp:build: [0mwarn  - Compiled with warnings
+[34mwebapp:build: [0m
+[34mwebapp:build: [0m../../node_modules/stripe/lib/utils.js
+[34mwebapp:build: [0mModule not found: Can't resolve 'child_process' in '/home/nick/projects/ono/node_modules/stripe/lib'
+[34mwebapp:build: [0m
+[34mwebapp:build: [0mImport trace for requested module:
+[34mwebapp:build: [0m../../node_modules/stripe/lib/stripe.js
+[34mwebapp:build: [0m./src/common/server-utils.ts
+[34mwebapp:build: [0m./src/modules/teams/server/db.ts
+[34mwebapp:build: [0m./src/modules/teams/server/validation.ts
+[34mwebapp:build: [0m./src/common/components/New-Team-Dialog.tsx
+[34mwebapp:build: [0m./src/modules/pricing-page/Pricing-Cards.tsx
+[34mwebapp:build: [0m./pages/pricing.tsx
+[34mwebapp:build: [0m
+[34mwebapp:build: [0minfo  - Collecting page data...
+[34mwebapp:build: [0minfo  - Generating static pages (0/39)
+[34mwebapp:build: [0m
+[34mwebapp:build: [0minfo  - Generating static pages (9/39)
+[34mwebapp:build: [0minfo  - Generating static pages (19/39)
+[34mwebapp:build: [0minfo  - Generating static pages (29/39)
+[34mwebapp:build: [0minfo  - Generating static pages (39/39)
+[34mwebapp:build: [0minfo  - Finalizing page optimization...
+[34mwebapp:build: [0m
+[34mwebapp:build: [0mPage                                                               Size     First Load JS
+[34mwebapp:build: [0m┌ ○ /                                                              9.4 kB          556 kB
+[34mwebapp:build: [0m├   /_app                                                          0 B             285 kB
+[34mwebapp:build: [0m├ ○ /404                                                           619 B           548 kB
+[34mwebapp:build: [0m├ λ /api/alerts/invocations                                        0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/auth/[...nextauth]                                        0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/billing/checkout-session                                  0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/billing/customer-portal                                   0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/billing/stripe-webhooks                                   0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/integrations/discord                                      0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/integrations/discord/install-url                          0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/integrations/discord/test                                 0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/integrations/slack                                        0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/integrations/slack/install-url                            0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/integrations/slack/test                                   0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/projects                                                  0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/teams                                                     0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/teams/invites                                             0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/teams/members                                             0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/uptime/monitors                                           0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/uptime/statuses                                           0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/user                                                      0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/user/email-opt-in                                         0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/user/plan                                                 0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/user/slack-installations                                  0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/user/tz                                                   0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/user/webhooks                                             0 B             285 kB
+[34mwebapp:build: [0m├ λ /api/webhooks                                                  0 B             285 kB
+[34mwebapp:build: [0m├ ○ /app (397 ms)                                                  3.41 kB         550 kB
+[34mwebapp:build: [0m├ ○ /app/integrations                                              1.08 kB         558 kB
+[34mwebapp:build: [0m├ ○ /app/projects/[projectId] (383 ms)                             279 B           576 kB
+[34mwebapp:build: [0m├ ○ /app/projects/[projectId]/settings                             3.17 kB         550 kB
+[34mwebapp:build: [0m├ ○ /app/projects/[projectId]/uptime                               291 B           606 kB
+[34mwebapp:build: [0m├ ○ /app/projects/[projectId]/uptime/[monitorId]                   1.15 kB         669 kB
+[34mwebapp:build: [0m├ ○ /app/settings                                                  1.2 kB          636 kB
+[34mwebapp:build: [0m├ ○ /auth/signin                                                   5.27 kB         552 kB
+[34mwebapp:build: [0m├ ● /blog (1240 ms)                                                1.83 kB         573 kB
+[34mwebapp:build: [0m├ ● /blog/posts/[[...slug]] (2804 ms)                              4.54 kB         342 kB
+[34mwebapp:build: [0m├   ├ /blog/posts/free-uptime-monitoring (1170 ms)
+[34mwebapp:build: [0m├   ├ /blog/posts/cost-of-downtime (723 ms)
+[34mwebapp:build: [0m├   ├ /blog/posts/implement-simple-uptime-monitor-in-aws (512 ms)
+[34mwebapp:build: [0m├   └ /blog/posts/time-to-first-byte-guide (399 ms)
+[34mwebapp:build: [0m├ ● /demo                                                          3.46 kB         551 kB
+[34mwebapp:build: [0m├ ● /demo/integrations                                             1.15 kB         558 kB
+[34mwebapp:build: [0m├ ● /docs/[[...slug]] (4750 ms)                                    14.7 kB         352 kB
+[34mwebapp:build: [0m├   ├ /docs/webhooks/uptime-monitor-status (847 ms)
+[34mwebapp:build: [0m├   ├ /docs/getting-started/introduction (614 ms)
+[34mwebapp:build: [0m├   ├ /docs/getting-started/quick-start (604 ms)
+[34mwebapp:build: [0m├   ├ /docs/teams/permissions (538 ms)
+[34mwebapp:build: [0m├   ├ /docs/getting-started/support (517 ms)
+[34mwebapp:build: [0m├   ├ /docs/uptime-monitor/intro (459 ms)
+[34mwebapp:build: [0m├   ├ /docs/uptime-monitor/up-condition-checks (416 ms)
+[34mwebapp:build: [0m├   └ [+2 more paths] (avg 378 ms)
+[34mwebapp:build: [0m├ ○ /integrations/[integration]                                    3.9 kB          576 kB
+[34mwebapp:build: [0m├ λ /integrations/discord/callback                                 299 B           285 kB
+[34mwebapp:build: [0m├ λ /integrations/slack/callback                                   296 B           285 kB
+[34mwebapp:build: [0m├ ○ /pricing                                                       4.25 kB         576 kB
+[34mwebapp:build: [0m├ ● /privacy (1057 ms)                                             1.94 kB         590 kB
+[34mwebapp:build: [0m├ ○ /teams/[teamId]                                                3.41 kB         550 kB
+[34mwebapp:build: [0m├ ○ /teams/[teamId]/integrations                                   1.1 kB          558 kB
+[34mwebapp:build: [0m├ ○ /teams/[teamId]/projects/[projectId]                           286 B           576 kB
+[34mwebapp:build: [0m├ ○ /teams/[teamId]/projects/[projectId]/settings                  3.16 kB         550 kB
+[34mwebapp:build: [0m├ ○ /teams/[teamId]/projects/[projectId]/uptime                    296 B           606 kB
+[34mwebapp:build: [0m├ ○ /teams/[teamId]/projects/[projectId]/uptime/[monitorId]        1.16 kB         669 kB
+[34mwebapp:build: [0m├ ○ /teams/[teamId]/settings                                       5.19 kB         640 kB
+[34mwebapp:build: [0m├ λ /teams/new-member                                              907 B           548 kB
+[34mwebapp:build: [0m├ ● /tos (600 ms)                                                  1.93 kB         590 kB
+[34mwebapp:build: [0m└ ○ /uptime                                                        532 B           548 kB
+[34mwebapp:build: [0m+ First Load JS shared by all                                      285 kB
+[34mwebapp:build: [0m  ├ chunks/framework-45ce3d09104a2cae.js                           42.1 kB
+[34mwebapp:build: [0m  ├ chunks/main-4038ac5420c21c2c.js                                26.1 kB
+[34mwebapp:build: [0m  ├ chunks/pages/_app-4c3845257e397094.js                          215 kB
+[34mwebapp:build: [0m  ├ chunks/webpack-985a10fdf25c881b.js                             1.84 kB
+[34mwebapp:build: [0m  └ css/cfadf56da43c5bf4.css                                       3.87 kB
+[34mwebapp:build: [0m
+[34mwebapp:build: [0mλ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+[34mwebapp:build: [0m○  (Static)  automatically rendered as static HTML (uses no initial props)
+[34mwebapp:build: [0m●  (SSG)     automatically generated as static HTML + JSON (uses getStaticProps)
+[34mwebapp:build: [0m
+[34mwebapp:build: [0m
+[34mwebapp:build: [0m> webapp@0.1.0 postbuild
+[34mwebapp:build: [0m> npx next-sitemap
+[34mwebapp:build: [0m
+[34mwebapp:build: [0mLoaded env from /home/nick/projects/ono/apps/webapp/.env.production.local
+[34mwebapp:build: [0m✅ [next-sitemap] Generated index sitemap and 1 sitemap(s)
+[34mwebapp:build: [0m   ○ https://komonitor.com/sitemap.xml (index)
+[34mwebapp:build: [0m   ○ https://komonitor.com/sitemap-0.xml 

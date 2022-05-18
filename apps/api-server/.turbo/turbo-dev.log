@@ -1,0 +1,8 @@
+[32mapi-server:dev: [0mcache hit, replaying output [2mbadcd360ba53f998[0m
+[32mapi-server:dev: [0m
+[32mapi-server:dev: [0m> dev
+[32mapi-server:dev: [0m> next dev
+[32mapi-server:dev: [0m
+[32mapi-server:dev: [0mready - started server on 0.0.0.0:3000, url: http://localhost:3000
+[32mapi-server:dev: [0mwait  - compiling...
+[32mapi-server:dev: [0mevent - compiled client and server successfully in 1913 ms (126 modules)

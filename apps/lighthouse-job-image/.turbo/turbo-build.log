@@ -1,0 +1,5 @@
+[35mlighthouse-job-image:build: [0mcache hit, replaying output [2m985a9d028943eb07[0m
+[35mlighthouse-job-image:build: [0m
+[35mlighthouse-job-image:build: [0m> lighthouse-job-image@1.0.0 build
+[35mlighthouse-job-image:build: [0m> rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript
+[35mlighthouse-job-image:build: [0m

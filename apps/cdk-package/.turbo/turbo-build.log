@@ -1,0 +1,5 @@
+[35mcdk-package:build: [0mcache hit, replaying output [2mbf972c039edf8453[0m
+[35mcdk-package:build: [0m
+[35mcdk-package:build: [0m> cdk-package@0.1.0 build
+[35mcdk-package:build: [0m> tsc
+[35mcdk-package:build: [0m
