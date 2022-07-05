@@ -1,0 +1,5 @@
+[32mjob-runner-lambda:build: [0mcache hit, replaying output [2m04316bf8026fa73f[0m
+[32mjob-runner-lambda:build: [0m
+[32mjob-runner-lambda:build: [0m> job-runner-lambda@1.0.0 build
+[32mjob-runner-lambda:build: [0m> rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && rm -rf dist/node_modules/@types dist/node_modules/typescript
+[32mjob-runner-lambda:build: [0m

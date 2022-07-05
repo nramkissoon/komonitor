@@ -1,0 +1,5 @@
+[35mutils:build: [0mcache hit, replaying output [2m3e2937cd962b0c86[0m
+[35mutils:build: [0m
+[35mutils:build: [0m> utils@1.0.0 build
+[35mutils:build: [0m> rm -rf dist/ && tsc --declaration
+[35mutils:build: [0m

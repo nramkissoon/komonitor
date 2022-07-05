@@ -1,0 +1,30 @@
+[32mapi-server:build: [0mcache hit, replaying output [2m11cc93ff76b96947[0m
+[32mapi-server:build: [0m
+[32mapi-server:build: [0m> build
+[32mapi-server:build: [0m> next build
+[32mapi-server:build: [0m
+[32mapi-server:build: [0minfo  - Checking validity of types...
+[32mapi-server:build: [0merror - ESLint: Plugin "@next/next" was conflicted between ".eslintrc.json » eslint-config-next/core-web-vitals » plugin:@next/next/core-web-vitals" and "../../.eslintrc » eslint-config-next » plugin:@next/next/recommended".
+[32mapi-server:build: [0minfo  - Creating an optimized production build...
+[32mapi-server:build: [0minfo  - Compiled successfully
+[32mapi-server:build: [0minfo  - Collecting page data...
+[32mapi-server:build: [0minfo  - Generating static pages (0/3)
+[32mapi-server:build: [0minfo  - Generating static pages (3/3)
+[32mapi-server:build: [0minfo  - Finalizing page optimization...
+[32mapi-server:build: [0m
+[32mapi-server:build: [0mPage                                       Size     First Load JS
+[32mapi-server:build: [0m┌ ○ /                                      6.23 kB        78.2 kB
+[32mapi-server:build: [0m├   └ css/149b18973e5508c7.css             655 B
+[32mapi-server:build: [0m├   /_app                                  0 B              72 kB
+[32mapi-server:build: [0m├ ○ /404                                   194 B          72.2 kB
+[32mapi-server:build: [0m└ λ /api/hello                             0 B              72 kB
+[32mapi-server:build: [0m+ First Load JS shared by all              72 kB
+[32mapi-server:build: [0m  ├ chunks/framework-39ef0a24cced4e18.js   42 kB
+[32mapi-server:build: [0m  ├ chunks/main-f0cea9c5ba8855fb.js        28.7 kB
+[32mapi-server:build: [0m  ├ chunks/pages/_app-2838f9015ff922d4.js  495 B
+[32mapi-server:build: [0m  ├ chunks/webpack-69bfa6990bb9e155.js     769 B
+[32mapi-server:build: [0m  └ css/27d177a30947857b.css               194 B
+[32mapi-server:build: [0m
+[32mapi-server:build: [0mλ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+[32mapi-server:build: [0m○  (Static)  automatically rendered as static HTML (uses no initial props)
+[32mapi-server:build: [0m

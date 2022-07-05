@@ -1,0 +1,5 @@
+[36muptime-check-lambda:build: [0mcache hit, replaying output [2m20a382f4fbc6030a[0m
+[36muptime-check-lambda:build: [0m
+[36muptime-check-lambda:build: [0m> uptime-check-lambda@1.0.0 build
+[36muptime-check-lambda:build: [0m> rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules &&  rm -rf dist/node_modules/@types dist/node_modules/typescript
+[36muptime-check-lambda:build: [0m

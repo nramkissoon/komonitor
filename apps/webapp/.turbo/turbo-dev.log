@@ -1,0 +1,12 @@
+[32mwebapp:dev: [0mcache hit, replaying output [2me43992ab28099b5c[0m
+[32mwebapp:dev: [0m
+[32mwebapp:dev: [0m> webapp@0.1.0 dev
+[32mwebapp:dev: [0m> next dev
+[32mwebapp:dev: [0m
+[32mwebapp:dev: [0mwarn  - Port 3000 is in use, trying 3001 instead.
+[32mwebapp:dev: [0mready - started server on 0.0.0.0:3001, url: http://localhost:3001
+[32mwebapp:dev: [0minfo  - Loaded env from /home/nick/projects/ono/apps/webapp/.env.development.local
+[32mwebapp:dev: [0minfo  - Disabled SWC as replacement for Babel because of custom Babel configuration ".babelrc" https://nextjs.org/docs/messages/swc-disabled
+[32mwebapp:dev: [0minfo  - Using external babel configuration from /home/nick/projects/ono/apps/webapp/.babelrc
+[32mwebapp:dev: [0mwait  - compiling...
+[32mwebapp:dev: [0mevent - compiled client and server successfully in 8.3s (800 modules)

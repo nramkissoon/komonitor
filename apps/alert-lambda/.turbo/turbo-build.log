@@ -1,0 +1,5 @@
+[33malert-lambda:build: [0mcache hit, replaying output [2mcb98c973e42fe26b[0m
+[33malert-lambda:build: [0m
+[33malert-lambda:build: [0m> alert-lambda@1.0.0 build
+[33malert-lambda:build: [0m> rm -rf dist/ && tsc && cp -LR node_modules dist/node_modules && cp -LR src/emails dist/emails && mkdir dist/build && cp -LR src/css dist/build/css && rm -rf dist/node_modules/@types dist/node_modules/typescript
+[33malert-lambda:build: [0m

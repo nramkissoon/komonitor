@@ -1,0 +1,235 @@
+
+☐ design and scope onboarding flow
+☐ scope google sign in
+☐ scope demo
+☐ scope pagerduty integ
+
+☐ add boolean to json checks
+☐ add boolean logic to up condition fields
+☐ add boolean to proprty type
+☐ check if boolean in field
+☐ docs for up condition checks
+☐ run deploy
+
+✔ tags for blogs @done(22-04-07 12:22)
+✔ searchable blog posts @done(22-04-07 12:42)
+✔ remove colormode toggle from pages with white only @done(22-04-07 11:40)
+
+Status Pages:
+    Overview page in Projects tabs:
+        ☐ lists all status pages
+        ☐ link to either edit, view, or delete status page
+        ☐ link to create new status page
+    New/ Edit page:
+        ☐ design mockup + scope components
+    DB:
+        ✔ declare models @done(22-04-04 14:49)
+        ✔ declare db in dev cdk @done(22-04-04 15:39)
+        ✔ declare dev s3 bucket for storing images @done(22-04-04 15:26)
+        ✔ deploy cdk @done(22-04-04 16:03)
+        implement fetching from db:
+            ✔ get all by owner_id @done(22-04-05 13:12)
+            ✔ get all by owner_id, project_id @done(22-04-05 13:13)
+            ✔ get by uuid, query index @done(22-04-05 13:15)
+            ✔ get by owner_id, project_id, page_id @done(22-04-05 13:16)
+            ✔ get incidents by page_id, timestamp @done(22-04-05 13:30)
+        ☐ implement saving to db
+        ☐ implement deleting from db
+        ☐ implement updating in db
+        ☐ implement deleting all from db
+        ☐ add envs to dev vercel
+        ☐ prod cdk table and s3, prod env to vercel
+        ☐ deleting monitor should carry warning if part of status page
+    UI:
+        ☐ implement hook for fetching from db based on team/owner
+    
+
+
+✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
+
+Landing: 
+    ✔ redesign advanced section @done(22-03-30 11:59)
+
+Sign up page: 
+    ✔ add left column @done(22-04-04 13:01)
+    ☐ for later: add images to bottom
+
+easy:
+    ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
+    ✔ add duration to up alerts @done(22-03-28 14:56)
+    ✔ test duration in alerts @done(22-03-29 15:18)
+    ✔ deploy duration in alerts and checks @done(22-03-31 12:24)
+    ☐ update stripe checkout with branding and domains
+
+
+Marketing: 
+    ✔ redesign blog section @done(22-03-08 12:01)
+    ✔ write implement simple monitor post and post to dev.to, personal blog @done(22-04-04 10:00)
+        ✔  upload sqs image and others to s3 @done(22-04-03 15:29)
+        ✔  delete resources @done(22-04-03 15:29)
+        ✔ post to medium @done(22-04-09 12:39)
+    ✔ add to reddit saas group @done(22-04-06 11:20)
+
+☐ promise.all alert lambda
+
+App header: 
+    ✔ add settings wheel @done(22-03-24 13:36)
+    ✔ add links in breadcrumbs @done(22-03-24 13:04)
+    ✔ change team button to just icon @done(22-03-24 13:04)
+    ✔ add back button @done(22-03-24 13:39)
+
+Project overview:
+    ✔ add tailwind @done(22-03-24 20:34)
+    ✔ Uptime monitor section @done(22-04-05 21:38)
+    ✔ create monitor quick link @done(22-04-05 21:38)
+    ✔ view monitor quick link with search @done(22-04-05 21:38)
+    ✔ list monitors with ongoing alerts @done(22-04-06 12:04)
+    
+
+Uptime HTTP:
+    ✔  follow http redirects @done(22-01-31 13:20)
+    ✔  pause function @done(22-01-31 13:58)
+    ☐  add edit + delete + pause as a settings tab
+    Statuses Tab: 
+        ✔  redesign - view json side by side @done(22-04-10 18:30)
+    Alert Tab: 
+        ✔  redesign - view json side by side @done(22-04-11 10:48)
+    Overview Tab:
+        ☐ design status aggregator into 100 data points
+        ☐ uptime changes + durations
+
+
+
+Usage Tab:
+    ☐ project usage
+    ☐ monitor usage
+    ☐ unlock x by upgrading
+
+
+
+    
+
+✘ pause function graph weirdness @cancelled(22-02-01 12:29)
+
+✔ scope demo page @done(22-02-02 22:38)
+
+Demo:
+    ☐  set up demo route
+    ☐  create demo project, monitors, and api for getting resources
+
+
+
+☐  axiom logging
+
+☐ increase data retention and view for free plan to 90 days
+
+☐ pause button confirmation when pausing
+
+☐ email after sign up with guide
+
+
+------------------------------------------------------------------------------------------
+
+Onboarding:
+    ☐ create onboarding page
+    ☐ welcome page
+    define steps and fields to collect:
+        ☐ where did you hear about Komonitor - Google, IndieHackers, Twitter, Reddit, word of mouth, Other
+        ☐ name
+        ☐ use case - Monitoring a production app/website, monitoring an API, Just looking a around
+    ☐ implement form
+    ☐ update user obj with form data
+
+Sign up email:
+    ☐ simplify like uptime robot
+
+Stripe:
+    ✔ change freelancer plan to pro @done(22-02-16 21:58)
+    ✔ change free to starter @done(22-02-16 21:58)
+Webapp: 
+       
+        
+    Alert Invocations:
+        ✔ implement get handler @done(21-10-07 14:56)
+    UI:
+        ☐ refactor page layout
+        ✔ Style the email verification email @done(21-10-11 14:14)
+        ✔ change hover color for create buttons and go to app button @10/22 @done(21-10-18 14:37)
+        ☐ view invocation object modal when clicked on in invocation tables
+
+        ☐  convert service SLA's to monitor resolutions SRE p62\
+
+
+        ✘  new user onboarding -> ask what they'll use for @cancelled(22-01-12 20:17)
+        ☐  add no alert warning to monitor creation form + overview page
+    API: 
+        ☐ check if subscriptions are valid in API's
+
+    Webhook Alerts: 
+        ☐ initial design
+    SNS Topic Alerts:
+        ☐ scope possibility
+
+    SEO:
+
+    Delete by user id:
+
+        ☐  verify
+    Website View:
+        ✘  scope @cancelled(22-01-28 22:28)
+
+
+Customer Serve:
+    ☐ notification for new users -> email template
+
+API:
+    ☐ research rate limiting
+    ☐ API server design (api.komonitor.com)
+    API keys:
+        ☐ design api key creation, storage, etc.
+        ☐ research what header API keys are sent in
+
+
+
+
+
+Blog: 
+    ☐ Ecommerce use case - high latency -> lost revenue
+    ☐ Buy vs. build -> time spent on product vs. infra
+    ☐ Monitoring tenets -> SRE chapter
+    ☐ Twitter alert use case -> better comm with users + public
+
+Website change monitoring:
+    ☐ scope
+
+Lighthouse:
+    ✔ get hello world app running and push to ECR working @done(21-12-06 13:05)
+    ✔ cdk setup DDB table in dev and prod @done(21-12-06 16:50)
+    ☐ cdk Faargate task role https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/modules/taskdefinition.html#taskrolearn
+    ☐ create execution role arn https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-ecs/modules/taskdefinition.html#executionrolearn
+    Job runner: 
+        ☐ read job from db
+        ☐ create and register task def from db
+        ☐ startTask
+        ☐ dereg task def -> check if can dereg during run
+    ☐ cdk setup S3 bucket
+    ☐ remove lighthouse pricing impl
+
+
+Bugs: 
+    ☐  Warning: Prop `id` did not match. Server: "accordion-button-2" Client: "accordion-button-4" on FAQ page
+    ☐  Alert invocation table can link to non existant monitor, -> fetch to see if mon exists before constructing link
+    ☐  Remove aws-cdk package by rewriting nextauth ddb client
+    ✔  upgrade nextauth @done(22-02-15 15:40)
+    ☐  get rid of hypernext
+    ✘  keyed mutates @cancelled(22-03-27 17:09)
+     ✔ make monitor url unchangeable, it messes up stats @done(22-03-27 17:09)
+     ✔  get rid of uptime monitor jobs @done(22-03-27 17:09)
+     ☐ add sweden to cdk
+    ☐  consolidate useUser hooks to one api call
+    ☐  consolidate db logic into one package
+    ☐  color mode does not persits from docs to any other page -> check provider
+    ☐ encrypt decrpyt webhook secrets in db
+   
+
+☐ product gif generation
