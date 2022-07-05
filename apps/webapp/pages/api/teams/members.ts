@@ -10,8 +10,6 @@ import {
 } from "../../../src/modules/teams/server/db";
 import { getUserById } from "../../../src/modules/user/user-db";
 
-//TODO update?
-
 async function createHandler(
   req: NextApiRequest,
   res: NextApiResponse,

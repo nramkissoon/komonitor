@@ -185,7 +185,7 @@ async function deleteHandler(
     const { teamId } = req.query;
     const { email } = req.body;
 
-    // check if admin, if not res.status(403)
+    // check if editor, if not res.status(403)
 
     const team = await getTeamById(teamId as string);
 

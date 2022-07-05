@@ -1,18 +1,8 @@
-☐ finish resume
-☐ find 20 companies
-✔ design analytics @done(22-03-07 14:15)
-
-☐ github auth broken maybe???/
-✔ leave team forbidden @done(22-04-07 11:10)
-
-☐  audit email designs
 
 ☐ design and scope onboarding flow
-☐ design and scope tracking
 ☐ scope google sign in
 ☐ scope demo
 ☐ scope pagerduty integ
-☐ scope red rectangle
 
 ☐ add boolean to json checks
 ☐ add boolean logic to up condition fields
@@ -23,7 +13,6 @@
 
 ✔ tags for blogs @done(22-04-07 12:22)
 ✔ searchable blog posts @done(22-04-07 12:42)
-☐ redesign blog grid - when more posts
 ✔ remove colormode toggle from pages with white only @done(22-04-07 11:40)
 
 Status Pages:
@@ -59,20 +48,18 @@ Status Pages:
 ✘ send pasued to uptime lambda @cancelled(22-03-22 15:45)
 
 Landing: 
-    ☐ follow hyperping for signups
     ✔ redesign advanced section @done(22-03-30 11:59)
 
 Sign up page: 
     ✔ add left column @done(22-04-04 13:01)
     ☐ for later: add images to bottom
 
-ez:
+easy:
     ✔ blog only white -> redesign main page cards @done(22-03-28 13:57)
     ✔ add duration to up alerts @done(22-03-28 14:56)
     ✔ test duration in alerts @done(22-03-29 15:18)
     ✔ deploy duration in alerts and checks @done(22-03-31 12:24)
     ☐ update stripe checkout with branding and domains
-    ☐ branch for eu gdpr
 
 
 Marketing: 
@@ -97,7 +84,6 @@ Project overview:
     ✔ create monitor quick link @done(22-04-05 21:38)
     ✔ view monitor quick link with search @done(22-04-05 21:38)
     ✔ list monitors with ongoing alerts @done(22-04-06 12:04)
-    ☐ post to IH with updates
     
 
 Uptime HTTP:
